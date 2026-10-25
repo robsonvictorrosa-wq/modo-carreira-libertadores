@@ -1,5 +1,5 @@
 {
- "_doc": "Configuração única da Libertadores ZC. Orçamentos são PROVISÓRIOS e neutros (iguais p/ todos) até o Robson definir. db: nome exato do clube no banco FC27 (null = clube não existe no FC27). squad: 'db' usa elenco FC27, 'empty' começa com elenco vazio (provisório).",
+ "_doc": "Configuração única da Libertadores ZC. Orçamentos são PROVISÓRIOS e neutros (iguais p/ todos) até o Robson definir. db: nome exato do clube no banco FC27 (null = clube não existe no FC27). squad: 'db' usa elenco FC27, 'empty' começa com elenco vazio (provisório). split_from+players: cria clube novo movendo esses jogadores (ids FC27) do clube-fonte (só neste app; o FC27 original não muda).",
  "default_budget": 20000000,
  "default_wage_budget": 400000,
  "placeholder_ovr": 68,
@@ -143,10 +143,11 @@
    "squad": "db"
   },
   {
-   "name": "Belgrano",
-   "country": "Argentina",
-   "db": "Belgrano",
-   "squad": "db"
+   "name": "Atlético Nacional",
+   "country": "Colômbia",
+   "db": "Atl. Nacional",
+   "squad": "db",
+   "crest": "692"
   },
   {
    "name": "Lanús",
@@ -233,10 +234,40 @@
    "squad": "db"
   },
   {
-   "name": "Always Ready",
-   "country": "Bolívia",
-   "db": "Always Ready",
-   "squad": "db"
+   "name": "Nacional",
+   "country": "Uruguai",
+   "db": null,
+   "squad": "db",
+   "crest": "nacional-uru",
+   "split_from": "Nacional",
+   "players": [
+    197655,
+    239207,
+    265766,
+    242335,
+    267406,
+    260208,
+    261989,
+    252074,
+    254628,
+    273659,
+    279245,
+    80743,
+    83245,
+    83246,
+    85177,
+    87048,
+    86065,
+    280248,
+    84397,
+    85179,
+    203864,
+    217805,
+    279922,
+    202089,
+    213064
+   ],
+   "rename_source": "Nacional (POR)"
   },
   {
    "name": "Caracas FC",

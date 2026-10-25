@@ -9,8 +9,23 @@ module.exports=(app,uni)=>{
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
- const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(()=>purgeRooms());
+ const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
+ // Migração única: troca Belgrano/Always Ready por Atlético Nacional/Nacional (URU) nas salas existentes
+ async function migClubs2610(){await pool.query('CREATE TABLE IF NOT EXISTS lib_migrations(name TEXT PRIMARY KEY,at TIMESTAMPTZ DEFAULT now())');
+  if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='clubs-2610'")).rows.length)return;
+  const CF=JSON.parse(require('fs').readFileSync(__dirname+'/config/libertadores.json','utf8'));const NEW=[692,774],OLD=[328,287];
+  const nac=CF.clubs.find(x=>x.split_from)?.players||[];const c=await pool.connect();
+  try{await c.query('BEGIN');for(const room of (await c.query('SELECT * FROM rooms')).rows){
+    for(const id of NEW){const w=uni.prepare('SELECT wage_bill FROM clubs WHERE id=?').get(id)?.wage_bill||0;
+     await c.query('INSERT INTO room_clubs(room_id,club_id,budget,wage_budget) VALUES($1,$2,$3,$4) ON CONFLICT(room_id,club_id) DO UPDATE SET budget=$3,wage_budget=$4',[room.id,id,CF.default_budget,Math.round(w*1.1)]);}
+    const mv=await c.query('UPDATE room_players SET club_id=774 WHERE room_id=$1 AND club_id=455 AND player_id=ANY($2)',[room.id,nac]);
+    const hm=await c.query('UPDATE room_managers SET club_id=NULL WHERE room_id=$1 AND club_id=ANY($2) RETURNING user_id',[room.id,OLD]);
+    await c.query("UPDATE offers SET status='expired' WHERE room_id=$1 AND status IN ('pending','countered','club_accepted') AND (buyer_club=ANY($2) OR seller_club=ANY($2))",[room.id,OLD]).catch(()=>{});
+    const comps=(await c.query('SELECT count(*)::int n FROM competitions WHERE room_id=$1',[room.id])).rows[0].n;
+    console.log('migClubs2610 room',room.code,'status',room.status,'comps',comps,'room_players movidos',mv.rowCount,'técnicos desvinculados',hm.rowCount);
+    await c.query('INSERT INTO room_events(room_id,text) VALUES($1,$2)',[room.id,'🔁 Belgrano e Always Ready saíram; Atlético Nacional e Nacional (URU) entraram na Libertadores ZC.']);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);}
+   await c.query("INSERT INTO lib_migrations(name) VALUES('clubs-2610')");await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');console.error('migClubs2610 falhou',e);}finally{c.release();}}
  async function purgeTest(){const re=process.env.PURGE_TEST_USERS;if(!re)return;const us=(await pool.query('SELECT id,nick FROM users WHERE nick ~ $1',[re])).rows;
   for(const u of us){await pool.query('DELETE FROM rooms WHERE owner_id=$1',[u.id]);await pool.query('DELETE FROM room_managers WHERE user_id=$1',[u.id]);await pool.query('DELETE FROM watchlist WHERE user_id=$1',[u.id]);await pool.query('DELETE FROM users WHERE id=$1',[u.id]);}
   console.log('Usuários de teste apagados:',us.map(u=>u.nick).join(', ')||'nenhum');}

@@ -36,6 +36,9 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
  const g=db.prepare("SELECT gender FROM leagues WHERE id=(SELECT league_id FROM clubs WHERE name='Flamengo')").get();if(g)db.prepare('UPDATE leagues SET gender=? WHERE id=?').run(g.gender,lg);
  const miss=[];db.transaction(()=>{for(const c of CF.clubs){let id=null;
   if(c.db){const r=db.prepare("SELECT c.id FROM clubs c JOIN leagues l ON l.id=c.league_id WHERE c.name=? AND l.kind!='free' ORDER BY (SELECT count(*) FROM players WHERE club_id=c.id) DESC").get(c.db);id=r?.id;}
+  if(!id&&c.players){const src=db.prepare("SELECT c.id,c.league_id FROM clubs c WHERE c.name=? ORDER BY (SELECT count(*) FROM players WHERE club_id=c.id) DESC").get(c.split_from);id=db.prepare('INSERT INTO clubs(name,league_id) VALUES(?,?)').run(c.name,lg).lastInsertRowid;
+   const mv=db.prepare('UPDATE players SET club_id=?,base_club_id=? WHERE id=? AND club_id=?');let n=0;for(const pid of c.players)n+=mv.run(id,id,pid,src.id).changes;
+   db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),wage_bill=(SELECT coalesce(sum(wage),0) FROM players WHERE club_id=clubs.id) WHERE id=?').run(src.id);if(c.rename_source)db.prepare('UPDATE clubs SET name=? WHERE id=?').run(c.rename_source,src.id);console.log('split',c.name,'<-',c.split_from,n,'jogadores');}
   if(!id){id=db.prepare('INSERT INTO clubs(name,league_id) VALUES(?,?)').run(c.name,lg).lastInsertRowid;miss.push(c.name);}
   else db.prepare('UPDATE clubs SET name=? WHERE id=?').run(c.name,id);
   if(c.squad==='empty')db.prepare('DELETE FROM players WHERE club_id=?').run(id); // elenco vazio provisório
