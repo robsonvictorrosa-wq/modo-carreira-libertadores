@@ -19,3 +19,4 @@ app.get('/api/positions',(q,r)=>r.json(db.prepare('SELECT primary_position p,cou
 app.get('/api/libertadores/clubs',(q,r)=>r.json({cfg:require('./libertadores').CFG,clubs:db.prepare('SELECT l.ord,l.club_id id,l.name,l.country,l.squad,c.overall,c.n_players,c.budget FROM lib_clubs l JOIN clubs c ON c.id=l.club_id ORDER BY l.ord').all()}));
 require('./mp')(app,db);
 const PORT=process.env.PORT||3027;app.listen(PORT,()=>console.log('Modo Carreira on',PORT));
+if(process.env.MIGRATE_DST)setTimeout(()=>require('./scripts/migrate-neon.js')().catch(e=>console.log('[MIGR] ERRO',e.message)),3000);
