@@ -11,7 +11,7 @@ module.exports=uni=>{
  const isFree=id=>id===FREE.M||id===FREE.F;
  const CLAUSE_C=new Set(['Espanha','Portugal','Brasil']);
  const defClause=(p,club)=>{const c=C.get(club);if(!c||isFree(club))return null;if(c.country==='Espanha')return Math.round(p.market_value*4/1e5)*1e5||null;if(CLAUSE_C.has(c.country)||c.kind==='conmebol')return Math.round(p.market_value*3/1e5)*1e5||null;return null;};
- const merge=(p,o)=>{if(!p)return null;const e={...p};if(o)for(const k of ['club_id','overall','potential','age','wage','market_value','contract_end','release_clause','morale','wants_out','listed','loan_from','role'])if(o[k]!=null)e[k]=typeof o[k]==='string'&&/^\d+$/.test(o[k])?+o[k]:o[k];
+ const merge=(p,o)=>{if(!p)return null;const e={...p};if(o)for(const k of ['club_id','overall','potential','age','wage','market_value','contract_end','release_clause','morale','wants_out','listed','shielded','loan_from','role'])if(o[k]!=null)e[k]=typeof o[k]==='string'&&/^\d+$/.test(o[k])?+o[k]:o[k];
   if(o&&o.overall!=null&&e.potential!=null&&!VAL.frozen(e))e.overall=Math.min(+e.overall,+e.potential);VAL.fix(e);e.market_value=VAL(e);e.release_clause=o&&o.release_clause!=null?+o.release_clause:defClause(e,e.club_id);if(e.morale==null)e.morale=70;e.wants_out=!!e.wants_out;e.listed=!!e.listed;return e;};
  const full=id=>{const p=uni.prepare('SELECT * FROM players WHERE id=?').get(id);return p&&{...p,positions:JSON.parse(p.positions||'[]'),stats:JSON.parse(p.stats||'{}')};};
  // elenco efetivo de um clube numa sala (com atributos completos para o motor)

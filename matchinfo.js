@@ -9,7 +9,7 @@ function matchInfo(m,res,hn,an){const r=rng(m.id*2654435761+res.hg*97+res.ag*13)
  const st={};for(const k of ['home','away']){const o=k==='home'?'away':'home';
   const sh=sum(k,'sh'),sot=sum(k,'sot');const gko=side[o].filter(isGK);const sv=gko.reduce((a,p)=>a+((ps[p.id]||{}).svd||0)+((ps[p.id]||{}).svs||0),0);
   st[k]={sh,sot,saves:gko.reduce((a,p)=>a+((ps[p.id]||{}).svd||0)+((ps[p.id]||{}).svs||0),0)*0,pa:sum(k,'pa'),pac:sum(k,'pac'),fc:sum(k,'fc'),yc:sum(k,'yc'),rd:sum(k,'rd'),tk:sum(k,'tk'),
-   corners:Math.max(0,Math.round((sh-sot)*.35+sot*.25+pois(1.5,r))),off:pois(1.8,r),_oppSv:sv};}
+   corners:Math.max(0,Math.round(((sh-sot)*.35+sot*.25+pois(1.5,r))*((res.fx||{})[k]?.cor||1))),off:pois(1.8,r),_oppSv:sv};}
  // defesas = defesas do próprio goleiro (chutes no alvo do rival que não viraram gol)
  st.home.saves=st.away._oppSv;st.away.saves=st.home._oppSv;delete st.home._oppSv;delete st.away._oppSv;
  const tp=st.home.pa+st.away.pa||1;let pos=Math.round(50+(100*st.home.pa/tp-50)*1.8);pos=Math.max(25,Math.min(75,pos));
@@ -19,7 +19,7 @@ function matchInfo(m,res,hn,an){const r=rng(m.id*2654435761+res.hg*97+res.ag*13)
  const minIn=id=>{const s=ps[id]||{};const i=(side[club[id]].find(p=>p.id===id)||{}).in||0;return Math.max(1,i+1+Math.floor(r()*Math.max(1,(s.min||90)-1)));};
  // gols
  let h=0,a=0;for(const e of (res.events||[])){const k=e.club===m.home?'home':'away';k==='home'?h++:a++;const pl=`${h}x${a}`;
-  L.push({min:e.min,t:'gol',side:k,txt:e.og?pk([`Gol contra! ${e.scorer_name} tenta cortar e manda pro próprio patrimônio. ${pl}.`,`Que fase: ${e.scorer_name} desvia contra a própria meta. ${pl}.`]):
+  L.push({min:e.min,t:'gol',side:k,txt:e.kind==='pen'?pk([`PÊNALTI convertido! ${e.scorer_name}, o cobrador oficial, desloca o goleiro. ${pl}.`,`${e.scorer_name} vai pra bola na marca da cal e não perdoa. ${pl}.`]):e.kind==='fk'?pk([`GOLAÇO DE FALTA! ${e.scorer_name} bate por cima da barreira, no ângulo. ${pl}.`,`Cobrança perfeita de ${e.scorer_name}: falta direta pra dentro. ${pl}.`]):e.kind==='ck'?pk([`GOOOL de escanteio! ${e.assist_name} cobra na medida e ${e.scorer_name} sobe mais que todo mundo. ${pl}.`,`Bola parada funciona: ${e.assist_name} levanta e ${e.scorer_name} cabeceia firme. ${pl}.`]):e.og?pk([`Gol contra! ${e.scorer_name} tenta cortar e manda pro próprio patrimônio. ${pl}.`,`Que fase: ${e.scorer_name} desvia contra a própria meta. ${pl}.`]):
    e.assist_name?pk([`GOOOL do ${T(k)}! ${e.assist_name} serve e ${e.scorer_name} só empurra. ${pl}.`,`${e.scorer_name} recebe de ${e.assist_name} e bate firme no canto! ${pl}.`,`Jogada bonita: ${e.assist_name} acha ${e.scorer_name}, que não perdoa. ${pl}.`]):
    pk([`GOOOL! ${e.scorer_name} resolve sozinho e estufa a rede. ${pl}.`,`${e.scorer_name} arrisca de longe e acha o ângulo! ${pl}.`,`Bola sobrando na área e ${e.scorer_name} manda pra dentro. ${pl}.`])});}
  // defesas difíceis, pênalti defendido, chances perdidas

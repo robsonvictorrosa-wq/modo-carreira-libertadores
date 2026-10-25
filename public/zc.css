@@ -35,3 +35,31 @@ table{font-size:13px}th{background:#151515}td{border-top:1px solid #1f1f1f}
 .zfg{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}.zf{display:flex;flex-direction:column;gap:3px;min-width:0}.zf>span{font-size:12px;font-weight:700;opacity:.8}.zf select{width:100%;min-width:0}.zr{display:flex;align-items:center;gap:4px}.zr input{flex:1 1 0;min-width:0;width:100%}.zr b{opacity:.6}
 .zh{border-left:2px solid #333;margin:6px 0;padding-left:8px;font-size:12px;color:#aaa;line-height:1.6;word-break:break-word}.zh b{color:#fff}.zh i{opacity:.6;font-style:normal;margin-left:4px}
 .btn{display:inline-block;max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;line-height:1.3;vertical-align:middle;text-decoration:none;overflow-wrap:anywhere}
+/* ---------- Escalação: campinho ---------- */
+.xtop{display:flex;align-items:center;gap:12px}.xtop .badge{width:52px;height:52px;flex:none}
+.xovr{background:linear-gradient(160deg,#FDE68A,#CA8A04);color:#1a1300;border-radius:12px;padding:6px 10px;text-align:center;font-weight:900;font-size:24px;line-height:1;box-shadow:0 4px 14px #CA8A0455}.xovr small{display:block;font-size:10px;letter-spacing:.1em}
+.xinds{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.xind{border-radius:10px;padding:6px 8px;background:#ffffff0d;border:1px solid #ffffff14;font-size:12px}.xind span{display:block;opacity:.7}.xind.ok b{color:#4ADE80}.xind.no b{color:#FB923C}
+.pitchwrap{margin:12px auto;max-width:520px;padding:0 4px}
+.pitch{position:relative;width:100%;aspect-ratio:68/100;border-radius:16px;overflow:hidden;box-shadow:0 12px 30px #0008,inset 0 0 60px #0006;
+ background:radial-gradient(ellipse at 50% 40%,#ffffff14,transparent 70%),repeating-linear-gradient(180deg,#2f8f3f 0 9.09%,#278036 9.09% 18.18%);border:2px solid #1d5f29}
+.pitch .lines{position:absolute;inset:0;width:100%;height:100%}
+.pcard{position:absolute;transform:translate(-50%,50%);width:19%;max-width:86px;min-width:58px;display:flex;flex-direction:column;align-items:center;cursor:pointer;border-radius:10px;padding:4px 2px 3px;
+ background:linear-gradient(180deg,#0f172aee,#020617ee);border:2px solid #64748b;box-shadow:0 4px 10px #0009;transition:transform .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+.pcard:active{transform:translate(-50%,50%) scale(.95)}
+.pcard.sel{box-shadow:0 0 0 3px #FACC15,0 0 18px #FACC15aa}.pcard.off{border-style:dashed}
+.pcard.t1{border-color:#FACC15}.pcard.t2{border-color:#22C55E}.pcard.t3{border-color:#38BDF8}.pcard.t4{border-color:#A78BFA}.pcard.t5{border-color:#94A3B8}
+.ppos{font-size:9px;font-weight:800;letter-spacing:.05em;background:#ffffff1f;border-radius:5px;padding:0 5px;color:#e2e8f0}
+.pnm{font-size:11px;font-weight:700;color:#fff;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:1px 2px}
+.pnum{display:flex;gap:5px;align-items:baseline;font-size:15px;line-height:1}.pnum b{color:#FACC15;font-weight:900}.pnum em{color:#fff;font-style:normal;font-size:11px;opacity:.85}
+.pwarn{position:absolute;top:-8px;right:-6px;background:#F97316;color:#fff;font-size:8px;font-weight:800;border-radius:6px;padding:1px 3px}
+.cap{font-style:normal;background:#FACC15;color:#000;border-radius:50%;padding:0 3px;font-size:9px;font-weight:900}
+.pickable .pl{box-shadow:inset 3px 0 0 #FACC15;cursor:pointer}
+.tgrp{margin-top:12px}.tgt{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-bottom:6px}
+.tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.tcard{border:2px solid #ffffff1a;border-radius:12px;padding:8px 10px;background:#ffffff08;cursor:pointer}.tcard b{display:block;font-size:14px}.tcard span{font-size:12px;opacity:.75}
+.tcard.on{border-color:#FACC15;background:#FACC1514;box-shadow:0 0 12px #FACC1533}
+.tplan{margin-top:12px;padding:10px;border-radius:10px;background:#FACC1512;border:1px solid #FACC1540}
+.tkg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.tkg label{font-size:12px;display:flex;flex-direction:column;gap:4px}.tkg select{width:100%}
+.xb{margin-left:6px;padding:6px 8px!important;font-size:12px!important;white-space:nowrap}
+details.card summary{cursor:pointer;list-style:none}details.card summary::-webkit-details-marker{display:none}
+@media (max-width:420px){.pnm{font-size:10px}.pnum{font-size:13px}.tcards{grid-template-columns:1fr 1fr}.tkg{grid-template-columns:1fr}}
