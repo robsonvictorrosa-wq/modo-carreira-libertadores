@@ -100,7 +100,10 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    if(await avail(c,room,b.club_id)<+b.amount)continue;
    await M.execute(c,room,{pid:l.player_id,from:l.from_club,to:b.club_id,fee:+b.amount,kind:'leilão'});await c.query("UPDATE auction_lots SET status='sold',winner_club=$2,price=$3 WHERE id=$1",[l.id,b.club_id,b.amount]);n++;won.add(b.club_id);done.add(l.id);
    await note(c,room.id,`🔨 Leilão: ${pname(l.player_id)} foi para o ${cname(b.club_id)} por € ${(b.amount/1e6).toFixed(1)} mi (maior lance).`);}
-  for(const l of lots.values())if(!done.has(l.id))await c.query("UPDATE auction_lots SET status='unsold' WHERE id=$1",[l.id]);return n;}
+  const AUCZ=[...R.C.values()].find(x=>x.name==='Leilão ZC')?.id;
+  for(const l of lots.values())if(!done.has(l.id)){await c.query("UPDATE auction_lots SET status='unsold' WHERE id=$1",[l.id]);
+   if(AUCZ){const p=await R.player(c,room.id,l.player_id);if(p&&p.club_id===AUCZ){await M.execute(c,room,{pid:l.player_id,from:AUCZ,to:R.FREE.M,fee:0,wage:p.wage,years:0,kind:'leilão sem lance'});await note(c,room.id,`🔓 Leilão: ${pname(l.player_id)} ficou sem lance e agora está livre no mercado (contratável pelo valor de mercado).`);}}}
+  return n;}
  const tx=async(room,fn)=>{const c=await pool.connect();try{await c.query('BEGIN');const v=await fn(c);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);await c.query('COMMIT');return v;}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}};
  app.post('/api/rooms/:code/zc/admin/auction/add',auth,wrap(async(r,s)=>{const room=await member(r);own(room,r);const st=stOf(room),state=stateOf(room);if(!CAL[st]||!['waiting','auction'].includes(state))throw fail('Agora não é período de leilão');
   const [cnt]=await q("SELECT count(*)::int n FROM auction_lots WHERE room_id=$1 AND season=$2 AND status='open'",[room.id,room.season]);if(cnt.n>=CAL[st].lots)throw fail(`O ${CAL[st].label} já tem ${CAL[st].lots} jogadores (máximo)`);
