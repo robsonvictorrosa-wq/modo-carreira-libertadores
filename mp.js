@@ -64,7 +64,7 @@ module.exports=(app,uni)=>{
   console.log('Usuários de teste apagados:',us.map(u=>u.nick).join(', ')||'nenhum');}
  async function purgeRooms(){if(process.env.PURGE_ROOMS!=='1')return;const rs=(await pool.query("DELETE FROM rooms WHERE code<>'LIGA' RETURNING code,name")).rows;console.log('Salas apagadas:',rs.map(x=>x.code+' '+x.name).join(', ')||'nenhuma');
   const ru=(await pool.query('SELECT nick FROM users ORDER BY id')).rows;console.log('Restam usuários:',ru.map(x=>x.nick).join(', ')||'—');}
- const hash=(p,salt=crypto.randomBytes(16).toString('hex'))=>new Promise((ok,ko)=>crypto.scrypt(p,salt,32,(e,k)=>e?ko(e):ok(salt+':'+k.toString('hex')))); // assíncrono: não trava o servidor (CPU 0,1 no Render free)
+ let SQ=Promise.resolve();const hash=(p,salt=crypto.randomBytes(16).toString('hex'))=>{const r=SQ.then(()=>new Promise((ok,ko)=>crypto.scrypt(p,salt,32,(e,k)=>e?ko(e):ok(salt+':'+k.toString('hex')))));SQ=r.catch(()=>{});return r;}; // assíncrono: não trava o servidor (CPU 0,1 no Render free)
  const check=async(p,h)=>{const [s]=h.split(':');const x=Buffer.from(await hash(p,s));const y=Buffer.from(h);return x.length===y.length&&crypto.timingSafeEqual(x,y);};
  const tokenOf=r=>(r.headers.authorization||'').replace('Bearer ','')||(r.headers.cookie||'').match(/mc_token=([a-f0-9]+)/)?.[1];
  const AUTHC=new Map();
