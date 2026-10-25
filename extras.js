@@ -78,7 +78,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const rows=await q('SELECT player_id,club_id,loan_from,loan_until FROM room_players WHERE room_id=$1 AND loan_from IS NOT NULL',[room.id]);
   s.json(rows.filter(x=>L.CLUBS.includes(x.club_id)||L.CLUBS.includes(x.loan_from)).map(x=>({player_id:x.player_id,player:pname(x.player_id),pos:R.P.get(x.player_id)?.primary_position,overall:R.P.get(x.player_id)?.overall,to:cname(x.club_id),to_id:x.club_id,from:cname(x.loan_from),from_id:x.loan_from,loan_until:x.loan_until,remaining:x.loan_until==null?null:Math.max(0,x.loan_until-cr)})));}));
  // administradores globais
- const envAdmins=()=>(process.env.ADMIN_APELIDOS||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
+ const envAdmins=require('./admins');
  const gadmin=r=>{if(!r.user.admin)throw fail('Só administradores',403);};
  app.get('/api/zc/admin/users',auth,wrap(async(r,s)=>{gadmin(r);const E=envAdmins();s.json((await q('SELECT id,nick,is_admin FROM users ORDER BY nick')).map(u=>({id:u.id,nick:u.nick,admin:u.is_admin||E.includes(u.nick.toLowerCase()),env:E.includes(u.nick.toLowerCase())})));}));
  app.post('/api/zc/admin/role',auth,wrap(async(r,s)=>{gadmin(r);const uid=+r.body?.user_id,on=!!r.body?.admin;if(uid===r.user.id&&!on)throw fail('Você não pode remover o seu próprio acesso');

@@ -13,7 +13,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
  const ownerOnly=(room,r)=>{if(room.owner_id!==r.user.id&&!r.user.admin)throw fail('Só o dono da sala',403);};
 
  app.post('/api/rooms/:code/season/start',auth,wrap(async(r,s)=>{const room=await member(r);ownerOnly(room,r);if(room.status!=='lobby')throw fail('Temporada já iniciada');
-  const ms=await q('SELECT club_id FROM room_managers WHERE room_id=$1',[room.id]);if(ms.some(m=>!m.club_id))throw fail('Todos os técnicos precisam escolher clube');
+  const ms=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND club_id IS NOT NULL',[room.id]);if(!ms.length)throw fail('Atribua pelo menos um clube a um técnico');
   if(ms.some(m=>!LIB.has(m.club_id)))throw fail('Todos os técnicos precisam escolher um dos 40 clubes da Libertadores ZC');const c=await pool.connect();
   try{await c.query('BEGIN');const all=S.schedule(L.CLUBS);const rounds=all.slice(0,all.length/2);// só turno: todos x todos uma vez = 39 rodadas
     const {rows:[comp]}=await c.query('INSERT INTO competitions(room_id,season,league_id,name,rounds_total) VALUES($1,$2,$3,$4,$5) RETURNING id',[room.id,room.season,null,L.CFG.NAME,PLAN.length]);
@@ -59,8 +59,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   await q('INSERT INTO lineups(room_id,club_id,formation,starters) VALUES($1,$2,$3,$4) ON CONFLICT(room_id,club_id) DO UPDATE SET formation=$3,starters=$4',[room.id,me.club_id,f,st]);s.json({ok:1});}));
 
  app.post('/api/rooms/:code/ready',auth,wrap(async(r,s)=>{const room=await member(r);await q('UPDATE room_managers SET ready=NOT ready WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);
-  const ms=await q('SELECT ready FROM room_managers WHERE room_id=$1',[room.id]);await q('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);
-  if(room.status==='season'&&ms.every(m=>m.ready))return s.json(await advance(room.id,'Todos prontos'));s.json({ok:1});}));
+  const ms=await q('SELECT ready FROM room_managers WHERE room_id=$1 AND club_id IS NOT NULL',[room.id]);await q('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);
+  if(room.status==='season'&&ms.length&&ms.every(m=>m.ready))return s.json(await advance(room.id,'Todos prontos'));s.json({ok:1});}));
  app.post('/api/rooms/:code/advance',auth,wrap(async(r,s)=>{const room=await member(r);ownerOnly(room,r);s.json(await advance(room.id,'Dono da sala'));}));
 
  async function advance(roomId,why){const c=await pool.connect();const out=[];

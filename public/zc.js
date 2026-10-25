@@ -17,19 +17,19 @@ async function ov(){OV=await get(R()+'/zc/overview');return OV}
 function chrome(tab){const isAdm=OV?.admin;
  document.getElementById('ztabs').innerHTML=TABS.filter(t=>!t[3]||isAdm).map(t=>`<a href="#/${t[0]}" class="${t[0]===tab?'on':''}">${t[1]} ${t[2]}</a>`).join('');
  const on=document.querySelector('#ztabs a.on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});
- document.getElementById('zcrumb').innerHTML=ME?`<span>Zero Clubistas / <b style="color:#fff">Libertadores</b>${OV?.room?' · '+esc(OV.room.name):''}</span><span>${OV?(OV.admin?'Administrador':'Técnico'):'Técnico'} • ${esc(ME.nick)} · <a href="#/salas">Salas</a> · <a href="#" onclick="zSair();return false">Sair</a></span>`:'';}
+ document.getElementById('zcrumb').innerHTML=ME?`<span>Zero Clubistas / <b style="color:#fff">Libertadores</b>${OV?.room?' · '+esc(OV.room.name):''}</span><span>${OV?(OV.admin?'Administrador':'Técnico'):'Técnico'} • ${esc(ME.nick)} · <a href="#" onclick="zSair();return false">Sair</a></span>`:'';}
 window.zSair=async()=>{try{await post('/auth/logout',{})}catch(e){}localStorage.removeItem('room');ROOM=null;ME=null;location.hash='#/';location.reload();};
+let LIGA=null;
 async function need(tab){if(!ME&&!(await whoami())){chrome(tab);loginView(route);return false}
- if(!ROOM){chrome(tab);salas();return false}
- try{await ov()}catch(e){ROOM=null;localStorage.removeItem('room');chrome(tab);salas();return false}
+ try{if(!LIGA)LIGA=await get('/liga');ROOM=LIGA.code;localStorage.room=ROOM;await ov()}catch(e){chrome(tab);app.innerHTML=empty('Erro ao carregar o campeonato',esc(e.message));return false}
  chrome(tab);return true}
 const myClub=()=>OV.clubs.find(c=>c.id===OV.me.club_id);
-const noClub=()=>empty('Sem clube',`Você ainda não comanda um clube nesta sala.<br><br><a class="btn" href="#/sala/${ROOM}">Escolher clube</a>`);
+const noClub=()=>empty('Sem clube',OV?.admin?'Atribua clubes aos técnicos na <a href="#/central">Central da liga</a>.':'Você ainda não comanda um clube. Aguarde um administrador definir seu clube na Central da liga.');
 
 // ---------- CAMPEONATO ----------
 async function campeonato(step){if(!await need('campeonato'))return;const c=OV.comp,mc=myClub();
  let h=`<div class="hero"><div class="kick">Libertadores · Temporada ${OV.room.season||1}</div><h1>${esc(OV.phase)}</h1><p>40 clubes, liga única de 39 rodadas. Top 10 direto às oitavas; 11º–22º disputam o play-in em jogo único. ${mc?`Você comanda <b>${esc(mc.name)}</b>.`:''}</p>`;
- if(!c){h+=OV.admin?`<a class="btn" href="#/sala/${ROOM}">Gerenciar sala e iniciar temporada</a>`:`<a class="btn" href="#/sala/${ROOM}">${mc?'Ver sala':'Escolher clube'}</a>`;h+='</div>';app.innerHTML=h+`<div class="z3"><div class="stat"><span>Clubes</span><b>40</b></div><div class="stat"><span>Técnicos</span><b>${OV.managers.length}</b></div><div class="stat"><span>Verba</span><b>€ 20 mi</b></div></div>`;return}
+ if(!c){h+=OV.admin?`<a class="btn" href="#/central">Central da liga: definir clubes e iniciar temporada</a>`:`<p>${mc?'Aguardando os administradores iniciarem a temporada.':'Aguardando um administrador definir seu clube.'}</p>`;h+='</div>';app.innerHTML=h+`<div class="z3"><div class="stat"><span>Clubes</span><b>40</b></div><div class="stat"><span>Técnicos</span><b>${OV.managers.length}</b></div><div class="stat"><span>Verba</span><b>€ 20 mi</b></div></div>`;return}
  h+=`<div style="display:flex;gap:8px;flex-wrap:wrap">${OV.admin?`<button class="btn" onclick="zSim()">▶ Simular próxima etapa</button>`:`<button class="btn sec" onclick="post('${R()}/ready',{}).then(route)">✋ Marcar pronto</button>`}<a class="btn sec" href="#/escalacao">Escalação</a></div></div><div id="zwarn"></div>`;
  if(c.current_round===0)h+=`<div class="card warn" style="margin-bottom:12px"><div class="kick">Antes da janela</div><p style="margin:6px 0 0">A janela de transferências está ${OV.window?.open?'<b class="ok">aberta</b>':'<b class="no">fechada</b>'}. Monte o elenco e garanta a <b>meta do onze</b>: pelo menos ${OV.meta_need} titulares contratados por você.</p></div>`;
  const tot=(OV.managers||[]).length;h+=`<div class="z3" style="margin-bottom:14px"><div class="stat"><span>Etapa</span><b>${Math.min(c.current_round+1,47)}/47</b></div><div class="stat"><span>Técnicos</span><b>${tot}</b></div><div class="stat"><span>Janela</span><b>${OV.window?.open?'Aberta':'Fechada'}</b></div></div>`;
@@ -135,16 +135,17 @@ async function evolucao(){if(!await need('evolucao'))return;app.innerHTML=`<div 
 // ---------- CENTRAL DA LIGA (admin) ----------
 async function central(){if(!await need('central'))return;if(!OV.admin){app.innerHTML=empty('Acesso restrito','Somente administradores.');return}
  const log=await get(R()+'/zc/log');const free=OV.clubs.filter(c=>!c.manager);
- app.innerHTML=`<div class="hero"><div class="kick">Central da liga</div><h1>Administração</h1><p>Sala <b>${esc(OV.room.code)}</b> · ${esc(OV.phase)} · janela ${OV.window?.open?'<b class="ok">aberta</b>':'<b class="no">fechada</b>'}</p>
- <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn green" onclick="zWin('open')">Abrir janela</button><button class="btn red" onclick="zWin('close')">Fechar janela</button><button class="btn sec" onclick="zWin('finalize')">Finalizar janela</button><button class="btn" onclick="zSim()">Simular etapa</button></div><div id="zwarn" style="margin-top:10px"></div></div>
- <h2>Técnicos</h2><div class="card" style="padding:0">${OV.managers.map(m=>`<div class="pl"><div class="i"><b>${esc(m.nick)}</b><span>${m.club_id?esc(OV.clubs.find(c=>c.id===m.club_id)?.name||''):'sem clube'}</span></div><select onchange="zAssign(${m.user_id},this.value)"><option value="">Definir clube…</option><option value="0">— sem clube —</option>${free.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select>${m.nick!==OV.me.nick?`<button class="btn red" onclick="zRem(${m.user_id})">✕</button>`:''}</div>`).join('')}</div>
+ app.innerHTML=`<div class="hero"><div class="kick">Central da liga</div><h1>Administração</h1><p>${esc(OV.phase)} · janela ${OV.window?.open?'<b class="ok">aberta</b>':'<b class="no">fechada</b>'}</p>
+ <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn green" onclick="zWin('open')">Abrir janela</button><button class="btn red" onclick="zWin('close')">Fechar janela</button><button class="btn sec" onclick="zWin('finalize')">Finalizar janela</button>${OV.comp?'':'<button class="btn green" onclick="zStart()">▶ Iniciar temporada</button>'}<button class="btn" onclick="zSim()">Simular etapa</button></div><div id="zwarn" style="margin-top:10px"></div></div>
+ <h2>Técnicos e clubes</h2><div class="sub">Todo usuário que entra no app aparece aqui. Escolha o clube de cada técnico.</div><div class="card" style="padding:0">${OV.managers.map(m=>`<div class="pl"><div class="i"><b>${esc(m.nick)}</b><span>${m.club_id?esc(OV.clubs.find(c=>c.id===m.club_id)?.name||''):'sem clube'}</span></div><select onchange="zAssign(${m.user_id},this.value)"><option value="">Definir clube…</option><option value="0">— sem clube —</option>${free.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select>${m.nick!==OV.me.nick?`<button class="btn red" onclick="zRem(${m.user_id})">✕</button>`:''}</div>`).join('')}</div>
  <h2>Leilão</h2><div class="card"><div class="mgr"><b id="aust">…</b><span><button class="btn green" onclick="zAu('open')">Abrir leilão</button> <button class="btn red" onclick="zAu('close')">Encerrar e definir vencedores</button></span></div><input placeholder="Buscar jogador dos 40 clubes para o leilão" oninput="zAs(this.value)" style="width:100%;margin:8px 0"><div id="aus"></div><div id="aul"></div></div>
  <h2>Administradores</h2><div id="adms" class="card" style="padding:0"></div>
  <h2>Contestar venda</h2><input placeholder="Buscar transferência (jogador ou clube)" oninput="zTr(this.value)" style="width:100%;margin-bottom:8px"><div id="trs"></div>
  <h2>Log da liga</h2><div class="card">${log.map(e=>`<div class="log">${esc(e.text)}<time>${new Date(e.created_at).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})}</time></div>`).join('')||'<div class="empty">Sem eventos</div>'}</div>`;zTr('');zAuL();zAdm();}
+window.zStart=async()=>{try{await post(R()+'/season/start',{});central();}catch(e){alert(e.message)}};
 window.zWin=async a=>{try{await post(R()+'/zc/admin/window',{action:a});central();}catch(e){alert(e.message)}};
 window.zAssign=async(u,c)=>{if(c==='')return;try{await post(R()+'/zc/admin/assign',{user_id:u,club_id:+c||null});central();}catch(e){alert(e.message)}};
-window.zRem=async u=>{if(!confirm('Remover este técnico da sala?'))return;try{await post(R()+'/zc/admin/remove',{user_id:u});central();}catch(e){alert(e.message)}};
+window.zRem=async u=>{if(!confirm('Remover este técnico do campeonato?'))return;try{await post(R()+'/zc/admin/remove',{user_id:u});central();}catch(e){alert(e.message)}};
 window.zTr=async t=>{const L=await get(R()+'/zc/admin/transfers?q='+encodeURIComponent(t));const el=document.getElementById('trs');if(!el)return;el.innerHTML=L.length?`<div class="card" style="padding:0">${L.map(x=>`<div class="pl"><div class="i"><b>${esc(x.player)}</b><span>${esc(x.from)} → ${esc(x.to)} · ${mi(x.fee)}${x.contested?' · contestada':''}</span></div>${x.contested?'':`<button class="btn red" onclick="zCon(${x.id})">Contestar</button>`}</div>`).join('')}</div>`:empty('Nenhuma transferência');};
 window.zAuL=async()=>{const a=await get(R()+'/zc/auction');const st=document.getElementById('aust');if(!st)return;st.innerHTML=a.open?'<span class="ok">Leilão aberto</span>':'<span class="no">Leilão fechado</span>';const op=a.lots.filter(l=>l.status==='open');
  document.getElementById('aul').innerHTML=op.length?op.map(l=>`<div class="pl">${psq(l)}<div class="i"><b>${esc(l.name)}</b><span>${badge(l.from)} ${esc(l.from)} · mín. ${mi(l.min_bid)} · ${l.bids} lance(s)</span></div><button class="btn red" onclick="zAuR(${l.id})">✕</button></div>`).join(''):empty('Nenhum lote','Busque um jogador acima e adicione.');};
@@ -161,6 +162,7 @@ window.mercado=sub=>sub==='propostas'?(location.hash==='#/negociacoes'?negociaco
 const old=window.route;
 window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
  const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes,escalacao:zEscalacao,emprestimos,estatisticas,leilao,premiacoes,clubes,evolucao,central};
+ if(['salas','sala','entrar','carreira',''].includes(t)&&t!=='')return location.hash='#/campeonato';
  if(map[t])return map[t]();
  chrome('');return old();};
 route=window.route;
