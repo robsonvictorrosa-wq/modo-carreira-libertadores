@@ -28,7 +28,7 @@ module.exports=async function(){
    for(const {oid,t} of tabs){
     const cols=await q(src,`select a.attname n,format_type(a.atttypid,a.atttypmod) ty,a.attnotnull nn,pg_get_expr(d.adbin,d.adrelid) df from pg_attribute a left join pg_attrdef d on d.adrelid=a.attrelid and d.adnum=a.attnum where a.attrelid=$1 and a.attnum>0 and not a.attisdropped order by a.attnum`,[oid]);
     const cons=await q(src,`select conname,contype,pg_get_constraintdef(oid) def from pg_constraint where conrelid=$1 order by contype desc`,[oid]);
-    const body=cols.map(c=>`${id(c.n)} ${c.ty}${c.df?' default '+c.df:''}${(c.nn===true||c.nn==='t')?' not null':''}`).concat(cons.filter(c=>c.contype!=='f').map(c=>`constraint ${id(c.conname)} ${c.def}`));
+    const body=cols.map(c=>`${id(c.n)} ${c.ty}${c.df?' default '+c.df:''}${(c.nn===true||c.nn==='t')?' not null':''}`).concat(cons.filter(c=>c.contype!=='f'&&c.contype!=='n').map(c=>`constraint ${id(c.conname)} ${c.def}`));
     await dst.query(`create table ${id(s)}.${id(t)} (${body.join(',')})`);
     cons.filter(c=>c.contype==='f').forEach(c=>fks.push(`alter table ${id(s)}.${id(t)} add constraint ${id(c.conname)} ${c.def}`));
     // copia dados em lotes
