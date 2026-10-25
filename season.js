@@ -1,6 +1,6 @@
 // Etapa 3: temporada, calendário, escalação, avanço rodada a rodada
 const S=require('./sim'),L=require('./libertadores'),{resenha}=require('./resenha');
-module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(uni);const LIB=new Set(L.CLUBS);const PLAN=L.plan();const stepOf=r=>PLAN[r-1];
+module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(uni);const LIB=new Set(L.CLUBS);const ALTM=new Map(uni.prepare('SELECT club_id,ord FROM lib_clubs').all().map(x=>[x.club_id,+(require('./config/libertadores.json').clubs[x.ord]?.alt||0)]));const ALT=id=>ALTM.get(id)||0;const PLAN=L.plan();const stepOf=r=>PLAN[r-1];
  app.locals.xiFor=(...a)=>xiFor(...a);
  // Notas individuais do jogador na temporada atual (média, jogos, últimas notas)
  app.get('/api/rooms/:code/player/:pid/notas',auth,wrap(async(r,s)=>{const room=await member(r);const pid=String(+r.params.pid);const [comp]=await q('SELECT id FROM competitions WHERE room_id=$1 ORDER BY id DESC LIMIT 1',[room.id]);if(!comp)return s.json({apps:0,avg:null,last:[]});
@@ -83,7 +83,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
      if(!ex)for(const g of L.koMatches(step,{rank,prev}))await c.query('INSERT INTO matches(comp_id,round,home,away,stage,leg,tie,neutral) VALUES($1,$2,$3,$4,$5,$6,$7,$8)',[comp.id,round,g.home,g.away,g.stage,g.leg,g.tie,!!g.neutral]);
      if(step.stage==='playin'&&!ex)out.push({info:'Fase de liga encerrada! Top 10 nas oitavas, 11º–22º no play-in.'});}
     const ms=(await c.query('SELECT * FROM matches WHERE comp_id=$1 AND round=$2',[comp.id,round])).rows;
-    for(const m of ms){const H={club_id:m.home,...await xiFor(c,roomId,m.home),form:await form(c,comp.id,m.home)},A={club_id:m.away,...await xiFor(c,roomId,m.away),form:await form(c,comp.id,m.away)};
+    for(const m of ms){const H={club_id:m.home,...await xiFor(c,roomId,m.home),form:await form(c,comp.id,m.home)},A={club_id:m.away,...await xiFor(c,roomId,m.away),form:await form(c,comp.id,m.away)};H.alt=ALT(m.home);A.alt=ALT(m.away);H.neutral=!!m.neutral;
      const res=S.playMatch(H,A);let tie=null;
      if(m.stage!=='league'){const decisive=m.stage==='playin'||m.leg===2||(m.stage==='final'?L.CFG.FINAL_SINGLE:!L.CFG.KO_TWO_LEGS);
       if(decisive){const legs=(await c.query('SELECT * FROM matches WHERE comp_id=$1 AND stage=$2 AND tie=$3 AND played',[comp.id,m.stage,m.tie])).rows;tie=L.decideTie([...legs,{...m,hg:res.hg,ag:res.ag}],{...m,hg:res.hg,ag:res.ag});if(legs.length===0)tie.agg=null;}}

@@ -36,8 +36,11 @@ function rate(s,p,gf,ga){const S=sec(p),f=clamp(s.min/90,.15,1);let v;
   if(S==='DEF'){v-=Math.max(0,s.ga-1)*.18;if(s.ga===0&&s.min>=60)v+=.3;}}
  v+=(gf>ga?.25:gf<ga?-.2:0)*f-s.yc*.3-s.rd*1.5+s.noise;
  if(s.min<45)v=6.5+(v-6.5)*(.4+s.min/75);return r1(clamp(v,3,10));}
-function playMatch(H,A,r=Math.random){ // H/A = {club_id,xi,bench?,form}
- const sH=strength(H.xi),sA=strength(A.xi),[xH,xA]=expected(sH,sA,H.form,A.form);const hg=poisson(xH,r),ag=poisson(xA,r);
+// Altitude: d = (alt mandante − max(alt visitante,1000 m))/1000. Ex.: Bolívar (3640 m) x clube ao nível do mar: d≈2,6 → mandante +13% xG, visitante −16% xG,
+// gols do mandante mais concentrados no 2º tempo e notas do visitante caem um pouco no 2º tempo (cansaço). Efeito moderado.
+const altD=(H,A)=>H.neutral?0:Math.max(0,((+H.alt||0)-Math.max(+A.alt||0,1000))/1000);
+function playMatch(H,A,r=Math.random){ // H/A = {club_id,xi,bench?,form,alt?}
+ const sH=strength(H.xi),sA=strength(A.xi),AD=altD(H,A);let [xH,xA]=expected(sH,sA,H.form,A.form);xH*=1+0.05*AD;xA*=Math.max(.7,1-0.06*AD);const hg=poisson(xH,r),ag=poisson(xA,r);
  const events=[],pr={},S0={},on={},teams=[[H,hg,ag,xH],[A,ag,hg,xA]];
  const mk=(p,T,i,o)=>{pr[p.id]={g:0,a:0};S0[p.id]={club:T.club_id,in:i,out:o,min:0,g:0,a:0,sh:0,sot:0,kp:0,pa:0,pac:0,dr:0,drs:0,tk:0,it:0,cl:0,rc:0,lost:0,fc:0,yc:0,rd:0,og:0,pkm:0,svd:0,svs:0,cla:0,lbs:0,ga:0,err:0,pks:0,noise:0};};
  const subs={};for(const [T] of teams){T.xi.forEach(p=>mk(p,T,0,90));subs[T.club_id]=[];
@@ -46,7 +49,7 @@ function playMatch(H,A,r=Math.random){ // H/A = {club_id,xi,bench?,form}
    const o=outs[Math.floor(r()*outs.length)];const cand=bench.filter(p=>!used.has(p)&&sec(p)===sec(o));const inn=(cand.length?cand:bench.filter(p=>!used.has(p)&&sec(p)!=='GK'))[0];if(!inn)break;used.add(inn);
    S0[o.id].out=min;mk(inn,T,min,90);subs[T.club_id].push({min,out:o.id,in:inn.id,inn});}}
  const field=(T,m)=>[...T.xi,...subs[T.club_id].map(s=>s.inn)].filter(p=>S0[p.id].in<=m&&S0[p.id].out>m);
- const goals=(T,O,n)=>{for(let i=0;i<n;i++){const min=1+Math.floor(r()*90);const fl=field(T,min);
+ const goals=(T,O,n)=>{for(let i=0;i<n;i++){const min=T===H&&AD>0?(r()<0.5+0.06*AD?46+Math.floor(r()*45):1+Math.floor(r()*45)):1+Math.floor(r()*90);const fl=field(T,min);
   if(r()<.03){const d=field(O,min).filter(p=>sec(p)==='DEF');if(d.length){const og=d[Math.floor(r()*d.length)];S0[og.id].og++;events.push({min,club:T.club_id,scorer:og.id,scorer_name:og.name,og:true,assist:null,assist_name:null});continue;}}
   if(!fl.length)continue;const sc=pick(fl,fl.map(p=>(GW[p.primary_position]??.3)*st(p,'shooting')**2),r);let as=null;
   if(sc&&r()<0.8&&fl.length>1){const c=fl.filter(p=>p!==sc);as=pick(c,c.map(p=>(AW[p.primary_position]??.3)*st(p,'passing')**2),r);pr[as.id].a++;S0[as.id].a++;}
@@ -70,13 +73,13 @@ function playMatch(H,A,r=Math.random){ // H/A = {club_id,xi,bench?,form}
    s.lost=pois((sec(p)==="ATT"?8:sec(p)==="MID"?6.5:sec(p)==="DEF"?4.5:1.5)*f*(1.15-(ovr-60)*.01),r)+(s.dr-s.drs);s.fc=pois(P.ft*f,r);
    if(sec(p)==='GK'){s.cla=pois(1.3,r);s.lbs=pois(6*f,r);s.pa+=s.lbs+pois(4,r);s.pac=Math.round(s.pa*acc);}
    if(r()<.12*f+s.fc*.03)s.yc=1;if(r()<.008*f)s.rd=1;if(s.sh&&r()<.012)s.pkm=1;
-   s.noise=(r()+r()+r()-1.5)*.35;}}
+   s.noise=(r()+r()+r()-1.5)*.35;if(T===A&&AD>0)s.noise-=0.08*AD*Math.max(0,s.out-Math.max(s.in,45))/45;}}
  const ratings={};for(const [T,gf,ga] of teams)for(const p of all(T))ratings[p.id]=rate(S0[p.id],p,gf,ga);
  const pstats={};for(const id in S0){const s=S0[id];const o={};for(const k in s)if(k!=='noise'&&k!=='club'&&s[k])o[k]=s[k];o.min=s.min;pstats[id]=o;}
  const motm=+Object.entries(ratings).sort((a,b)=>b[1]-a[1])[0]?.[0]||null;
  const lu=T=>[...T.xi.map(p=>({id:p.id,name:p.name,pos:p.primary_position,...(S0[p.id].out<90?{out:S0[p.id].out}:{})})),...subs[T.club_id].map(s=>({id:s.inn.id,name:s.inn.name,pos:s.inn.primary_position,sub:true,in:s.min}))];
  const appeared=[...all(H).map(p=>[p,H.club_id]),...all(A).map(p=>[p,A.club_id])];
- return {hg,ag,xg:[+xH.toFixed(2),+xA.toFixed(2)],strength:{home:sH,away:sA},events,ratings,pstats,motm,goalsBy:pr,appeared,
+ return {altitude:AD?Math.round(AD*1000)+1000:0,hg,ag,xg:[+xH.toFixed(2),+xA.toFixed(2)],strength:{home:sH,away:sA},events,ratings,pstats,motm,goalsBy:pr,appeared,
   subs:{home:subs[H.club_id].map(({min,out,in:i})=>({min,out,in:i})),away:subs[A.club_id].map(({min,out,in:i})=>({min,out,in:i}))},
   lineups:{home:lu(H),away:lu(A)}};}
 // Turno e returno (método do círculo)

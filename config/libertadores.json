@@ -9,161 +9,184 @@
    "country": "Brasil",
    "db": "Flamengo",
    "squad": "file",
-   "budget": 0
+   "budget": 0,
+   "alt": 10
   },
   {
    "name": "Palmeiras",
    "country": "Brasil",
    "db": "Palmeiras",
    "squad": "file",
-   "budget": 0
+   "budget": 0,
+   "alt": 760
   },
   {
    "name": "Fluminense",
    "country": "Brasil",
    "db": "Fluminense",
    "squad": "file",
-   "budget": 0
+   "budget": 0,
+   "alt": 10
   },
   {
    "name": "Botafogo",
    "country": "Brasil",
    "db": "Botafogo",
    "squad": "file",
-   "budget": 200000000
+   "budget": 200000000,
+   "alt": 10
   },
   {
    "name": "São Paulo",
    "country": "Brasil",
    "db": "São Paulo",
    "squad": "file",
-   "budget": 100000000
+   "budget": 100000000,
+   "alt": 760
   },
   {
    "name": "Corinthians",
    "country": "Brasil",
    "db": "Corinthians",
    "squad": "file",
-   "budget": 50000000
+   "budget": 50000000,
+   "alt": 760
   },
   {
    "name": "Atlético Mineiro",
    "country": "Brasil",
    "db": "Atlético-MG",
    "squad": "file",
-   "budget": 0
+   "budget": 0,
+   "alt": 850
   },
   {
    "name": "Grêmio",
    "country": "Brasil",
    "db": "Grêmio",
    "squad": "file",
-   "budget": 50000000
+   "budget": 50000000,
+   "alt": 10
   },
   {
    "name": "Internacional",
    "country": "Brasil",
    "db": null,
    "squad": "file",
-   "budget": 100000000
+   "budget": 100000000,
+   "alt": 10
   },
   {
    "name": "Cruzeiro",
    "country": "Brasil",
    "db": "Cruzeiro",
    "squad": "file",
-   "budget": 50000000
+   "budget": 50000000,
+   "alt": 850
   },
   {
    "name": "Bahia",
    "country": "Brasil",
    "db": "Bahia",
    "squad": "file",
-   "budget": 200000000
+   "budget": 200000000,
+   "alt": 10
   },
   {
    "name": "Santos",
    "country": "Brasil",
    "db": "Santos",
    "squad": "file",
-   "budget": 50000000
+   "budget": 50000000,
+   "alt": 5
   },
   {
    "name": "Vasco",
    "country": "Brasil",
    "db": "Vasco da Gama",
    "squad": "file",
-   "budget": 100000000
+   "budget": 100000000,
+   "alt": 10
   },
   {
    "name": "Athletico-PR",
    "country": "Brasil",
    "db": null,
    "squad": "file",
-   "budget": 100000000
+   "budget": 100000000,
+   "alt": 935
   },
   {
    "name": "River Plate",
    "country": "Argentina",
    "db": "River Plate",
    "squad": "db",
-   "budget": 0
+   "budget": 0,
+   "alt": 25
   },
   {
    "name": "Boca Juniors",
    "country": "Argentina",
    "db": "Boca Juniors",
    "squad": "db",
-   "budget": 50000000
+   "budget": 50000000,
+   "alt": 25
   },
   {
    "name": "Racing",
    "country": "Argentina",
    "db": "Racing Club",
    "squad": "db",
-   "budget": 200000000
+   "budget": 200000000,
+   "alt": 25
   },
   {
    "name": "Independiente",
    "country": "Argentina",
    "db": "Independiente",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 25
   },
   {
    "name": "San Lorenzo",
    "country": "Argentina",
    "db": "San Lorenzo",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 25
   },
   {
    "name": "Estudiantes",
    "country": "Argentina",
    "db": "Estudiantes",
    "squad": "db",
-   "budget": 100000000
+   "budget": 100000000,
+   "alt": 20
   },
   {
    "name": "Vélez Sarsfield",
    "country": "Argentina",
    "db": "Vélez Sarsfield",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 25
   },
   {
    "name": "Argentinos Juniors",
    "country": "Argentina",
    "db": "Argentinos Jrs.",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 25
   },
   {
    "name": "Rosario Central",
    "country": "Argentina",
    "db": "Rosario Central",
    "squad": "db",
-   "budget": 200000000
+   "budget": 200000000,
+   "alt": 25
   },
   {
    "name": "Atlético Nacional",
@@ -171,105 +194,120 @@
    "db": "Atl. Nacional",
    "squad": "db",
    "crest": "692",
-   "budget": 200000000
+   "budget": 200000000,
+   "alt": 1495
   },
   {
    "name": "Lanús",
    "country": "Argentina",
    "db": "Lanús",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 25
   },
   {
    "name": "Peñarol",
    "country": "Uruguai",
    "db": "Peñarol",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 40
   },
   {
    "name": "Indep. Santa Fe",
    "country": "Colômbia",
    "db": "Indep. Santa Fe",
    "squad": "db",
-   "budget": 400000000
+   "budget": 400000000,
+   "alt": 2640
   },
   {
    "name": "Universidad Católica",
    "country": "Chile",
    "db": "Uni. Católica",
    "squad": "db",
-   "budget": 400000000
+   "budget": 400000000,
+   "alt": 570
   },
   {
    "name": "Coquimbo Unido",
    "country": "Chile",
    "db": "Coquimbo Unido",
    "squad": "db",
-   "budget": 500000000
+   "budget": 500000000,
+   "alt": 30
   },
   {
    "name": "Olimpia",
    "country": "Paraguai",
    "db": "Olimpia",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 100
   },
   {
    "name": "Cerro Porteño",
    "country": "Paraguai",
    "db": "Cerro Porteño",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 100
   },
   {
    "name": "Libertad",
    "country": "Paraguai",
    "db": "Libertad",
    "squad": "db",
-   "budget": 500000000
+   "budget": 500000000,
+   "alt": 100
   },
   {
    "name": "Barcelona de Guayaquil",
    "country": "Equador",
    "db": "Barcelona SC",
    "squad": "db",
-   "budget": 400000000
+   "budget": 400000000,
+   "alt": 5
   },
   {
    "name": "LDU Quito",
    "country": "Equador",
    "db": "LDU Quito",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 2850
   },
   {
    "name": "Independiente del Valle",
    "country": "Equador",
    "db": "IDV",
    "squad": "db",
-   "budget": 300000000
+   "budget": 300000000,
+   "alt": 2520
   },
   {
    "name": "Sporting Cristal",
    "country": "Peru",
    "db": "Sporting Cristal",
    "squad": "db",
-   "budget": 400000000
+   "budget": 400000000,
+   "alt": 100
   },
   {
    "name": "Universitario",
    "country": "Peru",
    "db": "Universitario",
    "squad": "db",
-   "budget": 500000000
+   "budget": 500000000,
+   "alt": 100
   },
   {
    "name": "Bolívar",
    "country": "Bolívia",
    "db": "Bolívar",
    "squad": "db",
-   "budget": 500000000
+   "budget": 500000000,
+   "alt": 3640
   },
   {
    "name": "Nacional",
@@ -306,14 +344,16 @@
     213064
    ],
    "rename_source": "Nacional (POR)",
-   "budget": 400000000
+   "budget": 400000000,
+   "alt": 40
   },
   {
    "name": "Caracas FC",
    "country": "Venezuela",
    "db": "Caracas FC",
    "squad": "db",
-   "budget": 500000000
+   "budget": 500000000,
+   "alt": 900
   }
  ],
  "meta_onze": 6,
@@ -371,5 +411,6 @@
    "_nome": "Conan Ledesma"
   }
  },
- "_doc_budget": "Verba inicial por ranking da média dos 18 maiores overs (out/2026): 5 piores 500M, 5 400M, 10 300M, 5 200M, 5 100M, 5 50M, 5 melhores 0"
+ "_doc_budget": "Verba inicial por ranking da média dos 18 maiores overs (out/2026): 5 piores 500M, 5 400M, 10 300M, 5 200M, 5 100M, 5 50M, 5 melhores 0",
+ "_doc_alt": "alt: altitude (m) do estádio do mandante. Acima de 1000 m o mandante ganha vantagem e o visitante (de cidade baixa) cansa mais no 2º tempo. Efeito moderado; visitante de altitude sofre pouco."
 }
