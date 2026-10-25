@@ -44,7 +44,7 @@ window.zSim=async(force)=>{const bad=OV.clubs.filter(c=>c.manager&&!c.meta.ok);
  try{await post(R()+'/advance',{});}catch(e){return alert(e.message)}route();};
 
 // ---------- MERCADO ----------
-let MS={sub:'todos',chip:'',q:'',pos:'',club:'',max:'',u23:false,page:0,list:[]};
+let MS={sub:'todos',chip:'',q:'',pos:'',club:'',a1:'',a2:'',o1:'',o2:'',p1:'',p2:'',page:0,list:[]};
 const SEG=()=>`<div class="seg"><a href="#/mercado/todos" class="${!['livres','contratacoes'].includes(MS.sub)?'on':''}">Todos os jogadores</a><a href="#/mercado/livres" class="${MS.sub==='livres'?'on':''}">Livres <span id="nfree"></span></a><a href="#/mercado/contratacoes" class="${MS.sub==='contratacoes'?'on':''}">✍️ Contratações</a></div>`;
 async function zMercado(sub){if(!await need('mercado'))return;if(sub)MS.sub=sub;if(MS.sub==='contratacoes')return contratacoes(1);
  let mk;try{mk=await get(R()+'/market')}catch(e){mk={}}let reserved=0;try{const o=await get(R()+'/market/offers');reserved=(o.sent||[]).filter(x=>['pending','countered','club_accepted'].includes(x.status)).reduce((a,x)=>a+(+x.fee||0),0)}catch(e){}
@@ -53,15 +53,15 @@ async function zMercado(sub){if(!await need('mercado'))return;if(sub)MS.sub=sub;
  ${SEG()}
  <div class="chips"><span class="chip ${MS.chip==='venda'?'on':''}" onclick="zChip('venda')">🏷️ À venda</span><span class="chip ${MS.chip==='obs'?'on':''}" onclick="zChip('obs')">👁 Observados</span><a class="chip" href="#/negociacoes">🤝 Negociações${mk.counts?.received+mk.counts?.to_act?` (${mk.counts.received+mk.counts.to_act})`:''}</a></div>
  <div class="bar" style="flex-direction:column"><input id="mq" placeholder="Buscar jogador ou clube" value="${esc(MS.q)}" onkeydown="if(event.key==='Enter')zBusca()">
- <div style="display:flex;gap:6px;flex-wrap:wrap"><select id="mpos" style="flex:1"><option value="">Posição</option>${(window.POS||['GOL','ZAG','LD','LE','VOL','MC','MEI','PE','PD','ATA']).map(p=>`<option ${MS.pos===p?'selected':''}>${p}</option>`).join('')}</select>
- <select id="mclub" style="flex:2"><option value="">Todos os clubes</option>${OV.clubs.map(c=>`<option value="${c.id}" ${+MS.club===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
- <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><input id="mmax" type="number" placeholder="Valor máx. (€ mi)" value="${MS.max}" style="flex:1 1 150px;min-width:150px"><label class="tog"><input type="checkbox" id="mu23" ${MS.u23?'checked':''}> Sub-23</label><button class="btn" onclick="zBusca()">Buscar</button></div></div>
+ <div class="zfg"><div class="zf"><span>Posição</span><select id="mpos"><option value="">Todas</option>${(window.POS||['GOL','ZAG','LD','LE','VOL','MC','MEI','PE','PD','ATA']).map(p=>`<option ${MS.pos===p?'selected':''}>${p}</option>`).join('')}</select></div>
+ <div class="zf"><span>Clubes</span><select id="mclub"><option value="">Todos os clubes</option>${OV.clubs.map(c=>`<option value="${c.id}" ${+MS.club===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+ <div class="zf"><span>Idade</span><div class="zr"><input id="ma1" type="number" inputmode="numeric" placeholder="mín" value="${MS.a1}"><b>–</b><input id="ma2" type="number" inputmode="numeric" placeholder="máx" value="${MS.a2}"></div></div><div class="zf"><span>Overall</span><div class="zr"><input id="mo1" type="number" inputmode="numeric" placeholder="mín" value="${MS.o1}"><b>–</b><input id="mo2" type="number" inputmode="numeric" placeholder="máx" value="${MS.o2}"></div></div><div class="zf"><span>Potencial</span><div class="zr"><input id="mp1" type="number" inputmode="numeric" placeholder="mín" value="${MS.p1}"><b>–</b><input id="mp2" type="number" inputmode="numeric" placeholder="máx" value="${MS.p2}"></div></div><div class="zf"><span>&nbsp;</span><button class="btn" style="width:100%" onclick="zBusca()">Buscar</button></div></div></div>
  <div id="mres"><div class="empty">Carregando…</div></div>`;
  zBusca(true);}
 window.zChip=c=>{MS.chip=MS.chip===c?'':c;MS.page=0;zMercado();};
-window.zBusca=async(keep)=>{const g=id=>document.getElementById(id);if(g('mq')){MS.q=g('mq').value.trim();MS.pos=g('mpos').value;MS.club=g('mclub').value;MS.max=g('mmax').value;MS.u23=g('mu23').checked}if(keep!==true)MS.page=0;
+window.zBusca=async(keep)=>{const g=id=>document.getElementById(id);if(g('mq')){MS.q=g('mq').value.trim();MS.pos=g('mpos').value;MS.club=g('mclub').value;for(const k of ['a1','a2','o1','o2','p1','p2'])MS[k]=g('m'+k).value;}if(keep!==true)MS.page=0;
  let q=MS.q;const cm=q&&OV.clubs.find(c=>c.name.toLowerCase().includes(q.toLowerCase()));const club=MS.club||(cm?cm.id:'');if(cm&&!MS.club)q='';
- const p=new URLSearchParams();if(q)p.set('q',q);if(MS.pos)p.set('pos',MS.pos);if(club)p.set('club',club);if(MS.max)p.set('maxValue',Math.round(+MS.max*1e6));if(MS.u23)p.set('maxAge',23);if(MS.sub==='livres')p.set('free','1');if(MS.chip==='venda')p.set('listed','1');
+ const p=new URLSearchParams();if(q)p.set('q',q);if(MS.pos)p.set('pos',MS.pos);if(club)p.set('club',club);for(const [k,n] of [['a1','minAge'],['a2','maxAge'],['o1','minOvr'],['o2','maxOvr'],['p1','minPot'],['p2','maxPot']])if(MS[k]!=='')p.set(n,MS[k]);if(MS.sub==='livres')p.set('free','1');if(MS.chip==='venda')p.set('listed','1');
  try{let L;if(MS.chip==='obs'){L=await get(R()+'/market/watch');if(!Array.isArray(L))L=L.players||L.list||[]}else L=await get(R()+'/market/search?'+p);MS.list=L;
   if(MS.sub==='livres'){const n=document.getElementById('nfree');if(n)n.textContent='('+L.length+')'}zPage(0);}catch(e){document.getElementById('mres').innerHTML=empty('Erro',esc(e.message))}};
 window.zPage=d=>{MS.page=Math.max(0,Math.min(MS.page+d,Math.ceil(MS.list.length/20)-1));const L=MS.list.slice(MS.page*20,MS.page*20+20),el=document.getElementById('mres');if(!el)return;
