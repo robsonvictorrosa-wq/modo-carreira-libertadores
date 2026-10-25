@@ -4,6 +4,8 @@ const S=require('./sim'),X=require('./rules');
 module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  const {C,L,FREE,isFree}=R;const LIB={has:id=>require('./libertadores').CLUBS.includes(id)};const clubName=id=>C.get(id)?.name||'Sem clube';const pname=id=>R.P.get(id)?.name||'?';
  const freeOf=g=>FREE[g==='F'?'F':'M'];
+ // só existem no jogo jogadores dos 40 clubes (base): FC27 sem clube/fora da liga nunca entram no mercado, livres ou IA
+ const inGame=id=>LIB.has(R.P.get(id)?.club_id);
  const repOf=c=>X.rep(c,L);const la=c=>L.get(c.league_id)?.attr||60;
  // ---------- janela ----------
  async function mainComp(db,room){return (await db.query('SELECT * FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY rounds_total DESC,id LIMIT 1',[room.id,room.season])).rows[0];}
@@ -55,7 +57,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const summer=win.days===4;const pBuy=summer?0.55:0.25;
   // índice por setor+gênero ordenado por OVR
   const dism=new Set((await db.query('SELECT player_id FROM room_players WHERE room_id=$1 AND club_id=ANY($2::int[])',[room.id,[FREE.M,FREE.F].filter(Boolean)])).rows.map(x=>x.player_id));
-  const idx={};for(const p of W.players.values()){const c=W.clubs.get(p.club_id);if(!c||!(LIB.has(p.club_id)||(isFree(p.club_id)&&dism.has(p.id)))||hum.has(p.club_id)||p.loan_from)continue;const k=c.gender+S.sec(p);(idx[k]=idx[k]||[]).push(p);}
+  const idx={};for(const p of W.players.values()){const c=W.clubs.get(p.club_id);if(!c||!inGame(p.id)||!(LIB.has(p.club_id)||(isFree(p.club_id)&&dism.has(p.id)))||hum.has(p.club_id)||p.loan_from)continue;const k=c.gender+S.sec(p);(idx[k]=idx[k]||[]).push(p);}
   for(const k in idx)idx[k].sort((a,b)=>a.overall-b.overall);
   const lower=(a,v)=>{let l=0,h=a.length;while(l<h){const m=(l+h)>>1;if(a[m].overall<v)l=m+1;else h=m;}return l;};
   const move=(p,from,to,fee,wage,kind,loan)=>{const fc=W.clubs.get(from),tc=W.clubs.get(to);if(fc){const i=fc.squad.indexOf(p);if(i>=0)fc.squad.splice(i,1);}if(tc)tc.squad.push(p);tc&&tc.squad.sort((a,b)=>b.overall-a.overall);
@@ -131,14 +133,14 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  app.get('/api/rooms/:code/market/search',auth,wrap(async(r,s)=>{const room=await member(r);const Q=r.query;const hum=await humans(pool,room.id);let gender=null;try{gender=C.get(await myClub(pool,room,r.user.id)).gender;}catch(e){}
   // Zero Clubistas: só jogadores masculinos que estão HOJE nos 40 clubes da liga (sem livres, sem clubes de fora)
   const ov=await q('SELECT * FROM room_players WHERE room_id=$1',[room.id]);const om=new Map(ov.map(o=>[o.player_id,o]));
-  const ids=new Set();for(const cid of require('./libertadores').CLUBS)for(const id of (R.byClub.get(cid)||[]))ids.add(id);for(const o of ov)if(LIB.has(o.club_id)||isFree(o.club_id))ids.add(o.player_id);
+  const ids=new Set();for(const cid of require('./libertadores').CLUBS)for(const id of (R.byClub.get(cid)||[]))ids.add(id);for(const o of ov)if((LIB.has(o.club_id)||isFree(o.club_id))&&inGame(o.player_id))ids.add(o.player_id);
   const t=String(Q.q||'').toLowerCase();const key={overall:p=>-p.overall,potential:p=>-(p.potential||0),value:p=>-(+p.market_value||0),age:p=>p.age}[Q.sort]||(p=>-p.overall);
-  let list=[...ids].map(id=>R.merge(R.P.get(id),om.get(id))).filter(p=>p&&(LIB.has(p.club_id)||(isFree(p.club_id)&&om.get(p.id)&&isFree(om.get(p.id).club_id)))&&(Q.free!=='1'||isFree(p.club_id))&&C.get(p.club_id)?.gender!=='F'&&R.P.get(p.id)?.gender!=='Mulher')
+  let list=[...ids].map(id=>R.merge(R.P.get(id),om.get(id))).filter(p=>p&&inGame(p.id)&&(LIB.has(p.club_id)||(isFree(p.club_id)&&om.get(p.id)&&isFree(om.get(p.id).club_id)))&&(Q.free!=='1'||isFree(p.club_id))&&C.get(p.club_id)?.gender!=='F'&&R.P.get(p.id)?.gender!=='Mulher')
    .filter(p=>(!t||p.name.toLowerCase().includes(t)||String(p.nationality||'').toLowerCase().includes(t))&&(!Q.pos||p.primary_position===Q.pos)&&(!Q.minOvr||p.overall>=+Q.minOvr)&&(!Q.maxOvr||p.overall<=+Q.maxOvr)&&(!Q.minAge||p.age>=+Q.minAge)&&(!Q.maxAge||p.age<=+Q.maxAge)&&(!Q.minPot||(p.potential??p.overall)>=+Q.minPot)&&(!Q.maxPot||(p.potential??p.overall)<=+Q.maxPot)&&(!Q.maxValue||(+p.market_value||0)<=+Q.maxValue)&&(!Q.club||(Q.club==='free'?isFree(p.club_id):p.club_id===+Q.club)))
    .sort((a,b)=>key(a)-key(b)).slice(0,Q.club?60:150);
   if(Q.listed==='1')list=list.filter(p=>p.listed||p.wants_out);
   s.json(list.map(p=>view(p,hum)));}));
- app.get('/api/rooms/:code/market/player/:pid',auth,wrap(async(r,s)=>{const room=await member(r);const p=await R.player(pool,room.id,+r.params.pid);if(!p)throw fail('Jogador não encontrado',404);const hum=await humans(pool,room.id);
+ app.get('/api/rooms/:code/market/player/:pid',auth,wrap(async(r,s)=>{const room=await member(r);const p=await R.player(pool,room.id,+r.params.pid);if(!p||!inGame(p.id))throw fail('Jogador não encontrado',404);const hum=await humans(pool,room.id);
   let ctx={};try{const cid=await myClub(pool,room,r.user.id);const mine=await R.squad(pool,room.id,cid,false);const n=(await q('SELECT * FROM negotiations WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3',[room.id,cid,p.id]))[0];
    ctx={my_club:cid,own:p.club_id===cid,expected_role:p.club_id===cid?null:X.expectedRole(p,mine),blocked:n&&n.blocked_until>=room.market_day,club_fails:n?.club_fails||0,player_fails:n?.player_fails||0,watched:!!(await q('SELECT 1 FROM watchlist WHERE room_id=$1 AND user_id=$2 AND player_id=$3',[room.id,r.user.id,p.id])).length};}catch(e){}
   let imp=null;if(!isFree(p.club_id)){const sq=await R.squad(pool,room.id,p.club_id,false);imp=X.importance(p,sq).k;}
@@ -147,7 +149,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  // nova proposta
  app.post('/api/rooms/:code/market/offer',auth,wrap(async(r,s)=>s.json(await tx(async c=>{const room=await lockRoom(c,r);const win=await needOpen(c,room);const buyer=await myClub(c,room,r.user.id);const hum=await humans(c,room.id);
   const pid=+r.body?.player_id,fee=Math.max(0,Math.round(+r.body?.fee||0)),loan=!!r.body?.loan,swap=r.body?.swap_player_id?+r.body.swap_player_id:null;const p=await R.player(c,room.id,pid);if(!p)throw fail('Jogador não encontrado');
-  if(!(LIB.has(p.club_id)||isFree(p.club_id))||!LIB.has(buyer))throw fail('Por enquanto só há transferências entre os 40 clubes da liga');if(loan)throw fail('Empréstimos estão desativados');const lr=loan?Math.round(+r.body?.loan_rounds||0):null;if(loan&&!(lr>=1&&lr<=39))throw fail('Informe por quantas rodadas (1 a 39) é o empréstimo');
+  if(!inGame(p.id)||!(LIB.has(p.club_id)||isFree(p.club_id))||!LIB.has(buyer))throw fail('Por enquanto só há transferências entre os 40 clubes da liga');if(loan)throw fail('Empréstimos estão desativados');const lr=loan?Math.round(+r.body?.loan_rounds||0):null;if(loan&&!(lr>=1&&lr<=39))throw fail('Informe por quantas rodadas (1 a 39) é o empréstimo');
   if(p.club_id===buyer)throw fail('Esse jogador já é seu');capChk(p,fee);const bc=C.get(buyer),sc=C.get(p.club_id);if(sc.gender!==bc.gender)throw fail('Jogador de outra modalidade (masculino/feminino)');
   const f=await finances(c,room.id,buyer);if(f.squad.length+(swap?0:1)>X.MAX_SQ)throw fail(`Elenco cheio (máximo ${X.MAX_SQ})`);if(fee>f.available||f.available<=0)throw noMoney(fee,f);
   if(swap&&!f.squad.some(x=>x.id===swap))throw fail('Jogador de troca não é do seu elenco');if(p.loan_from)throw fail('Jogador emprestado não pode ser negociado');
