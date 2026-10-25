@@ -46,7 +46,7 @@ module.exports=(app,uni)=>{
   const ev=await q('SELECT text,created_at FROM room_events WHERE room_id=$1 ORDER BY id DESC LIMIT 20',[room.id]);
   s.json({...room,me:r.user.id,managers:ms.map(m=>({...m,club:clubInfo(m.club_id)})),events:ev});}));
  app.post('/api/rooms/:code/club',auth,wrap(async(r,s)=>{const room=await member(r);const club=clubInfo(+r.body?.club_id);if(!club)throw fail('Clube inválido');
-  if(room.status!=='lobby')throw fail('A temporada já começou');
+  if(room.status!=='lobby')throw fail('A temporada já começou');if(!uni.prepare('SELECT 1 FROM lib_clubs WHERE club_id=?').get(club.id))throw fail('Na Libertadores ZC só valem os 40 clubes da competição');
   const taken=await q('SELECT u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1 AND club_id=$2 AND user_id<>$3',[room.id,club.id,r.user.id]);if(taken.length)throw fail(club.name+' já é de '+taken[0].nick,409);
   try{await q('UPDATE room_managers SET club_id=$3 WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id,club.id]);}catch(e){if(e.code==='23505')throw fail('Clube já escolhido',409);throw e;}
   await bump(room.id,`${r.user.nick} assumiu o ${club.name} (${club.league})`);s.json({ok:1,club});}));
@@ -64,6 +64,7 @@ module.exports=(app,uni)=>{
  const R=require('./roster')(uni);
  const M=require('./market')({app,uni,q,pool,auth,wrap,fail,member,bump,R});
  require('./season')({app,uni,q,pool,auth,wrap,fail,member,bump,R,M});
+ require('./bolao')({app,uni,q,pool,auth,wrap,fail,member});
  // apagar a própria conta (usado também para limpar usuários de teste): exige PIN
  app.delete('/api/me',auth,wrap(async(r,s)=>{const [u]=await q('SELECT * FROM users WHERE id=$1',[r.user.id]);if(!check(String(r.body?.pin||''),u.pass_hash))throw fail('PIN incorreto',401);
   await q('DELETE FROM rooms WHERE owner_id=$1',[u.id]);await q('DELETE FROM room_managers WHERE user_id=$1',[u.id]);await q('DELETE FROM watchlist WHERE user_id=$1',[u.id]);await q('DELETE FROM users WHERE id=$1',[u.id]);s.json({ok:1});}));

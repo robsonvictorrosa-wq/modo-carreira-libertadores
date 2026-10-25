@@ -1,10 +1,9 @@
-# Modo Carreira FC 27 (multiplayer) – Etapa 1
-- `node import.js` → gera `data/game.db` (SQLite) a partir de `data/fc27.json`
-- `./start.sh` → sobe o servidor em background na porta 3027
-- Tabelas users/rooms/room_* já criadas para as etapas 2–4 (estado por sala).
-- Publicação: neste box só sai HTTP(S) via proxy; cloudflared (porta 7844), localtunnel, pinggy (SSH) e tunnelmole falharam. Caminho sugerido: deploy no Render.
+# Modo Carreira Libertadores – Zero Clubismo
+Fork do Modo Carreira FC 27: salas multiplayer (apelido + PIN), temporada simulada rodada a rodada, mercado de transferências e PWA instalável, agora no formato **Libertadores ZC**.
 
-## Etapa 2 – Multiplayer
-- Usuários/sessões/salas em Postgres (`DATABASE_URL`, qualquer Postgres; SSL automático para hosts externos, `PGSSL=0/1` força). Schema em `pg.sql`, criado no boot.
-- Estado por sala: `room_clubs` (orçamento de todos os clubes, copiado ao criar a sala) e `room_players` (copy-on-write: só jogadores alterados).
-- Universo FC27 continua read-only no SQLite gerado no build.
+- 40 clubes (lista e caixas em `config/libertadores.json`). Os 14 brasileiros, exceto Bahia e Botafogo, começam com elenco vazio.
+- Todos contra todos em 39 rodadas. 1º–10º vão às oitavas; 11º–22º jogam o play-in em jogo único na casa da melhor campanha. Mata-mata ida e volta, final única, pênaltis. Regras em `libertadores.js` (CFG).
+- Resenha pós-jogo (`resenha.js`), bolão por sala (`bolao.js`) e histórico real com fonte (`public/historico.html`).
+- Stack: Node 20 + Express, SQLite read-only (universo FC27, gerado por `node import.js`) e Postgres (`DATABASE_URL`).
+
+Local: `npm ci && node import.js && DATABASE_URL=postgres://... PGSSL=0 node server.js`

@@ -30,3 +30,17 @@ db.exec(`UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=
  budget=(SELECT coalesce(sum(market_value),0)/8 FROM players WHERE club_id=clubs.id)`);
 console.log(db.prepare('select count(*) n from players').get(),db.prepare('select count(*) n from clubs').get(),db.prepare('select count(*) n from leagues').get());
 console.log(db.prepare("select name,(select count(*) from clubs where league_id=leagues.id) c from leagues where kind='conmebol'").all());
+// ===== Libertadores ZC: aplica config/libertadores.json =====
+{const CF=JSON.parse(fs.readFileSync(__dirname+'/config/libertadores.json','utf8'));
+ const lg=db.prepare("INSERT INTO leagues(name,country,tier,gender,kind) VALUES('Libertadores ZC – clubes fora do FC27','Vários',1,'Homem','conmebol')").run().lastInsertRowid;
+ const g=db.prepare("SELECT gender FROM leagues WHERE id=(SELECT league_id FROM clubs WHERE name='Flamengo')").get();if(g)db.prepare('UPDATE leagues SET gender=? WHERE id=?').run(g.gender,lg);
+ const miss=[];db.transaction(()=>{for(const c of CF.clubs){let id=null;
+  if(c.db){const r=db.prepare("SELECT c.id FROM clubs c JOIN leagues l ON l.id=c.league_id WHERE c.name=? AND l.kind!='free' ORDER BY (SELECT count(*) FROM players WHERE club_id=c.id) DESC").get(c.db);id=r?.id;}
+  if(!id){id=db.prepare('INSERT INTO clubs(name,league_id) VALUES(?,?)').run(c.name,lg).lastInsertRowid;miss.push(c.name);}
+  else db.prepare('UPDATE clubs SET name=? WHERE id=?').run(c.name,id);
+  if(c.squad==='empty')db.prepare('DELETE FROM players WHERE club_id=?').run(id); // elenco vazio provisório
+  const empty=!db.prepare('SELECT 1 FROM players WHERE club_id=?').get(id);
+  db.prepare('UPDATE clubs SET budget=?,wage_bill=?,n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),overall=coalesce(?,overall) WHERE id=?').run(c.budget??CF.default_budget,c.wage_budget??CF.default_wage_budget,empty?CF.placeholder_ovr:null,id);
+  c.id=id;}})();
+ db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad));
+ console.log('Libertadores ZC: 40 clubes; fora do FC27 (criados vazios):',miss.join(', '));}

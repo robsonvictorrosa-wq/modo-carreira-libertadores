@@ -16,5 +16,6 @@ app.get('/api/players/search',(q,r)=>{const s=(q.query.q||'').trim();const w=[],
  r.json(db.prepare(`SELECT p.*,c.name club,l.name league FROM players p LEFT JOIN clubs c ON c.id=p.club_id LEFT JOIN leagues l ON l.id=c.league_id ${w.length?'WHERE '+w.join(' AND '):''} ORDER BY ${order} NULLS LAST LIMIT 100`).all(...a).map(parse));});
 app.get('/api/players/:id',(q,r)=>r.json(parse(db.prepare('SELECT p.*,c.name club,l.name league FROM players p LEFT JOIN clubs c ON c.id=p.club_id LEFT JOIN leagues l ON l.id=c.league_id WHERE p.id=?').get(q.params.id))||{}));
 app.get('/api/positions',(q,r)=>r.json(db.prepare('SELECT primary_position p,count(*) n FROM players WHERE primary_position IS NOT NULL GROUP BY 1 ORDER BY 2 DESC').all()));
+app.get('/api/libertadores/clubs',(q,r)=>r.json({cfg:require('./libertadores').CFG,clubs:db.prepare('SELECT l.ord,l.club_id id,l.name,l.country,l.squad,c.overall,c.n_players,c.budget FROM lib_clubs l JOIN clubs c ON c.id=l.club_id ORDER BY l.ord').all()}));
 require('./mp')(app,db);
 const PORT=process.env.PORT||3027;app.listen(PORT,()=>console.log('Modo Carreira on',PORT));
