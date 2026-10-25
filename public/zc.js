@@ -1,6 +1,6 @@
 /* Zero Clubistas – Libertadores · shell de UI (abas) sobre o backend existente */
 (function(){
-const TABS=[['campeonato','🏆','Campeonato'],['mercado','🛒','Mercado'],['contratacoes','✍️','Contratações'],['escalacao','📋','Escalação'],['estatisticas','📊','Estatísticas'],['leilao','🔨','Leilão'],['premiacoes','🥇','Premiações'],['clubes','💰','Clubes e verbas'],['evolucao','📈','Evolução'],['central','⚙️','Central da liga',1]];
+const TABS=[['campeonato','🏆','Campeonato'],['mercado','🛒','Mercado'],['escalacao','📋','Escalação'],['estatisticas','📊','Estatísticas'],['leilao','🔨','Leilão'],['premiacoes','🥇','Premiações'],['clubes','💰','Clubes e verbas'],['evolucao','📈','Evolução'],['central','⚙️','Central da liga',1]];
 let OV=null;const R=()=>`/rooms/${ROOM}`;
 const POSC={GOL:'#FACC15',GK:'#FACC15',ZAG:'#60A5FA',CB:'#60A5FA',LD:'#38BDF8',LE:'#38BDF8',RB:'#38BDF8',LB:'#38BDF8',VOL:'#34D399',CDM:'#34D399',MC:'#4ADE80',CM:'#4ADE80',MEI:'#A3E635',CAM:'#A3E635',ME:'#86EFAC',MD:'#86EFAC',LM:'#86EFAC',RM:'#86EFAC',PE:'#F87171',PD:'#F87171',LW:'#F87171',RW:'#F87171',ATA:'#EF4444',ST:'#EF4444',SA:'#FB923C',CF:'#FB923C'};
 const pc=p=>POSC[p]||'#9CA3AF';
@@ -45,12 +45,13 @@ window.zSim=async(force)=>{const bad=OV.clubs.filter(c=>c.manager&&!c.meta.ok);
 
 // ---------- MERCADO ----------
 let MS={sub:'todos',chip:'',q:'',pos:'',club:'',max:'',u23:false,page:0,list:[]};
-async function zMercado(sub){if(!await need('mercado'))return;if(sub)MS.sub=sub;
+const SEG=()=>`<div class="seg"><a href="#/mercado/todos" class="${!['livres','contratacoes'].includes(MS.sub)?'on':''}">Todos os jogadores</a><a href="#/mercado/livres" class="${MS.sub==='livres'?'on':''}">Livres <span id="nfree"></span></a><a href="#/mercado/contratacoes" class="${MS.sub==='contratacoes'?'on':''}">✍️ Contratações</a></div>`;
+async function zMercado(sub){if(!await need('mercado'))return;if(sub)MS.sub=sub;if(MS.sub==='contratacoes')return contratacoes(1);
  let mk;try{mk=await get(R()+'/market')}catch(e){mk={}}let reserved=0;try{const o=await get(R()+'/market/offers');reserved=(o.sent||[]).filter(x=>['pending','countered','club_accepted'].includes(x.status)).reduce((a,x)=>a+(+x.fee||0),0)}catch(e){}
  const me=mk.me||{};let si=0;try{si=(await get(R()+'/zc/signings')).in.length}catch(e){}
  app.innerHTML=`<div class="hero"><div class="kick">Mercado · ${mk.window?.open?'janela aberta':'janela fechada'}</div><h1>Mercado</h1><div class="z3"><div class="stat"><span>Orçamento</span><b>${mi(me.budget)}</b></div><div class="stat"><span>Valor reservado</span><b>${mi(reserved)}</b></div><div class="stat"><span>Jogadores na base</span><b>${me.squad_size??'—'}</b></div></div></div>
- <div class="seg"><a href="#/mercado/todos" class="${MS.sub!=='livres'?'on':''}">Todos</a><a href="#/mercado/livres" class="${MS.sub==='livres'?'on':''}">Livres <span id="nfree"></span></a></div>
- <div class="chips"><a class="chip" href="#/contratacoes">✍️ Contratações (${si})</a><span class="chip ${MS.chip==='venda'?'on':''}" onclick="zChip('venda')">🏷️ À venda</span><span class="chip ${MS.chip==='obs'?'on':''}" onclick="zChip('obs')">👁 Observados</span><a class="chip" href="#/negociacoes">🤝 Negociações${mk.counts?.received+mk.counts?.to_act?` (${mk.counts.received+mk.counts.to_act})`:''}</a></div>
+ ${SEG()}
+ <div class="chips"><span class="chip ${MS.chip==='venda'?'on':''}" onclick="zChip('venda')">🏷️ À venda</span><span class="chip ${MS.chip==='obs'?'on':''}" onclick="zChip('obs')">👁 Observados</span><a class="chip" href="#/negociacoes">🤝 Negociações${mk.counts?.received+mk.counts?.to_act?` (${mk.counts.received+mk.counts.to_act})`:''}</a></div>
  <div class="bar" style="flex-direction:column"><input id="mq" placeholder="Buscar jogador ou clube" value="${esc(MS.q)}" onkeydown="if(event.key==='Enter')zBusca()">
  <div style="display:flex;gap:6px;flex-wrap:wrap"><select id="mpos" style="flex:1"><option value="">Posição</option>${(window.POS||['GOL','ZAG','LD','LE','VOL','MC','MEI','PE','PD','ATA']).map(p=>`<option ${MS.pos===p?'selected':''}>${p}</option>`).join('')}</select>
  <select id="mclub" style="flex:2"><option value="">Todos os clubes</option>${OV.clubs.map(c=>`<option value="${c.id}" ${+MS.club===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
@@ -75,9 +76,9 @@ async function negociacoes(){if(!await need('mercado'))return;let o;try{o=await 
  app.innerHTML=`<h1>Negociações</h1><a class="back" href="#/mercado">← Mercado</a><h2>Recebidas</h2>${o.received.length?o.received.map(x=>row(x,1)).join(''):empty('Nenhuma proposta recebida')}<h2>Enviadas</h2>${o.sent.length?o.sent.map(x=>row(x,0)).join(''):empty('Nenhuma proposta enviada')}`;}
 
 // ---------- CONTRATAÇÕES ----------
-async function contratacoes(){if(!await need('contratacoes'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}const s=await get(R()+'/zc/signings'),m=s.meta;
+async function contratacoes(emb){if(!emb)return location.hash='#/mercado/contratacoes';const H0=`<div class="hero"><div class="kick">Mercado</div><h1>Contratações</h1></div>`+SEG();if(!OV.me.club_id){app.innerHTML=H0+noClub();return}const s=await get(R()+'/zc/signings'),m=s.meta;
  const it=x=>`<div class="pl">${psq(x)}<div class="i"><b>${esc(x.player||x.name)}</b><span>${esc(x.from||'')} → ${esc(x.to||'')} · ${x.kind||''}${x.loan_left!=null?` · <b style="color:#FACC15">volta em ${x.loan_left} rodada(s)</b>`:''}</span></div><b>${mi(x.fee)}</b></div>`;
- app.innerHTML=`<div class="hero"><div class="kick">Meta do onze</div><h1>${m.n}/${m.need} no XI</h1><p>${m.ok?'<b class="ok">✔ Meta cumprida.</b>':`<b class="no">Faltam ${m.need-m.n} contratados entre os titulares.</b>`} Somente jogadores contratados por você no campeonato contam.</p><a class="btn sec" href="#/escalacao">Ajustar escalação</a></div>
+ app.innerHTML=SEG()+`<div class="hero" style="margin-top:12px"><div class="kick">Meta do onze</div><h1>${m.n}/${m.need} no XI</h1><p>${m.ok?'<b class="ok">✔ Meta cumprida.</b>':`<b class="no">Faltam ${m.need-m.n} contratados entre os titulares.</b>`} Somente jogadores contratados por você no campeonato contam.</p><a class="btn sec" href="#/escalacao">Ajustar escalação</a></div>
  <h2>Contratados (${s.in.length})</h2>${s.in.length?`<div class="card" style="padding:0">${s.in.map(it).join('')}</div>`:empty('Nenhuma contratação','Vá ao <a href="#/mercado">Mercado</a> para reforçar o elenco.')}
  <h2>Vendidos / cedidos (${s.out.length})</h2>${s.out.length?`<div class="card" style="padding:0">${s.out.map(it).join('')}</div>`:empty('Nenhuma saída')}`;}
 
@@ -161,7 +162,7 @@ window.zCon=async id=>{if(!confirm('Desfazer esta venda e devolver o valor?'))re
 window.mercado=sub=>sub==='propostas'?(location.hash==='#/negociacoes'?negociacoes():location.hash='#/negociacoes'):zMercado(sub);
 const old=window.route;
 window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
- const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes,escalacao:zEscalacao,emprestimos:()=>location.hash='#/mercado',estatisticas,leilao,premiacoes,clubes,evolucao,central};
+ const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:zEscalacao,emprestimos:()=>location.hash='#/mercado',estatisticas,leilao,premiacoes,clubes,evolucao,central};
  if(['salas','sala','entrar','carreira',''].includes(t)&&t!=='')return location.hash='#/campeonato';
  if(map[t])return map[t]();
  chrome('');return old();};
