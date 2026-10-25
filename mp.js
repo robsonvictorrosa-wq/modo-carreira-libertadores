@@ -9,8 +9,14 @@ module.exports=(app,uni)=>{
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
- const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(()=>purgeRooms());
+ const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
+ // Migração única: verba inicial por ranking da média dos 18 maiores overs (config/libertadores.json clubs[].budget). Preserva movimentações já feitas (saldo - 20M + verba nova).
+ async function migVerbas2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='verbas-2610'")).rows.length)return;
+  const ids=uni.prepare('SELECT club_id FROM lib_clubs').all().map(x=>x.club_id);const nb=ids.map(id=>+(uni.prepare('SELECT budget FROM clubs WHERE id=?').get(id)?.budget||0));
+  const c=await pool.connect();try{await c.query('BEGIN');
+   await c.query('UPDATE room_clubs rc SET budget=rc.budget-20000000+u.b FROM unnest($1::int[],$2::bigint[]) u(c,b) WHERE rc.club_id=u.c',[ids,nb]);
+   await c.query("INSERT INTO lib_migrations(name) VALUES('verbas-2610')");await c.query('COMMIT');console.log('Migração verbas-2610 OK');}catch(e){await c.query('ROLLBACK');console.error('verbas-2610',e)}finally{c.release()}}
  // Migração única: troca Belgrano/Always Ready por Atlético Nacional/Nacional (URU) nas salas existentes
  async function migClubs2610(){await pool.query('CREATE TABLE IF NOT EXISTS lib_migrations(name TEXT PRIMARY KEY,at TIMESTAMPTZ DEFAULT now())');
   if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='clubs-2610'")).rows.length)return;

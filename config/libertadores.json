@@ -8,230 +8,268 @@
    "name": "Flamengo",
    "country": "Brasil",
    "db": "Flamengo",
-   "squad": "file"
+   "squad": "file",
+   "budget": 0
   },
   {
    "name": "Palmeiras",
    "country": "Brasil",
    "db": "Palmeiras",
-   "squad": "file"
+   "squad": "file",
+   "budget": 0
   },
   {
    "name": "Fluminense",
    "country": "Brasil",
    "db": "Fluminense",
-   "squad": "file"
+   "squad": "file",
+   "budget": 0
   },
   {
    "name": "Botafogo",
    "country": "Brasil",
    "db": "Botafogo",
-   "squad": "file"
+   "squad": "file",
+   "budget": 200000000
   },
   {
    "name": "São Paulo",
    "country": "Brasil",
    "db": "São Paulo",
-   "squad": "file"
+   "squad": "file",
+   "budget": 100000000
   },
   {
    "name": "Corinthians",
    "country": "Brasil",
    "db": "Corinthians",
-   "squad": "file"
+   "squad": "file",
+   "budget": 50000000
   },
   {
    "name": "Atlético Mineiro",
    "country": "Brasil",
    "db": "Atlético-MG",
-   "squad": "file"
+   "squad": "file",
+   "budget": 0
   },
   {
    "name": "Grêmio",
    "country": "Brasil",
    "db": "Grêmio",
-   "squad": "file"
+   "squad": "file",
+   "budget": 50000000
   },
   {
    "name": "Internacional",
    "country": "Brasil",
    "db": null,
-   "squad": "file"
+   "squad": "file",
+   "budget": 100000000
   },
   {
    "name": "Cruzeiro",
    "country": "Brasil",
    "db": "Cruzeiro",
-   "squad": "file"
+   "squad": "file",
+   "budget": 50000000
   },
   {
    "name": "Bahia",
    "country": "Brasil",
    "db": "Bahia",
-   "squad": "file"
+   "squad": "file",
+   "budget": 200000000
   },
   {
    "name": "Santos",
    "country": "Brasil",
    "db": "Santos",
-   "squad": "file"
+   "squad": "file",
+   "budget": 50000000
   },
   {
    "name": "Vasco",
    "country": "Brasil",
    "db": "Vasco da Gama",
-   "squad": "file"
+   "squad": "file",
+   "budget": 100000000
   },
   {
    "name": "Athletico-PR",
    "country": "Brasil",
    "db": null,
-   "squad": "file"
+   "squad": "file",
+   "budget": 100000000
   },
   {
    "name": "River Plate",
    "country": "Argentina",
    "db": "River Plate",
-   "squad": "db"
+   "squad": "db",
+   "budget": 0
   },
   {
    "name": "Boca Juniors",
    "country": "Argentina",
    "db": "Boca Juniors",
-   "squad": "db"
+   "squad": "db",
+   "budget": 50000000
   },
   {
    "name": "Racing",
    "country": "Argentina",
    "db": "Racing Club",
-   "squad": "db"
+   "squad": "db",
+   "budget": 200000000
   },
   {
    "name": "Independiente",
    "country": "Argentina",
    "db": "Independiente",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "San Lorenzo",
    "country": "Argentina",
    "db": "San Lorenzo",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Estudiantes",
    "country": "Argentina",
    "db": "Estudiantes",
-   "squad": "db"
+   "squad": "db",
+   "budget": 100000000
   },
   {
    "name": "Vélez Sarsfield",
    "country": "Argentina",
    "db": "Vélez Sarsfield",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Argentinos Juniors",
    "country": "Argentina",
    "db": "Argentinos Jrs.",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Rosario Central",
    "country": "Argentina",
    "db": "Rosario Central",
-   "squad": "db"
+   "squad": "db",
+   "budget": 200000000
   },
   {
    "name": "Atlético Nacional",
    "country": "Colômbia",
    "db": "Atl. Nacional",
    "squad": "db",
-   "crest": "692"
+   "crest": "692",
+   "budget": 200000000
   },
   {
    "name": "Lanús",
    "country": "Argentina",
    "db": "Lanús",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Peñarol",
    "country": "Uruguai",
    "db": "Peñarol",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Indep. Santa Fe",
    "country": "Colômbia",
    "db": "Indep. Santa Fe",
-   "squad": "db"
+   "squad": "db",
+   "budget": 400000000
   },
   {
    "name": "Universidad Católica",
    "country": "Chile",
    "db": "Uni. Católica",
-   "squad": "db"
+   "squad": "db",
+   "budget": 400000000
   },
   {
    "name": "Coquimbo Unido",
    "country": "Chile",
    "db": "Coquimbo Unido",
-   "squad": "db"
+   "squad": "db",
+   "budget": 500000000
   },
   {
    "name": "Olimpia",
    "country": "Paraguai",
    "db": "Olimpia",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Cerro Porteño",
    "country": "Paraguai",
    "db": "Cerro Porteño",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Libertad",
    "country": "Paraguai",
    "db": "Libertad",
-   "squad": "db"
+   "squad": "db",
+   "budget": 500000000
   },
   {
    "name": "Barcelona de Guayaquil",
    "country": "Equador",
    "db": "Barcelona SC",
-   "squad": "db"
+   "squad": "db",
+   "budget": 400000000
   },
   {
    "name": "LDU Quito",
    "country": "Equador",
    "db": "LDU Quito",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Independiente del Valle",
    "country": "Equador",
    "db": "IDV",
-   "squad": "db"
+   "squad": "db",
+   "budget": 300000000
   },
   {
    "name": "Sporting Cristal",
    "country": "Peru",
    "db": "Sporting Cristal",
-   "squad": "db"
+   "squad": "db",
+   "budget": 400000000
   },
   {
    "name": "Universitario",
    "country": "Peru",
    "db": "Universitario",
-   "squad": "db"
+   "squad": "db",
+   "budget": 500000000
   },
   {
    "name": "Bolívar",
    "country": "Bolívia",
    "db": "Bolívar",
-   "squad": "db"
+   "squad": "db",
+   "budget": 500000000
   },
   {
    "name": "Nacional",
@@ -267,13 +305,15 @@
     202089,
     213064
    ],
-   "rename_source": "Nacional (POR)"
+   "rename_source": "Nacional (POR)",
+   "budget": 400000000
   },
   {
    "name": "Caracas FC",
    "country": "Venezuela",
    "db": "Caracas FC",
-   "squad": "db"
+   "squad": "db",
+   "budget": 500000000
   }
  ],
  "meta_onze": 6,
@@ -318,10 +358,6 @@
    "potential": 80,
    "_nome": "Ángel Correa"
   },
-  "219522": {
-   "potential": 76,
-   "_nome": "Conan Ledesma"
-  },
   "215259": {
    "potential": 75,
    "_nome": "Emiliano Rigoni"
@@ -329,6 +365,11 @@
   "216700": {
    "potential": 74,
    "_nome": "Maximiliano Meza"
+  },
+  "219522": {
+   "potential": 76,
+   "_nome": "Conan Ledesma"
   }
- }
+ },
+ "_doc_budget": "Verba inicial por ranking da média dos 18 maiores overs (out/2026): 5 piores 500M, 5 400M, 10 300M, 5 200M, 5 100M, 5 50M, 5 melhores 0"
 }
