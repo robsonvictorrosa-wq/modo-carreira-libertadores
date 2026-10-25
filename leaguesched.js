@@ -15,5 +15,7 @@ function leagueSchedule(clubs,strength,seed=Date.now()){const n=clubs.length;if(
   const ranked=[...clubs].sort((a,b)=>(strength.get(b)||0)-(strength.get(a)||0)||a-b);
   const strong=sh(ranked.slice(0,half)),weak=sh(ranked.slice(half));
   const map=Array(n);let si=0,wi=0;h.forEach((x,i)=>{map[i]=x<half?strong[si++]:weak[wi++];});
-  return R.map(g=>g.map(([a,b])=>[map[a],map[b]]));}
+  const out=R.map(g=>g.map(([a,b])=>[map[a],map[b]]));const seq=new Map();for(const g of out)for(const [a,b]of g){seq.set(a,(seq.get(a)||'')+'H');seq.set(b,(seq.get(b)||'')+'A');}
+  for(const [c,q]of seq){if(/HHH|AAA/.test(q))throw new Error('3 seguidos: '+c);const hc=q.split('H').length-1;if(hc!==(strong.includes(c)?half-1:half))throw new Error('mando errado: '+c);}
+  return out;}
 module.exports={leagueSchedule,berger};
