@@ -10,7 +10,10 @@ module.exports=async function(){
  const src=mk(process.env.DATABASE_URL),dst=mk(process.env.MIGRATE_DST);await src.connect();await dst.connect();
  try{
   const schemas=(await q(src,`select nspname n from pg_namespace where nspname not like 'pg\\_%' and nspname<>'information_schema' and exists(select 1 from pg_tables where schemaname=nspname) order by 1`)).map(r=>r.n);
+  const ONLY=(process.env.MIGRATE_SCHEMAS||'').split(',').filter(Boolean);if(ONLY.length)schemas.splice(0,schemas.length,...schemas.filter(x=>ONLY.includes(x)));
+  if(!schemas.length){L('ABORT nenhum schema');return;}
   L('schemas',schemas.join(','));
+  if(process.env.MIGRATE_REPLACE==='1'&&process.env.MIGRATE_MODE!=='verify'){if(schemas.includes('public')){L('ABORT REPLACE não permitido em public');return;}for(const x of schemas){await dst.query(`drop schema if exists ${id(x)} cascade`);L('dst schema removido',x);}}
   if(process.env.MIGRATE_MODE==='verify'){const a=await counts(src,schemas),b=await counts(dst,schemas);L('VERIFY',JSON.stringify(Object.keys(a).map(k=>[k,a[k],b[k]])),Object.keys(a).every(k=>a[k]===b[k])?'ALL_MATCH':'MISMATCH');return;}
   const ex=await q(dst,`select schemaname||'.'||tablename t from pg_tables where schemaname=any($1)`,[schemas]);
   if(ex.length){L('ABORT destino já tem tabelas:',ex.map(r=>r.t).join(','));return;}
