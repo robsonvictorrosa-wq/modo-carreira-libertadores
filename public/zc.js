@@ -20,7 +20,7 @@ function chrome(tab){const isAdm=OV?.admin;
  document.getElementById('zcrumb').innerHTML=ME?`<span>Zero Clubistas / <b style="color:#fff">Libertadores</b>${OV?.room?' · '+esc(OV.room.name):''}</span><span>${OV?(OV.admin?'Administrador':'Técnico'):'Técnico'} • ${esc(ME.nick)} · <a href="#" onclick="zSair();return false">Sair</a></span>`:'';}
 window.zSair=async()=>{try{await post('/auth/logout',{})}catch(e){}localStorage.removeItem('room');ROOM=null;ME=null;location.hash='#/';location.reload();};
 let LIGA=null;
-async function need(tab){if(!ME&&!(await whoami())){chrome(tab);loginView(route);return false}
+async function need(tab){if(window.zLastTab!==tab){window.zLastTab=tab;app.innerHTML='<div class="card empty" style="text-align:center;padding:28px">Carregando…</div>';}if(!ME&&!(await whoami())){chrome(tab);loginView(route);return false}
  try{if(!LIGA)LIGA=await get('/liga');ROOM=LIGA.code;localStorage.room=ROOM;await ov()}catch(e){chrome(tab);app.innerHTML=empty('Erro ao carregar o campeonato',esc(e.message));return false}
  chrome(tab);return true}
 const myClub=()=>OV.clubs.find(c=>c.id===OV.me.club_id);
