@@ -4,6 +4,7 @@ module.exports=(app,uni)=>{
  const url=process.env.DATABASE_URL;if(!url){console.warn('DATABASE_URL ausente: multiplayer desativado');return;}
  const SCH0=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  const pool=new Pool({max:10,idleTimeoutMillis:0,keepAlive:true,connectionString:url,ssl:(()=>{const h=new URL(url).hostname;return process.env.PGSSL==='0'||(!process.env.PGSSL&&(!h.includes('.')||h==='localhost'))?false:{rejectUnauthorized:false};})()});
+ pool.on('error',e=>console.error('pg pool (cliente ocioso):',e.message));
  const q=(s,a)=>pool.query(s,a).then(r=>r.rows);
  // PGSCHEMA: isola as tabelas num schema próprio (permite dividir a instância Postgres free com outro app sem colisão)
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;

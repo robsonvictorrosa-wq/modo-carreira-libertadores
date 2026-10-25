@@ -31,10 +31,11 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
    await c.query("UPDATE rooms SET status='season',version=version+1 WHERE id=$1",[room.id]);await c.query('UPDATE room_managers SET ready=false WHERE room_id=$1',[room.id]);if(M)await M.onStart(c,{...room,status:'season'});await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');throw e}finally{c.release()}
   await bump(room.id,`Temporada ${room.season}/${room.season+1} iniciada! Clubes travados.`);s.json({ok:1,ai_signings:ai,penalties:pen});}));
 
+ app.use('/api/rooms/:code/comp/:id',(r,s,n)=>/^\d+$/.test(r.params.id)?n():s.status(404).json({error:'Competição não encontrada'}));
  app.get('/api/rooms/:code/season',auth,wrap(async(r,s)=>{const room=await member(r);const comps=await q('SELECT * FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY id',[room.id,room.season]);
   const ms=await q('SELECT m.user_id,u.nick,m.club_id,m.ready FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[room.id]);const me=ms.find(m=>m.user_id===r.user.id);
   const myComp=comps[0];
-  s.json({status:room.status,season:room.season,owner:room.owner_id===r.user.id||!!r.user.admin,competitions:comps,my_comp:myComp?.id||null,my_club:me.club_id,managers:ms.map(m=>({...m,club:m.club_id&&club(m.club_id).name}))});}));
+  s.json({status:room.status,season:room.season,owner:room.owner_id===r.user.id||!!r.user.admin,competitions:comps,my_comp:myComp?.id||null,my_club:me?.club_id??null,managers:ms.map(m=>({...m,club:m.club_id&&club(m.club_id).name}))});}));
 
  app.get('/api/rooms/:code/comp/:id/table',auth,wrap(async(r,s)=>{const room=await member(r);const [comp]=await q('SELECT * FROM competitions WHERE id=$1 AND room_id=$2',[r.params.id,room.id]);if(!comp)throw fail('Competição não encontrada',404);
   const ms=await q('SELECT * FROM matches WHERE comp_id=$1 AND played',[comp.id]);const hum=new Map((await q('SELECT m.club_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[room.id])).map(x=>[x.club_id,x.nick]));

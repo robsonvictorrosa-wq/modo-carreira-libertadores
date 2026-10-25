@@ -1,7 +1,7 @@
 // Etapa 3 – telas de temporada
 const tabs=(c,act)=>`<div class="bar">${[['temporada','Resumo'],['calendario/'+c,'Calendário'],['tabela/'+c,'Tabela'],['matamata/'+c,'Mata-mata'],['artilharia/'+c,'Artilharia'],['bolao','Bolão'],['escalacao','Escalação'],['como-funciona','Como funciona']].map(([h,t])=>`<a class="btn ${act===h.split('/')[0]?'':'sec'}" href="#/${h}">${t}</a>`).join('')}</div>`;
 let SEA=null;
-async function loadSea(){if(!ROOM)throw new Error('Entre em uma sala');SEA=await get(`/rooms/${ROOM}/season`);return SEA;}
+async function loadSea(){if(!ROOM){try{const l=await get('/liga');ROOM=l.code;localStorage.room=ROOM}catch(e){}}if(!ROOM)throw new Error('Entre em uma sala');SEA=await get(`/rooms/${ROOM}/season`);return SEA;}
 async function temporada(){if(!ME&&!(await whoami()))return loginView(temporada);let d;try{d=await loadSea();}catch(e){return location.hash='#/salas';}
  if(d.status==='lobby'){app.innerHTML=`<h1>Temporada ${d.season}/${d.season+1}</h1><div class="sub">A temporada ainda não começou. Técnicos: ${d.managers.map(m=>esc(m.nick)+' ('+esc(m.club||'sem clube')+')').join(', ')}</div>
   ${d.owner?`<button class="btn" id="st">▶ Iniciar temporada (gera calendário e trava os clubes)</button>`:'<div class="sub">Aguardando o dono da sala iniciar.</div>'}<div class="err" id="er"></div> <a class="btn sec" href="#/como-funciona">Como funciona a simulação</a>`;
