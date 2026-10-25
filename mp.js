@@ -9,8 +9,28 @@ module.exports=(app,uni)=>{
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
- const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(()=>purgeRooms());
+ const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
+ // Migração única: primeiro leilão (config/leilao-pre.json) -> jogadores vão para o clube "Leilão ZC" com over/pot/idade do Robson e viram lotes do leilão de pré-temporada (bloqueado até um admin desbloquear)
+ async function migLeilaoPre2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='leilao-pre-2610'")).rows.length)return;
+  const auc=uni.prepare("SELECT id FROM clubs WHERE name='Leilão ZC'").get()?.id;if(!auc)return console.error('leilao-pre-2610: clube Leilão ZC ausente');
+  const ps=uni.prepare('SELECT p.id,p.name,p.overall,p.potential,p.age,p.market_value FROM lib_auction a JOIN players p ON p.id=a.player_id ORDER BY a.ord').all();
+  const lib=new Set(uni.prepare('SELECT club_id FROM lib_clubs').all().map(x=>x.club_id));const cn=id=>uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name||id;
+  const pct=(()=>{try{return JSON.parse(fs.readFileSync(__dirname+'/config/libertadores.json','utf8')).auction?.min_bid_pct??.5}catch(e){return .5}})();
+  const c=await pool.connect();try{await c.query('BEGIN');
+   const rooms=(await c.query("SELECT * FROM rooms WHERE (mkt_stage='pre' OR (mkt_stage IS NULL AND status='lobby')) AND COALESCE(mkt_state,'waiting')='waiting' AND NOT auction_open FOR UPDATE")).rows;
+   for(const room of rooms){const moved=[];let lots=0;
+    for(const p of ps){const [o]=(await c.query('SELECT club_id FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,p.id])).rows;if(o&&lib.has(o.club_id))moved.push(`${p.name} (${cn(o.club_id)})`);
+     await c.query(`INSERT INTO room_players(room_id,player_id,club_id,overall,potential,age,market_value) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(room_id,player_id) DO UPDATE SET club_id=$3,overall=$4,potential=$5,age=$6,market_value=$7,loan_from=NULL,loan_until=NULL,role=NULL,listed=false,wants_out=false,release_clause=NULL`,[room.id,p.id,auc,p.overall,p.potential,p.age,p.market_value]);
+     await c.query('UPDATE lineups SET starters=array_remove(starters,$2) WHERE room_id=$1 AND $2=ANY(starters)',[room.id,p.id]);
+     await c.query("UPDATE offers SET status='expired',reason='Jogador foi para o leilão',updated_at=now() WHERE room_id=$1 AND player_id=$2 AND status IN ('pending','countered','club_accepted')",[room.id,p.id]);
+     const [d]=(await c.query("SELECT 1 FROM auction_lots WHERE room_id=$1 AND season=$2 AND player_id=$3 AND status='open'",[room.id,room.season,p.id])).rows;
+     if(!d){await c.query("INSERT INTO auction_lots(room_id,season,player_id,from_club,min_bid,created_round,stage) VALUES($1,$2,$3,$4,$5,0,'pre')",[room.id,room.season,p.id,auc,Math.max(1e5,Math.round(p.market_value*pct/1e5)*1e5)]);lots++;}
+     else await c.query("UPDATE auction_lots SET from_club=$4 WHERE room_id=$1 AND season=$2 AND player_id=$3 AND status='open'",[room.id,room.season,p.id,auc]);}
+    await c.query("UPDATE rooms SET mkt_stage='pre',mkt_state='waiting',version=version+1 WHERE id=$1",[room.id]);
+    await c.query('INSERT INTO room_events(room_id,text) VALUES($1,$2)',[room.id,`🔨 Os ${ps.length} jogadores do leilão de pré-temporada foram definidos. Leilão BLOQUEADO até um administrador desbloquear na Central da liga.`+(moved.length?` Saíram dos clubes para o leilão: ${moved.join(', ')}.`:'')]);
+    console.log('leilao-pre-2610 sala',room.code,'lotes novos',lots,'saíram de clubes:',moved.join(', ')||'nenhum');}
+   await c.query("INSERT INTO lib_migrations(name) VALUES('leilao-pre-2610')");await c.query('COMMIT');console.log('Migração leilao-pre-2610 OK',rooms.length,'sala(s)');}catch(e){await c.query('ROLLBACK');console.error('leilao-pre-2610',e)}finally{c.release()}}
  // Migração única: idade real (Transfermarkt) dos elencos brasileiros -> atualiza idade, potencial (34+ = over) e valor de mercado nas salas
  async function migIdadesBR2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='idades-br-2610'")).rows.length)return;
   const ps=uni.prepare('SELECT id,age,potential,market_value FROM players WHERE id>=95000000 AND id<96000000').all();

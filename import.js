@@ -62,5 +62,16 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
    ins.run(95000000+i,p.name,p.nationality||'Brasil',cid,cid,JSON.stringify([pos]),pos,o,pl.potential,age,require('./value')(pl),wageOf(o));});
    for(const id of Object.values(byName))db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),overall=coalesce((SELECT round(avg(overall),1) FROM (SELECT overall FROM players WHERE club_id=clubs.id ORDER BY overall DESC LIMIT 11)),overall) WHERE id=?').run(id);})();
   console.log('Elencos brasileiros: fora da liga (ignorados):',JSON.stringify(skip));}
+ // ===== Primeiro leilão (config/leilao-pre.json, lista do Robson): jogadores saem dos clubes e ficam no clube técnico "Leilão ZC" =====
+ {const AU=JSON.parse(fs.readFileSync(__dirname+'/config/leilao-pre.json','utf8')).players;const VAL=require('./value');
+  const auc=db.prepare('INSERT INTO clubs(name,league_id) VALUES(?,?)').run('Leilão ZC',lg).lastInsertRowid;db.exec('CREATE TABLE lib_auction(ord INT,player_id INT,stage TEXT)');
+  db.transaction(()=>{AU.forEach((a,i)=>{const pl={overall:a.ovr,potential:a.pot,age:a.age};const mv=VAL(pl);let id=a.id;
+   if(id&&db.prepare('SELECT 1 FROM players WHERE id=?').get(id)){const old=JSON.parse(db.prepare('SELECT positions FROM players WHERE id=?').get(id).positions||'[]');
+    db.prepare('UPDATE players SET name=?,nationality=?,club_id=?,base_club_id=?,primary_position=?,positions=?,overall=?,potential=?,age=?,market_value=? WHERE id=?').run(a.name,a.nat,auc,auc,a.pos,JSON.stringify([a.pos,...old.filter(x=>x!==a.pos)]),a.ovr,a.pot,a.age,mv,id);}
+   else{id=96000000+i;const st=a.stats_from&&db.prepare('SELECT stats,wage,height_cm,weight_kg,preferred_foot,weak_foot,skill_moves FROM players WHERE id=?').get(a.stats_from)||{};
+    db.prepare(`INSERT INTO players(id,name,nationality,club_id,base_club_id,positions,primary_position,overall,potential,age,height_cm,weight_kg,preferred_foot,weak_foot,skill_moves,gender,market_value,wage,contract_end,stats) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'Homem',?,?,2028,?)`).run(id,a.name,a.nat,auc,auc,JSON.stringify([a.pos]),a.pos,a.ovr,a.pot,a.age,st.height_cm??null,st.weight_kg??null,st.preferred_foot??null,st.weak_foot??null,st.skill_moves??null,mv,st.wage||50000,st.stats||'{}');}
+   db.prepare("INSERT INTO lib_auction VALUES(?,?,'pre')").run(i,id);});
+   db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();})();
+  console.log('Leilão de pré-temporada:',AU.length,'jogadores no clube Leilão ZC',auc);}
  db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad));
  console.log('Libertadores ZC: 40 clubes; fora do FC27 (criados vazios):',miss.join(', '));}

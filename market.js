@@ -5,7 +5,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  const {C,L,FREE,isFree}=R;const LIB={has:id=>require('./libertadores').CLUBS.includes(id)};const clubName=id=>C.get(id)?.name||'Sem clube';const pname=id=>R.P.get(id)?.name||'?';
  const freeOf=g=>FREE[g==='F'?'F':'M'];
  // só existem no jogo jogadores dos 40 clubes (base): FC27 sem clube/fora da liga nunca entram no mercado, livres ou IA
- const inGame=id=>LIB.has(R.P.get(id)?.club_id);
+ const AUC=[...C.values()].find(c=>c.name==='Leilão ZC')?.id; // jogadores do leilão (config/leilao-pre.json) também existem no jogo
+ const inGame=id=>{const b=R.P.get(id)?.club_id;return LIB.has(b)||(AUC!=null&&b===AUC);};
  const repOf=c=>X.rep(c,L);const la=c=>L.get(c.league_id)?.attr||60;
  // ---------- janela ----------
  async function mainComp(db,room){return (await db.query('SELECT * FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY rounds_total DESC,id LIMIT 1',[room.id,room.season])).rows[0];}
