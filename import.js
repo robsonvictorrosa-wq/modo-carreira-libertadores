@@ -21,7 +21,7 @@ const insP=db.prepare(`INSERT INTO players(id,name,nationality,club_id,base_club
 db.transaction(()=>{const clubId={};
  for(const c of Object.keys(byClub)){const o=byClub[c];clubId[c]=insC.run(o.name,getL(leagueOf(c),o.league,o.g)).lastInsertRowid;}
  for(const p of P){const cid=p.club?clubId[ck(p)]:null;
-  insP.run({...p,club_id:cid,positions:JSON.stringify(p.positions||[]),mv:require('./value')(p),wg:money(p.wage_display),rc:money(p.release_clause_display),stats:JSON.stringify(p.stats||{})});}
+  if((+p.age||0)>33)p.potential=p.overall;insP.run({...p,club_id:cid,positions:JSON.stringify(p.positions||[]),mv:require('./value')(p),wg:money(p.wage_display),rc:money(p.release_clause_display),stats:JSON.stringify(p.stats||{})});}
 })();
 db.exec(`UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),
  squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),
