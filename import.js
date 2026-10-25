@@ -52,14 +52,14 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
   // salário: mediana do FC27 por overall nos clubes brasileiros do FC27
   const wq=db.prepare("SELECT p.overall o,p.wage w FROM players p JOIN clubs c ON c.id=p.club_id JOIN leagues l ON l.id=c.league_id WHERE l.name='Brasileirão (CONMEBOL)' AND p.wage>0").all();
   const wageOf=o=>{for(let d=0;d<10;d++){const ws=wq.filter(r=>Math.abs(r.o-o)<=d).map(r=>r.w).sort((a,b)=>a-b);if(ws.length>=5)return ws[ws.length>>1];}return 20000;};
-  // idade não vem no arquivo: estimada pela diferença potencial-overall
+  // idade/nacionalidade reais (Transfermarkt) no arquivo; sem idade: estimada pela diferença potencial-overall
   const ageOf=(o,p)=>{const g=p-o;return g>=10?19:g>=7?21:g>=4?23:g>=2?25:g>=1?27:30;};
-  const ins=db.prepare(`INSERT INTO players(id,name,nationality,club_id,base_club_id,positions,primary_position,overall,potential,age,gender,market_value,wage,contract_end,stats) VALUES(?,?,NULL,?,?,?,?,?,?,?,'Homem',?,?,2028,'{}')`);
+  const ins=db.prepare(`INSERT INTO players(id,name,nationality,club_id,base_club_id,positions,primary_position,overall,potential,age,gender,market_value,wage,contract_end,stats) VALUES(?,?,?,?,?,?,?,?,?,?,'Homem',?,?,2028,'{}')`);
   const byName=Object.fromEntries(CF.clubs.filter(c=>c.country==='Brasil').map(c=>[c.name,c.id]));const skip={};
   db.transaction(()=>{BR.forEach((p,i)=>{const cid=byName[CMAP[p.club]||p.club];if(!cid){skip[p.club]=(skip[p.club]||0)+1;return;}
    const pos=POS[String(p.position).toLowerCase().trim()];if(!pos)throw new Error('posição desconhecida: '+p.position);
-   const o=+p.ovr,pt=Math.max(o,+p.potential||o),age=ageOf(o,pt);const pl={overall:o,potential:age>33?o:pt,age};
-   ins.run(95000000+i,p.name,cid,cid,JSON.stringify([pos]),pos,o,pl.potential,age,require('./value')(pl),wageOf(o));});
+   const o=+p.ovr,pt=Math.max(o,+p.potential||o),age=p.age!=null?+p.age:ageOf(o,pt);const pl={overall:o,potential:age>33?o:pt,age};
+   ins.run(95000000+i,p.name,p.nationality||'Brasil',cid,cid,JSON.stringify([pos]),pos,o,pl.potential,age,require('./value')(pl),wageOf(o));});
    for(const id of Object.values(byName))db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),overall=coalesce((SELECT round(avg(overall),1) FROM (SELECT overall FROM players WHERE club_id=clubs.id ORDER BY overall DESC LIMIT 11)),overall) WHERE id=?').run(id);})();
   console.log('Elencos brasileiros: fora da liga (ignorados):',JSON.stringify(skip));}
  db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad));

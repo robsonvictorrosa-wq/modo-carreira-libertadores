@@ -9,8 +9,14 @@ module.exports=(app,uni)=>{
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
- const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(()=>purgeRooms());
+ const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
+ // Migração única: idade real (Transfermarkt) dos elencos brasileiros -> atualiza idade, potencial (34+ = over) e valor de mercado nas salas
+ async function migIdadesBR2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='idades-br-2610'")).rows.length)return;
+  const ps=uni.prepare('SELECT id,age,potential,market_value FROM players WHERE id>=95000000 AND id<96000000').all();
+  const c=await pool.connect();try{await c.query('BEGIN');
+   const r=await c.query('UPDATE room_players rp SET age=u.a,potential=GREATEST(rp.overall,LEAST(u.p,CASE WHEN u.a>33 THEN rp.overall ELSE u.p END)),market_value=u.v FROM unnest($1::int[],$2::int[],$3::int[],$4::bigint[]) u(i,a,p,v) WHERE rp.player_id=u.i',[ps.map(x=>x.id),ps.map(x=>x.age),ps.map(x=>x.potential),ps.map(x=>x.market_value)]);
+   await c.query("INSERT INTO lib_migrations(name) VALUES('idades-br-2610')");await c.query('COMMIT');console.log('Migração idades-br-2610 OK',r.rowCount);}catch(e){await c.query('ROLLBACK');console.error('idades-br-2610',e)}finally{c.release()}}
  // Migração única: verba inicial por ranking da média dos 18 maiores overs (config/libertadores.json clubs[].budget). Preserva movimentações já feitas (saldo - 20M + verba nova).
  async function migVerbas2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='verbas-2610'")).rows.length)return;
   const ids=uni.prepare('SELECT club_id FROM lib_clubs').all().map(x=>x.club_id);const nb=ids.map(id=>+(uni.prepare('SELECT budget FROM clubs WHERE id=?').get(id)?.budget||0));
