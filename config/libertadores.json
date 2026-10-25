@@ -281,5 +281,11 @@
  "auction": {
   "lots": 12,
   "min_bid_pct": 0.5
+ },
+ "player_overrides": {
+  "214997": {
+   "potential": 80,
+   "_nome": "Ángel Correa"
+  }
  }
 }
