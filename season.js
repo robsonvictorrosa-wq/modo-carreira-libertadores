@@ -6,7 +6,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
  app.get('/api/rooms/:code/player/:pid/notas',auth,wrap(async(r,s)=>{const room=await member(r);const pid=String(+r.params.pid);const [comp]=await q('SELECT id FROM competitions WHERE room_id=$1 ORDER BY id DESC LIMIT 1',[room.id]);if(!comp)return s.json({apps:0,avg:null,last:[]});
   const [ps]=await q('SELECT apps,goals,assists,rating_sum FROM player_stats WHERE comp_id=$1 AND player_id=$2',[comp.id,+pid]);
   const last=(await q(`SELECT id,round,home,away,hg,ag,(details->'ratings'->>$2)::real nota,(details->>'motm')=$2 motm FROM matches WHERE comp_id=$1 AND played AND details->'ratings' ? $2 ORDER BY round DESC,id DESC LIMIT 5`,[comp.id,pid])).map(x=>({...x,home_name:club(x.home)?.name,away_name:club(x.away)?.name}));
-  s.json({apps:ps?.apps||0,goals:ps?.goals||0,assists:ps?.assists||0,avg:ps?.apps?+(ps.rating_sum/ps.apps).toFixed(2):null,last});}));const vname=id=>id<0?{name:'Provisório',primary_position:'—'}:null;
+  const [ev]=await q('SELECT overall,ovr_start FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,+pid]);
+  s.json({apps:ps?.apps||0,goals:ps?.goals||0,assists:ps?.assists||0,avg:ps?.apps?+(ps.rating_sum/ps.apps).toFixed(2):null,last,evo:ev&&ev.ovr_start!=null?{start:ev.ovr_start,now:ev.overall}:null});}));const vname=id=>id<0?{name:'Provisório',primary_position:'—'}:null;
  const club=id=>uni.prepare('SELECT c.id,c.name,c.overall,c.league_id,l.name league FROM clubs c JOIN leagues l ON l.id=c.league_id WHERE c.id=?').get(id);
  const pp=p=>({...p,positions:JSON.parse(p.positions||'[]'),stats:JSON.parse(p.stats||'{}')});
  const squad=(db,roomId,clubId)=>R.squad(db,roomId,clubId);
