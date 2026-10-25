@@ -26,7 +26,7 @@
    "name": "Botafogo",
    "country": "Brasil",
    "db": "Botafogo",
-   "squad": "db"
+   "squad": "empty"
   },
   {
    "name": "São Paulo",
@@ -68,7 +68,7 @@
    "name": "Bahia",
    "country": "Brasil",
    "db": "Bahia",
-   "squad": "db"
+   "squad": "empty"
   },
   {
    "name": "Santos",
