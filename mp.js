@@ -64,8 +64,8 @@ module.exports=(app,uni)=>{
   console.log('Usuários de teste apagados:',us.map(u=>u.nick).join(', ')||'nenhum');}
  async function purgeRooms(){if(process.env.PURGE_ROOMS!=='1')return;const rs=(await pool.query("DELETE FROM rooms WHERE code<>'LIGA' RETURNING code,name")).rows;console.log('Salas apagadas:',rs.map(x=>x.code+' '+x.name).join(', ')||'nenhuma');
   const ru=(await pool.query('SELECT nick FROM users ORDER BY id')).rows;console.log('Restam usuários:',ru.map(x=>x.nick).join(', ')||'—');}
- const hash=(p,salt=crypto.randomBytes(16).toString('hex'))=>salt+':'+crypto.scryptSync(p,salt,32).toString('hex');
- const check=(p,h)=>{const [s]=h.split(':');return crypto.timingSafeEqual(Buffer.from(hash(p,s)),Buffer.from(h));};
+ const hash=(p,salt=crypto.randomBytes(16).toString('hex'))=>new Promise((ok,ko)=>crypto.scrypt(p,salt,32,(e,k)=>e?ko(e):ok(salt+':'+k.toString('hex')))); // assíncrono: não trava o servidor (CPU 0,1 no Render free)
+ const check=async(p,h)=>{const [s]=h.split(':');const x=Buffer.from(await hash(p,s));const y=Buffer.from(h);return x.length===y.length&&crypto.timingSafeEqual(x,y);};
  const tokenOf=r=>(r.headers.authorization||'').replace('Bearer ','')||(r.headers.cookie||'').match(/mc_token=([a-f0-9]+)/)?.[1];
  const AUTHC=new Map();
  const auth=async(r,s,n)=>{await ready;const t=tokenOf(r);let u=null;if(t){const c=AUTHC.get(t);if(c&&c.exp>Date.now())u={...c.u};else{u=(await q('SELECT u.id,u.nick,u.is_admin FROM sessions s JOIN users u ON u.id=s.user_id WHERE token=$1',[t]))[0]||null;if(u)AUTHC.set(t,{u:{...u},exp:Date.now()+60000});}}if(!u)return s.status(401).json({error:'Faça login'});u.admin=!!u.is_admin||require('./admins')().includes(String(u.nick).toLowerCase());r.user=u;n();};
@@ -75,9 +75,9 @@ module.exports=(app,uni)=>{
  app.post('/api/auth/register',wrap(async(r,s)=>{await ready;const {nick,pin}=r.body||{};
   if(!/^[\wÀ-ú .-]{3,20}$/.test(nick||''))throw fail('Apelido de 3 a 20 caracteres');if(!pin||String(pin).length<4)throw fail('PIN/senha com pelo menos 4 caracteres');
   const ex=await q('SELECT 1 FROM users WHERE lower(nick)=lower($1)',[nick.trim()]);if(ex.length)throw fail('Apelido já existe',409);
-  const [u]=await q('INSERT INTO users(nick,pass_hash) VALUES($1,$2) RETURNING id,nick',[nick.trim(),hash(String(pin))]);s.json({user:u,token:await login(s,u.id)});}));
+  const [u]=await q('INSERT INTO users(nick,pass_hash) VALUES($1,$2) RETURNING id,nick',[nick.trim(),await hash(String(pin))]);s.json({user:u,token:await login(s,u.id)});}));
  app.post('/api/auth/login',wrap(async(r,s)=>{await ready;const {nick,pin}=r.body||{};const [u]=await q('SELECT * FROM users WHERE lower(nick)=lower($1)',[String(nick||'').trim()]);
-  if(!u||!check(String(pin||''),u.pass_hash))throw fail('Apelido ou PIN inválido',401);s.json({user:{id:u.id,nick:u.nick},token:await login(s,u.id)});}));
+  if(!u||!(await check(String(pin||''),u.pass_hash)))throw fail('Apelido ou PIN inválido',401);s.json({user:{id:u.id,nick:u.nick},token:await login(s,u.id)});}));
  app.post('/api/auth/logout',wrap(async(r,s)=>{AUTHC.delete(tokenOf(r)||'');await q('DELETE FROM sessions WHERE token=$1',[tokenOf(r)||'']);s.setHeader('Set-Cookie','mc_token=; Path=/; Max-Age=0');s.json({ok:1});}));
  app.get('/api/me',auth,wrap(async(r,s)=>s.json({user:r.user,rooms:await q(`SELECT r.id,r.code,r.name,r.max_managers,m.club_id,(SELECT count(*)::int FROM room_managers x WHERE x.room_id=r.id) n FROM room_managers m JOIN rooms r ON r.id=m.room_id WHERE m.user_id=$1 ORDER BY r.id DESC`,[r.user.id])})));
  const code=()=>Array.from(crypto.randomBytes(6),b=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b%32]).join('');
@@ -138,6 +138,6 @@ module.exports=(app,uni)=>{
  require('./extras')({app,uni,q,pool,auth,wrap,fail,member,bump,R,M});
  require('./bolao')({app,uni,q,pool,auth,wrap,fail,member});
  // apagar a própria conta (usado também para limpar usuários de teste): exige PIN
- app.delete('/api/me',auth,wrap(async(r,s)=>{const [u]=await q('SELECT * FROM users WHERE id=$1',[r.user.id]);if(!check(String(r.body?.pin||''),u.pass_hash))throw fail('PIN incorreto',401);
+ app.delete('/api/me',auth,wrap(async(r,s)=>{const [u]=await q('SELECT * FROM users WHERE id=$1',[r.user.id]);if(!(await check(String(r.body?.pin||''),u.pass_hash)))throw fail('PIN incorreto',401);
   await q('DELETE FROM rooms WHERE owner_id=$1',[u.id]);await q('DELETE FROM room_managers WHERE user_id=$1',[u.id]);await q('DELETE FROM watchlist WHERE user_id=$1',[u.id]);await q('DELETE FROM users WHERE id=$1',[u.id]);s.json({ok:1});}));
 };
