@@ -26,10 +26,13 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   if(step.stage==='league'&&round===MID_ROUND&&round<LEAGUE_END){await c.query("UPDATE rooms SET mkt_stage='mid',mkt_state='waiting',auction_open=false WHERE id=$1",[room.id]);await note(c,room.id,`🔨 Rodada ${MID_ROUND} concluída: rodadas paradas até o leilão do meio da fase de liga (22 jogadores) e o mercado de 3 dias.`);out.push({info:'🔨 Leilão do meio da fase de liga pendente.'});}
   out.push(...((await EVO.afterRound(c,room,comp,step))||[]));return out;});
  // ---------- leitura ----------
+ const OVC=new Map();app.locals.zcOvCacheClear=id=>OVC.delete(id);
  app.get('/api/rooms/:code/zc/overview',auth,wrap(async(r,s)=>{const room=await member(r);const comp=await comp0(pool,room);
   const mans=await q('SELECT m.user_id,m.club_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1 ORDER BY joined_at',[room.id]);const by=new Map(mans.filter(m=>m.club_id).map(m=>[m.club_id,m.nick]));
   const rc=new Map((await q('SELECT club_id,budget FROM room_clubs WHERE room_id=$1',[room.id])).map(x=>[x.club_id,+x.budget]));
-  const PS=new Map((await M.preStatus(pool,room)).map(x=>[x.club_id,x]));const clubs=[];for(const cid of L.CLUBS){const lc=uni.prepare('SELECT country,squad FROM lib_clubs WHERE club_id=?').get(cid);const m=await meta(pool,room,cid);clubs.push({pre:PS.get(cid),id:cid,name:cname(cid),country:lc.country,squad:lc.squad,manager:by.get(cid)||null,budget:rc.get(cid)??null,initial:+(uni.prepare('SELECT budget FROM clubs WHERE id=?').get(cid)?.budget||0),meta:m});}
+  // parte pesada (XI de 40 clubes): cache por sala+versão por até 45 s e uma única computação simultânea (antes levava ~17 s por chamada e derrubava o servidor)
+  const ck=room.id+':'+room.version;let hv=OVC.get(room.id);if(!hv||hv.k!==ck||(!hv.busy&&Date.now()-hv.t>45000)){const p=(async()=>{const PS=new Map((await M.preStatus(pool,room)).map(x=>[x.club_id,x]));const out=new Map();for(const cid of L.CLUBS)out.set(cid,{pre:PS.get(cid),meta:await meta(pool,room,cid)});return out})();const nh={k:ck,t:Date.now(),p,busy:true};const prev=hv;OVC.set(room.id,nh);p.then(()=>{nh.t=Date.now();nh.busy=false},()=>{if(OVC.get(room.id)===nh)OVC.delete(room.id)});hv=(prev&&prev.k===ck&&!prev.busy)?prev:nh;}
+  const H=await hv.p;const clubs=[];for(const cid of L.CLUBS){const lc=uni.prepare('SELECT country,squad FROM lib_clubs WHERE club_id=?').get(cid);const h=H.get(cid);clubs.push({pre:h.pre,id:cid,name:cname(cid),country:lc.country,squad:lc.squad,manager:by.get(cid)||null,budget:rc.get(cid)??null,initial:+(uni.prepare('SELECT budget FROM clubs WHERE id=?').get(cid)?.budget||0),meta:h.meta});}
   const me=mans.find(m=>m.user_id===r.user.id);let win=null;try{win=M.windowOf(room,await M.mainComp(pool,room));}catch(e){}
   s.json({room:{code:room.code,name:room.name,status:room.status,season:room.season,market_day:room.market_day},admin:room.owner_id===r.user.id||!!r.user.admin,me:{nick:r.user.nick,club_id:me?.club_id||null},comp,phase:phase(comp),window:win,cal:await calInfo(pool,room),clubs,managers:mans,prizes:CF.prizes,meta_need:CF.meta_onze||6,pre_need:M.PRE_NEED,evolution:{enabled:EVO.enabled,description:EVO.description}});}));
  app.get('/api/rooms/:code/zc/signings',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!m?.club_id)return s.json({in:[],out:[]});
@@ -128,10 +131,13 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  app.post('/api/rooms/:code/zc/admin/cal',auth,wrap(async(r,s)=>{const room=await member(r);own(room,r);s.json(await calAction(room,r.body?.action,r.user.nick));}));
  app.post('/api/rooms/:code/zc/admin/auction/state',auth,wrap(async(r,s)=>{const room=await member(r);own(room,r);const a=r.body?.action;s.json(await calAction(room,a==='open'?'auction_start':a==='close'?'auction_close':a,r.user.nick));}));
  // fechamento automático no prazo
- async function sweep(){try{const rs=(await pool.query("SELECT * FROM rooms WHERE (mkt_state='market' AND mkt_until<=now()) OR (window_was_open AND coalesce(mkt_state,'')<>'market')")).rows;
-  for(const rm of rs){const c=await pool.connect();try{await c.query('BEGIN');const [x]=(await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[rm.id])).rows;
-    if(x.mkt_state==='market'&&new Date(x.mkt_until)<=Date.now()){await c.query("UPDATE rooms SET mkt_state='done' WHERE id=$1",[x.id]);x.mkt_state='done';}
-    await M.after(c,x);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[x.id]);await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');console.error('sweep',e.message)}finally{c.release()}}}catch(e){console.error('sweep',e.message)}}
+ const sweepSkip=new Set();let sweepN=0;
+ async function sweep(){try{if(++sweepN%10===0)sweepSkip.clear();const rs=(await pool.query("SELECT * FROM rooms WHERE (mkt_state='market' AND mkt_until<=now()) OR (window_was_open AND coalesce(mkt_state,'')<>'market')")).rows;
+  for(const rm of rs){if(sweepSkip.has(rm.id)&&!(rm.mkt_state==='market'))continue;const c=await pool.connect();try{await c.query('BEGIN');const [x]=(await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[rm.id])).rows;
+    let ch=false;if(x.mkt_state==='market'&&new Date(x.mkt_until)<=Date.now()){await c.query("UPDATE rooms SET mkt_state='done' WHERE id=$1",[x.id]);x.mkt_state='done';ch=true;}
+    await M.after(c,x);const [y]=(await c.query('SELECT window_was_open FROM rooms WHERE id=$1',[x.id])).rows;if(y.window_was_open!==x.window_was_open)ch=true;
+    // só incrementa a versão se algo mudou (antes: +1 a cada 30 s, fazendo todo celular recarregar tudo e travando o servidor)
+    if(ch)await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[x.id]);await c.query('COMMIT');if(!ch)sweepSkip.add(x.id);}catch(e){await c.query('ROLLBACK');console.error('sweep',e.message)}finally{c.release()}}}catch(e){console.error('sweep',e.message)}}
  setInterval(sweep,+process.env.SWEEP_MS||30000);setTimeout(sweep,5000);
  app.get('/api/rooms/:code/zc/loans',auth,wrap(async(r,s)=>{const room=await member(r);const comp=await comp0(pool,room);const cr=comp?.current_round||0;
   const rows=await q('SELECT player_id,club_id,loan_from,loan_until FROM room_players WHERE room_id=$1 AND loan_from IS NOT NULL',[room.id]);
