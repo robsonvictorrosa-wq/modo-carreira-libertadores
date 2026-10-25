@@ -20,7 +20,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
 
  app.post('/api/rooms/:code/season/start',auth,wrap(async(r,s)=>{const room=await member(r);ownerOnly(room,r);if(room.status!=='lobby')throw fail('Temporada já iniciada');
   const ms=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND club_id IS NOT NULL',[room.id]);if(!ms.length)throw fail('Atribua pelo menos um clube a um técnico');
-  if(ms.some(m=>!LIB.has(m.club_id)))throw fail('Todos os técnicos precisam escolher um dos 40 clubes da Libertadores ZC');if(!r.body?.confirm)throw fail('Confirme o início da temporada (punições da pré-temporada serão aplicadas)');const c=await pool.connect();let pen=[],ai=0;
+  if(ms.some(m=>!LIB.has(m.club_id)))throw fail('Todos os técnicos precisam escolher um dos 40 clubes da Libertadores ZC');if(app.locals.canStart)await app.locals.canStart(room);if(!r.body?.confirm)throw fail('Confirme o início da temporada (punições da pré-temporada serão aplicadas)');const c=await pool.connect();let pen=[],ai=0;
   try{await c.query('BEGIN');await c.query('SELECT id FROM rooms WHERE id=$1 FOR UPDATE',[room.id]);if(M){ai=await M.preseasonAI(c,room);pen=await M.applyPenalties(c,room);}const all=S.schedule(L.CLUBS);const rounds=all.slice(0,all.length/2);// só turno: todos x todos uma vez = 39 rodadas
     const {rows:[comp]}=await c.query('INSERT INTO competitions(room_id,season,league_id,name,rounds_total) VALUES($1,$2,$3,$4,$5) RETURNING id',[room.id,room.season,null,L.CFG.NAME,PLAN.length]);
     const vals=[];rounds.forEach((m,i)=>m.forEach(([h,a])=>vals.push([comp.id,i+1,h,a])));

@@ -59,3 +59,9 @@ ALTER TABLE transfers ADD COLUMN IF NOT EXISTS prev JSONB;
 UPDATE transfers SET created_at=now() WHERE created_at IS NULL;
 ALTER TABLE offers ADD COLUMN IF NOT EXISTS history JSONB NOT NULL DEFAULT '[]'::jsonb;
 ALTER TABLE room_clubs ADD COLUMN IF NOT EXISTS penalty_pts INT NOT NULL DEFAULT 0;
+-- Calendário de mercado (leilão -> mercado com prazo -> fechado)
+ALTER TABLE rooms ADD COLUMN IF NOT EXISTS mkt_stage TEXT;
+ALTER TABLE rooms ADD COLUMN IF NOT EXISTS mkt_state TEXT;
+ALTER TABLE rooms ADD COLUMN IF NOT EXISTS mkt_until TIMESTAMPTZ;
+ALTER TABLE rooms ADD COLUMN IF NOT EXISTS auction_excl INT[] NOT NULL DEFAULT '{}';
+ALTER TABLE auction_lots ADD COLUMN IF NOT EXISTS stage TEXT;

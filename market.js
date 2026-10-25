@@ -9,15 +9,14 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  const repOf=c=>X.rep(c,L);const la=c=>L.get(c.league_id)?.attr||60;
  // ---------- janela ----------
  async function mainComp(db,room){return (await db.query('SELECT * FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY rounds_total DESC,id LIMIT 1',[room.id,room.season])).rows[0];}
- function windowOf(room,comp){if(room.status==='lobby'&&room.window_override!=='closed')return {open:true,name:'Janela de pré-temporada',day:0,days:4,pre:true,closes:'quando a temporada começar'};
-  if(room.status==='lobby')return {open:false,name:'Janela fechada pelo dono da sala',day:0,days:4,override:'closed'};
-  if(room.status!=='season'||!comp)return {open:false,name:'Mercado fechado (temporada não iniciada)',day:0,days:4};
-  if(room.window_override==='open')return {open:true,name:'Janela aberta pelo dono da sala',day:0,days:4,override:'open'};
-  if(room.window_override==='closed')return {open:false,name:'Janela fechada pelo dono da sala',day:0,days:4,override:'closed'};
-  const cr=comp.current_round,half=Math.floor(comp.rounds_total/2);
-  if(cr<4)return {open:true,name:'Janela de início de temporada',day:cr,days:4,closes:'após a rodada 4'};
-  if(cr>=half&&cr<half+3)return {open:true,name:'Janela do meio da temporada',day:cr-half,days:3,closes:`após a rodada ${half+3}`};
-  return {open:false,name:'Janela fechada',day:0,days:4,next:cr<half?`reabre após a rodada ${half}`:'só na próxima temporada'};}
+ // calendário: leilão (admins) -> mercado aberto com prazo (horário de Brasília) -> fechado. Fora disso, fechado.
+ const CAL_LBL={pre:'pré-temporada',mid:'meio da fase de liga',end:'fim da fase de liga'};
+ const brt=d=>new Date(d).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).replace(',','');
+ function windowOf(room,comp){const st=room.mkt_stage||(room.status==='lobby'?'pre':null),lb=CAL_LBL[st]||'';
+  if(room.auction_open)return {open:false,auction:true,stage:st,name:('Leilão '+(lb?'de '+lb:'')).trim()+' em andamento',day:0,days:3};
+  const u=room.mkt_until?new Date(room.mkt_until):null;
+  if(room.mkt_state==='market'&&u&&u>Date.now())return {open:true,stage:st,name:`Mercado aberto até ${brt(u)}`,until:u.toISOString(),closes:brt(u),day:0,days:3};
+  return {open:false,stage:st,name:'Mercado fechado',day:0,days:3};}
  const note=(db,roomId,text,uid=null)=>db.query('INSERT INTO room_events(room_id,text,user_id) VALUES($1,$2,$3)',[roomId,text,uid]);
  const humans=async(db,roomId)=>new Map((await db.query('SELECT m.club_id,m.user_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1 AND club_id IS NOT NULL',[roomId])).rows.map(x=>[x.club_id,x]));
  const myClub=async(db,room,uid)=>{const [m]=(await db.query('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,uid])).rows;if(!m?.club_id)throw fail('Escolha um clube');return m.club_id;};
@@ -114,7 +113,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
    await note(db,r.id,`🔒 Janela de transferências fechada.${n?` ${n} negociação(ões) em aberto expiraram.`:''}`);}
   if(!r.window_was_open&&win.open)await note(db,r.id,`🔓 ${win.name} aberta (fecha ${win.closes||'quando o dono decidir'}).`);
   await db.query('UPDATE rooms SET window_was_open=$2 WHERE id=$1',[r.id,win.open]);}
- async function onStart(db,room){const [r]=(await db.query("UPDATE rooms SET market_day=1,window_was_open=true WHERE id=$1 RETURNING *",[room.id])).rows;await note(db,r.id,'🔓 Janela de início de temporada aberta (fecha após a rodada 4).');await tick(db,r,windowOf(r,await mainComp(db,r)));}
+ async function onStart(db,room){await db.query("UPDATE rooms SET market_day=1,window_was_open=false,mkt_stage='pre',mkt_state='done',auction_open=false WHERE id=$1",[room.id]);}
  // ---------- rotas ----------
  const tx=async f=>{const c=await pool.connect();try{await c.query('BEGIN');const r=await f(c);await c.query('COMMIT');return r;}catch(e){await c.query('ROLLBACK');throw e}finally{c.release()}};
  const lockRoom=async(c,r)=>{const [room]=(await c.query('SELECT r.* FROM rooms r JOIN room_managers m ON m.room_id=r.id AND m.user_id=$2 WHERE r.code=$1 FOR UPDATE OF r',[String(r.params.code).toUpperCase(),r.user.id])).rows;if(!room)throw fail('Você não está nessa sala',403);return room;};
@@ -270,5 +269,5 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   for(const x of bad)await db.query('UPDATE room_clubs SET penalty_pts=penalty_pts+$3,budget=budget-$4 WHERE room_id=$1 AND club_id=$2',[room.id,x.club_id,x.pts,x.money]);
   await note(db,room.id,bad.length?`⚖️ Punição da pré-temporada (meta de ${PRE_NEED} contratações): `+bad.map(x=>`${x.club} ${x.n}/${PRE_NEED} → -${x.pts} pts e -${X.fmt(x.money)}`).join(' · '):`✅ Todos os clubes cumpriram a meta de ${PRE_NEED} contratações da pré-temporada.`);return bad;}
  app.get('/api/rooms/:code/preseason',auth,wrap(async(r,s)=>{const room=await member(r);const st=await preStatus(pool,room);let me=null;try{const cid=await myClub(pool,room,r.user.id);me=st.find(x=>x.club_id===cid)||null;}catch(e){}s.json({status:room.status,need:PRE_NEED,me,clubs:st,below:st.filter(x=>x.miss)});}));
- return {preStatus,preseasonAI,applyPenalties,PRE_NEED,reservedMap,before,after,onStart,windowOf,mainComp,execute,note,finances};
+ return {brt,preStatus,preseasonAI,applyPenalties,PRE_NEED,reservedMap,before,after,onStart,windowOf,mainComp,execute,note,finances};
 };
