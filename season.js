@@ -11,8 +11,13 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
  const club=id=>uni.prepare('SELECT c.id,c.name,c.overall,c.league_id,l.name league FROM clubs c JOIN leagues l ON l.id=c.league_id WHERE c.id=?').get(id);
  const pp=p=>({...p,positions:JSON.parse(p.positions||'[]'),stats:JSON.parse(p.stats||'{}')});
  const squad=(db,roomId,clubId)=>R.squad(db,roomId,clubId);
+ const XIMEMO=new Map();
  async function xiFor(db,roomId,clubId){let sq=await squad(db,roomId,clubId);if(sq.length<11)sq=[...sq,...L.virtualSquad(clubId)];const [l]=(await db.query('SELECT * FROM lineups WHERE room_id=$1 AND club_id=$2',[roomId,clubId])).rows;
-  const TT=require('./tactics');if(!l){const ai=TT.aiPlan(sq,clubId);const xi=TT.autoXI(sq,ai.formation);return {xi,bench:sq.filter(p=>!xi.includes(p)),formation:ai.formation,tactics:ai.tactics,takers:null,slotted:true,custom:false,ai:true};}
+  const TT=require('./tactics');if(!l){
+   // aiPlan é pesado (~25 ms por clube localmente, ~10x no Render free): memoiza pelo elenco (ids+over+posição+moral)
+   const key=clubId+'|'+sq.map(p=>p.id+'.'+p.overall+'.'+p.primary_position+'.'+(p.morale??'')+'.'+(p.wants_out?1:0)).join(',');let hit=XIMEMO.get(key);
+   if(!hit){const ai=TT.aiPlan(sq,clubId);const xi0=TT.autoXI(sq,ai.formation);hit={ids:xi0.map(p=>p?p.id:null),formation:ai.formation,tactics:ai.tactics};XIMEMO.set(key,hit);if(XIMEMO.size>400)XIMEMO.delete(XIMEMO.keys().next().value);}
+   const m=new Map(sq.map(p=>[p.id,p]));const xi=hit.ids.map(id=>id==null?null:(m.get(id)??null));return {xi,bench:sq.filter(p=>!xi.includes(p)),formation:hit.formation,tactics:hit.tactics,takers:null,slotted:true,custom:false,ai:true};}
   const f=S.FORMATIONS[l.formation]?l.formation:'4-3-3',tac=TT.norm(l.tactics);
   if(l.starters?.length===11){const m=new Map(sq.map(p=>[p.id,p]));const xi=l.starters.map(id=>m.get(id)).filter(Boolean);if(xi.length===11)return {xi,bench:sq.filter(p=>!xi.includes(p)),formation:f,tactics:tac,takers:l.takers,slotted:l.slotted,custom:true};}
   const xi=TT.autoXI(sq,f);return {xi,bench:sq.filter(p=>!xi.includes(p)),formation:f,tactics:tac,takers:l.takers,slotted:true,custom:false};}
