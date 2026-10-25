@@ -41,9 +41,26 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
    db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),wage_bill=(SELECT coalesce(sum(wage),0) FROM players WHERE club_id=clubs.id) WHERE id=?').run(src.id);for(const k of [id,src.id])db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),wage_bill=(SELECT coalesce(sum(wage),0) FROM players WHERE club_id=clubs.id),overall=(SELECT round(avg(overall),1) FROM (SELECT overall FROM players WHERE club_id=clubs.id AND overall IS NOT NULL ORDER BY overall DESC LIMIT 11)) WHERE id=?').run(k);if(c.rename_source)db.prepare('UPDATE clubs SET name=? WHERE id=?').run(c.rename_source,src.id);console.log('split',c.name,'<-',c.split_from,n,'jogadores');}
   if(!id){id=db.prepare('INSERT INTO clubs(name,league_id) VALUES(?,?)').run(c.name,lg).lastInsertRowid;miss.push(c.name);}
   else db.prepare('UPDATE clubs SET name=? WHERE id=?').run(c.name,id);
-  if(c.squad==='empty')db.prepare('DELETE FROM players WHERE club_id=?').run(id); // elenco vazio provisório
+  if(c.squad==='empty'||c.squad==='file')db.prepare('DELETE FROM players WHERE club_id=?').run(id); // elenco vazio provisório
   const empty=!db.prepare('SELECT 1 FROM players WHERE club_id=?').get(id);
   db.prepare('UPDATE clubs SET budget=?,wage_bill=?,n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),overall=coalesce(?,overall) WHERE id=?').run(c.budget??CF.default_budget,c.wage_budget??CF.default_wage_budget,empty?CF.placeholder_ovr:null,id);
   c.id=id;}})();
+ // ===== Elencos brasileiros (config/elencos-brasileiros.json, enviado pelo Robson) =====
+ {const BR=JSON.parse(fs.readFileSync(__dirname+'/config/elencos-brasileiros.json','utf8')).players;
+  const CMAP={'Atlético-MG':'Atlético Mineiro'};
+  const POS={'goleiro':'GOL','zagueiro':'ZAG','lateral-direito':'LD','lateral direito':'LD','lateral dir.':'LD','lateral-esquerdo':'LE','lateral esquerdo':'LE','lateral esq.':'LE','volante':'VOL','meia central':'MC','meia ofensivo':'MEI','meia-atacante':'MEI','ponta direita':'PD','ponta-direita':'PD','ponta esquerda':'PE','ponta-esquerda':'PE','centroavante':'ATA','segundo atacante':'ATA'};
+  // salário: mediana do FC27 por overall nos clubes brasileiros do FC27
+  const wq=db.prepare("SELECT p.overall o,p.wage w FROM players p JOIN clubs c ON c.id=p.club_id JOIN leagues l ON l.id=c.league_id WHERE l.name='Brasileirão (CONMEBOL)' AND p.wage>0").all();
+  const wageOf=o=>{for(let d=0;d<10;d++){const ws=wq.filter(r=>Math.abs(r.o-o)<=d).map(r=>r.w).sort((a,b)=>a-b);if(ws.length>=5)return ws[ws.length>>1];}return 20000;};
+  // idade não vem no arquivo: estimada pela diferença potencial-overall
+  const ageOf=(o,p)=>{const g=p-o;return g>=10?19:g>=7?21:g>=4?23:g>=2?25:g>=1?27:30;};
+  const ins=db.prepare(`INSERT INTO players(id,name,nationality,club_id,base_club_id,positions,primary_position,overall,potential,age,gender,market_value,wage,contract_end,stats) VALUES(?,?,NULL,?,?,?,?,?,?,?,'Homem',?,?,2028,'{}')`);
+  const byName=Object.fromEntries(CF.clubs.filter(c=>c.country==='Brasil').map(c=>[c.name,c.id]));const skip={};
+  db.transaction(()=>{BR.forEach((p,i)=>{const cid=byName[CMAP[p.club]||p.club];if(!cid){skip[p.club]=(skip[p.club]||0)+1;return;}
+   const pos=POS[String(p.position).toLowerCase().trim()];if(!pos)throw new Error('posição desconhecida: '+p.position);
+   const o=+p.ovr,pt=Math.max(o,+p.potential||o),age=ageOf(o,pt);const pl={overall:o,potential:age>33?o:pt,age};
+   ins.run(95000000+i,p.name,cid,cid,JSON.stringify([pos]),pos,o,pl.potential,age,require('./value')(pl),wageOf(o));});
+   for(const id of Object.values(byName))db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),overall=coalesce((SELECT round(avg(overall),1) FROM (SELECT overall FROM players WHERE club_id=clubs.id ORDER BY overall DESC LIMIT 11)),overall) WHERE id=?').run(id);})();
+  console.log('Elencos brasileiros: fora da liga (ignorados):',JSON.stringify(skip));}
  db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad));
  console.log('Libertadores ZC: 40 clubes; fora do FC27 (criados vazios):',miss.join(', '));}

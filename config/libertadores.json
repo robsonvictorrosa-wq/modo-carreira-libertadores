@@ -1,5 +1,5 @@
 {
- "_doc": "Configuração única da Libertadores ZC. Orçamentos são PROVISÓRIOS e neutros (iguais p/ todos) até o Robson definir. db: nome exato do clube no banco FC27 (null = clube não existe no FC27). squad: 'db' usa elenco FC27, 'empty' começa com elenco vazio (provisório). split_from+players: cria clube novo movendo esses jogadores (ids FC27) do clube-fonte (só neste app; o FC27 original não muda).",
+ "_doc": "Configuração única da Libertadores ZC. Orçamentos são PROVISÓRIOS e neutros (iguais p/ todos) até o Robson definir. db: nome exato do clube no banco FC27 (null = clube não existe no FC27). squad: 'db' usa elenco FC27, 'empty' começa com elenco vazio (provisório). split_from+players: cria clube novo movendo esses jogadores (ids FC27) do clube-fonte (só neste app; o FC27 original não muda). 'file': elenco vem de config/elencos-brasileiros.json (base enviada pelo Robson; idade estimada pelo potencial).",
  "default_budget": 20000000,
  "default_wage_budget": 400000,
  "placeholder_ovr": 68,
@@ -8,85 +8,85 @@
    "name": "Flamengo",
    "country": "Brasil",
    "db": "Flamengo",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Palmeiras",
    "country": "Brasil",
    "db": "Palmeiras",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Fluminense",
    "country": "Brasil",
    "db": "Fluminense",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Botafogo",
    "country": "Brasil",
    "db": "Botafogo",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "São Paulo",
    "country": "Brasil",
    "db": "São Paulo",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Corinthians",
    "country": "Brasil",
    "db": "Corinthians",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Atlético Mineiro",
    "country": "Brasil",
    "db": "Atlético-MG",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Grêmio",
    "country": "Brasil",
    "db": "Grêmio",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Internacional",
    "country": "Brasil",
    "db": null,
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Cruzeiro",
    "country": "Brasil",
    "db": "Cruzeiro",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Bahia",
    "country": "Brasil",
    "db": "Bahia",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Santos",
    "country": "Brasil",
    "db": "Santos",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Vasco",
    "country": "Brasil",
    "db": "Vasco da Gama",
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "Athletico-PR",
    "country": "Brasil",
    "db": null,
-   "squad": "empty"
+   "squad": "file"
   },
   {
    "name": "River Plate",

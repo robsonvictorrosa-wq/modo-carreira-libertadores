@@ -1,0 +1,4590 @@
+{
+  "version": 2,
+  "exportedAt": "2026-10-25T20:06:41.659Z",
+  "players": [
+    {
+      "id": "tm2026:Athletico-PR:Mycael",
+      "club": "Athletico-PR",
+      "name": "Mycael",
+      "position": "Goleiro",
+      "ovr": 74,
+      "potential": 81
+    },
+    {
+      "id": "tm2026:Athletico-PR:Santos",
+      "club": "Athletico-PR",
+      "name": "Santos",
+      "position": "Goleiro",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Athletico-PR:Matheus Soares",
+      "club": "Athletico-PR",
+      "name": "Matheus Soares",
+      "position": "Goleiro",
+      "ovr": 64,
+      "potential": 70
+    },
+    {
+      "id": "tm2026:Athletico-PR:Arthur Dias",
+      "club": "Athletico-PR",
+      "name": "Arthur Dias",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 81
+    },
+    {
+      "id": "tm2026:Athletico-PR:Carlos Terán",
+      "club": "Athletico-PR",
+      "name": "Carlos Terán",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Athletico-PR:Juan Felipe Aguirre",
+      "club": "Athletico-PR",
+      "name": "Juan Felipe Aguirre",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Athletico-PR:Léo",
+      "club": "Athletico-PR",
+      "name": "Léo",
+      "position": "Zagueiro",
+      "ovr": 70,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Athletico-PR:Dantas",
+      "club": "Athletico-PR",
+      "name": "Dantas",
+      "position": "Zagueiro",
+      "ovr": 67,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Athletico-PR:Lucas Esquivel",
+      "club": "Athletico-PR",
+      "name": "Lucas Esquivel",
+      "position": "Lateral-esquerdo",
+      "ovr": 77,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Athletico-PR:Léo Derik",
+      "club": "Athletico-PR",
+      "name": "Léo Derik",
+      "position": "Lateral-esquerdo",
+      "ovr": 69,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Athletico-PR:Claudinho",
+      "club": "Athletico-PR",
+      "name": "Claudinho",
+      "position": "Lateral-esquerdo",
+      "ovr": 64,
+      "potential": 71
+    },
+    {
+      "id": "tm2026:Athletico-PR:Gastón Benavídez",
+      "club": "Athletico-PR",
+      "name": "Gastón Benavídez",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Athletico-PR:Gilberto Junior",
+      "club": "Athletico-PR",
+      "name": "Gilberto Junior",
+      "position": "Lateral-direito",
+      "ovr": 68,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Athletico-PR:Gilberto",
+      "club": "Athletico-PR",
+      "name": "Gilberto",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Athletico-PR:Diogo Riquelme",
+      "club": "Athletico-PR",
+      "name": "Diogo Riquelme",
+      "position": "Volante",
+      "ovr": 68,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Athletico-PR:Luiz Gustavo",
+      "club": "Athletico-PR",
+      "name": "Luiz Gustavo",
+      "position": "Volante",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Athletico-PR:João Cruz",
+      "club": "Athletico-PR",
+      "name": "João Cruz",
+      "position": "Meia central",
+      "ovr": 73,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Athletico-PR:Juan Portilla",
+      "club": "Athletico-PR",
+      "name": "Juan Portilla",
+      "position": "Meia central",
+      "ovr": 73,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Athletico-PR:Felipinho",
+      "club": "Athletico-PR",
+      "name": "Felipinho",
+      "position": "Meia central",
+      "ovr": 70,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Athletico-PR:Jádson",
+      "club": "Athletico-PR",
+      "name": "Jádson",
+      "position": "Meia central",
+      "ovr": 69,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Athletico-PR:Alejandro García",
+      "club": "Athletico-PR",
+      "name": "Alejandro García",
+      "position": "Meia central",
+      "ovr": 66,
+      "potential": 71
+    },
+    {
+      "id": "tm2026:Athletico-PR:Dudu",
+      "club": "Athletico-PR",
+      "name": "Dudu",
+      "position": "Meia-atacante",
+      "ovr": 72,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Athletico-PR:Bruno Zapelli",
+      "club": "Athletico-PR",
+      "name": "Bruno Zapelli",
+      "position": "Meia-atacante",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Athletico-PR:Chiqueti",
+      "club": "Athletico-PR",
+      "name": "Chiqueti",
+      "position": "Meia-atacante",
+      "ovr": 69,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Athletico-PR:Stiven Mendoza",
+      "club": "Athletico-PR",
+      "name": "Stiven Mendoza",
+      "position": "Ponta esquerda",
+      "ovr": 72,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Athletico-PR:Kerwin Vargas",
+      "club": "Athletico-PR",
+      "name": "Kerwin Vargas",
+      "position": "Ponta direita",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Athletico-PR:Leozinho",
+      "club": "Athletico-PR",
+      "name": "Leozinho",
+      "position": "Ponta direita",
+      "ovr": 73,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Athletico-PR:Kevin Viveros",
+      "club": "Athletico-PR",
+      "name": "Kevin Viveros",
+      "position": "Centroavante",
+      "ovr": 79,
+      "potential": 82
+    },
+    {
+      "id": "tm2026:Athletico-PR:Jorge Rivaldo",
+      "club": "Athletico-PR",
+      "name": "Jorge Rivaldo",
+      "position": "Centroavante",
+      "ovr": 68,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Athletico-PR:Renan Peixoto",
+      "club": "Athletico-PR",
+      "name": "Renan Peixoto",
+      "position": "Centroavante",
+      "ovr": 69,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Athletico-PR:Renan Viana",
+      "club": "Athletico-PR",
+      "name": "Renan Viana",
+      "position": "Centroavante",
+      "ovr": 64,
+      "potential": 71
+    },
+    {
+      "id": "tm2026:Bahia:Ronaldo",
+      "club": "Bahia",
+      "name": "Ronaldo",
+      "position": "Goleiro",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "br2026v6:Bahia:Guido Herrera",
+      "club": "Bahia",
+      "name": "Guido Herrera",
+      "position": "Goleiro",
+      "ovr": 71,
+      "potential": 71
+    },
+    {
+      "id": "tm2026:Bahia:Léo Vieira",
+      "club": "Bahia",
+      "name": "Léo Vieira",
+      "position": "Goleiro",
+      "ovr": 69,
+      "potential": 69
+    },
+    {
+      "id": "tm2026:Bahia:Victor",
+      "club": "Bahia",
+      "name": "Victor",
+      "position": "Goleiro",
+      "ovr": 65,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Bahia:Kanu",
+      "club": "Bahia",
+      "name": "Kanu",
+      "position": "Zagueiro",
+      "ovr": 69,
+      "potential": 69
+    },
+    {
+      "id": "br2026v6:Bahia:David Duarte",
+      "club": "Bahia",
+      "name": "David Duarte",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "br2026v6:Bahia:Marco Moreno",
+      "club": "Bahia",
+      "name": "Marco Moreno",
+      "position": "Zagueiro",
+      "ovr": 71,
+      "potential": 76
+    },
+    {
+      "id": "br2026v6:Bahia:Luiz Gustavo",
+      "club": "Bahia",
+      "name": "Luiz Gustavo",
+      "position": "Zagueiro",
+      "ovr": 68,
+      "potential": 78
+    },
+    {
+      "id": "br2026v6:Bahia:Marcos Victor",
+      "club": "Bahia",
+      "name": "Marcos Victor",
+      "position": "Zagueiro",
+      "ovr": 70,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Bahia:Fredi Gomes",
+      "club": "Bahia",
+      "name": "Fredi Gomes",
+      "position": "Zagueiro",
+      "ovr": 66,
+      "potential": 78
+    },
+    {
+      "id": "cbf2026:Bahia:Luciano Juba",
+      "club": "Bahia",
+      "name": "Luciano Juba",
+      "position": "Lateral-esquerdo",
+      "ovr": 77,
+      "potential": 79
+    },
+    {
+      "id": "br2026v6:Bahia:Zé Guilherme",
+      "club": "Bahia",
+      "name": "Zé Guilherme",
+      "position": "Lateral-esquerdo",
+      "ovr": 68,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Bahia:Roman Gomez",
+      "club": "Bahia",
+      "name": "Román Gómez",
+      "position": "Lateral-direito",
+      "ovr": 71,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Bahia:Nicolás Acevedo",
+      "club": "Bahia",
+      "name": "Nicolás Acevedo",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 75
+    },
+    {
+      "id": "br2026v6:Bahia:Caio Alexandre",
+      "club": "Bahia",
+      "name": "Caio Alexandre",
+      "position": "Volante",
+      "ovr": 70,
+      "potential": 74
+    },
+    {
+      "id": "br2026v6:Bahia:Erick",
+      "club": "Bahia",
+      "name": "Erick",
+      "position": "Volante",
+      "ovr": 71,
+      "potential": 73
+    },
+    {
+      "id": "br2026v6:Bahia:Lautaro Lopez",
+      "club": "Bahia",
+      "name": "Lautaro López",
+      "position": "Volante",
+      "ovr": 69,
+      "potential": 78
+    },
+    {
+      "id": "br2026v6:Bahia:Jean Lucas",
+      "club": "Bahia",
+      "name": "Jean Lucas",
+      "position": "Meia central",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Bahia:Rodrigo Nestor",
+      "club": "Bahia",
+      "name": "Rodrigo Nestor",
+      "position": "Meia central",
+      "ovr": 73,
+      "potential": 78
+    },
+    {
+      "id": "br2026v6:Bahia:Everton Ribeiro",
+      "club": "Bahia",
+      "name": "Everton Ribeiro",
+      "position": "Meia ofensivo",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "br2026v6:Bahia:David Martins",
+      "club": "Bahia",
+      "name": "David Martins",
+      "position": "Meia ofensivo",
+      "ovr": 67,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Bahia:Roger Gabriel",
+      "club": "Bahia",
+      "name": "Roger Gabriel",
+      "position": "Meia ofensivo",
+      "ovr": 67,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Bahia:Erick Pulga",
+      "club": "Bahia",
+      "name": "Erick Pulga",
+      "position": "Ponta esquerda",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Bahia:Ruan Pablo",
+      "club": "Bahia",
+      "name": "Ruan Pablo",
+      "position": "Ponta esquerda",
+      "ovr": 66,
+      "potential": 84
+    },
+    {
+      "id": "tm2026:Bahia:Mateo Sanabria",
+      "club": "Bahia",
+      "name": "Mateo Sanabria",
+      "position": "Ponta esquerda",
+      "ovr": 69,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Bahia:Cristian Olivera",
+      "club": "Bahia",
+      "name": "Cristian Olivera",
+      "position": "Ponta direita",
+      "ovr": 72,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Bahia:Kauê Furquim",
+      "club": "Bahia",
+      "name": "Kauê Furquim",
+      "position": "Ponta direita",
+      "ovr": 68,
+      "potential": 84
+    },
+    {
+      "id": "tm2026:Bahia:Michel Araújo",
+      "club": "Bahia",
+      "name": "Michel Araújo",
+      "position": "Ponta direita",
+      "ovr": 69,
+      "potential": 69
+    },
+    {
+      "id": "tm2026:Bahia:Ademir",
+      "club": "Bahia",
+      "name": "Ademir",
+      "position": "Ponta direita",
+      "ovr": 71,
+      "potential": 71
+    },
+    {
+      "id": "br2026v6:Bahia:Alejo Véliz",
+      "club": "Bahia",
+      "name": "Alejo Véliz",
+      "position": "Centroavante",
+      "ovr": 73,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Bahia:Dell",
+      "club": "Bahia",
+      "name": "Dell",
+      "position": "Centroavante",
+      "ovr": 66,
+      "potential": 82
+    },
+    {
+      "id": "br2026v6:Bahia:Willian José",
+      "club": "Bahia",
+      "name": "Willian José",
+      "position": "Centroavante",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "br2026v6:Bahia:Everaldo",
+      "club": "Bahia",
+      "name": "Everaldo",
+      "position": "Centroavante",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "print2026:Atlético-MG:Gabriel Delfim:1",
+      "club": "Atlético-MG",
+      "name": "Gabriel Delfim",
+      "position": "Goleiro",
+      "ovr": 75,
+      "potential": 81
+    },
+    {
+      "id": "print2026:Atlético-MG:Everson:22",
+      "club": "Atlético-MG",
+      "name": "Everson",
+      "position": "Goleiro",
+      "ovr": 78,
+      "potential": 78
+    },
+    {
+      "id": "print2026:Atlético-MG:Pedro Cobra:46",
+      "club": "Atlético-MG",
+      "name": "Pedro Cobra",
+      "position": "Goleiro",
+      "ovr": 66,
+      "potential": 73
+    },
+    {
+      "id": "print2026:Atlético-MG:Robert:31",
+      "club": "Atlético-MG",
+      "name": "Robert",
+      "position": "Goleiro",
+      "ovr": 66,
+      "potential": 69
+    },
+    {
+      "id": "print2026:Atlético-MG:Lyanco:13",
+      "club": "Atlético-MG",
+      "name": "Lyanco",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 78
+    },
+    {
+      "id": "print2026:Atlético-MG:Ruan:4",
+      "club": "Atlético-MG",
+      "name": "Ruan",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "print2026:Atlético-MG:Léo Duarte:3",
+      "club": "Atlético-MG",
+      "name": "Léo Duarte",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 76
+    },
+    {
+      "id": "print2026:Atlético-MG:Vitão:40",
+      "club": "Atlético-MG",
+      "name": "Vitão",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 82
+    },
+    {
+      "id": "print2026:Atlético-MG:Vitor Hugo:14",
+      "club": "Atlético-MG",
+      "name": "Vitor Hugo",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "print2026:Atlético-MG:Renan Lodi:6",
+      "club": "Atlético-MG",
+      "name": "Renan Lodi",
+      "position": "Lateral-esquerdo",
+      "ovr": 77,
+      "potential": 79
+    },
+    {
+      "id": "print2026:Atlético-MG:Kauã Pascini:36",
+      "club": "Atlético-MG",
+      "name": "Kauã Pascini",
+      "position": "Lateral-esquerdo",
+      "ovr": 71,
+      "potential": 80
+    },
+    {
+      "id": "print2026:Atlético-MG:Natanael:2",
+      "club": "Atlético-MG",
+      "name": "Natanael",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "print2026:Atlético-MG:Ángelo Preciado:23",
+      "club": "Atlético-MG",
+      "name": "Ángelo Preciado",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "print2026:Atlético-MG:Alexsander:5",
+      "club": "Atlético-MG",
+      "name": "Alexsander",
+      "position": "Volante",
+      "ovr": 73,
+      "potential": 78
+    },
+    {
+      "id": "print2026:Atlético-MG:Kevin Castaño:15",
+      "club": "Atlético-MG",
+      "name": "Kevin Castaño",
+      "position": "Volante",
+      "ovr": 76,
+      "potential": 78
+    },
+    {
+      "id": "print2026:Atlético-MG:Tomás Pérez:25",
+      "club": "Atlético-MG",
+      "name": "Tomás Pérez",
+      "position": "Volante",
+      "ovr": 69,
+      "potential": 77
+    },
+    {
+      "id": "print2026:Atlético-MG:Victor Hugo:30",
+      "club": "Atlético-MG",
+      "name": "Victor Hugo",
+      "position": "Meia central",
+      "ovr": 75,
+      "potential": 80
+    },
+    {
+      "id": "print2026:Atlético-MG:Fred:7",
+      "club": "Atlético-MG",
+      "name": "Fred",
+      "position": "Meia central",
+      "ovr": 79,
+      "potential": 79
+    },
+    {
+      "id": "print2026:Atlético-MG:Alan Franco:21",
+      "club": "Atlético-MG",
+      "name": "Alan Franco",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 76
+    },
+    {
+      "id": "print2026:Atlético-MG:Mamady Cissé:39",
+      "club": "Atlético-MG",
+      "name": "Mamady Cissé",
+      "position": "Meia central",
+      "ovr": 69,
+      "potential": 77
+    },
+    {
+      "id": "print2026:Atlético-MG:Maycon:8",
+      "club": "Atlético-MG",
+      "name": "Maycon",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "print2026:Atlético-MG:Índio:38",
+      "club": "Atlético-MG",
+      "name": "Índio",
+      "position": "Meia central",
+      "ovr": 67,
+      "potential": 70
+    },
+    {
+      "id": "print2026:Atlético-MG:Gustavo Scarpa:10",
+      "club": "Atlético-MG",
+      "name": "Gustavo Scarpa",
+      "position": "Meia-atacante",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "print2026:Atlético-MG:Reinier:19",
+      "club": "Atlético-MG",
+      "name": "Reinier",
+      "position": "Centroavante",
+      "ovr": 74,
+      "potential": 77
+    },
+    {
+      "id": "print2026:Atlético-MG:Igor Gomes:17",
+      "club": "Atlético-MG",
+      "name": "Igor Gomes",
+      "position": "Meia-atacante",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "print2026:Atlético-MG:Tomás Cuello:28",
+      "club": "Atlético-MG",
+      "name": "Tomás Cuello",
+      "position": "Ponta esquerda",
+      "ovr": 77,
+      "potential": 80
+    },
+    {
+      "id": "print2026:Atlético-MG:Dudu:92",
+      "club": "Atlético-MG",
+      "name": "Dudu",
+      "position": "Ponta esquerda",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "print2026:Atlético-MG:Alan Minda:27",
+      "club": "Atlético-MG",
+      "name": "Alan Minda",
+      "position": "Ponta direita",
+      "ovr": 74,
+      "potential": 79
+    },
+    {
+      "id": "print2026:Atlético-MG:Mateo Cassierra:9",
+      "club": "Atlético-MG",
+      "name": "Mateo Cassierra",
+      "position": "Centroavante",
+      "ovr": 72,
+      "potential": 77
+    },
+    {
+      "id": "print2026:Atlético-MG:Thiago Borbas:18",
+      "club": "Atlético-MG",
+      "name": "Thiago Borbas",
+      "position": "Centroavante",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "print2026:Atlético-MG:Cauã Soares:29",
+      "club": "Atlético-MG",
+      "name": "Cauã Soares",
+      "position": "Centroavante",
+      "ovr": 68,
+      "potential": 75
+    },
+    {
+      "id": "print2026:Atlético-MG:Bernard:11",
+      "club": "Atlético-MG",
+      "name": "Bernard",
+      "position": "Ponta esquerda",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "print2026:Atlético-MG:Gabriel Veneno:U17",
+      "club": "Atlético-MG",
+      "name": "Gabriel Veneno",
+      "position": "Ponta direita",
+      "ovr": 65,
+      "potential": 84
+    },
+    {
+      "id": "br2026v8:Botafogo:Gabriel Batista:12",
+      "club": "Botafogo",
+      "name": "Gabriel Batista",
+      "position": "Goleiro",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "br2026v8:Botafogo:Warleson:17",
+      "club": "Botafogo",
+      "name": "Warleson",
+      "position": "Goleiro",
+      "ovr": 70,
+      "potential": 71
+    },
+    {
+      "id": "br2026v8:Botafogo:Cristhian Loor:40",
+      "club": "Botafogo",
+      "name": "Cristhian Loor",
+      "position": "Goleiro",
+      "ovr": 65,
+      "potential": 75
+    },
+    {
+      "id": "br2026v8:Botafogo:Arthur Chaves:3",
+      "club": "Botafogo",
+      "name": "Arthur Chaves",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Nahuel Ferraresi:5",
+      "club": "Botafogo",
+      "name": "Nahuel Ferraresi",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Kaio:31",
+      "club": "Botafogo",
+      "name": "Kaio",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "br2026v8:Botafogo:Lucas Monzón:33",
+      "club": "Botafogo",
+      "name": "Lucas Monzón",
+      "position": "Zagueiro",
+      "ovr": 69,
+      "potential": 73
+    },
+    {
+      "id": "br2026v8:Botafogo:Gabriel Justino:34",
+      "club": "Botafogo",
+      "name": "Gabriel Justino",
+      "position": "Zagueiro",
+      "ovr": 70,
+      "potential": 79
+    },
+    {
+      "id": "br2026v8:Botafogo:Anthony:26",
+      "club": "Botafogo",
+      "name": "Anthony",
+      "position": "Zagueiro",
+      "ovr": 63,
+      "potential": 73
+    },
+    {
+      "id": "br2026v8:Botafogo:Kawan:sem-numero",
+      "club": "Botafogo",
+      "name": "Kawan",
+      "position": "Zagueiro",
+      "ovr": 63,
+      "potential": 70
+    },
+    {
+      "id": "br2026v8:Botafogo:Alex Telles:13",
+      "club": "Botafogo",
+      "name": "Alex Telles",
+      "position": "Lateral esquerdo",
+      "ovr": 77,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Paulinho:29",
+      "club": "Botafogo",
+      "name": "Paulinho",
+      "position": "Lateral esquerdo",
+      "ovr": 67,
+      "potential": 67
+    },
+    {
+      "id": "br2026v8:Botafogo:Marçal:21",
+      "club": "Botafogo",
+      "name": "Marçal",
+      "position": "Lateral esquerdo",
+      "ovr": 70,
+      "potential": 70
+    },
+    {
+      "id": "br2026v8:Botafogo:Jhoan Hernández:67",
+      "club": "Botafogo",
+      "name": "Jhoan Hernández",
+      "position": "Lateral esquerdo",
+      "ovr": 64,
+      "potential": 74
+    },
+    {
+      "id": "br2026v8:Botafogo:Vitinho:2",
+      "club": "Botafogo",
+      "name": "Vitinho",
+      "position": "Lateral direito",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Mateo Ponte:4",
+      "club": "Botafogo",
+      "name": "Mateo Ponte",
+      "position": "Lateral direito",
+      "ovr": 71,
+      "potential": 76
+    },
+    {
+      "id": "br2026v8:Botafogo:Kadu Santos:42",
+      "club": "Botafogo",
+      "name": "Kadu Santos",
+      "position": "Lateral direito",
+      "ovr": 64,
+      "potential": 73
+    },
+    {
+      "id": "br2026v8:Botafogo:Huguinho:75",
+      "club": "Botafogo",
+      "name": "Huguinho",
+      "position": "Volante",
+      "ovr": 68,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Domingos Andrade:91",
+      "club": "Botafogo",
+      "name": "Domingos Andrade",
+      "position": "Volante",
+      "ovr": 68,
+      "potential": 74
+    },
+    {
+      "id": "br2026v8:Botafogo:Allan:25",
+      "club": "Botafogo",
+      "name": "Allan",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "br2026v8:Botafogo:Wallace Davi:55",
+      "club": "Botafogo",
+      "name": "Wallace Davi",
+      "position": "Volante",
+      "ovr": 67,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Danilo:8",
+      "club": "Botafogo",
+      "name": "Danilo",
+      "position": "Meia central",
+      "ovr": 79,
+      "potential": 83
+    },
+    {
+      "id": "br2026v8:Botafogo:Cristian Medina:6",
+      "club": "Botafogo",
+      "name": "Cristian Medina",
+      "position": "Meia central",
+      "ovr": 75,
+      "potential": 80
+    },
+    {
+      "id": "br2026v8:Botafogo:Edenílson:88",
+      "club": "Botafogo",
+      "name": "Edenílson",
+      "position": "Meia central",
+      "ovr": 71,
+      "potential": 71
+    },
+    {
+      "id": "br2026v8:Botafogo:Jordan Barrera:14",
+      "club": "Botafogo",
+      "name": "Jordan Barrera",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 78
+    },
+    {
+      "id": "br2026v8:Botafogo:Álvaro Montoro:10",
+      "club": "Botafogo",
+      "name": "Álvaro Montoro",
+      "position": "Ponta esquerda",
+      "ovr": 75,
+      "potential": 85
+    },
+    {
+      "id": "br2026v8:Botafogo:Matheus Martins:11",
+      "club": "Botafogo",
+      "name": "Matheus Martins",
+      "position": "Ponta esquerda",
+      "ovr": 74,
+      "potential": 79
+    },
+    {
+      "id": "br2026v8:Botafogo:Júnior Santos:7",
+      "club": "Botafogo",
+      "name": "Júnior Santos",
+      "position": "Ponta direita",
+      "ovr": 71,
+      "potential": 71
+    },
+    {
+      "id": "br2026v8:Botafogo:Hakim Ziyech:22",
+      "club": "Botafogo",
+      "name": "Hakim Ziyech",
+      "position": "Ponta direita",
+      "ovr": 77,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Lucas Villalba:77",
+      "club": "Botafogo",
+      "name": "Lucas Villalba",
+      "position": "Ponta direita",
+      "ovr": 70,
+      "potential": 74
+    },
+    {
+      "id": "br2026v8:Botafogo:Kauan Toledo:59",
+      "club": "Botafogo",
+      "name": "Kauan Toledo",
+      "position": "Ponta direita",
+      "ovr": 66,
+      "potential": 76
+    },
+    {
+      "id": "br2026v8:Botafogo:Arthur Cabral:19",
+      "club": "Botafogo",
+      "name": "Arthur Cabral",
+      "position": "Centroavante",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Kadir Barría:37",
+      "club": "Botafogo",
+      "name": "Kadir Barría",
+      "position": "Centroavante",
+      "ovr": 67,
+      "potential": 77
+    },
+    {
+      "id": "br2026v8:Botafogo:Lucas Emanuel:79",
+      "club": "Botafogo",
+      "name": "Lucas Emanuel",
+      "position": "Centroavante",
+      "ovr": 65,
+      "potential": 78
+    },
+    {
+      "id": "br2026v8:Botafogo:Danilo:90",
+      "club": "Botafogo",
+      "name": "Danilo Pereira",
+      "position": "Centroavante",
+      "ovr": 69,
+      "potential": 73
+    },
+    {
+      "id": "br2026v8:Botafogo:Tiquinho Soares:9",
+      "club": "Botafogo",
+      "name": "Tiquinho Soares",
+      "position": "Centroavante",
+      "ovr": 70,
+      "potential": 70
+    },
+    {
+      "id": "br2026v11:Corinthians:Hugo Souza:1",
+      "club": "Corinthians",
+      "name": "Hugo Souza",
+      "position": "Goleiro",
+      "ovr": 76,
+      "potential": 79
+    },
+    {
+      "id": "br2026v11:Corinthians:Kauê:51",
+      "club": "Corinthians",
+      "name": "Kauê",
+      "position": "Goleiro",
+      "ovr": 67,
+      "potential": 76
+    },
+    {
+      "id": "br2026v11:Corinthians:Felipe Longo:40",
+      "club": "Corinthians",
+      "name": "Felipe Longo",
+      "position": "Goleiro",
+      "ovr": 65,
+      "potential": 73
+    },
+    {
+      "id": "br2026v11:Corinthians:João Pedro Tchoça:4",
+      "club": "Corinthians",
+      "name": "João Pedro Tchoça",
+      "position": "Zagueiro",
+      "ovr": 69,
+      "potential": 75
+    },
+    {
+      "id": "br2026v11:Corinthians:Iago Machado:55",
+      "club": "Corinthians",
+      "name": "Iago Machado",
+      "position": "Zagueiro",
+      "ovr": 67,
+      "potential": 80
+    },
+    {
+      "id": "br2026v11:Corinthians:André Ramalho:5",
+      "club": "Corinthians",
+      "name": "André Ramalho",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "br2026v11:Corinthians:Gustavo Henrique:13",
+      "club": "Corinthians",
+      "name": "Gustavo Henrique",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "br2026v11:Corinthians:Gabriel Paulista:3",
+      "club": "Corinthians",
+      "name": "Gabriel Paulista",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "br2026v11:Corinthians:Renato Santos:sem-numero",
+      "club": "Corinthians",
+      "name": "Renato Santos",
+      "position": "Zagueiro",
+      "ovr": 69,
+      "potential": 75
+    },
+    {
+      "id": "br2026v11:Corinthians:Matheus Bidu:21",
+      "club": "Corinthians",
+      "name": "Matheus Bidu",
+      "position": "Lateral-esquerdo",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "br2026v11:Corinthians:Hugo:46",
+      "club": "Corinthians",
+      "name": "Hugo",
+      "position": "Lateral-esquerdo",
+      "ovr": 65,
+      "potential": 67
+    },
+    {
+      "id": "br2026v11:Corinthians:Fabrizio Angileri:sem-numero",
+      "club": "Corinthians",
+      "name": "Fabrizio Angileri",
+      "position": "Lateral-esquerdo",
+      "ovr": 69,
+      "potential": 69
+    },
+    {
+      "id": "br2026v11:Corinthians:Matheuzinho:2",
+      "club": "Corinthians",
+      "name": "Matheuzinho",
+      "position": "Lateral-direito",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "br2026v11:Corinthians:Pedro Milans:20",
+      "club": "Corinthians",
+      "name": "Pedro Milans",
+      "position": "Lateral-direito",
+      "ovr": 68,
+      "potential": 73
+    },
+    {
+      "id": "br2026v11:Corinthians:Léo Mana:sem-numero",
+      "club": "Corinthians",
+      "name": "Léo Mana",
+      "position": "Lateral-direito",
+      "ovr": 65,
+      "potential": 72
+    },
+    {
+      "id": "br2026v11:Corinthians:Raniele:14",
+      "club": "Corinthians",
+      "name": "Raniele",
+      "position": "Volante",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "br2026v11:Corinthians:Allan:29",
+      "club": "Corinthians",
+      "name": "Allan",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "br2026v11:Corinthians:Charles:35",
+      "club": "Corinthians",
+      "name": "Charles",
+      "position": "Volante",
+      "ovr": 69,
+      "potential": 71
+    },
+    {
+      "id": "br2026v11:Corinthians:Breno Bidon:7",
+      "club": "Corinthians",
+      "name": "Breno Bidon",
+      "position": "Meia central",
+      "ovr": 77,
+      "potential": 84
+    },
+    {
+      "id": "br2026v11:Corinthians:André:49",
+      "club": "Corinthians",
+      "name": "André",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 82
+    },
+    {
+      "id": "br2026v11:Corinthians:Matheus Pereira:23",
+      "club": "Corinthians",
+      "name": "Matheus Pereira",
+      "position": "Meia central",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "br2026v11:Corinthians:Alex Santana:80",
+      "club": "Corinthians",
+      "name": "Alex Santana",
+      "position": "Meia central",
+      "ovr": 69,
+      "potential": 70
+    },
+    {
+      "id": "br2026v11:Corinthians:André Carrillo:19",
+      "club": "Corinthians",
+      "name": "André Carrillo",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "br2026v11:Corinthians:Bahia:54",
+      "club": "Corinthians",
+      "name": "Bahia",
+      "position": "Meia central",
+      "ovr": 63,
+      "potential": 74
+    },
+    {
+      "id": "br2026v11:Corinthians:Rodrigo Garro:8",
+      "club": "Corinthians",
+      "name": "Rodrigo Garro",
+      "position": "Meia ofensivo",
+      "ovr": 77,
+      "potential": 79
+    },
+    {
+      "id": "br2026v11:Corinthians:Jesse Lingard:77",
+      "club": "Corinthians",
+      "name": "Jesse Lingard",
+      "position": "Meia ofensivo",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "br2026v11:Corinthians:Zakaria Labyad:52",
+      "club": "Corinthians",
+      "name": "Zakaria Labyad",
+      "position": "Meia ofensivo",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "br2026v11:Corinthians:Kayke:31",
+      "club": "Corinthians",
+      "name": "Kayke",
+      "position": "Ponta esquerda",
+      "ovr": 70,
+      "potential": 76
+    },
+    {
+      "id": "br2026v11:Corinthians:Vitinho:11",
+      "club": "Corinthians",
+      "name": "Vitinho",
+      "position": "Ponta esquerda",
+      "ovr": 71,
+      "potential": 72
+    },
+    {
+      "id": "br2026v11:Corinthians:Kaio César:37",
+      "club": "Corinthians",
+      "name": "Kaio César",
+      "position": "Ponta direita",
+      "ovr": 73,
+      "potential": 80
+    },
+    {
+      "id": "br2026v11:Corinthians:Dieguinho:61",
+      "club": "Corinthians",
+      "name": "Dieguinho",
+      "position": "Ponta direita",
+      "ovr": 68,
+      "potential": 76
+    },
+    {
+      "id": "br2026v11:Corinthians:Yuri Alberto:9",
+      "club": "Corinthians",
+      "name": "Yuri Alberto",
+      "position": "Centroavante",
+      "ovr": 77,
+      "potential": 80
+    },
+    {
+      "id": "br2026v11:Corinthians:Memphis Depay:10",
+      "club": "Corinthians",
+      "name": "Memphis Depay",
+      "position": "Centroavante",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "br2026v11:Corinthians:Gui Negão:56",
+      "club": "Corinthians",
+      "name": "Gui Negão",
+      "position": "Centroavante",
+      "ovr": 71,
+      "potential": 81
+    },
+    {
+      "id": "br2026v11:Corinthians:Pedro Raul:18",
+      "club": "Corinthians",
+      "name": "Pedro Raul",
+      "position": "Centroavante",
+      "ovr": 70,
+      "potential": 71
+    },
+    {
+      "id": "br2026v10:Chapecoense:Anderson:98",
+      "club": "Chapecoense",
+      "name": "Anderson",
+      "position": "Goleiro",
+      "ovr": 70,
+      "potential": 72
+    },
+    {
+      "id": "br2026v10:Chapecoense:Matheus Aurélio:30",
+      "club": "Chapecoense",
+      "name": "Matheus Aurélio",
+      "position": "Goleiro",
+      "ovr": 67,
+      "potential": 71
+    },
+    {
+      "id": "br2026v10:Chapecoense:Rafael Santos:1",
+      "club": "Chapecoense",
+      "name": "Rafael Santos",
+      "position": "Goleiro",
+      "ovr": 67,
+      "potential": 67
+    },
+    {
+      "id": "br2026v10:Chapecoense:Gabriel Werner:14",
+      "club": "Chapecoense",
+      "name": "Gabriel Werner",
+      "position": "Goleiro",
+      "ovr": 66,
+      "potential": 74
+    },
+    {
+      "id": "br2026v10:Chapecoense:Doma:3",
+      "club": "Chapecoense",
+      "name": "Doma",
+      "position": "Zagueiro",
+      "ovr": 71,
+      "potential": 73
+    },
+    {
+      "id": "br2026v10:Chapecoense:João Paulo:4",
+      "club": "Chapecoense",
+      "name": "João Paulo",
+      "position": "Zagueiro",
+      "ovr": 68,
+      "potential": 70
+    },
+    {
+      "id": "br2026v10:Chapecoense:Victor Caetano:25",
+      "club": "Chapecoense",
+      "name": "Victor Caetano",
+      "position": "Zagueiro",
+      "ovr": 69,
+      "potential": 71
+    },
+    {
+      "id": "br2026v10:Chapecoense:Kauan Faria:21",
+      "club": "Chapecoense",
+      "name": "Kauan Faria",
+      "position": "Zagueiro",
+      "ovr": 66,
+      "potential": 74
+    },
+    {
+      "id": "br2026v10:Chapecoense:Rafael Thyere:15",
+      "club": "Chapecoense",
+      "name": "Rafael Thyere",
+      "position": "Zagueiro",
+      "ovr": 67,
+      "potential": 67
+    },
+    {
+      "id": "br2026v10:Chapecoense:Vinicius Eduardo:35",
+      "club": "Chapecoense",
+      "name": "Vinicius Eduardo",
+      "position": "Zagueiro",
+      "ovr": 63,
+      "potential": 73
+    },
+    {
+      "id": "br2026v10:Chapecoense:Mancha:6",
+      "club": "Chapecoense",
+      "name": "Mancha",
+      "position": "Lateral-esquerdo",
+      "ovr": 68,
+      "potential": 74
+    },
+    {
+      "id": "br2026v10:Chapecoense:Fernando:12",
+      "club": "Chapecoense",
+      "name": "Fernando",
+      "position": "Lateral-esquerdo",
+      "ovr": 70,
+      "potential": 74
+    },
+    {
+      "id": "br2026v10:Chapecoense:Bruno Pacheco:91",
+      "club": "Chapecoense",
+      "name": "Bruno Pacheco",
+      "position": "Lateral-esquerdo",
+      "ovr": 69,
+      "potential": 69
+    },
+    {
+      "id": "br2026v10:Chapecoense:Da Silva:48",
+      "club": "Chapecoense",
+      "name": "Da Silva",
+      "position": "Lateral-esquerdo",
+      "ovr": 65,
+      "potential": 69
+    },
+    {
+      "id": "br2026v10:Chapecoense:Dudu:23",
+      "club": "Chapecoense",
+      "name": "Dudu",
+      "position": "Lateral-direito",
+      "ovr": 69,
+      "potential": 71
+    },
+    {
+      "id": "br2026v10:Chapecoense:Heitor:5",
+      "club": "Chapecoense",
+      "name": "Heitor",
+      "position": "Lateral-direito",
+      "ovr": 65,
+      "potential": 71
+    },
+    {
+      "id": "br2026v10:Chapecoense:Everton:26",
+      "club": "Chapecoense",
+      "name": "Everton",
+      "position": "Lateral-direito",
+      "ovr": 68,
+      "potential": 69
+    },
+    {
+      "id": "br2026v10:Chapecoense:Carvalheira:99",
+      "club": "Chapecoense",
+      "name": "Carvalheira",
+      "position": "Volante",
+      "ovr": 70,
+      "potential": 76
+    },
+    {
+      "id": "br2026v10:Chapecoense:Camilo:27",
+      "club": "Chapecoense",
+      "name": "Camilo",
+      "position": "Volante",
+      "ovr": 69,
+      "potential": 74
+    },
+    {
+      "id": "br2026v10:Chapecoense:Vinicius Baleiro:17",
+      "club": "Chapecoense",
+      "name": "Vinicius Baleiro",
+      "position": "Volante",
+      "ovr": 68,
+      "potential": 72
+    },
+    {
+      "id": "br2026v10:Chapecoense:Rosivan:55",
+      "club": "Chapecoense",
+      "name": "Rosivan",
+      "position": "Volante",
+      "ovr": 65,
+      "potential": 69
+    },
+    {
+      "id": "br2026v10:Chapecoense:Yago Felipe:88",
+      "club": "Chapecoense",
+      "name": "Yago Felipe",
+      "position": "Meia central",
+      "ovr": 68,
+      "potential": 69
+    },
+    {
+      "id": "br2026v10:Chapecoense:Bruno Matias:16",
+      "club": "Chapecoense",
+      "name": "Bruno Matias",
+      "position": "Meia central",
+      "ovr": 67,
+      "potential": 71
+    },
+    {
+      "id": "br2026v10:Chapecoense:David Antunes:19",
+      "club": "Chapecoense",
+      "name": "David Antunes",
+      "position": "Meia central",
+      "ovr": 66,
+      "potential": 77
+    },
+    {
+      "id": "br2026v10:Chapecoense:Robert Santos:8",
+      "club": "Chapecoense",
+      "name": "Robert Santos",
+      "position": "Meia ofensivo",
+      "ovr": 69,
+      "potential": 76
+    },
+    {
+      "id": "br2026v10:Chapecoense:Max:22",
+      "club": "Chapecoense",
+      "name": "Max",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 74
+    },
+    {
+      "id": "br2026v10:Chapecoense:Miguel Carvalho:80",
+      "club": "Chapecoense",
+      "name": "Miguel Carvalho",
+      "position": "Meia ofensivo",
+      "ovr": 65,
+      "potential": 76
+    },
+    {
+      "id": "br2026v10:Chapecoense:Giovanni Augusto:10",
+      "club": "Chapecoense",
+      "name": "Giovanni Augusto",
+      "position": "Meia ofensivo",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "br2026v10:Chapecoense:Dylan Borrero:77",
+      "club": "Chapecoense",
+      "name": "Dylan Borrero",
+      "position": "Ponta esquerda",
+      "ovr": 68,
+      "potential": 74
+    },
+    {
+      "id": "br2026v10:Chapecoense:Maurício Garcez:31",
+      "club": "Chapecoense",
+      "name": "Maurício Garcez",
+      "position": "Ponta esquerda",
+      "ovr": 70,
+      "potential": 72
+    },
+    {
+      "id": "br2026v10:Chapecoense:Kevin Ramírez:94",
+      "club": "Chapecoense",
+      "name": "Kevin Ramírez",
+      "position": "Ponta esquerda",
+      "ovr": 69,
+      "potential": 69
+    },
+    {
+      "id": "br2026v10:Chapecoense:Marcinho:7",
+      "club": "Chapecoense",
+      "name": "Marcinho",
+      "position": "Ponta direita",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "br2026v10:Chapecoense:Rubens:70",
+      "club": "Chapecoense",
+      "name": "Rubens",
+      "position": "Ponta direita",
+      "ovr": 67,
+      "potential": 73
+    },
+    {
+      "id": "br2026v10:Chapecoense:Bruno Tubarão:20",
+      "club": "Chapecoense",
+      "name": "Bruno Tubarão",
+      "position": "Ponta direita",
+      "ovr": 67,
+      "potential": 68
+    },
+    {
+      "id": "br2026v10:Chapecoense:Tulio Eduardo:9",
+      "club": "Chapecoense",
+      "name": "Tulio Eduardo",
+      "position": "Centroavante",
+      "ovr": 69,
+      "potential": 80
+    },
+    {
+      "id": "br2026v10:Chapecoense:Franco Rossi:29",
+      "club": "Chapecoense",
+      "name": "Franco Rossi",
+      "position": "Centroavante",
+      "ovr": 68,
+      "potential": 76
+    },
+    {
+      "id": "br2026v10:Chapecoense:Yannick Bolasie:11",
+      "club": "Chapecoense",
+      "name": "Yannick Bolasie",
+      "position": "Centroavante",
+      "ovr": 71,
+      "potential": 71
+    },
+    {
+      "id": "br2026v9:Bragantino:Cleiton:1",
+      "club": "Bragantino",
+      "name": "Cleiton",
+      "position": "Goleiro",
+      "ovr": 74,
+      "potential": 76
+    },
+    {
+      "id": "br2026v9:Bragantino:Tiago Volpi:18",
+      "club": "Bragantino",
+      "name": "Tiago Volpi",
+      "position": "Goleiro",
+      "ovr": 76,
+      "potential": 76
+    },
+    {
+      "id": "br2026v9:Bragantino:Fabrício:37",
+      "club": "Bragantino",
+      "name": "Fabrício",
+      "position": "Goleiro",
+      "ovr": 66,
+      "potential": 69
+    },
+    {
+      "id": "br2026v9:Bragantino:Gustavo Reis:56",
+      "club": "Bragantino",
+      "name": "Gustavo Reis",
+      "position": "Goleiro",
+      "ovr": 64,
+      "potential": 75
+    },
+    {
+      "id": "br2026v9:Bragantino:Gustavo Marques:16",
+      "club": "Bragantino",
+      "name": "Gustavo Marques",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "br2026v9:Bragantino:Alix:4",
+      "club": "Bragantino",
+      "name": "Alix",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 76
+    },
+    {
+      "id": "br2026v9:Bragantino:Guzmán Rodríguez:2",
+      "club": "Bragantino",
+      "name": "Guzmán Rodríguez",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 75
+    },
+    {
+      "id": "br2026v9:Bragantino:Eduardo:3",
+      "club": "Bragantino",
+      "name": "Eduardo",
+      "position": "Zagueiro",
+      "ovr": 69,
+      "potential": 70
+    },
+    {
+      "id": "br2026v9:Bragantino:Juninho Capixaba:29",
+      "club": "Bragantino",
+      "name": "Juninho Capixaba",
+      "position": "Lateral-esquerdo",
+      "ovr": 76,
+      "potential": 77
+    },
+    {
+      "id": "br2026v9:Bragantino:Vanderlan:12",
+      "club": "Bragantino",
+      "name": "Vanderlan",
+      "position": "Lateral-esquerdo",
+      "ovr": 71,
+      "potential": 76
+    },
+    {
+      "id": "br2026v9:Bragantino:Cauê Nascimento:51",
+      "club": "Bragantino",
+      "name": "Cauê Nascimento",
+      "position": "Lateral-esquerdo",
+      "ovr": 65,
+      "potential": 76
+    },
+    {
+      "id": "br2026v9:Bragantino:Agustín Sant'Anna:23",
+      "club": "Bragantino",
+      "name": "Agustín Sant'Anna",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "br2026v9:Bragantino:José Andrés Hurtado:34",
+      "club": "Bragantino",
+      "name": "José Andrés Hurtado",
+      "position": "Lateral-direito",
+      "ovr": 72,
+      "potential": 77
+    },
+    {
+      "id": "br2026v9:Bragantino:Ryan Augusto:52",
+      "club": "Bragantino",
+      "name": "Ryan Augusto",
+      "position": "Lateral-direito",
+      "ovr": 66,
+      "potential": 77
+    },
+    {
+      "id": "br2026v9:Bragantino:Fabinho:5",
+      "club": "Bragantino",
+      "name": "Fabinho",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 77
+    },
+    {
+      "id": "br2026v9:Bragantino:Patrick:28",
+      "club": "Bragantino",
+      "name": "Patrick",
+      "position": "Volante",
+      "ovr": 67,
+      "potential": 75
+    },
+    {
+      "id": "br2026v9:Bragantino:Matheus Fernandes:35",
+      "club": "Bragantino",
+      "name": "Matheus Fernandes",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 73
+    },
+    {
+      "id": "br2026v9:Bragantino:Gabriel:6",
+      "club": "Bragantino",
+      "name": "Gabriel",
+      "position": "Volante",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "br2026v9:Bragantino:Ignacio Sosa:15",
+      "club": "Bragantino",
+      "name": "Ignacio Sosa",
+      "position": "Meia central",
+      "ovr": 72,
+      "potential": 79
+    },
+    {
+      "id": "br2026v9:Bragantino:Eric Ramires:7",
+      "club": "Bragantino",
+      "name": "Eric Ramires",
+      "position": "Meia central",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "br2026v9:Bragantino:Gustavo Neves:22",
+      "club": "Bragantino",
+      "name": "Gustavo Neves",
+      "position": "Meia central",
+      "ovr": 73,
+      "potential": 80
+    },
+    {
+      "id": "br2026v9:Bragantino:Rodriguinho:20",
+      "club": "Bragantino",
+      "name": "Rodriguinho",
+      "position": "Meia ofensivo",
+      "ovr": 73,
+      "potential": 80
+    },
+    {
+      "id": "br2026v9:Bragantino:Bruninho:19",
+      "club": "Bragantino",
+      "name": "Bruninho",
+      "position": "Meia ofensivo",
+      "ovr": 69,
+      "potential": 76
+    },
+    {
+      "id": "br2026v9:Bragantino:Marcelinho Braz:57",
+      "club": "Bragantino",
+      "name": "Marcelinho Braz",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 75
+    },
+    {
+      "id": "br2026v9:Bragantino:Henry Mosquera:30",
+      "club": "Bragantino",
+      "name": "Henry Mosquera",
+      "position": "Ponta esquerda",
+      "ovr": 74,
+      "potential": 79
+    },
+    {
+      "id": "br2026v9:Bragantino:Vinicinho:17",
+      "club": "Bragantino",
+      "name": "Vinicinho",
+      "position": "Ponta esquerda",
+      "ovr": 71,
+      "potential": 78
+    },
+    {
+      "id": "br2026v9:Bragantino:Davi Gomes:27",
+      "club": "Bragantino",
+      "name": "Davi Gomes",
+      "position": "Ponta esquerda",
+      "ovr": 68,
+      "potential": 77
+    },
+    {
+      "id": "br2026v9:Bragantino:Lucas Barbosa:21",
+      "club": "Bragantino",
+      "name": "Lucas Barbosa",
+      "position": "Ponta direita",
+      "ovr": 76,
+      "potential": 80
+    },
+    {
+      "id": "br2026v9:Bragantino:José Herrera:32",
+      "club": "Bragantino",
+      "name": "José Herrera",
+      "position": "Ponta direita",
+      "ovr": 70,
+      "potential": 77
+    },
+    {
+      "id": "br2026v9:Bragantino:Isidro Pitta:9",
+      "club": "Bragantino",
+      "name": "Isidro Pitta",
+      "position": "Centroavante",
+      "ovr": 75,
+      "potential": 78
+    },
+    {
+      "id": "br2026v9:Bragantino:Wallace Yan:47",
+      "club": "Bragantino",
+      "name": "Wallace Yan",
+      "position": "Centroavante",
+      "ovr": 70,
+      "potential": 79
+    },
+    {
+      "id": "br2026v9:Bragantino:Fernando:11",
+      "club": "Bragantino",
+      "name": "Fernando",
+      "position": "Centroavante",
+      "ovr": 74,
+      "potential": 77
+    },
+    {
+      "id": "br2026v9:Bragantino:Eduardo Sasha:8",
+      "club": "Bragantino",
+      "name": "Eduardo Sasha",
+      "position": "Centroavante",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Vasco:Léo Jardim",
+      "club": "Vasco",
+      "name": "Léo Jardim",
+      "position": "Goleiro",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Vasco:Daniel Fuzato",
+      "club": "Vasco",
+      "name": "Daniel Fuzato",
+      "position": "Goleiro",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Vasco:Pablo",
+      "club": "Vasco",
+      "name": "Pablo",
+      "position": "Goleiro",
+      "ovr": 65,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Vasco:Robert Renan",
+      "club": "Vasco",
+      "name": "Robert Renan",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Vasco:Carlos Cuesta",
+      "club": "Vasco",
+      "name": "Carlos Cuesta",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Vasco:Gabriel Pereira",
+      "club": "Vasco",
+      "name": "Gabriel Pereira",
+      "position": "Zagueiro",
+      "ovr": 71,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Vasco:Lucas Freitas",
+      "club": "Vasco",
+      "name": "Lucas Freitas",
+      "position": "Zagueiro",
+      "ovr": 70,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Vasco:Alan Saldivia",
+      "club": "Vasco",
+      "name": "Alan Saldivia",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Vasco:Walace Falcão",
+      "club": "Vasco",
+      "name": "Walace Falcão",
+      "position": "Zagueiro",
+      "ovr": 67,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Vasco:Cuiabano",
+      "club": "Vasco",
+      "name": "Cuiabano",
+      "position": "Lateral-esquerdo",
+      "ovr": 74,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Vasco:Lucas Piton",
+      "club": "Vasco",
+      "name": "Lucas Piton",
+      "position": "Lateral-esquerdo",
+      "ovr": 74,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Vasco:Riquelme",
+      "club": "Vasco",
+      "name": "Riquelme",
+      "position": "Lateral-esquerdo",
+      "ovr": 68,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Vasco:Paulinho",
+      "club": "Vasco",
+      "name": "Paulinho",
+      "position": "Lateral-esquerdo",
+      "ovr": 69,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Vasco:Paulo Henrique",
+      "club": "Vasco",
+      "name": "Paulo Henrique",
+      "position": "Lateral-direito",
+      "ovr": 76,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Vasco:José Luis Rodríguez",
+      "club": "Vasco",
+      "name": "José Luis Rodríguez",
+      "position": "Lateral-direito",
+      "ovr": 69,
+      "potential": 69
+    },
+    {
+      "id": "tm2026:Vasco:João Mutano",
+      "club": "Vasco",
+      "name": "João Mutano",
+      "position": "Lateral-direito",
+      "ovr": 67,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Vasco:Santiago Sosa",
+      "club": "Vasco",
+      "name": "Santiago Sosa",
+      "position": "Volante",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Vasco:Cauan Barros",
+      "club": "Vasco",
+      "name": "Cauan Barros",
+      "position": "Volante",
+      "ovr": 71,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Vasco:Mateus Carvalho",
+      "club": "Vasco",
+      "name": "Mateus Carvalho",
+      "position": "Volante",
+      "ovr": 70,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Vasco:Thiago Mendes",
+      "club": "Vasco",
+      "name": "Thiago Mendes",
+      "position": "Volante",
+      "ovr": 77,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Vasco:Jair",
+      "club": "Vasco",
+      "name": "Jair",
+      "position": "Volante",
+      "ovr": 70,
+      "potential": 71
+    },
+    {
+      "id": "tm2026:Vasco:Euder",
+      "club": "Vasco",
+      "name": "Euder",
+      "position": "Volante",
+      "ovr": 68,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Vasco:Ramon Rique",
+      "club": "Vasco",
+      "name": "Ramon Rique",
+      "position": "Meia central",
+      "ovr": 69,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Vasco:Tchê Tchê",
+      "club": "Vasco",
+      "name": "Tchê Tchê",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Vasco:Alan Lescano",
+      "club": "Vasco",
+      "name": "Alan Lescano",
+      "position": "Meia ofensivo",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Vasco:Johan Rojas",
+      "club": "Vasco",
+      "name": "Johan Rojas",
+      "position": "Meia ofensivo",
+      "ovr": 73,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Vasco:Guilherme Estrella",
+      "club": "Vasco",
+      "name": "Guilherme Estrella",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Vasco:Andrés Gómez",
+      "club": "Vasco",
+      "name": "Andrés Gómez",
+      "position": "Ponta esquerda",
+      "ovr": 75,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Vasco:David",
+      "club": "Vasco",
+      "name": "David",
+      "position": "Ponta esquerda",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Vasco:Nuno Moreira",
+      "club": "Vasco",
+      "name": "Nuno Moreira",
+      "position": "Ponta direita",
+      "ovr": 73,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Vasco:Marino Hinestroza",
+      "club": "Vasco",
+      "name": "Marino Hinestroza",
+      "position": "Ponta direita",
+      "ovr": 73,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Vasco:Adson",
+      "club": "Vasco",
+      "name": "Adson",
+      "position": "Ponta direita",
+      "ovr": 74,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Vasco:Loide Augusto",
+      "club": "Vasco",
+      "name": "Loide Augusto",
+      "position": "Ponta direita",
+      "ovr": 71,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Vasco:Facundo Colidio",
+      "club": "Vasco",
+      "name": "Facundo Colidio",
+      "position": "Centroavante",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Vasco:Bruno Duarte",
+      "club": "Vasco",
+      "name": "Bruno Duarte",
+      "position": "Centroavante",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Vasco:Brenner",
+      "club": "Vasco",
+      "name": "Brenner",
+      "position": "Centroavante",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Vasco:Claudio Spinelli",
+      "club": "Vasco",
+      "name": "Claudio Spinelli",
+      "position": "Centroavante",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:São Paulo:Carlos Coronel",
+      "club": "São Paulo",
+      "name": "Carlos Coronel",
+      "position": "Goleiro",
+      "ovr": 70,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:São Paulo:Rafael",
+      "club": "São Paulo",
+      "name": "Rafael",
+      "position": "Goleiro",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:São Paulo:Young",
+      "club": "São Paulo",
+      "name": "Young",
+      "position": "Goleiro",
+      "ovr": 68,
+      "potential": 73
+    },
+    {
+      "id": "print2026:São Paulo:João Pedro",
+      "club": "São Paulo",
+      "name": "João Pedro",
+      "position": "Goleiro",
+      "ovr": 65,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:São Paulo:Felipe Preis",
+      "club": "São Paulo",
+      "name": "Felipe Preis",
+      "position": "Goleiro",
+      "ovr": 63,
+      "potential": 73
+    },
+    {
+      "id": "br2026v7:São Paulo:Sabino",
+      "club": "São Paulo",
+      "name": "Sabino",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "print2026:São Paulo:Matheus Belém",
+      "club": "São Paulo",
+      "name": "Matheus Belém",
+      "position": "Zagueiro",
+      "ovr": 67,
+      "potential": 73
+    },
+    {
+      "id": "print2026:São Paulo:Rafael Tolói",
+      "club": "São Paulo",
+      "name": "Rafael Tolói",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "br2026v7:São Paulo:Domingos Duarte",
+      "club": "São Paulo",
+      "name": "Domingos Duarte",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "print2026:São Paulo:Luis Osorio",
+      "club": "São Paulo",
+      "name": "Luis Osorio",
+      "position": "Zagueiro",
+      "ovr": 66,
+      "potential": 76
+    },
+    {
+      "id": "print2026:São Paulo:Robert Arboleda",
+      "club": "São Paulo",
+      "name": "Robert Arboleda",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "br2026v7:São Paulo:Isac",
+      "club": "São Paulo",
+      "name": "Isac",
+      "position": "Zagueiro",
+      "ovr": 66,
+      "potential": 76
+    },
+    {
+      "id": "br2026v7:São Paulo:Iago",
+      "club": "São Paulo",
+      "name": "Iago",
+      "position": "Lateral-esquerdo",
+      "ovr": 71,
+      "potential": 73
+    },
+    {
+      "id": "br2026v7:São Paulo:Enzo Díaz",
+      "club": "São Paulo",
+      "name": "Enzo Díaz",
+      "position": "Lateral-esquerdo",
+      "ovr": 71,
+      "potential": 73
+    },
+    {
+      "id": "br2026v7:São Paulo:Wendell",
+      "club": "São Paulo",
+      "name": "Wendell",
+      "position": "Lateral-esquerdo",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "print2026:São Paulo:Nicolas",
+      "club": "São Paulo",
+      "name": "Nicolas",
+      "position": "Lateral-esquerdo",
+      "ovr": 65,
+      "potential": 74
+    },
+    {
+      "id": "br2026v7:São Paulo:Pedro Lima",
+      "club": "São Paulo",
+      "name": "Pedro Lima",
+      "position": "Lateral-direito",
+      "ovr": 70,
+      "potential": 79
+    },
+    {
+      "id": "print2026:São Paulo:Aurélio Buta",
+      "club": "São Paulo",
+      "name": "Aurélio Buta",
+      "position": "Lateral-direito",
+      "ovr": 70,
+      "potential": 72
+    },
+    {
+      "id": "br2026v7:São Paulo:Lucas Ramon",
+      "club": "São Paulo",
+      "name": "Lucas Ramon",
+      "position": "Lateral-direito",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "br2026v7:São Paulo:Cédric Soares",
+      "club": "São Paulo",
+      "name": "Cédric Soares",
+      "position": "Lateral-direito",
+      "ovr": 70,
+      "potential": 70
+    },
+    {
+      "id": "br2026v7:São Paulo:Igor Felisberto",
+      "club": "São Paulo",
+      "name": "Igor Felisberto",
+      "position": "Lateral-direito",
+      "ovr": 65,
+      "potential": 74
+    },
+    {
+      "id": "br2026v7:São Paulo:Pablo Maia",
+      "club": "São Paulo",
+      "name": "Pablo Maia",
+      "position": "Volante",
+      "ovr": 74,
+      "potential": 79
+    },
+    {
+      "id": "print2026:São Paulo:Newton",
+      "club": "São Paulo",
+      "name": "Newton",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 75
+    },
+    {
+      "id": "br2026v7:São Paulo:Marcos Antônio",
+      "club": "São Paulo",
+      "name": "Marcos Antônio",
+      "position": "Meia central",
+      "ovr": 76,
+      "potential": 80
+    },
+    {
+      "id": "print2026:São Paulo:Damián Bobadilla",
+      "club": "São Paulo",
+      "name": "Damián Bobadilla",
+      "position": "Meia central",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "print2026:São Paulo:Dj hordeney",
+      "club": "São Paulo",
+      "name": "Djhordney",
+      "position": "Meia central",
+      "ovr": 69,
+      "potential": 77
+    },
+    {
+      "id": "print2026:São Paulo:Danielzinho",
+      "club": "São Paulo",
+      "name": "Danielzinho",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "br2026v7:São Paulo:Cauly",
+      "club": "São Paulo",
+      "name": "Cauly",
+      "position": "Meia ofensivo",
+      "ovr": 71,
+      "potential": 72
+    },
+    {
+      "id": "print2026:São Paulo:Pedro Ferreira",
+      "club": "São Paulo",
+      "name": "Pedro Ferreira",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 77
+    },
+    {
+      "id": "print2026:São Paulo:Ferreirinha",
+      "club": "São Paulo",
+      "name": "Ferreirinha",
+      "position": "Ponta esquerda",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "br2026v7:São Paulo:Lucca",
+      "club": "São Paulo",
+      "name": "Lucca",
+      "position": "Ponta esquerda",
+      "ovr": 69,
+      "potential": 77
+    },
+    {
+      "id": "print2026:São Paulo:Victor Sá",
+      "club": "São Paulo",
+      "name": "Victor Sá",
+      "position": "Ponta esquerda",
+      "ovr": 71,
+      "potential": 72
+    },
+    {
+      "id": "br2026v7:São Paulo:Tetê",
+      "club": "São Paulo",
+      "name": "Tetê",
+      "position": "Ponta esquerda",
+      "ovr": 69,
+      "potential": 77
+    },
+    {
+      "id": "br2026v7:São Paulo:Artur",
+      "club": "São Paulo",
+      "name": "Artur",
+      "position": "Ponta direita",
+      "ovr": 76,
+      "potential": 78
+    },
+    {
+      "id": "br2026v7:São Paulo:Lucas Moura",
+      "club": "São Paulo",
+      "name": "Lucas Moura",
+      "position": "Ponta direita",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "print2026:São Paulo:Ryan Francisco",
+      "club": "São Paulo",
+      "name": "Ryan Francisco",
+      "position": "Centroavante",
+      "ovr": 66,
+      "potential": 80
+    },
+    {
+      "id": "br2026v7:São Paulo:André Silva",
+      "club": "São Paulo",
+      "name": "André Silva",
+      "position": "Centroavante",
+      "ovr": 71,
+      "potential": 73
+    },
+    {
+      "id": "print2026:São Paulo:Jonathan Calleri",
+      "club": "São Paulo",
+      "name": "Jonathan Calleri",
+      "position": "Centroavante",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "cbf2026:São Paulo:Luciano",
+      "club": "São Paulo",
+      "name": "Luciano",
+      "position": "Centroavante",
+      "ovr": 76,
+      "potential": 77
+    },
+    {
+      "id": "br2026v7:São Paulo:Gustavo Santana",
+      "club": "São Paulo",
+      "name": "Gustavo Santana",
+      "position": "Centroavante",
+      "ovr": 65,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Santos:Gabriel Brazão",
+      "club": "Santos",
+      "name": "Gabriel Brazão",
+      "position": "Goleiro",
+      "ovr": 75,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Santos:João Paulo",
+      "club": "Santos",
+      "name": "João Paulo",
+      "position": "Goleiro",
+      "ovr": 72,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Santos:Diógenes",
+      "club": "Santos",
+      "name": "Diógenes",
+      "position": "Goleiro",
+      "ovr": 68,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Santos:João Fernandes",
+      "club": "Santos",
+      "name": "João Fernandes",
+      "position": "Goleiro",
+      "ovr": 64,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Santos:Rodrigo Falcão",
+      "club": "Santos",
+      "name": "Rodrigo Falcão",
+      "position": "Goleiro",
+      "ovr": 63,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Santos:João Ananias",
+      "club": "Santos",
+      "name": "João Ananias",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Santos:Lucas Veríssimo",
+      "club": "Santos",
+      "name": "Lucas Veríssimo",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Santos:Alexis Duarte",
+      "club": "Santos",
+      "name": "Alexis Duarte",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Santos:Willian Arão",
+      "club": "Santos",
+      "name": "Willian Arão",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Santos:Luan Peres",
+      "club": "Santos",
+      "name": "Luan Peres",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Santos:João Alencar",
+      "club": "Santos",
+      "name": "João Alencar",
+      "position": "Zagueiro",
+      "ovr": 63,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Santos:Vinicius Lira",
+      "club": "Santos",
+      "name": "Vinicius Lira",
+      "position": "Lateral-esquerdo",
+      "ovr": 68,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Santos:Gonzalo Escobar",
+      "club": "Santos",
+      "name": "Gonzalo Escobar",
+      "position": "Lateral-esquerdo",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Santos:Gabriel Menino",
+      "club": "Santos",
+      "name": "Gabriel Menino",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Santos:Igor Vinícius",
+      "club": "Santos",
+      "name": "Igor Vinícius",
+      "position": "Lateral-direito",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Santos:Rodinei",
+      "club": "Santos",
+      "name": "Rodinei",
+      "position": "Lateral-direito",
+      "ovr": 76,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Santos:Arthur Melo",
+      "club": "Santos",
+      "name": "Arthur Melo",
+      "position": "Volante",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Santos:Gustavinho",
+      "club": "Santos",
+      "name": "Gustavinho",
+      "position": "Volante",
+      "ovr": 68,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Santos:Christian Oliva",
+      "club": "Santos",
+      "name": "Christian Oliva",
+      "position": "Volante",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Santos:João Schmidt",
+      "club": "Santos",
+      "name": "João Schmidt",
+      "position": "Volante",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Santos:Gabriel Bontempo",
+      "club": "Santos",
+      "name": "Gabriel Bontempo",
+      "position": "Meia central",
+      "ovr": 76,
+      "potential": 84
+    },
+    {
+      "id": "tm2026:Santos:Neymar",
+      "club": "Santos",
+      "name": "Neymar",
+      "position": "Meia ofensivo",
+      "ovr": 81,
+      "potential": 81
+    },
+    {
+      "id": "tm2026:Santos:Miguelito",
+      "club": "Santos",
+      "name": "Miguelito",
+      "position": "Meia ofensivo",
+      "ovr": 72,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Santos:Philippe Coutinho",
+      "club": "Santos",
+      "name": "Philippe Coutinho",
+      "position": "Meia ofensivo",
+      "ovr": 76,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Santos:Lima",
+      "club": "Santos",
+      "name": "Lima",
+      "position": "Meia ofensivo",
+      "ovr": 71,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Santos:Thaciano",
+      "club": "Santos",
+      "name": "Thaciano",
+      "position": "Meia ofensivo",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Santos:Nadson",
+      "club": "Santos",
+      "name": "Nadson",
+      "position": "Meia ofensivo",
+      "ovr": 62,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Santos:Pepê Firmino",
+      "club": "Santos",
+      "name": "Pepê Firmino",
+      "position": "Meia ofensivo",
+      "ovr": 64,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Santos:Álvaro Barreal",
+      "club": "Santos",
+      "name": "Álvaro Barreal",
+      "position": "Ponta esquerda",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Santos:Everton",
+      "club": "Santos",
+      "name": "Cebolinha",
+      "position": "Ponta esquerda",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Santos:Moisés",
+      "club": "Santos",
+      "name": "Moisés",
+      "position": "Ponta esquerda",
+      "ovr": 72,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Santos:Gustavo Caballero",
+      "club": "Santos",
+      "name": "Gustavo Caballero",
+      "position": "Ponta esquerda",
+      "ovr": 70,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Santos:Mateus Xavier",
+      "club": "Santos",
+      "name": "Mateus Xavier",
+      "position": "Ponta esquerda",
+      "ovr": 66,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Santos:Benjamín Rollheiser",
+      "club": "Santos",
+      "name": "Benjamín Rollheiser",
+      "position": "Ponta direita",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Santos:Andrey Quintino",
+      "club": "Santos",
+      "name": "Andrey Quintino",
+      "position": "Ponta direita",
+      "ovr": 66,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Santos:Enzo Boer",
+      "club": "Santos",
+      "name": "Enzo Boer",
+      "position": "Ponta direita",
+      "ovr": 64,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Santos:Gabriel Barbosa",
+      "club": "Santos",
+      "name": "Gabriel Barbosa",
+      "position": "Centroavante",
+      "ovr": 78,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Santos:Rony",
+      "club": "Santos",
+      "name": "Rony",
+      "position": "Centroavante",
+      "ovr": 72,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Palmeiras:Carlos Miguel",
+      "club": "Palmeiras",
+      "name": "Carlos Miguel",
+      "position": "Goleiro",
+      "ovr": 76,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Marcelo Lomba",
+      "club": "Palmeiras",
+      "name": "Marcelo Lomba",
+      "position": "Goleiro",
+      "ovr": 71,
+      "potential": 71
+    },
+    {
+      "id": "tm2026:Palmeiras:Bruno Bertinato",
+      "club": "Palmeiras",
+      "name": "Bruno Bertinato",
+      "position": "Goleiro",
+      "ovr": 68,
+      "potential": 70
+    },
+    {
+      "id": "tm2026:Palmeiras:Murilo",
+      "club": "Palmeiras",
+      "name": "Murilo",
+      "position": "Zagueiro",
+      "ovr": 77,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Alexander Barboza",
+      "club": "Palmeiras",
+      "name": "Alexander Barboza",
+      "position": "Zagueiro",
+      "ovr": 77,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Bruno Fuchs",
+      "club": "Palmeiras",
+      "name": "Bruno Fuchs",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Palmeiras:Luis Benedetti",
+      "club": "Palmeiras",
+      "name": "Luis Benedetti",
+      "position": "Zagueiro",
+      "ovr": 70,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Palmeiras:Gustavo Gómez",
+      "club": "Palmeiras",
+      "name": "Gustavo Gómez",
+      "position": "Zagueiro",
+      "ovr": 78,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Joaquín Piquerez",
+      "club": "Palmeiras",
+      "name": "Joaquín Piquerez",
+      "position": "Lateral-esquerdo",
+      "ovr": 77,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Jefté",
+      "club": "Palmeiras",
+      "name": "Jefté",
+      "position": "Lateral-esquerdo",
+      "ovr": 71,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Arthur Gabriel",
+      "club": "Palmeiras",
+      "name": "Arthur Gabriel",
+      "position": "Lateral-esquerdo",
+      "ovr": 69,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Agustín Giay",
+      "club": "Palmeiras",
+      "name": "Agustín Giay",
+      "position": "Lateral-direito",
+      "ovr": 75,
+      "potential": 82
+    },
+    {
+      "id": "tm2026:Palmeiras:Khellven",
+      "club": "Palmeiras",
+      "name": "Khellven",
+      "position": "Lateral-direito",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Marlon Freitas",
+      "club": "Palmeiras",
+      "name": "Marlon Freitas",
+      "position": "Volante",
+      "ovr": 78,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Emiliano Martínez",
+      "club": "Palmeiras",
+      "name": "Emiliano Martínez",
+      "position": "Volante",
+      "ovr": 75,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Palmeiras:Luis Pacheco",
+      "club": "Palmeiras",
+      "name": "Luis Pacheco",
+      "position": "Volante",
+      "ovr": 65,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Palmeiras:Andreas Pereira",
+      "club": "Palmeiras",
+      "name": "Andreas Pereira",
+      "position": "Meia central",
+      "ovr": 78,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Lucas Evangelista",
+      "club": "Palmeiras",
+      "name": "Lucas Evangelista",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Palmeiras:Larson",
+      "club": "Palmeiras",
+      "name": "Larson",
+      "position": "Meia central",
+      "ovr": 67,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Palmeiras:Maurício",
+      "club": "Palmeiras",
+      "name": "Maurício",
+      "position": "Meia ofensivo",
+      "ovr": 76,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Palmeiras:Erick Belé",
+      "club": "Palmeiras",
+      "name": "Erick Belé",
+      "position": "Meia ofensivo",
+      "ovr": 67,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Palmeiras:Ramón Sosa",
+      "club": "Palmeiras",
+      "name": "Ramón Sosa",
+      "position": "Ponta esquerda",
+      "ovr": 76,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Palmeiras:Felipe Anderson",
+      "club": "Palmeiras",
+      "name": "Felipe Anderson",
+      "position": "Ponta esquerda",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Palmeiras:Jhon Arias",
+      "club": "Palmeiras",
+      "name": "Jhon Arias",
+      "position": "Ponta direita",
+      "ovr": 79,
+      "potential": 81
+    },
+    {
+      "id": "tm2026:Palmeiras:Paulinho",
+      "club": "Palmeiras",
+      "name": "Paulinho",
+      "position": "Segundo atacante",
+      "ovr": 77,
+      "potential": 81
+    },
+    {
+      "id": "tm2026:Palmeiras:Vitor Roque",
+      "club": "Palmeiras",
+      "name": "Vitor Roque",
+      "position": "Centroavante",
+      "ovr": 76,
+      "potential": 84
+    },
+    {
+      "id": "tm2026:Palmeiras:José Manuel López",
+      "club": "Palmeiras",
+      "name": "José Manuel López",
+      "position": "Centroavante",
+      "ovr": 79,
+      "potential": 83
+    },
+    {
+      "id": "tm2026:Grêmio:Gabriel Grando",
+      "club": "Grêmio",
+      "name": "Gabriel Grando",
+      "position": "Goleiro",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Grêmio:Weverton",
+      "club": "Grêmio",
+      "name": "Weverton",
+      "position": "Goleiro",
+      "ovr": 76,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Grêmio:Thiago Beltrame",
+      "club": "Grêmio",
+      "name": "Thiago Beltrame",
+      "position": "Goleiro",
+      "ovr": 64,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Grêmio:Gabriel Menegon",
+      "club": "Grêmio",
+      "name": "Gabriel Menegon",
+      "position": "Goleiro",
+      "ovr": 63,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Grêmio:Gustavo Martins",
+      "club": "Grêmio",
+      "name": "Gustavo Martins",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Grêmio:Wallace",
+      "club": "Grêmio",
+      "name": "Wallace",
+      "position": "Zagueiro",
+      "ovr": 70,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Grêmio:Wagner Leonardo",
+      "club": "Grêmio",
+      "name": "Wagner Leonardo",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Grêmio:Fabián Balbuena",
+      "club": "Grêmio",
+      "name": "Fabián Balbuena",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Grêmio:Luis Eduardo",
+      "club": "Grêmio",
+      "name": "Luis Eduardo",
+      "position": "Zagueiro",
+      "ovr": 63,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Grêmio:Walter Kannemann",
+      "club": "Grêmio",
+      "name": "Walter Kannemann",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Grêmio:Athos Thawan",
+      "club": "Grêmio",
+      "name": "Athos Thawan",
+      "position": "Zagueiro",
+      "ovr": 65,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Grêmio:Marlon",
+      "club": "Grêmio",
+      "name": "Marlon",
+      "position": "Lateral-esquerdo",
+      "ovr": 74,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Grêmio:Pedro Gabriel",
+      "club": "Grêmio",
+      "name": "Pedro Gabriel",
+      "position": "Lateral-esquerdo",
+      "ovr": 68,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Grêmio:Caio Paulista",
+      "club": "Grêmio",
+      "name": "Caio Paulista",
+      "position": "Lateral-esquerdo",
+      "ovr": 71,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Grêmio:Diego Caito",
+      "club": "Grêmio",
+      "name": "Diego Caito",
+      "position": "Lateral-direito",
+      "ovr": 68,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Grêmio:João Pedro",
+      "club": "Grêmio",
+      "name": "João Pedro",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Grêmio:Marcos Rocha",
+      "club": "Grêmio",
+      "name": "Marcos Rocha",
+      "position": "Lateral-direito",
+      "ovr": 70,
+      "potential": 70
+    },
+    {
+      "id": "tm2026:Grêmio:Erick Noriega",
+      "club": "Grêmio",
+      "name": "Erick Noriega",
+      "position": "Volante",
+      "ovr": 76,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Grêmio:Mathías Villasanti",
+      "club": "Grêmio",
+      "name": "Mathías Villasanti",
+      "position": "Volante",
+      "ovr": 74,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Grêmio:Danilo Barbosa",
+      "club": "Grêmio",
+      "name": "Danilo Barbosa",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Grêmio:Filip Krovínović",
+      "club": "Grêmio",
+      "name": "Filip Krovínović",
+      "position": "Volante",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Grêmio:Dodi",
+      "club": "Grêmio",
+      "name": "Dodi",
+      "position": "Volante",
+      "ovr": 70,
+      "potential": 71
+    },
+    {
+      "id": "tm2026:Grêmio:Juan Nardoni",
+      "club": "Grêmio",
+      "name": "Juan Nardoni",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Grêmio:Tiago Augusto",
+      "club": "Grêmio",
+      "name": "Tiago Augusto",
+      "position": "Meia central",
+      "ovr": 65,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Grêmio:Riquelme",
+      "club": "Grêmio",
+      "name": "Riquelme",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Grêmio:Francis Amuzu",
+      "club": "Grêmio",
+      "name": "Francis Amuzu",
+      "position": "Ponta esquerda",
+      "ovr": 76,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Grêmio:Jovane Cabral",
+      "club": "Grêmio",
+      "name": "Jovane Cabral",
+      "position": "Ponta esquerda",
+      "ovr": 74,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Grêmio:Tetê",
+      "club": "Grêmio",
+      "name": "Tetê",
+      "position": "Ponta direita",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Grêmio:Cristian Pavón",
+      "club": "Grêmio",
+      "name": "Cristian Pavón",
+      "position": "Ponta direita",
+      "ovr": 76,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Grêmio:José Enamorado",
+      "club": "Grêmio",
+      "name": "José Enamorado",
+      "position": "Ponta direita",
+      "ovr": 74,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Grêmio:Roger",
+      "club": "Grêmio",
+      "name": "Roger",
+      "position": "Ponta direita",
+      "ovr": 64,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Grêmio:Carlos Vinícius",
+      "club": "Grêmio",
+      "name": "Carlos Vinícius",
+      "position": "Centroavante",
+      "ovr": 77,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Grêmio:Matheus Nascimento",
+      "club": "Grêmio",
+      "name": "Matheus Nascimento",
+      "position": "Centroavante",
+      "ovr": 70,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Grêmio:Martin Braithwaite",
+      "club": "Grêmio",
+      "name": "Martin Braithwaite",
+      "position": "Centroavante",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Internacional:Anthoni",
+      "club": "Internacional",
+      "name": "Anthoni",
+      "position": "Goleiro",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Internacional:Matheus Cunha",
+      "club": "Internacional",
+      "name": "Matheus Cunha",
+      "position": "Goleiro",
+      "ovr": 72,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Internacional:Sergio Rochet",
+      "club": "Internacional",
+      "name": "Sergio Rochet",
+      "position": "Goleiro",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Internacional:Kauan",
+      "club": "Internacional",
+      "name": "Kauan",
+      "position": "Goleiro",
+      "ovr": 67,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Internacional:Diego Esser",
+      "club": "Internacional",
+      "name": "Diego Esser",
+      "position": "Goleiro",
+      "ovr": 67,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Internacional:Victor Gabriel",
+      "club": "Internacional",
+      "name": "Victor Gabriel",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Internacional:Guillermo Maripán",
+      "club": "Internacional",
+      "name": "Guillermo Maripán",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Internacional:Félix Torres",
+      "club": "Internacional",
+      "name": "Félix Torres",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "tm2026:Internacional:Juninho",
+      "club": "Internacional",
+      "name": "Juninho",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Internacional:Gabriel Mercado",
+      "club": "Internacional",
+      "name": "Gabriel Mercado",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "tm2026:Internacional:Alexandro Bernabei",
+      "club": "Internacional",
+      "name": "Alexandro Bernabei",
+      "position": "Lateral-esquerdo",
+      "ovr": 77,
+      "potential": 80
+    },
+    {
+      "id": "br2026v6:Internacional:Matheus Bahia",
+      "club": "Internacional",
+      "name": "Matheus Bahia",
+      "position": "Lateral-esquerdo",
+      "ovr": 72,
+      "potential": 75
+    },
+    {
+      "id": "br2026v6:Internacional:Bruno Gomes",
+      "club": "Internacional",
+      "name": "Bruno Gomes",
+      "position": "Lateral-direito",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "br2026v6:Internacional:Braian Aguirre",
+      "club": "Internacional",
+      "name": "Braian Aguirre",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Internacional:Rodrigo Villagra",
+      "club": "Internacional",
+      "name": "Rodrigo Villagra",
+      "position": "Volante",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Internacional:Ronaldo",
+      "club": "Internacional",
+      "name": "Ronaldo",
+      "position": "Volante",
+      "ovr": 71,
+      "potential": 72
+    },
+    {
+      "id": "br2026v6:Internacional:Thiago Maia",
+      "club": "Internacional",
+      "name": "Thiago Maia",
+      "position": "Volante",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "tm2026:Internacional:Benjamin",
+      "club": "Internacional",
+      "name": "Benjamin",
+      "position": "Volante",
+      "ovr": 65,
+      "potential": 77
+    },
+    {
+      "id": "br2026v6:Internacional:Paulinho Paula",
+      "club": "Internacional",
+      "name": "Paulinho Paula",
+      "position": "Meia central",
+      "ovr": 71,
+      "potential": 72
+    },
+    {
+      "id": "br2026v6:Internacional:Bruno Henrique",
+      "club": "Internacional",
+      "name": "Bruno Henrique",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Internacional:Niclas Eliasson",
+      "club": "Internacional",
+      "name": "Niclas Eliasson",
+      "position": "Ponta direita",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "br2026v6:Internacional:Alan Patrick",
+      "club": "Internacional",
+      "name": "Alan Patrick",
+      "position": "Meia ofensivo",
+      "ovr": 78,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Internacional:Calebe",
+      "club": "Internacional",
+      "name": "Calebe",
+      "position": "Meia ofensivo",
+      "ovr": 71,
+      "potential": 75
+    },
+    {
+      "id": "br2026v6:Internacional:Allex",
+      "club": "Internacional",
+      "name": "Allex",
+      "position": "Meia ofensivo",
+      "ovr": 69,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Internacional:Yago Noal",
+      "club": "Internacional",
+      "name": "Yago Noal",
+      "position": "Meia ofensivo",
+      "ovr": 65,
+      "potential": 78
+    },
+    {
+      "id": "cbf2026:Internacional:Johan Carbonero",
+      "club": "Internacional",
+      "name": "Johan Carbonero",
+      "position": "Ponta esquerda",
+      "ovr": 76,
+      "potential": 79
+    },
+    {
+      "id": "br2026v6:Internacional:Vitinho",
+      "club": "Internacional",
+      "name": "Vitinho",
+      "position": "Ponta esquerda",
+      "ovr": 75,
+      "potential": 78
+    },
+    {
+      "id": "br2026v6:Internacional:Kayky",
+      "club": "Internacional",
+      "name": "Kayky",
+      "position": "Ponta direita",
+      "ovr": 71,
+      "potential": 78
+    },
+    {
+      "id": "br2026v6:Internacional:Alerrandro",
+      "club": "Internacional",
+      "name": "Alerrandro",
+      "position": "Centroavante",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Internacional:Antonio Sanabria",
+      "club": "Internacional",
+      "name": "Antonio Sanabria",
+      "position": "Centroavante",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Internacional:Raykkonen",
+      "club": "Internacional",
+      "name": "Raykkonen",
+      "position": "Centroavante",
+      "ovr": 64,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Fluminense:Vitor Eudes",
+      "club": "Fluminense",
+      "name": "Vitor Eudes",
+      "position": "Goleiro",
+      "ovr": 69,
+      "potential": 71
+    },
+    {
+      "id": "tm2026:Fluminense:Marcelo Pitaluga",
+      "club": "Fluminense",
+      "name": "Marcelo Pitaluga",
+      "position": "Goleiro",
+      "ovr": 67,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Fluminense:Fábio",
+      "club": "Fluminense",
+      "name": "Fábio",
+      "position": "Goleiro",
+      "ovr": 77,
+      "potential": 77
+    },
+    {
+      "id": "print2026:Fluminense:Juan Pablo Freytes",
+      "club": "Fluminense",
+      "name": "Juan Pablo Freytes",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 78
+    },
+    {
+      "id": "print2026:Fluminense:Julián Millán",
+      "club": "Fluminense",
+      "name": "Julián Millán",
+      "position": "Zagueiro",
+      "ovr": 70,
+      "potential": 72
+    },
+    {
+      "id": "br2026plus:Fluminense:Ignacio",
+      "club": "Fluminense",
+      "name": "Ignácio",
+      "position": "Zagueiro",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "br2026plus:Fluminense:Jemmes",
+      "club": "Fluminense",
+      "name": "Jemmes",
+      "position": "Zagueiro",
+      "ovr": 73,
+      "potential": 77
+    },
+    {
+      "id": "br2026plus:Fluminense:Igor Rabello",
+      "club": "Fluminense",
+      "name": "Igor Rabello",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 73
+    },
+    {
+      "id": "cbf2026:Fluminense:Thiago Silva",
+      "club": "Fluminense",
+      "name": "Thiago Silva",
+      "position": "Zagueiro",
+      "ovr": 77,
+      "potential": 77
+    },
+    {
+      "id": "br2026plus:Fluminense:Guilherme Arana",
+      "club": "Fluminense",
+      "name": "Guilherme Arana",
+      "position": "Lateral-esquerdo",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "br2026plus:Fluminense:Renê",
+      "club": "Fluminense",
+      "name": "Renê",
+      "position": "Lateral-esquerdo",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "print2026:Fluminense:Léo Jance",
+      "club": "Fluminense",
+      "name": "Léo Jance",
+      "position": "Lateral-esquerdo",
+      "ovr": 68,
+      "potential": 77
+    },
+    {
+      "id": "br2026plus:Fluminense:Guga",
+      "club": "Fluminense",
+      "name": "Guga",
+      "position": "Lateral-direito",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "print2026:Fluminense:Julio Fidelis",
+      "club": "Fluminense",
+      "name": "Julio Fidelis",
+      "position": "Lateral-direito",
+      "ovr": 66,
+      "potential": 78
+    },
+    {
+      "id": "print2026:Fluminense:Jhonny",
+      "club": "Fluminense",
+      "name": "Jhonny",
+      "position": "Lateral-direito",
+      "ovr": 69,
+      "potential": 74
+    },
+    {
+      "id": "br2026plus:Fluminense:Samuel Xavier",
+      "club": "Fluminense",
+      "name": "Samuel Xavier",
+      "position": "Lateral-direito",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "br2026plus:Fluminense:Martinelli",
+      "club": "Fluminense",
+      "name": "Martinelli",
+      "position": "Volante",
+      "ovr": 76,
+      "potential": 81
+    },
+    {
+      "id": "br2026plus:Fluminense:Otávio",
+      "club": "Fluminense",
+      "name": "Otávio",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "print2026:Fluminense:Luis Fernando",
+      "club": "Fluminense",
+      "name": "Luis Fernando",
+      "position": "Volante",
+      "ovr": 67,
+      "potential": 76
+    },
+    {
+      "id": "br2026plus:Fluminense:Hércules",
+      "club": "Fluminense",
+      "name": "Hércules",
+      "position": "Meia central",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "br2026plus:Fluminense:Nonato",
+      "club": "Fluminense",
+      "name": "Nonato",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "br2026plus:Fluminense:Alisson",
+      "club": "Fluminense",
+      "name": "Alisson",
+      "position": "Meia central",
+      "ovr": 71,
+      "potential": 71
+    },
+    {
+      "id": "br2026plus:Fluminense:Jefferson Savarino",
+      "club": "Fluminense",
+      "name": "Jefferson Savarino",
+      "position": "Meia ofensivo",
+      "ovr": 76,
+      "potential": 79
+    },
+    {
+      "id": "br2026plus:Fluminense:Luciano Acosta",
+      "club": "Fluminense",
+      "name": "Luciano Acosta",
+      "position": "Meia ofensivo",
+      "ovr": 76,
+      "potential": 77
+    },
+    {
+      "id": "print2026:Fluminense:Ganso",
+      "club": "Fluminense",
+      "name": "Ganso",
+      "position": "Meia ofensivo",
+      "ovr": 72,
+      "potential": 72
+    },
+    {
+      "id": "print2026:Fluminense:Yago Ferreira",
+      "club": "Fluminense",
+      "name": "Yago Ferreira",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 73
+    },
+    {
+      "id": "br2026plus:Fluminense:Yeferson Soteldo",
+      "club": "Fluminense",
+      "name": "Yeferson Soteldo",
+      "position": "Ponta esquerda",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "print2026:Fluminense:Wesley Natã",
+      "club": "Fluminense",
+      "name": "Wesley Natã",
+      "position": "Ponta esquerda",
+      "ovr": 69,
+      "potential": 81
+    },
+    {
+      "id": "print2026:Fluminense:Matheus Reis",
+      "club": "Fluminense",
+      "name": "Matheus Reis",
+      "position": "Ponta esquerda",
+      "ovr": 66,
+      "potential": 78
+    },
+    {
+      "id": "br2026plus:Fluminense:Agustín Canobbio",
+      "club": "Fluminense",
+      "name": "Agustín Canobbio",
+      "position": "Ponta direita",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "print2026:Fluminense:Riquelme",
+      "club": "Fluminense",
+      "name": "Riquelme",
+      "position": "Ponta direita",
+      "ovr": 67,
+      "potential": 79
+    },
+    {
+      "id": "br2026plus:Fluminense:Kevin Serna",
+      "club": "Fluminense",
+      "name": "Kevin Serna",
+      "position": "Ponta direita",
+      "ovr": 76,
+      "potential": 78
+    },
+    {
+      "id": "br2026plus:Fluminense:John Kennedy",
+      "club": "Fluminense",
+      "name": "John Kennedy",
+      "position": "Centroavante",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "br2026plus:Fluminense:Rodrigo Castillo",
+      "club": "Fluminense",
+      "name": "Rodrigo Castillo",
+      "position": "Centroavante",
+      "ovr": 74,
+      "potential": 76
+    },
+    {
+      "id": "cbf2026:Fluminense:Hulk",
+      "club": "Fluminense",
+      "name": "Hulk",
+      "position": "Centroavante",
+      "ovr": 76,
+      "potential": 76
+    },
+    {
+      "id": "br2026plus:Fluminense:Germán Cano",
+      "club": "Fluminense",
+      "name": "Germán Cano",
+      "position": "Centroavante",
+      "ovr": 74,
+      "potential": 74
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Otávio:81",
+      "club": "Cruzeiro",
+      "name": "Otávio",
+      "position": "Goleiro",
+      "ovr": 76,
+      "potential": 83
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Léo Aragão:41",
+      "club": "Cruzeiro",
+      "name": "Léo Aragão",
+      "position": "Goleiro",
+      "ovr": 67,
+      "potential": 72
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Cássio:1",
+      "club": "Cruzeiro",
+      "name": "Cássio",
+      "position": "Goleiro",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Jonathan Jesus:34",
+      "club": "Cruzeiro",
+      "name": "Jonathan Jesus",
+      "position": "Zagueiro",
+      "ovr": 77,
+      "potential": 82
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Fabrício Bruno:15",
+      "club": "Cruzeiro",
+      "name": "Fabrício Bruno",
+      "position": "Zagueiro",
+      "ovr": 76,
+      "potential": 79
+    },
+    {
+      "id": "br2026v13:Cruzeiro:João Marcelo:43",
+      "club": "Cruzeiro",
+      "name": "João Marcelo",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 75
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Lucas Villalba:25",
+      "club": "Cruzeiro",
+      "name": "Lucas Villalba",
+      "position": "Zagueiro",
+      "ovr": 71,
+      "potential": 73
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Gabriel Rojas:27",
+      "club": "Cruzeiro",
+      "name": "Gabriel Rojas",
+      "position": "Lateral-esquerdo",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Matías Viña:6",
+      "club": "Cruzeiro",
+      "name": "Matías Viña",
+      "position": "Lateral-esquerdo",
+      "ovr": 74,
+      "potential": 76
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Kauã Moraes:2",
+      "club": "Cruzeiro",
+      "name": "Kauã Moraes",
+      "position": "Lateral-direito",
+      "ovr": 69,
+      "potential": 78
+    },
+    {
+      "id": "br2026v13:Cruzeiro:William:12",
+      "club": "Cruzeiro",
+      "name": "William",
+      "position": "Lateral-direito",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Fagner:23",
+      "club": "Cruzeiro",
+      "name": "Fagner",
+      "position": "Lateral-direito",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Zé Lucas:5",
+      "club": "Cruzeiro",
+      "name": "Zé Lucas",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 84
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Lucas Romero:29",
+      "club": "Cruzeiro",
+      "name": "Lucas Romero",
+      "position": "Volante",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Lucas Silva:16",
+      "club": "Cruzeiro",
+      "name": "Lucas Silva",
+      "position": "Volante",
+      "ovr": 72,
+      "potential": 73
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Gerson:8",
+      "club": "Cruzeiro",
+      "name": "Gerson",
+      "position": "Meia central",
+      "ovr": 78,
+      "potential": 81
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Matheus Henrique:7",
+      "club": "Cruzeiro",
+      "name": "Matheus Henrique",
+      "position": "Meia central",
+      "ovr": 74,
+      "potential": 77
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Fabrizio Peralta:sem-numero",
+      "club": "Cruzeiro",
+      "name": "Fabrizio Peralta",
+      "position": "Meia central",
+      "ovr": 69,
+      "potential": 74
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Matheus Pereira:10",
+      "club": "Cruzeiro",
+      "name": "Matheus Pereira",
+      "position": "Meia ofensivo",
+      "ovr": 79,
+      "potential": 81
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Felipe Morais:38",
+      "club": "Cruzeiro",
+      "name": "Felipe Morais",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 77
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Luis Sinisterra:17",
+      "club": "Cruzeiro",
+      "name": "Luis Sinisterra",
+      "position": "Ponta esquerda",
+      "ovr": 74,
+      "potential": 77
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Wesley:20",
+      "club": "Cruzeiro",
+      "name": "Wesley",
+      "position": "Ponta esquerda",
+      "ovr": 71,
+      "potential": 79
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Kaique Kenji:70",
+      "club": "Cruzeiro",
+      "name": "Kaique Kenji",
+      "position": "Ponta esquerda",
+      "ovr": 68,
+      "potential": 77
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Wanderson:94",
+      "club": "Cruzeiro",
+      "name": "Wanderson",
+      "position": "Ponta esquerda",
+      "ovr": 71,
+      "potential": 72
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Bruno Rodrigues:9",
+      "club": "Cruzeiro",
+      "name": "Bruno Rodrigues",
+      "position": "Ponta esquerda",
+      "ovr": 70,
+      "potential": 72
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Keny Arroyo:99",
+      "club": "Cruzeiro",
+      "name": "Keny Arroyo",
+      "position": "Ponta direita",
+      "ovr": 75,
+      "potential": 82
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Gabriel Pec:77",
+      "club": "Cruzeiro",
+      "name": "Gabriel Pec",
+      "position": "Ponta direita",
+      "ovr": 75,
+      "potential": 80
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Marquinhos:11",
+      "club": "Cruzeiro",
+      "name": "Marquinhos",
+      "position": "Ponta direita",
+      "ovr": 69,
+      "potential": 75
+    },
+    {
+      "id": "br2026v13:Cruzeiro:João Costa:67",
+      "club": "Cruzeiro",
+      "name": "João Costa",
+      "position": "Ponta direita",
+      "ovr": 67,
+      "potential": 75
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Kaio Jorge:19",
+      "club": "Cruzeiro",
+      "name": "Kaio Jorge",
+      "position": "Centroavante",
+      "ovr": 78,
+      "potential": 83
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Luciano Rodríguez:97",
+      "club": "Cruzeiro",
+      "name": "Luciano Rodríguez",
+      "position": "Centroavante",
+      "ovr": 70,
+      "potential": 76
+    },
+    {
+      "id": "br2026v13:Cruzeiro:Néiser Villarreal:22",
+      "club": "Cruzeiro",
+      "name": "Néiser Villarreal",
+      "position": "Centroavante",
+      "ovr": 71,
+      "potential": 78
+    },
+    {
+      "id": "br2026v12:Coritiba:Pedro Morisco:1",
+      "club": "Coritiba",
+      "name": "Pedro Morisco",
+      "position": "Goleiro",
+      "ovr": 77,
+      "potential": 83
+    },
+    {
+      "id": "br2026v12:Coritiba:Pedro Rangel:22",
+      "club": "Coritiba",
+      "name": "Pedro Rangel",
+      "position": "Goleiro",
+      "ovr": 73,
+      "potential": 75
+    },
+    {
+      "id": "br2026v12:Coritiba:Keiller:13",
+      "club": "Coritiba",
+      "name": "Keiller",
+      "position": "Goleiro",
+      "ovr": 70,
+      "potential": 72
+    },
+    {
+      "id": "br2026v12:Coritiba:Benassi:67",
+      "club": "Coritiba",
+      "name": "Benassi",
+      "position": "Goleiro",
+      "ovr": 67,
+      "potential": 73
+    },
+    {
+      "id": "br2026v12:Coritiba:Jacy:55",
+      "club": "Coritiba",
+      "name": "Jacy",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 74
+    },
+    {
+      "id": "br2026v12:Coritiba:Tiago Cóser:23",
+      "club": "Coritiba",
+      "name": "Tiago Cóser",
+      "position": "Zagueiro",
+      "ovr": 72,
+      "potential": 77
+    },
+    {
+      "id": "br2026v12:Coritiba:Maicon:3",
+      "club": "Coritiba",
+      "name": "Maicon",
+      "position": "Zagueiro",
+      "ovr": 70,
+      "potential": 71
+    },
+    {
+      "id": "br2026v12:Coritiba:Rodrigo Moledo:4",
+      "club": "Coritiba",
+      "name": "Rodrigo Moledo",
+      "position": "Zagueiro",
+      "ovr": 69,
+      "potential": 69
+    },
+    {
+      "id": "br2026v12:Coritiba:Thiago Santos:21",
+      "club": "Coritiba",
+      "name": "Thiago Santos",
+      "position": "Zagueiro",
+      "ovr": 71,
+      "potential": 71
+    },
+    {
+      "id": "br2026v12:Coritiba:Felipe Jonatan:6",
+      "club": "Coritiba",
+      "name": "Felipe Jonatan",
+      "position": "Lateral-esquerdo",
+      "ovr": 69,
+      "potential": 72
+    },
+    {
+      "id": "br2026v12:Coritiba:Rodrigo Gelado:66",
+      "club": "Coritiba",
+      "name": "Rodrigo Gelado",
+      "position": "Lateral-esquerdo",
+      "ovr": 66,
+      "potential": 71
+    },
+    {
+      "id": "br2026v12:Coritiba:Bruno Melo:26",
+      "club": "Coritiba",
+      "name": "Bruno Melo",
+      "position": "Lateral-esquerdo",
+      "ovr": 71,
+      "potential": 72
+    },
+    {
+      "id": "br2026v12:Coritiba:Fabricio Bustos:14",
+      "club": "Coritiba",
+      "name": "Fabricio Bustos",
+      "position": "Lateral-direito",
+      "ovr": 69,
+      "potential": 71
+    },
+    {
+      "id": "br2026v12:Coritiba:Lucas Taverna:86",
+      "club": "Coritiba",
+      "name": "Lucas Taverna",
+      "position": "Lateral-direito",
+      "ovr": 66,
+      "potential": 74
+    },
+    {
+      "id": "br2026v12:Coritiba:Tinga:2",
+      "club": "Coritiba",
+      "name": "Tinga",
+      "position": "Lateral-direito",
+      "ovr": 70,
+      "potential": 71
+    },
+    {
+      "id": "br2026v12:Coritiba:Nicolás Fonseca:5",
+      "club": "Coritiba",
+      "name": "Nicolás Fonseca",
+      "position": "Volante",
+      "ovr": 70,
+      "potential": 75
+    },
+    {
+      "id": "br2026v12:Coritiba:Tissi:50",
+      "club": "Coritiba",
+      "name": "Tissi",
+      "position": "Volante",
+      "ovr": 66,
+      "potential": 74
+    },
+    {
+      "id": "br2026v12:Coritiba:Richard:25",
+      "club": "Coritiba",
+      "name": "Richard",
+      "position": "Volante",
+      "ovr": 70,
+      "potential": 70
+    },
+    {
+      "id": "br2026v12:Coritiba:Sebastián Gómez:19",
+      "club": "Coritiba",
+      "name": "Sebastián Gómez",
+      "position": "Meia central",
+      "ovr": 70,
+      "potential": 73
+    },
+    {
+      "id": "br2026v12:Coritiba:Vini Paulista:36",
+      "club": "Coritiba",
+      "name": "Vini Paulista",
+      "position": "Meia central",
+      "ovr": 69,
+      "potential": 74
+    },
+    {
+      "id": "br2026v12:Coritiba:Gustavo:39",
+      "club": "Coritiba",
+      "name": "Gustavo",
+      "position": "Meia ofensivo",
+      "ovr": 68,
+      "potential": 72
+    },
+    {
+      "id": "br2026v12:Coritiba:Josué:10",
+      "club": "Coritiba",
+      "name": "Josué",
+      "position": "Meia ofensivo",
+      "ovr": 76,
+      "potential": 76
+    },
+    {
+      "id": "br2026v12:Coritiba:Joaquín Lavega:7",
+      "club": "Coritiba",
+      "name": "Joaquín Lavega",
+      "position": "Ponta esquerda",
+      "ovr": 73,
+      "potential": 81
+    },
+    {
+      "id": "br2026v12:Coritiba:Breno Lopes:77",
+      "club": "Coritiba",
+      "name": "Breno Lopes",
+      "position": "Ponta esquerda",
+      "ovr": 74,
+      "potential": 76
+    },
+    {
+      "id": "br2026v12:Coritiba:Brian Ocampo:17",
+      "club": "Coritiba",
+      "name": "Brian Ocampo",
+      "position": "Ponta esquerda",
+      "ovr": 70,
+      "potential": 75
+    },
+    {
+      "id": "br2026v12:Coritiba:Keno:20",
+      "club": "Coritiba",
+      "name": "Keno",
+      "position": "Ponta esquerda",
+      "ovr": 69,
+      "potential": 70
+    },
+    {
+      "id": "br2026v12:Coritiba:Lucas Ronier:11",
+      "club": "Coritiba",
+      "name": "Lucas Ronier",
+      "position": "Ponta direita",
+      "ovr": 73,
+      "potential": 80
+    },
+    {
+      "id": "br2026v12:Coritiba:Fabinho:28",
+      "club": "Coritiba",
+      "name": "Fabinho",
+      "position": "Ponta direita",
+      "ovr": 69,
+      "potential": 73
+    },
+    {
+      "id": "br2026v12:Coritiba:Paulo Roberto:18",
+      "club": "Coritiba",
+      "name": "Paulo Roberto",
+      "position": "Centroavante",
+      "ovr": 70,
+      "potential": 77
+    },
+    {
+      "id": "br2026v12:Coritiba:Pedro Rocha:32",
+      "club": "Coritiba",
+      "name": "Pedro Rocha",
+      "position": "Centroavante",
+      "ovr": 74,
+      "potential": 75
+    },
+    {
+      "id": "br2026v12:Coritiba:Renato Marques:78",
+      "club": "Coritiba",
+      "name": "Renato Marques",
+      "position": "Centroavante",
+      "ovr": 69,
+      "potential": 75
+    },
+    {
+      "id": "br2026v12:Coritiba:Rodrigo Rodrigues:99",
+      "club": "Coritiba",
+      "name": "Rodrigo Rodrigues",
+      "position": "Centroavante",
+      "ovr": 68,
+      "potential": 69
+    },
+    {
+      "id": "br2026v12:Coritiba:Éberth:sem-numero",
+      "club": "Coritiba",
+      "name": "Éberth",
+      "position": "Centroavante",
+      "ovr": 67,
+      "potential": 72
+    },
+    {
+      "id": "tm2026:Flamengo:Agustín Rossi",
+      "club": "Flamengo",
+      "name": "Agustín Rossi",
+      "position": "Goleiro",
+      "ovr": 77,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Flamengo:Andrew",
+      "club": "Flamengo",
+      "name": "Andrew",
+      "position": "Goleiro",
+      "ovr": 73,
+      "potential": 78
+    },
+    {
+      "id": "tm2026:Flamengo:Dyogo Alves",
+      "club": "Flamengo",
+      "name": "Dyogo Alves",
+      "position": "Goleiro",
+      "ovr": 66,
+      "potential": 74
+    },
+    {
+      "id": "tm2026:Flamengo:Léo Ortiz",
+      "club": "Flamengo",
+      "name": "Léo Ortiz",
+      "position": "Zagueiro",
+      "ovr": 77,
+      "potential": 78
+    },
+    {
+      "id": "br2026plus:Flamengo:Léo Pereira",
+      "club": "Flamengo",
+      "name": "Léo Pereira",
+      "position": "Zagueiro",
+      "ovr": 78,
+      "potential": 79
+    },
+    {
+      "id": "br2026plus:Flamengo:Vitão",
+      "club": "Flamengo",
+      "name": "Vitão",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 80
+    },
+    {
+      "id": "br2026plus:Flamengo:Danilo",
+      "club": "Flamengo",
+      "name": "Danilo",
+      "position": "Zagueiro",
+      "ovr": 75,
+      "potential": 75
+    },
+    {
+      "id": "br2026v7:Flamengo:João Souza",
+      "club": "Flamengo",
+      "name": "João Souza",
+      "position": "Zagueiro",
+      "ovr": 66,
+      "potential": 75
+    },
+    {
+      "id": "br2026plus:Flamengo:Ayrton Lucas",
+      "club": "Flamengo",
+      "name": "Ayrton Lucas",
+      "position": "Lateral Esq.",
+      "ovr": 75,
+      "potential": 77
+    },
+    {
+      "id": "br2026plus:Flamengo:Alex Sandro",
+      "club": "Flamengo",
+      "name": "Alex Sandro",
+      "position": "Lateral Esq.",
+      "ovr": 73,
+      "potential": 73
+    },
+    {
+      "id": "br2026plus:Flamengo:Emerson Royal",
+      "club": "Flamengo",
+      "name": "Emerson Royal",
+      "position": "Lateral Dir.",
+      "ovr": 75,
+      "potential": 78
+    },
+    {
+      "id": "br2026plus:Flamengo:Guillermo Varela",
+      "club": "Flamengo",
+      "name": "Guillermo Varela",
+      "position": "Lateral Dir.",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "br2026plus:Flamengo:Evertton Araújo",
+      "club": "Flamengo",
+      "name": "Evertton Araújo",
+      "position": "Volante",
+      "ovr": 74,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Flamengo:Erick Pulgar",
+      "club": "Flamengo",
+      "name": "Erick Pulgar",
+      "position": "Volante",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "br2026plus:Flamengo:Jorginho",
+      "club": "Flamengo",
+      "name": "Jorginho",
+      "position": "Volante",
+      "ovr": 77,
+      "potential": 77
+    },
+    {
+      "id": "br2026plus:Flamengo:Nicolás de la Cruz",
+      "club": "Flamengo",
+      "name": "Nicolás de la Cruz",
+      "position": "Meia Central",
+      "ovr": 74,
+      "potential": 77
+    },
+    {
+      "id": "tm2026:Flamengo:Saúl Ñíguez",
+      "club": "Flamengo",
+      "name": "Saúl Ñíguez",
+      "position": "Meia Central",
+      "ovr": 73,
+      "potential": 74
+    },
+    {
+      "id": "br2026plus:Flamengo:Lucas Paquetá",
+      "club": "Flamengo",
+      "name": "Lucas Paquetá",
+      "position": "Meia Ofensivo",
+      "ovr": 79,
+      "potential": 82
+    },
+    {
+      "id": "br2026plus:Flamengo:Jorge Carrascal",
+      "club": "Flamengo",
+      "name": "Jorge Carrascal",
+      "position": "Meia Ofensivo",
+      "ovr": 76,
+      "potential": 80
+    },
+    {
+      "id": "tm2026:Flamengo:Giorgian de Arrascaeta",
+      "club": "Flamengo",
+      "name": "Giorgian de Arrascaeta",
+      "position": "Meia Ofensivo",
+      "ovr": 80,
+      "potential": 81
+    },
+    {
+      "id": "br2026plus:Flamengo:Samuel Lino",
+      "club": "Flamengo",
+      "name": "Samuel Lino",
+      "position": "Ponta-Esquerda",
+      "ovr": 79,
+      "potential": 84
+    },
+    {
+      "id": "br2026plus:Flamengo:Gonzalo Plata",
+      "club": "Flamengo",
+      "name": "Gonzalo Plata",
+      "position": "Ponta-Direita",
+      "ovr": 75,
+      "potential": 79
+    },
+    {
+      "id": "tm2026:Flamengo:Luiz Araújo",
+      "club": "Flamengo",
+      "name": "Luiz Araújo",
+      "position": "Ponta-Direita",
+      "ovr": 75,
+      "potential": 76
+    },
+    {
+      "id": "br2026v7:Flamengo:Anthony Valencia",
+      "club": "Flamengo",
+      "name": "Anthony Valencia",
+      "position": "Ponta-Direita",
+      "ovr": 69,
+      "potential": 76
+    },
+    {
+      "id": "br2026plus:Flamengo:Pedro",
+      "club": "Flamengo",
+      "name": "Pedro",
+      "position": "Centroavante",
+      "ovr": 80,
+      "potential": 82
+    },
+    {
+      "id": "br2026v7:Flamengo:Joaquín Freitas",
+      "club": "Flamengo",
+      "name": "Joaquín Freitas",
+      "position": "Centroavante",
+      "ovr": 71,
+      "potential": 78
+    },
+    {
+      "id": "br2026plus:Flamengo:Bruno Henrique",
+      "club": "Flamengo",
+      "name": "Bruno Henrique",
+      "position": "Centroavante",
+      "ovr": 76,
+      "potential": 76
+    }
+  ]
+}
