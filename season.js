@@ -52,7 +52,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
 
  app.get('/api/rooms/:code/lineup',auth,wrap(async(r,s)=>{const room=await member(r);const [me]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!me.club_id)throw fail('Escolha um clube');
   const sq=await squad(pool,room.id,me.club_id);const x=await xiFor(pool,room.id,me.club_id);
-  s.json({formations:Object.keys(S.FORMATIONS),formation:x.formation,custom:x.custom,starters:x.xi.map(p=>p.id),strength:S.strength(x.xi),squad:sq.map(p=>({id:p.id,name:p.name,primary_position:p.primary_position,overall:p.overall,age:p.age,sector:S.sec(p)})).sort((a,b)=>b.overall-a.overall)});}));
+  s.json({formations:Object.keys(S.FORMATIONS),formation:x.formation,custom:x.custom,starters:x.xi.map(p=>p.id),strength:S.strength(x.xi),squad:sq.map(p=>({id:p.id,name:p.name,primary_position:p.primary_position,overall:p.overall,potential:p.potential,age:p.age,sector:S.sec(p)})).sort((a,b)=>b.overall-a.overall)});}));
  app.post('/api/rooms/:code/lineup',auth,wrap(async(r,s)=>{const room=await member(r);const [me]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!me.club_id)throw fail('Escolha um clube');
   const f=r.body?.formation;if(!S.FORMATIONS[f])throw fail('Formação inválida');let st=null;
   if(!r.body.auto){st=[...new Set((r.body.starters||[]).map(Number))];if(st.length!==11)throw fail('Escolha exatamente 11 titulares');const ids=new Set((await squad(pool,room.id,me.club_id)).map(p=>p.id));if(st.some(i=>!ids.has(i)))throw fail('Jogador fora do elenco');}

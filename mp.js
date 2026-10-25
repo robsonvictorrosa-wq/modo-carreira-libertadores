@@ -2,10 +2,12 @@
 const {Pool}=require('pg'),crypto=require('crypto'),fs=require('fs');
 module.exports=(app,uni)=>{
  const url=process.env.DATABASE_URL;if(!url){console.warn('DATABASE_URL ausente: multiplayer desativado');return;}
- const pool=new Pool({connectionString:url,ssl:(()=>{const h=new URL(url).hostname;return process.env.PGSSL==='0'||(!process.env.PGSSL&&(!h.includes('.')||h==='localhost'))?false:{rejectUnauthorized:false};})()});
+ const SCH0=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
+ const pool=new Pool({max:10,idleTimeoutMillis:0,keepAlive:true,connectionString:url,ssl:(()=>{const h=new URL(url).hostname;return process.env.PGSSL==='0'||(!process.env.PGSSL&&(!h.includes('.')||h==='localhost'))?false:{rejectUnauthorized:false};})()});
  const q=(s,a)=>pool.query(s,a).then(r=>r.rows);
  // PGSCHEMA: isola as tabelas num schema próprio (permite dividir a instância Postgres free com outro app sem colisão)
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
+ 
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
  const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
@@ -17,7 +19,8 @@ module.exports=(app,uni)=>{
  const hash=(p,salt=crypto.randomBytes(16).toString('hex'))=>salt+':'+crypto.scryptSync(p,salt,32).toString('hex');
  const check=(p,h)=>{const [s]=h.split(':');return crypto.timingSafeEqual(Buffer.from(hash(p,s)),Buffer.from(h));};
  const tokenOf=r=>(r.headers.authorization||'').replace('Bearer ','')||(r.headers.cookie||'').match(/mc_token=([a-f0-9]+)/)?.[1];
- const auth=async(r,s,n)=>{await ready;const t=tokenOf(r);const u=t&&(await q('SELECT u.id,u.nick,u.is_admin FROM sessions s JOIN users u ON u.id=s.user_id WHERE token=$1',[t]))[0];if(!u)return s.status(401).json({error:'Faça login'});u.admin=!!u.is_admin||require('./admins')().includes(String(u.nick).toLowerCase());r.user=u;n();};
+ const AUTHC=new Map();
+ const auth=async(r,s,n)=>{await ready;const t=tokenOf(r);let u=null;if(t){const c=AUTHC.get(t);if(c&&c.exp>Date.now())u={...c.u};else{u=(await q('SELECT u.id,u.nick,u.is_admin FROM sessions s JOIN users u ON u.id=s.user_id WHERE token=$1',[t]))[0]||null;if(u)AUTHC.set(t,{u:{...u},exp:Date.now()+60000});}}if(!u)return s.status(401).json({error:'Faça login'});u.admin=!!u.is_admin||require('./admins')().includes(String(u.nick).toLowerCase());r.user=u;n();};
  const wrap=f=>(r,s)=>f(r,s).catch(e=>{console.error(e);s.status(e.status||500).json({error:e.expose?e.message:'Erro interno'})});
  const fail=(m,st=400)=>Object.assign(new Error(m),{status:st,expose:true});
  const login=async(s,uid)=>{const t=crypto.randomBytes(24).toString('hex');await q('INSERT INTO sessions(token,user_id) VALUES($1,$2)',[t,uid]);s.setHeader('Set-Cookie',`mc_token=${t}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=31536000`);return t;};
@@ -27,7 +30,7 @@ module.exports=(app,uni)=>{
   const [u]=await q('INSERT INTO users(nick,pass_hash) VALUES($1,$2) RETURNING id,nick',[nick.trim(),hash(String(pin))]);s.json({user:u,token:await login(s,u.id)});}));
  app.post('/api/auth/login',wrap(async(r,s)=>{await ready;const {nick,pin}=r.body||{};const [u]=await q('SELECT * FROM users WHERE lower(nick)=lower($1)',[String(nick||'').trim()]);
   if(!u||!check(String(pin||''),u.pass_hash))throw fail('Apelido ou PIN inválido',401);s.json({user:{id:u.id,nick:u.nick},token:await login(s,u.id)});}));
- app.post('/api/auth/logout',wrap(async(r,s)=>{await q('DELETE FROM sessions WHERE token=$1',[tokenOf(r)||'']);s.setHeader('Set-Cookie','mc_token=; Path=/; Max-Age=0');s.json({ok:1});}));
+ app.post('/api/auth/logout',wrap(async(r,s)=>{AUTHC.delete(tokenOf(r)||'');await q('DELETE FROM sessions WHERE token=$1',[tokenOf(r)||'']);s.setHeader('Set-Cookie','mc_token=; Path=/; Max-Age=0');s.json({ok:1});}));
  app.get('/api/me',auth,wrap(async(r,s)=>s.json({user:r.user,rooms:await q(`SELECT r.id,r.code,r.name,r.max_managers,m.club_id,(SELECT count(*)::int FROM room_managers x WHERE x.room_id=r.id) n FROM room_managers m JOIN rooms r ON r.id=m.room_id WHERE m.user_id=$1 ORDER BY r.id DESC`,[r.user.id])})));
  const code=()=>Array.from(crypto.randomBytes(6),b=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b%32]).join('');
  app.post('/api/rooms',auth,wrap(async(r,s)=>{const name=String(r.body?.name||'').trim().slice(0,40)||'Sala de '+r.user.nick;const max=Math.min(Math.max(parseInt(r.body?.max_managers)||5,2),20);
