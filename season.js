@@ -1,13 +1,18 @@
 // Etapa 3: temporada, calendário, escalação, avanço rodada a rodada
 const S=require('./sim'),L=require('./libertadores'),{resenha}=require('./resenha');
 module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(uni);const LIB=new Set(L.CLUBS);const PLAN=L.plan();const stepOf=r=>PLAN[r-1];
- app.locals.xiFor=(...a)=>xiFor(...a);const vname=id=>id<0?{name:'Provisório',primary_position:'—'}:null;
+ app.locals.xiFor=(...a)=>xiFor(...a);
+ // Notas individuais do jogador na temporada atual (média, jogos, últimas notas)
+ app.get('/api/rooms/:code/player/:pid/notas',auth,wrap(async(r,s)=>{const room=await member(r);const pid=String(+r.params.pid);const [comp]=await q('SELECT id FROM competitions WHERE room_id=$1 ORDER BY id DESC LIMIT 1',[room.id]);if(!comp)return s.json({apps:0,avg:null,last:[]});
+  const [ps]=await q('SELECT apps,goals,assists,rating_sum FROM player_stats WHERE comp_id=$1 AND player_id=$2',[comp.id,+pid]);
+  const last=(await q(`SELECT id,round,home,away,hg,ag,(details->'ratings'->>$2)::real nota,(details->>'motm')=$2 motm FROM matches WHERE comp_id=$1 AND played AND details->'ratings' ? $2 ORDER BY round DESC,id DESC LIMIT 5`,[comp.id,pid])).map(x=>({...x,home_name:club(x.home)?.name,away_name:club(x.away)?.name}));
+  s.json({apps:ps?.apps||0,goals:ps?.goals||0,assists:ps?.assists||0,avg:ps?.apps?+(ps.rating_sum/ps.apps).toFixed(2):null,last});}));const vname=id=>id<0?{name:'Provisório',primary_position:'—'}:null;
  const club=id=>uni.prepare('SELECT c.id,c.name,c.overall,c.league_id,l.name league FROM clubs c JOIN leagues l ON l.id=c.league_id WHERE c.id=?').get(id);
  const pp=p=>({...p,positions:JSON.parse(p.positions||'[]'),stats:JSON.parse(p.stats||'{}')});
  const squad=(db,roomId,clubId)=>R.squad(db,roomId,clubId);
  async function xiFor(db,roomId,clubId){let sq=await squad(db,roomId,clubId);if(sq.length<11)sq=[...sq,...L.virtualSquad(clubId)];const [l]=(await db.query('SELECT * FROM lineups WHERE room_id=$1 AND club_id=$2',[roomId,clubId])).rows;
-  if(l&&l.starters?.length===11){const m=new Map(sq.map(p=>[p.id,p]));const xi=l.starters.map(id=>m.get(id)).filter(Boolean);if(xi.length===11)return {xi,formation:l.formation,custom:true};}
-  const f=l?.formation||'4-3-3';return {xi:S.autoXI(sq,f),formation:f,custom:false};}
+  if(l&&l.starters?.length===11){const m=new Map(sq.map(p=>[p.id,p]));const xi=l.starters.map(id=>m.get(id)).filter(Boolean);if(xi.length===11)return {xi,bench:sq.filter(p=>!xi.includes(p)),formation:l.formation,custom:true};}
+  const f=l?.formation||'4-3-3';const xi=S.autoXI(sq,f);return {xi,bench:sq.filter(p=>!xi.includes(p)),formation:f,custom:false};}
  const form=async(db,compId,clubId)=>{const r=(await db.query('SELECT home,hg,ag FROM matches WHERE comp_id=$1 AND played AND (home=$2 OR away=$2) ORDER BY round DESC LIMIT 5',[compId,clubId])).rows;
   if(!r.length)return null;return r.reduce((a,m)=>{const [f,g]=m.home===clubId?[m.hg,m.ag]:[m.ag,m.hg];return a+(f>g?3:f===g?1:0)},0)*5/r.length;};
  const penMap=async(db,roomId)=>new Map((await db.query('SELECT club_id,penalty_pts FROM room_clubs WHERE room_id=$1 AND penalty_pts<>0',[roomId])).rows.map(x=>[x.club_id,x.penalty_pts]));
@@ -83,9 +88,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
       if(decisive){const legs=(await c.query('SELECT * FROM matches WHERE comp_id=$1 AND stage=$2 AND tie=$3 AND played',[comp.id,m.stage,m.tie])).rows;tie=L.decideTie([...legs,{...m,hg:res.hg,ag:res.ag}],{...m,hg:res.hg,ag:res.ag});if(legs.length===0)tie.agg=null;}}
      const rz=resenha(m,res,{hn:club(m.home).name,an:club(m.away).name,stage:L.STAGE_NAMES[m.stage]+(m.leg?` (${m.leg===1&&step.stage!=='playin'&&L.CFG.KO_TWO_LEGS&&m.stage!=='final'?'ida':m.leg===2?'volta':'jogo único'})`:` – rodada ${round}`),agg:tie?.agg,pens:tie?.pens,rankH:m.stage==='league'&&prev.length?rank.get(m.home):null,rankA:m.stage==='league'&&prev.length?rank.get(m.away):null});
      if(tie){await c.query('UPDATE matches SET winner=$2,pens=$3 WHERE id=$1',[m.id,tie.winner,tie.pens]);if(m.stage==='final'){await c.query('UPDATE competitions SET champion=$2 WHERE id=$1',[comp.id,tie.winner]);out.push({info:`🏆 ${club(tie.winner).name} é campeão da ${L.CFG.NAME}! Glória eterna (até a próxima temporada).`});}}
-     const details={resenha:rz,xg:res.xg,strength:res.strength,events:res.events,ratings:res.ratings,lineups:res.lineups,formation:{home:H.formation,away:A.formation},form:{home:H.form,away:A.form}};
+     const details={resenha:rz,xg:res.xg,strength:res.strength,events:res.events,ratings:res.ratings,pstats:res.pstats,motm:res.motm,subs:res.subs,lineups:res.lineups,formation:{home:H.formation,away:A.formation},form:{home:H.form,away:A.form}};
      await c.query('UPDATE matches SET hg=$2,ag=$3,played=true,details=$4 WHERE id=$1',[m.id,res.hg,res.ag,details]);
-     const pl=[...H.xi.map(p=>[p,m.home]),...A.xi.map(p=>[p,m.away])];
+     const pl=res.appeared||[...H.xi.map(p=>[p,m.home]),...A.xi.map(p=>[p,m.away])];
      await c.query(`INSERT INTO player_stats(comp_id,player_id,club_id,apps,goals,assists,rating_sum) SELECT $1,* FROM unnest($2::int[],$3::int[],$4::int[],$5::int[],$6::int[],$7::real[]) ON CONFLICT(comp_id,player_id) DO UPDATE SET apps=player_stats.apps+1,goals=player_stats.goals+EXCLUDED.goals,assists=player_stats.assists+EXCLUDED.assists,rating_sum=player_stats.rating_sum+EXCLUDED.rating_sum,club_id=EXCLUDED.club_id`,
       [comp.id,pl.map(x=>x[0].id),pl.map(x=>x[1]),pl.map(()=>1),pl.map(x=>res.goalsBy[x[0].id].g),pl.map(x=>res.goalsBy[x[0].id].a),pl.map(x=>res.ratings[x[0].id])]);
      if(hum.has(m.home)||hum.has(m.away))out.push({id:m.id,comp:comp.name,round,home:club(m.home).name,away:club(m.away).name,hg:res.hg,ag:res.ag,pens:tie?.pens||null});}
