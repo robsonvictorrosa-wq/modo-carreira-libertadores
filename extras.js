@@ -1,3 +1,4 @@
+const TRX=require('./dt').trx;
 // Zero Clubistas: visão geral dos clubes (meta do onze), contratações, estatísticas, empréstimos, leilão, premiações e Central da liga
 const L=require('./libertadores'),EVO=require('./evolution'),CF=require('./config/libertadores.json');
 module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
@@ -10,7 +11,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  const prizeOf=pos=>(CF.prizes||[]).find(p=>pos>=p.from&&pos<=p.to)?.amount||0;
  const phase=comp=>{if(!comp)return 'Pré-temporada';const s=PLAN[comp.current_round];if(!s)return 'Temporada encerrada';return s.stage==='league'?`Fase de liga – rodada ${s.round??comp.current_round+1}/${LEAGUE_END}`:L.STAGE_NAMES[s.stage]+(s.leg===1&&s.stage!=='playin'&&s.stage!=='final'?' (ida)':s.leg===2?' (volta)':'');};
 
- const signedSet=async(db,room,cid)=>new Set((await db.query("SELECT player_id FROM transfers WHERE room_id=$1 AND to_club=$2 AND kind<>'empréstimo'",[room.id,cid])).rows.map(x=>x.player_id));
+ const signedSet=async(db,room,cid)=>new Set((await db.query("SELECT player_id FROM transfers WHERE room_id=$1 AND to_club=$2 AND kind<>'empréstimo' AND status<>'cancelled'",[room.id,cid])).rows.map(x=>x.player_id));
  async function meta(db,room,cid){const x=await app.locals.xiFor(db,room.id,cid);const s=await signedSet(db,room,cid);const n=x.xi.filter(p=>s.has(p.id)).length;return {n,need:CF.meta_onze||6,ok:n>=(CF.meta_onze||6)};}
  // ---------- ganchos de rodada ----------
  (app.locals.afterRound??=[]).push(async(c,room,comp,step)=>{const out=[];const round=comp.current_round;
@@ -33,9 +34,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const me=mans.find(m=>m.user_id===r.user.id);let win=null;try{win=M.windowOf(room,await M.mainComp(pool,room));}catch(e){}
   s.json({room:{code:room.code,name:room.name,status:room.status,season:room.season,market_day:room.market_day},admin:room.owner_id===r.user.id||!!r.user.admin,me:{nick:r.user.nick,club_id:me?.club_id||null},comp,phase:phase(comp),window:win,clubs,managers:mans,prizes:CF.prizes,meta_need:CF.meta_onze||6,evolution:{enabled:EVO.enabled,description:EVO.description}});}));
  app.get('/api/rooms/:code/zc/signings',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!m?.club_id)return s.json({in:[],out:[]});
-  const t=await q('SELECT * FROM transfers WHERE room_id=$1 AND (to_club=$2 OR from_club=$2) ORDER BY id DESC',[room.id,m.club_id]);const sq=new Set((await R.squad(pool,room.id,m.club_id,false)).map(p=>p.id));const x=await app.locals.xiFor(pool,room.id,m.club_id);const xi=new Set(x.xi.map(p=>p.id));
+  const t=await q('SELECT * FROM transfers WHERE room_id=$1 AND (to_club=$2 OR from_club=$2) AND status<>\'cancelled\' ORDER BY id DESC',[room.id,m.club_id]);const sq=new Set((await R.squad(pool,room.id,m.club_id,false)).map(p=>p.id));const x=await app.locals.xiFor(pool,room.id,m.club_id);const xi=new Set(x.xi.map(p=>p.id));
   const cr=(await comp0(pool,room))?.current_round||0;const LN=new Map((await q('SELECT player_id,club_id,loan_until FROM room_players WHERE room_id=$1 AND loan_from IS NOT NULL',[room.id])).map(y=>[y.player_id,y]));
-  const f=x2=>({...x2,loan_left:(x2.kind==='empréstimo'&&LN.get(x2.player_id)?.club_id===x2.to_club&&LN.get(x2.player_id).loan_until!=null)?Math.max(0,LN.get(x2.player_id).loan_until-cr):null,fee:+x2.fee,wage:+x2.wage,player:pname(x2.player_id),pos:R.P.get(x2.player_id)?.primary_position,ovr:R.P.get(x2.player_id)?.overall,from:cname(x2.from_club),to:cname(x2.to_club),in_squad:sq.has(x2.player_id),starter:xi.has(x2.player_id)});
+  const f=x2=>({...x2,...TRX(x2),loan_left:(x2.kind==='empréstimo'&&LN.get(x2.player_id)?.club_id===x2.to_club&&LN.get(x2.player_id).loan_until!=null)?Math.max(0,LN.get(x2.player_id).loan_until-cr):null,fee:+x2.fee,wage:+x2.wage,player:pname(x2.player_id),pos:R.P.get(x2.player_id)?.primary_position,ovr:R.P.get(x2.player_id)?.overall,from:cname(x2.from_club),to:cname(x2.to_club),in_squad:sq.has(x2.player_id),starter:xi.has(x2.player_id)});
   s.json({in:t.filter(x2=>x2.to_club===m.club_id).map(f),out:t.filter(x2=>x2.from_club===m.club_id).map(f),meta:await meta(pool,room,m.club_id)});}));
  app.get('/api/rooms/:code/zc/stats',auth,wrap(async(r,s)=>{const room=await member(r);const comp=await comp0(pool,room);if(!comp)return s.json({players:[],matches:0});
   const st=r.query.stage||'',club=+r.query.club||0;const ms=await q(`SELECT home,away,details FROM matches WHERE comp_id=$1 AND played ${st==='ko'?"AND stage<>'league'":st?'AND stage=$2':''}`,st&&st!=='ko'?[comp.id,st]:[comp.id]);
@@ -96,13 +97,26 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    await note(c,room.id,a==='open'?'🔓 Admin abriu a janela':a==='close'?'🔒 Admin fechou a janela':'🏁 Admin finalizou a janela (negociações pendentes expiradas)');await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}s.json({ok:1});}));
  app.get('/api/rooms/:code/zc/admin/transfers',auth,wrap(async(r,s)=>{const room=await member(r);own(room,r);const t=String(r.query.q||'').toLowerCase();
   const rows=await q("SELECT * FROM transfers WHERE room_id=$1 AND fee>0 ORDER BY id DESC LIMIT 300",[room.id]);
-  s.json(rows.map(x=>({...x,fee:+x.fee,player:pname(x.player_id),from:cname(x.from_club),to:cname(x.to_club)})).filter(x=>!t||(x.player+' '+x.from+' '+x.to).toLowerCase().includes(t)).slice(0,50));}));
- app.post('/api/rooms/:code/zc/admin/contest',auth,wrap(async(r,s)=>{const room=await member(r);own(room,r);const c=await pool.connect();
-  try{await c.query('BEGIN');const [t]=(await c.query('SELECT * FROM transfers WHERE id=$1 AND room_id=$2',[+r.body?.transfer_id,room.id])).rows;if(!t)throw fail('Venda não encontrada');
-   const p=await R.player(c,room.id,t.player_id);if(p.club_id!==t.to_club)throw fail('O jogador já mudou de clube de novo – desfaça a transferência mais recente primeiro');
-   await c.query('UPDATE room_players SET club_id=$3,loan_from=NULL WHERE room_id=$1 AND player_id=$2',[room.id,t.player_id,t.from_club]);
-   await c.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[room.id,t.to_club,t.fee]);await c.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[room.id,t.from_club,t.fee]);
-   await c.query('UPDATE lineups SET starters=NULL WHERE room_id=$1 AND club_id=$2 AND $3=ANY(starters)',[room.id,t.to_club,t.player_id]);await c.query('DELETE FROM transfers WHERE id=$1',[t.id]);
-   await note(c,room.id,`⚖️ Admin contestou e desfez a venda de ${pname(t.player_id)} (${cname(t.from_club)} → ${cname(t.to_club)}, € ${(t.fee/1e6).toFixed(1)} mi devolvidos).`);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}s.json({ok:1});}));
+  s.json(rows.map(x=>({...x,...TRX(x),contested:x.status==='contested',fee:+x.fee,player:pname(x.player_id),from:cname(x.from_club),to:cname(x.to_club)})).filter(x=>!t||(x.player+' '+x.from+' '+x.to).toLowerCase().includes(t)).slice(0,50));}));
+ // Contestação de transferência (admins): contestar -> manter | cancelar (reverte tudo)
+ const trAct=async(r,fn)=>{const room=await member(r);own(room,r);const c=await pool.connect();
+  try{await c.query('BEGIN');const [t]=(await c.query('SELECT * FROM transfers WHERE id=$1 AND room_id=$2 FOR UPDATE',[+r.body?.transfer_id||+r.params.id,room.id])).rows;if(!t)throw fail('Transferência não encontrada');
+   await fn(c,room,t);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}};
+ const desc=t=>`${pname(t.player_id)} (${cname(t.from_club)} → ${cname(t.to_club)}${+t.fee?`, € ${(t.fee/1e6).toFixed(1)} mi`:''})`;
+ const contest=wrap(async(r,s)=>{await trAct(r,async(c,room,t)=>{if(t.status==='cancelled')throw fail('Transferência já cancelada');if(t.status==='contested')throw fail('Já está contestada');
+   await c.query("UPDATE transfers SET status='contested',contested_by=$2,contested_at=now() WHERE id=$1",[t.id,r.user.nick]);await note(c,room.id,`⚖️ ${r.user.nick} contestou a transferência de ${desc(t)}.`);});s.json({ok:1});});
+ app.post('/api/rooms/:code/zc/admin/contest',auth,contest);app.post('/api/rooms/:code/zc/admin/transfer/:id/contest',auth,contest);
+ app.post('/api/rooms/:code/zc/admin/transfer/:id/keep',auth,wrap(async(r,s)=>{await trAct(r,async(c,room,t)=>{if(t.status!=='contested')throw fail('A transferência não está contestada');
+   await c.query("UPDATE transfers SET status='ok',contested_by=NULL,contested_at=NULL WHERE id=$1",[t.id]);await note(c,room.id,`✅ ${r.user.nick} manteve a transferência de ${desc(t)}.`);});s.json({ok:1});}));
+ app.post('/api/rooms/:code/zc/admin/transfer/:id/cancel',auth,wrap(async(r,s)=>{await trAct(r,async(c,room,t)=>{if(t.status==='cancelled')throw fail('Transferência já cancelada');if(t.status!=='contested')throw fail('Conteste a transferência antes de cancelar');
+   const later=(await c.query("SELECT 1 FROM transfers WHERE room_id=$1 AND player_id=$2 AND id>$3 AND status<>'cancelled'",[room.id,t.player_id,t.id])).rows.length;
+   const p=await R.player(c,room.id,t.player_id);if(later||p.club_id!==t.to_club)throw fail('Não dá para cancelar: o jogador já foi transferido de novo depois desta transferência. Cancele a mais recente primeiro.');
+   const pv=t.prev;if(pv&&pv.none)await c.query('DELETE FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,t.player_id]);
+   else if(pv){const cols=Object.keys(pv).filter(k=>!['room_id','player_id'].includes(k));await c.query(`UPDATE room_players SET ${cols.map((k,i)=>`${k}=$${i+3}`).join(',')} WHERE room_id=$1 AND player_id=$2`,[room.id,t.player_id,...cols.map(k=>pv[k])]);}
+   else await c.query('UPDATE room_players SET club_id=$3,loan_from=NULL,loan_until=NULL WHERE room_id=$1 AND player_id=$2',[room.id,t.player_id,t.from_club]);
+   if(+t.fee){await c.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[room.id,t.to_club,t.fee]);if(!R.isFree||!R.isFree(t.from_club))await c.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[room.id,t.from_club,t.fee]);}
+   await c.query('UPDATE lineups SET starters=NULL WHERE room_id=$1 AND club_id=$2 AND $3=ANY(starters)',[room.id,t.to_club,t.player_id]);
+   await c.query("UPDATE transfers SET status='cancelled',cancelled_by=$2,cancelled_at=now() WHERE id=$1",[t.id,r.user.nick]);
+   await note(c,room.id,`↩️ ${r.user.nick} cancelou a transferência de ${desc(t)}: jogador voltou e valores devolvidos.`);});s.json({ok:1});}));
  app.get('/api/rooms/:code/zc/log',auth,wrap(async(r,s)=>{const room=await member(r);s.json(await q('SELECT id,text,created_at FROM room_events WHERE room_id=$1 ORDER BY id DESC LIMIT 150',[room.id]));}));
 };

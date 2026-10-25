@@ -1,3 +1,4 @@
+const TRX=require('./dt').trx;
 // Etapa 4: mercado de transferências por sala (ver CRITERIOS_MERCADO.md)
 const S=require('./sim'),X=require('./rules');
 module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
@@ -21,6 +22,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  const neg=async(db,roomId,buyer,pid)=>(await db.query('INSERT INTO negotiations(room_id,buyer_club,player_id) VALUES($1,$2,$3) ON CONFLICT(room_id,buyer_club,player_id) DO UPDATE SET room_id=EXCLUDED.room_id RETURNING *',[roomId,buyer,pid])).rows[0];
  // ---------- execução de transferência ----------
  async function execute(db,room,t){const p=await R.player(db,room.id,t.pid);const day=room.market_day;
+  const prev=(await db.query('SELECT * FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,t.pid])).rows[0]||{none:true};
   const contract=t.loan?p.contract_end:room.season+(t.years||3);
   await db.query(`INSERT INTO room_players(room_id,player_id,club_id,wage,contract_end,morale,wants_out,listed,loan_from,release_clause,role) VALUES($1,$2,$3,$4,$5,75,false,false,$6,NULL,$7)
    ON CONFLICT(room_id,player_id) DO UPDATE SET club_id=$3,wage=$4,contract_end=$5,morale=75,wants_out=false,listed=false,loan_from=$6,release_clause=NULL,role=$7`,[room.id,t.pid,t.to,t.wage||p.wage,contract,t.loan?t.from:null,t.role||null]);
@@ -28,7 +30,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   if(t.fee){await db.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[room.id,t.to,t.fee]);if(!isFree(t.from))await db.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[room.id,t.from,t.fee]);}
   await db.query('UPDATE lineups SET starters=NULL WHERE room_id=$1 AND club_id=$2 AND $3=ANY(starters)',[room.id,t.from,t.pid]);
   await db.query("UPDATE offers SET status='expired',reason='O jogador já se transferiu',updated_at=now() WHERE room_id=$1 AND player_id=$2 AND status IN ('pending','countered','club_accepted')",[room.id,t.pid]);
-  await db.query('INSERT INTO transfers(room_id,season,day,player_id,from_club,to_club,fee,wage,kind,human) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,true)',[room.id,room.season,day,t.pid,t.from,t.to,t.fee||0,t.wage||p.wage,t.kind]);}
+  await db.query('INSERT INTO transfers(room_id,season,day,player_id,from_club,to_club,fee,wage,kind,human,prev) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,true,$10)',[room.id,room.season,day,t.pid,t.from,t.to,t.fee||0,t.wage||p.wage,t.kind,JSON.stringify(prev)]);}
  // ---------- reação do jogador a uma oferta grande recusada ----------
  async function upsetPlayer(db,room,o,hum){const p=await R.player(db,room.id,o.player_id);const buyer=C.get(o.buyer_club),seller=C.get(o.seller_club);
   if(!(o.fee>=1.25*p.market_value&&repOf(buyer)>repOf(seller)+3))return;const morale=Math.max(0,p.morale-25),out=morale<50;
@@ -100,6 +102,17 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   await db.query('UPDATE rooms SET window_was_open=$2 WHERE id=$1',[r.id,win.open]);}
  async function onStart(db,room){const [r]=(await db.query("UPDATE rooms SET market_day=1,window_was_open=true WHERE id=$1 RETURNING *",[room.id])).rows;await note(db,r.id,'🔓 Janela de início de temporada aberta (fecha após a rodada 4).');await tick(db,r,windowOf(r,await mainComp(db,r)));}
  // ---------- rotas ----------
+ // TEMP: teste e2e de cancelamento (só com TEST_TRANSFER_SEED=1 e admin) — remover depois
+ if(process.env.TEST_TRANSFER_SEED==='1'){const adm=async r=>{const [room]=(await pool.query('SELECT * FROM rooms WHERE code=$1',[String(r.params.code).toUpperCase()])).rows;if(!room||!r.user.admin)throw fail('admin',403);return room;};
+  const bud=async(id,cs)=>Object.fromEntries((await pool.query('SELECT club_id,budget FROM room_clubs WHERE room_id=$1 AND club_id=ANY($2)',[id,cs])).rows.map(x=>[x.club_id,+x.budget]));
+  app.post('/api/rooms/:code/zz-test/seed',auth,wrap(async(r,s)=>{const room=await adm(r);const hum=await humans(pool,room.id);
+   const cl=(await pool.query('SELECT club_id FROM room_clubs WHERE room_id=$1 ORDER BY club_id',[room.id])).rows.map(x=>x.club_id).filter(c=>!hum.has(c)&&!isFree(c));const A=cl[0],B=cl[1];
+   const sq=await R.squad(pool,room.id,A,false);const p=sq[sq.length-1];const ev0=(await pool.query('SELECT COALESCE(max(id),0) m FROM room_events')).rows[0].m;
+   const before={budgets:await bud(room.id,[A,B]),row:(await pool.query('SELECT * FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,p.id])).rows[0]||null};
+   const id=await tx(async c=>{await execute(c,room,{pid:p.id,from:A,to:B,fee:1e6,wage:p.wage,years:2,kind:'teste'});return (await c.query('SELECT max(id) id FROM transfers WHERE room_id=$1',[room.id])).rows[0].id;});
+   s.json({id,A,B,pid:p.id,ev0,before,after:{budgets:await bud(room.id,[A,B]),club:(await R.player(pool,room.id,p.id)).club_id}});}));
+  app.post('/api/rooms/:code/zz-test/state',auth,wrap(async(r,s)=>{const room=await adm(r);const b=r.body;s.json({budgets:await bud(room.id,[b.A,b.B]),club:(await R.player(pool,room.id,b.pid)).club_id,row:(await pool.query('SELECT * FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,b.pid])).rows[0]||null,t:(await pool.query('SELECT id,status,contested_by,cancelled_by,created_at,cancelled_at FROM transfers WHERE id=$1',[b.id])).rows[0]});}));
+  app.post('/api/rooms/:code/zz-test/clean',auth,wrap(async(r,s)=>{const room=await adm(r);const b=r.body;const d1=(await pool.query("DELETE FROM transfers WHERE id=$1 AND kind='teste'",[b.id])).rowCount;const d2=(await pool.query('DELETE FROM room_events WHERE room_id=$1 AND id>$2 AND text LIKE $3',[room.id,b.ev0,'%'+R.P.get(b.pid).name+'%'])).rowCount;s.json({d1,d2});}));}
  const tx=async f=>{const c=await pool.connect();try{await c.query('BEGIN');const r=await f(c);await c.query('COMMIT');return r;}catch(e){await c.query('ROLLBACK');throw e}finally{c.release()}};
  const lockRoom=async(c,r)=>{const [room]=(await c.query('SELECT r.* FROM rooms r JOIN room_managers m ON m.room_id=r.id AND m.user_id=$2 WHERE r.code=$1 FOR UPDATE OF r',[String(r.params.code).toUpperCase(),r.user.id])).rows;if(!room)throw fail('Você não está nessa sala',403);return room;};
  const needOpen=async(c,room)=>{const w=windowOf(room,await mainComp(c,room));if(!w.open)throw fail('A janela de transferências está fechada');return w;};
@@ -130,7 +143,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
    ctx={my_club:cid,own:p.club_id===cid,expected_role:p.club_id===cid?null:X.expectedRole(p,mine),blocked:n&&n.blocked_until>=room.market_day,club_fails:n?.club_fails||0,player_fails:n?.player_fails||0,watched:!!(await q('SELECT 1 FROM watchlist WHERE room_id=$1 AND user_id=$2 AND player_id=$3',[room.id,r.user.id,p.id])).length};}catch(e){}
   let imp=null;if(!isFree(p.club_id)){const sq=await R.squad(pool,room.id,p.club_id,false);imp=X.importance(p,sq).k;}
   const hist=await q('SELECT * FROM transfers WHERE room_id=$1 AND player_id=$2 ORDER BY id DESC',[room.id,p.id]);
-  s.json({...view(p,hum),positions:p.positions,stats:p.stats,importance:imp,...ctx,history:hist.map(t=>({...t,from:clubName(t.from_club),to:clubName(t.to_club)}))});}));
+  s.json({...view(p,hum),positions:p.positions,stats:p.stats,importance:imp,...ctx,history:hist.map(t=>({...t,...TRX(t),from:clubName(t.from_club),to:clubName(t.to_club)}))});}));
  // nova proposta
  app.post('/api/rooms/:code/market/offer',auth,wrap(async(r,s)=>s.json(await tx(async c=>{const room=await lockRoom(c,r);const win=await needOpen(c,room);const buyer=await myClub(c,room,r.user.id);const hum=await humans(c,room.id);
   const pid=+r.body?.player_id,fee=Math.max(0,Math.round(+r.body?.fee||0)),loan=!!r.body?.loan,swap=r.body?.swap_player_id?+r.body.swap_player_id:null;const p=await R.player(c,room.id,pid);if(!p)throw fail('Jogador não encontrado');
@@ -226,6 +239,6 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  app.get('/api/rooms/:code/market/news',auth,wrap(async(r,s)=>{const room=await member(r);const hum=await humans(pool,room.id);const lim=Math.min(300,+r.query.limit||120);
   const rows=await q(`SELECT * FROM transfers WHERE room_id=$1 ${r.query.human==='1'?'AND human':''} ORDER BY ${r.query.sort==='fee'?'fee DESC,':''}id DESC LIMIT ${lim}`,[room.id]);
   const ev=await q("SELECT text,created_at FROM room_events WHERE room_id=$1 AND (user_id IS NULL OR user_id=$2) AND (text LIKE '📰%' OR text LIKE '📩%' OR text LIKE '✅%' OR text LIKE '✍️%' OR text LIKE '💥%' OR text LIKE '😠%' OR text LIKE '😕%' OR text LIKE '🔒%' OR text LIKE '🔓%' OR text LIKE '📤%' OR text LIKE '🤝%' OR text LIKE '❌%' OR text LIKE '↩️%' OR text LIKE '🚫%') ORDER BY id DESC LIMIT 40",[room.id,r.user.id]);
-  s.json({events:ev,transfers:rows.map(t=>({...t,fee:+t.fee,wage:+t.wage,player:pname(t.player_id),ovr:R.P.get(t.player_id)?.overall,age:R.P.get(t.player_id)?.age,pos:R.P.get(t.player_id)?.primary_position,from:isFree(t.from_club)?'Livre':clubName(t.from_club),to:isFree(t.to_club)?'Livre':clubName(t.to_club),human:hum.has(t.from_club)||hum.has(t.to_club)}))});}));
+  s.json({events:ev,transfers:rows.map(t=>({...t,...TRX(t),fee:+t.fee,wage:+t.wage,player:pname(t.player_id),ovr:R.P.get(t.player_id)?.overall,age:R.P.get(t.player_id)?.age,pos:R.P.get(t.player_id)?.primary_position,from:isFree(t.from_club)?'Livre':clubName(t.from_club),to:isFree(t.to_club)?'Livre':clubName(t.to_club),human:hum.has(t.from_club)||hum.has(t.to_club)}))});}));
  return {before,after,onStart,windowOf,mainComp,execute,note,finances};
 };
