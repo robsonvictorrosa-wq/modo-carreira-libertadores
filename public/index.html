@@ -1,8 +1,20 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000"><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/favicon.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="Zero Clubistas">
-<title>Zero Clubistas – Libertadores</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="zc.css"></head><body>
+<title>Zero Clubistas – Libertadores</title><link rel="stylesheet" href="style.css?v=10"><link rel="stylesheet" href="zc.css?v=10"></head><body>
 <header class="zh"><a href="#/campeonato" class="zlogo">Z</a><div class="zt"><b>ZERO CLUBISTAS</b><span>Libertadores</span></div><nav style="margin-left:auto"><span id="who" style="display:none"></span></nav></header>
 <div class="ztabs" id="ztabs"></div><div class="zcrumb" id="zcrumb"></div>
 <main id="app"></main><div id="modal" class="modal hidden"></div>
 <footer>Zero Clubistas · amamos futebol, odiamos clubismo</footer>
-<script src="pwa.js"></script><script src="app.js"></script><script src="season.js"></script><script src="mp.js"></script><script src="market.js"></script><script src="lib.js"></script><script src="zc.js"></script></body></html>
+<script>
+/* Rede de segurança: nunca deixar a tela em branco */
+(function(){var shown=false;
+window.zFail=function(msg){if(shown)return;shown=true;var a=document.getElementById('app');if(!a)return;
+ a.innerHTML='<div class="card empty" style="text-align:center;padding:28px"><b style="font-size:18px">Ops, não conseguimos carregar</b><p style="margin:10px 0 16px">'+(msg||'O servidor pode estar reiniciando. Espere alguns segundos e tente de novo.')+'</p><button class="btn" onclick="zRetry()">Tentar de novo</button></div>';};
+window.zRetry=function(){shown=false;try{if(window.route&&window.zBooted){route();return}}catch(e){}location.reload();};
+window.zOk=function(){shown=false};
+window.addEventListener('error',function(e){if(e.target&&(e.target.tagName==='SCRIPT'||e.target.tagName==='LINK')){zFail('Falha ao baixar uma parte do app. Verifique a internet e tente de novo.');return}console.error(e.error||e.message);if(!document.getElementById('app').innerHTML.trim())zFail()},true);
+window.addEventListener('unhandledrejection',function(e){console.error(e.reason);var a=document.getElementById('app');var t=a.innerText.trim();if(!t||t==='Carregando…')zFail(e.reason&&e.reason.zNet?null:'Algo deu errado ao abrir esta tela.')});
+setTimeout(function(){var a=document.getElementById('app');if(!window.zBooted||!a.innerHTML.trim())zFail()},20000);
+})();
+</script>
+<script src="pwa.js?v=10"></script><script src="app.js?v=10"></script><script src="season.js?v=10"></script><script src="mp.js?v=10"></script><script src="market.js?v=10"></script><script src="lib.js?v=10"></script><script src="zc.js?v=10"></script></body></html>

@@ -215,9 +215,9 @@ const old=window.route;
 window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
  const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:zEscalacao,emprestimos:()=>location.hash='#/mercado',estatisticas,leilao,premiacoes,clubes,evolucao,central};
  if(['salas','sala','entrar','carreira',''].includes(t)&&t!=='')return location.hash='#/campeonato';
- if(map[t])return map[t]();
+ if(map[t]){const pr=map[t]();if(pr&&pr.catch)pr.catch(e=>{console.error(e);window.zFail&&zFail(e&&e.zNet?null:'Algo deu errado ao abrir esta tela: '+esc(e&&e.message||e))});return pr}
  chrome('');return old();};
-route=window.route;
+route=window.route;window.zBooted=true;
 })();
 
 // ---------- calendário do mercado (fase + contagem regressiva) ----------

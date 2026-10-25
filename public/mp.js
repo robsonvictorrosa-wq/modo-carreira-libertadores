@@ -1,9 +1,14 @@
 // Etapa 2: login, salas, lobby, minha carreira
 let ME=null,ROOM=localStorage.room||'',RS=null,poll=null;
 const H=()=>({'Content-Type':'application/json',...(localStorage.token?{Authorization:'Bearer '+localStorage.token}:{})});
-const post=(u,b)=>fetch('/api'+u,{method:'POST',headers:H(),body:JSON.stringify(b||{})}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'Erro');return j;});
-const get=u=>fetch('/api'+u,{headers:H()}).then(async r=>{const j=await r.json();if(r.status===401){ME=null;}if(!r.ok)throw new Error(j.error||'Erro');return j;});
-async function whoami(){try{const j=await get('/me');ME=j.user;$('#who').textContent='👤 '+ME.nick;return j;}catch{ME=null;$('#who').textContent='';return null;}}
+const zSleep=ms=>new Promise(r=>setTimeout(r,ms));
+/* fetch com nova tentativa (backoff) quando o Render está reiniciando (502/503/504) ou a rede oscila */
+async function zFetch(u,o,tries){tries=tries||4;let last;for(let i=0;i<tries;i++){try{const r=await fetch(u,o);if([502,503,504].includes(r.status)&&i<tries-1){await zSleep(800*2**i);continue}return r}catch(e){last=e;if(i<tries-1)await zSleep(800*2**i)}}const e=new Error('Sem conexão com o servidor. Tente de novo em alguns segundos.');e.zNet=1;e.cause=last;throw e}
+async function zJson(r){let j=null;try{j=await r.json()}catch(e){if(r.ok)throw Object.assign(new Error('Resposta inválida do servidor'),{zNet:1});}
+ if(r.status===401)ME=null;if(!r.ok){const e=new Error((j&&j.error)||([502,503,504].includes(r.status)?'Servidor reiniciando. Tente de novo em alguns segundos.':'Erro '+r.status));if(r.status>=500)e.zNet=1;e.status=r.status;throw e}return j}
+const post=(u,b)=>zFetch('/api'+u,{method:'POST',headers:H(),body:JSON.stringify(b||{})},/\/auth\//.test(u)?2:3).then(zJson);
+const get=u=>zFetch('/api'+u,{headers:H()}).then(zJson);
+async function whoami(){try{const j=await get('/me');ME=j.user;$('#who').textContent='👤 '+ME.nick;return j;}catch(e){if(e.zNet)throw e;ME=null;$('#who').textContent='';return null;}}
 function loginView(next){app.innerHTML=`<h1>Entrar</h1><div class="sub">Crie um apelido e um PIN (mín. 4 dígitos/caracteres). Use o mesmo para entrar depois em qualquer aparelho.</div>
  <div class="form"><input id="nk" placeholder="Apelido" autocomplete="username"><input id="pn" type="password" placeholder="PIN / senha" autocomplete="current-password">
  <button class="btn" id="bl">Entrar</button><button class="btn sec" id="br">Criar conta</button><div class="err" id="er"></div></div>`;
@@ -42,4 +47,4 @@ window.pick=id=>post(`/rooms/${ROOM}/club`,{club_id:id}).then(()=>location.hash=
 async function roomBanner(clubId){if(!ROOM||!localStorage.token)return '';try{RS=await get('/rooms/'+ROOM);}catch{return '';}
  const owner=RS.managers.find(m=>m.club_id===clubId);const mine=RS.managers.find(m=>m.user_id===RS.me);
  return `<div class="banner"><span>Sala <b>${esc(RS.name)}</b>${clubId?owner?` · técnico: <b>${esc(owner.nick)}</b>`:' · clube controlado por bot':' · escolha um clube'}</span>${clubId&&!owner&&RS.status==='lobby'?`<button class="btn" onclick="pick(${clubId})">${mine.club?'Trocar para este clube':'Assumir este clube'}</button>`:''}</div>`;}
-addEventListener('hashchange',()=>route());whoami().then(()=>route());
+addEventListener('hashchange',()=>route());whoami().catch(e=>{console.error(e)}).then(()=>route());
