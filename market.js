@@ -66,9 +66,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
     const dClub=free?0:repOf(c)-repOf(s),dLeague=free?0:la(c)-la(s);
     if(!free&&p.overall>=78&&dClub<=-6&&p.age<30)continue;if(!free&&p.age<29&&dLeague<=-6)continue;
     if(!free&&imp.k==='chave'&&(dClub<3||rnd()<0.75))continue;if(!free&&p.age>=33&&!X.VET_DEST.has(c.country)&&rnd()<0.85)continue;                          // titular-chave só sai para clube maior
-    let loan=false,price=free?0:X.askPrice(p,{imp,season:room.season,day:win.day,days:win.days,sellerBudget:s.budget,salt:room.id});
+    let loan=false,price=free?Math.round(+p.market_value||0):X.askPrice(p,{imp,season:room.season,day:win.day,days:win.days,sellerBudget:s.budget,salt:room.id});
     
-    if(price>c.budget*0.7)continue;const wage=X.wround((p.wage||1000)*(free?1:1.15+(dClub<-3?0.04*(-dClub-3):0)));if(c.wage_bill+wage>c.wage_budget*1.02&&wage>(p.wage||0))continue;
+    if(price>c.budget*0.7||price>c.budget)continue;const wage=X.wround((p.wage||1000)*(free?1:1.15+(dClub<-3?0.04*(-dClub-3):0)));if(c.wage_bill+wage>c.wage_budget*1.02&&wage>(p.wage||0))continue;
     let sc=(p.overall-c.xiavg)+(p.potential-p.overall)*0.15-3*price/Math.max(1,c.budget)+rnd()*2;
     if(X.EXPORT.has(s.country)&&p.age<=23&&la(c)>la(s)+3)sc+=4;if(p.age>=31&&X.VET_DEST.has(c.country))sc+=4;if(dLeague<-3&&p.age<30)sc-=4;if(loan)sc+=1;if(p.wants_out||p.listed)sc+=2;
     if(!best||sc>best.sc)best={p,s,price,wage,loan,sc};}
@@ -146,7 +146,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const dup=(await c.query("SELECT 1 FROM offers WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3 AND status IN ('pending','countered','club_accepted')",[room.id,buyer,pid])).rows.length;if(dup)throw fail('Você já tem uma negociação em andamento por esse jogador');
   const base=[room.id,pid,buyer,p.club_id,r.user.id,hum.get(p.club_id)?.user_id||null,fee,swap,loan,room.market_day+2,room.market_day,lr];
   const ins=(st,extra={})=>c.query('INSERT INTO offers(room_id,player_id,buyer_club,seller_club,buyer_user,seller_user,fee,swap_player_id,loan,deadline_day,created_day,loan_rounds,status,counter_fee,reason) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *',[...base,st,extra.counter||null,extra.msg||null]).then(async x=>{const o=x.rows[0];await addH(c,o.id,[{by:'comprador',club:bc.name,act:'proposta',fee}].concat(extra.counter?[{by:'vendedor',club:sc.name,act:'contraproposta',fee:extra.counter}]:st==='club_accepted'&&!isFree(p.club_id)?[{by:'vendedor',club:sc.name,act:'aceitou',fee}]:st==='rejected'?[{by:'vendedor',club:sc.name,act:'recusou'}]:[]));return o;});
-  if(isFree(p.club_id)){if(fee||swap)throw fail('Jogador livre: não há taxa de transferência, negocie só o contrato');const o=await ins('club_accepted',{msg:'Jogador livre: negocie o contrato direto com ele.'});return {offer:o,decision:'accept',message:o.reason};}
+  if(isFree(p.club_id)){if(swap)throw fail('Jogador livre: não há troca, você paga o valor de mercado dele');const price=Math.round(+p.market_value||0);if(price>f.budget)throw fail(`Orçamento insuficiente: contratar ${p.name} custa ${X.fmt(price)} (valor de mercado) e você tem ${X.fmt(f.budget)}`);base[6]=price;const o=await ins('club_accepted',{msg:`Jogador livre: custa ${X.fmt(price)} (valor de mercado). Negocie o contrato direto com ele.`});return {offer:o,decision:'accept',message:o.reason};}
   if(hum.has(p.club_id)){const o=await ins('pending',{msg:'Aguardando resposta do técnico.'});await note(c,room.id,`📩 ${r.user.nick} (${bc.name}) ofereceu ${X.fmt(fee)}${swap?' + '+pname(swap):''}${loan?' (empréstimo)':''} por ${p.name}.`,hum.get(p.club_id).user_id);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);return {offer:o,decision:'pending',message:'Proposta enviada ao técnico do '+sc.name+'.'};}
   // clube bot decide
   const sq=await R.squad(c,room.id,p.club_id,false);const imp=X.importance(p,sq);let swapValue=0;if(swap){const sp=await R.player(c,room.id,swap);swapValue=Math.round(sp.market_value*X.ageF(sp.age)*0.6);}
@@ -210,7 +210,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
    await execute(c,room,{pid:p.id,from:o.seller_club,to:cid,fee:+o.fee,wage:o.loan?p.wage:wage,years,loan:o.loan,loan_rounds:o.loan_rounds,kind,role:role||expected});
    if(o.swap_player_id){const sp=await R.player(c,room.id,o.swap_player_id);await execute(c,room,{pid:sp.id,from:cid,to:o.seller_club,fee:0,wage:sp.wage,years:3,kind:'troca'});}
    await c.query("UPDATE offers SET status='done',wage=$2,role=$3,years=$4,reason=$5,updated_at=now() WHERE id=$1",[o.id,wage,role||expected,years,d.msg]);
-   await note(c,room.id,`✍️ ${p.name} assinou com o ${clubName(cid)}${+o.fee?` por ${X.fmt(+o.fee)}`:from?'':' (livre)'}${o.loan?' (empréstimo)':''}${o.swap_player_id?' + '+pname(o.swap_player_id)+' na troca':''}.`);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);
+   await note(c,room.id,`✍️ ${p.name} assinou com o ${clubName(cid)}${+o.fee?` por ${X.fmt(+o.fee)}${from?'':' (agente livre)'}`:from?'':' (livre)'}${o.loan?' (empréstimo)':''}${o.swap_player_id?' + '+pname(o.swap_player_id)+' na troca':''}.`);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);
    return {decision:'accept',message:d.msg+' Transferência concluída!'};}
   const fails=n.player_fails+1;const end=d.hard||fails>=3;
   await c.query('UPDATE negotiations SET player_fails=$4,blocked_until=$5 WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3',[room.id,cid,p.id,end?0:fails,end?room.market_day+3:n.blocked_until]);
