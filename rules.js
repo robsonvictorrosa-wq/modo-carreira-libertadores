@@ -36,7 +36,7 @@ function clubDecision(p,o,ctx){const ask=askPrice(p,ctx);const fee=o.fee+(o.swap
  if(r>=0.65){const c=mround(ask*(ctx.fails?1:0.98+0.04*noise(ctx.salt,'c')));return {d:'counter',ask,counter:Math.max(c,mround(o.fee*1.05)),msg:`O clube pede ${fmt(c)} para negociar.`};}
  if(r>=0.4)return {d:'reject',ask,msg:'Proposta muito abaixo do valor que o clube espera.'};
  return {d:'reject',ask,msg:'O clube considerou a proposta desrespeitosa e nem respondeu.'};}
-const fmt=v=>v>=1e6?'€ '+(v/1e6).toFixed(1).replace('.',',')+' M':'€ '+Math.round(v/1e3)+' mil';
+const fmt=v=>v<0?'-'+fmt(-v):v>=1e6?'€ '+(v/1e6).toFixed(1).replace('.',',')+' M':'€ '+Math.round(v/1e3)+' mil';
 // papel esperado do jogador no elenco de destino (pelo OVR)
 function expectedRole(p,toSquad){const others=toSquad.filter(x=>x.id!==p.id);const xi=S.autoXI([...others,p]);const starter=xi.some(x=>x.id===p.id);
  const better=others.filter(x=>x.overall>p.overall).length;const xiavg=xi.reduce((a,x)=>a+x.overall,0)/11;

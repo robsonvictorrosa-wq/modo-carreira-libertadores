@@ -10,17 +10,18 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   const f=l?.formation||'4-3-3';return {xi:S.autoXI(sq,f),formation:f,custom:false};}
  const form=async(db,compId,clubId)=>{const r=(await db.query('SELECT home,hg,ag FROM matches WHERE comp_id=$1 AND played AND (home=$2 OR away=$2) ORDER BY round DESC LIMIT 5',[compId,clubId])).rows;
   if(!r.length)return null;return r.reduce((a,m)=>{const [f,g]=m.home===clubId?[m.hg,m.ag]:[m.ag,m.hg];return a+(f>g?3:f===g?1:0)},0)*5/r.length;};
+ const penMap=async(db,roomId)=>new Map((await db.query('SELECT club_id,penalty_pts FROM room_clubs WHERE room_id=$1 AND penalty_pts<>0',[roomId])).rows.map(x=>[x.club_id,x.penalty_pts]));
  const ownerOnly=(room,r)=>{if(room.owner_id!==r.user.id&&!r.user.admin)throw fail('Só o dono da sala',403);};
 
  app.post('/api/rooms/:code/season/start',auth,wrap(async(r,s)=>{const room=await member(r);ownerOnly(room,r);if(room.status!=='lobby')throw fail('Temporada já iniciada');
   const ms=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND club_id IS NOT NULL',[room.id]);if(!ms.length)throw fail('Atribua pelo menos um clube a um técnico');
-  if(ms.some(m=>!LIB.has(m.club_id)))throw fail('Todos os técnicos precisam escolher um dos 40 clubes da Libertadores ZC');const c=await pool.connect();
-  try{await c.query('BEGIN');const all=S.schedule(L.CLUBS);const rounds=all.slice(0,all.length/2);// só turno: todos x todos uma vez = 39 rodadas
+  if(ms.some(m=>!LIB.has(m.club_id)))throw fail('Todos os técnicos precisam escolher um dos 40 clubes da Libertadores ZC');if(!r.body?.confirm)throw fail('Confirme o início da temporada (punições da pré-temporada serão aplicadas)');const c=await pool.connect();let pen=[],ai=0;
+  try{await c.query('BEGIN');await c.query('SELECT id FROM rooms WHERE id=$1 FOR UPDATE',[room.id]);if(M){ai=await M.preseasonAI(c,room);pen=await M.applyPenalties(c,room);}const all=S.schedule(L.CLUBS);const rounds=all.slice(0,all.length/2);// só turno: todos x todos uma vez = 39 rodadas
     const {rows:[comp]}=await c.query('INSERT INTO competitions(room_id,season,league_id,name,rounds_total) VALUES($1,$2,$3,$4,$5) RETURNING id',[room.id,room.season,null,L.CFG.NAME,PLAN.length]);
     const vals=[];rounds.forEach((m,i)=>m.forEach(([h,a])=>vals.push([comp.id,i+1,h,a])));
     await c.query('INSERT INTO matches(comp_id,round,home,away) SELECT * FROM unnest($1::int[],$2::int[],$3::int[],$4::int[])',[vals.map(v=>v[0]),vals.map(v=>v[1]),vals.map(v=>v[2]),vals.map(v=>v[3])]);
    await c.query("UPDATE rooms SET status='season',version=version+1 WHERE id=$1",[room.id]);await c.query('UPDATE room_managers SET ready=false WHERE room_id=$1',[room.id]);if(M)await M.onStart(c,{...room,status:'season'});await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');throw e}finally{c.release()}
-  await bump(room.id,`Temporada ${room.season}/${room.season+1} iniciada! Clubes travados.`);s.json({ok:1});}));
+  await bump(room.id,`Temporada ${room.season}/${room.season+1} iniciada! Clubes travados.`);s.json({ok:1,ai_signings:ai,penalties:pen});}));
 
  app.get('/api/rooms/:code/season',auth,wrap(async(r,s)=>{const room=await member(r);const comps=await q('SELECT * FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY id',[room.id,room.season]);
   const ms=await q('SELECT m.user_id,u.nick,m.club_id,m.ready FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[room.id]);const me=ms.find(m=>m.user_id===r.user.id);
@@ -29,7 +30,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
 
  app.get('/api/rooms/:code/comp/:id/table',auth,wrap(async(r,s)=>{const room=await member(r);const [comp]=await q('SELECT * FROM competitions WHERE id=$1 AND room_id=$2',[r.params.id,room.id]);if(!comp)throw fail('Competição não encontrada',404);
   const ms=await q('SELECT * FROM matches WHERE comp_id=$1 AND played',[comp.id]);const hum=new Map((await q('SELECT m.club_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[room.id])).map(x=>[x.club_id,x.nick]));
-  const rows=L.standings(ms,L.CLUBS,id=>club(id).name).map(t=>({...t,manager:hum.get(t.club_id)||null}));
+  const pen=await penMap(pool,room.id);const rows=L.standings(ms,L.CLUBS,id=>club(id).name,pen).map(t=>({...t,manager:hum.get(t.club_id)||null}));
   s.json({comp,rows});}));
 
  app.get('/api/rooms/:code/comp/:id/fixtures',auth,wrap(async(r,s)=>{const room=await member(r);const [comp]=await q('SELECT * FROM competitions WHERE id=$1 AND room_id=$2',[r.params.id,room.id]);if(!comp)throw fail('Competição não encontrada',404);
@@ -71,7 +72,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
    const hum=new Map((await c.query('SELECT m.club_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[roomId])).rows.map(x=>[x.club_id,x.nick]));
    for(const comp of comps){const round=comp.current_round+1;const step=stepOf(round);
     const prev=(await c.query('SELECT * FROM matches WHERE comp_id=$1 AND played ORDER BY round,id',[comp.id])).rows;
-    const table=L.standings(prev,L.CLUBS,id=>club(id).name);const rank=new Map(table.map(t=>[t.club_id,t.pos]));
+    const table=L.standings(prev,L.CLUBS,id=>club(id).name,await penMap(c,roomId));const rank=new Map(table.map(t=>[t.club_id,t.pos]));
     if(step.stage!=='league'){const ex=(await c.query('SELECT 1 FROM matches WHERE comp_id=$1 AND round=$2 LIMIT 1',[comp.id,round])).rows.length;
      if(!ex)for(const g of L.koMatches(step,{rank,prev}))await c.query('INSERT INTO matches(comp_id,round,home,away,stage,leg,tie,neutral) VALUES($1,$2,$3,$4,$5,$6,$7,$8)',[comp.id,round,g.home,g.away,g.stage,g.leg,g.tie,!!g.neutral]);
      if(step.stage==='playin'&&!ex)out.push({info:'Fase de liga encerrada! Top 10 nas oitavas, 11º–22º no play-in.'});}

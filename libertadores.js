@@ -20,7 +20,7 @@ function plan(n=40){const p=[];const lr=n%2?n:n-1;for(let i=1;i<=lr;i++)p.push({
  return p.map((x,i)=>({...x,round:i+1}));}
 const LEAGUE_ROUNDS=()=>plan().filter(x=>x.stage==='league').length;
 // Tabela: pontos, vitórias, saldo, gols pró (depois nome)
-function standings(matches,clubIds,nameOf=id=>String(id)){const T={};clubIds.forEach(id=>T[id]={club_id:id,name:nameOf(id),j:0,v:0,e:0,d:0,gp:0,gc:0,pts:0,form:[]});
+function standings(matches,clubIds,nameOf=id=>String(id),pen){const T={};clubIds.forEach(id=>T[id]={club_id:id,name:nameOf(id),j:0,v:0,e:0,d:0,gp:0,gc:0,pts:-(pen?.get(id)||0),penalty:pen?.get(id)||0,form:[]});
  for(const m of [...matches].filter(m=>m.played&&(m.stage||'league')==='league').sort((a,b)=>a.round-b.round))for(const [id,f,g] of [[m.home,m.hg,m.ag],[m.away,m.ag,m.hg]]){const t=T[id];if(!t)continue;t.j++;t.gp+=f;t.gc+=g;if(f>g){t.v++;t.pts+=3;t.form.push('V')}else if(f===g){t.e++;t.pts++;t.form.push('E')}else{t.d++;t.form.push('D')}}
  return Object.values(T).map(t=>({...t,sg:t.gp-t.gc,form:t.form.slice(-5)})).sort((a,b)=>b.pts-a.pts||b.v-a.v||b.sg-a.sg||b.gp-a.gp||a.name.localeCompare(b.name)).map((t,i)=>({...t,pos:i+1,zone:i+1<=CFG.DIRECT?'oitavas':i+1>=CFG.PLAYIN_FROM&&i+1<=CFG.PLAYIN_TO?'playin':'fora'}));}
 // chaveamento das oitavas por campanha (1x16, 8x9, ...): metades separadas, 1 e 2 só se cruzam na final
