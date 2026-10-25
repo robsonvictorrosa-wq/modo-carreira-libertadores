@@ -30,3 +30,4 @@ table{font-size:13px}th{background:#151515}td{border-top:1px solid #1f1f1f}
 
 .bar input:not([type=checkbox]),.bar select{min-width:0;width:100%}.tog input{width:auto;margin:0}.bar>div{width:100%}
 .tog{flex:0 0 auto}.tog input{width:18px!important;height:18px;flex:0 0 18px}#mmax{flex:1 1 auto!important;width:auto!important}
+.badge.crest{background:transparent!important;border:0;border-radius:0}.badge.crest img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 1px 2px #0008)}

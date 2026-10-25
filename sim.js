@@ -30,7 +30,7 @@ function playMatch(H,A,r=Math.random){ // H/A = {club_id,xi,form}
  const sH=strength(H.xi),sA=strength(A.xi),[xH,xA]=expected(sH,sA,H.form,A.form);const hg=poisson(xH,r),ag=poisson(xA,r);
  const events=[],pr={};[...H.xi,...A.xi].forEach(p=>pr[p.id]={g:0,a:0});
  const goals=(T,n)=>{for(let i=0;i<n;i++){const sc=pick(T.xi,T.xi.map(p=>(GW[p.primary_position]??.3)*st(p,'shooting')**2),r);let as=null;
-  if(r()<0.75){const c=T.xi.filter(p=>p!==sc);as=pick(c,c.map(p=>(AW[p.primary_position]??.3)*st(p,'passing')**2),r);pr[as.id].a++;}
+  if(r()<0.8){const c=T.xi.filter(p=>p!==sc);as=pick(c,c.map(p=>(AW[p.primary_position]??.3)*st(p,'passing')**2),r);pr[as.id].a++;}
   pr[sc.id].g++;events.push({min:1+Math.floor(r()*90),club:T.club_id,scorer:sc.id,scorer_name:sc.name,assist:as?.id||null,assist_name:as?.name||null});}};
  goals(H,hg);goals(A,ag);events.sort((a,b)=>a.min-b.min);
  const ratings={};for(const [T,gf,ga] of [[H,hg,ag],[A,ag,hg]])for(const p of T.xi){let v=6.2+(gf>ga?.4:gf<ga?-.3:0)+pr[p.id].g*.9+pr[p.id].a*.5+(r()-.5)*1.2;

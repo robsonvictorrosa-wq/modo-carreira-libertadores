@@ -45,3 +45,8 @@ CREATE TABLE IF NOT EXISTS bolao(room_id INT REFERENCES rooms(id) ON DELETE CASC
 CREATE TABLE IF NOT EXISTS auction_lots(id SERIAL PRIMARY KEY,room_id INT REFERENCES rooms(id) ON DELETE CASCADE,season INT,player_id INT,from_club INT,min_bid BIGINT,status TEXT NOT NULL DEFAULT 'open',winner_club INT,price BIGINT,created_round INT);
   CREATE TABLE IF NOT EXISTS auction_bids(lot_id INT REFERENCES auction_lots(id) ON DELETE CASCADE,club_id INT,user_id INT,amount BIGINT,created_at TIMESTAMPTZ DEFAULT now(),PRIMARY KEY(lot_id,club_id));
   ALTER TABLE competitions ADD COLUMN IF NOT EXISTS prizes_paid BOOLEAN NOT NULL DEFAULT false;
+-- Rodada 3: administradores, leilão manual, empréstimos por rodadas
+ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE rooms ADD COLUMN IF NOT EXISTS auction_open BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE room_players ADD COLUMN IF NOT EXISTS loan_until INT;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS loan_rounds INT;

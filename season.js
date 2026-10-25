@@ -10,7 +10,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   const f=l?.formation||'4-3-3';return {xi:S.autoXI(sq,f),formation:f,custom:false};}
  const form=async(db,compId,clubId)=>{const r=(await db.query('SELECT home,hg,ag FROM matches WHERE comp_id=$1 AND played AND (home=$2 OR away=$2) ORDER BY round DESC LIMIT 5',[compId,clubId])).rows;
   if(!r.length)return null;return r.reduce((a,m)=>{const [f,g]=m.home===clubId?[m.hg,m.ag]:[m.ag,m.hg];return a+(f>g?3:f===g?1:0)},0)*5/r.length;};
- const ownerOnly=(room,r)=>{if(room.owner_id!==r.user.id)throw fail('Só o dono da sala',403);};
+ const ownerOnly=(room,r)=>{if(room.owner_id!==r.user.id&&!r.user.admin)throw fail('Só o dono da sala',403);};
 
  app.post('/api/rooms/:code/season/start',auth,wrap(async(r,s)=>{const room=await member(r);ownerOnly(room,r);if(room.status!=='lobby')throw fail('Temporada já iniciada');
   const ms=await q('SELECT club_id FROM room_managers WHERE room_id=$1',[room.id]);if(ms.some(m=>!m.club_id))throw fail('Todos os técnicos precisam escolher clube');
@@ -25,7 +25,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
  app.get('/api/rooms/:code/season',auth,wrap(async(r,s)=>{const room=await member(r);const comps=await q('SELECT * FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY id',[room.id,room.season]);
   const ms=await q('SELECT m.user_id,u.nick,m.club_id,m.ready FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[room.id]);const me=ms.find(m=>m.user_id===r.user.id);
   const myComp=comps[0];
-  s.json({status:room.status,season:room.season,owner:room.owner_id===r.user.id,competitions:comps,my_comp:myComp?.id||null,my_club:me.club_id,managers:ms.map(m=>({...m,club:m.club_id&&club(m.club_id).name}))});}));
+  s.json({status:room.status,season:room.season,owner:room.owner_id===r.user.id||!!r.user.admin,competitions:comps,my_comp:myComp?.id||null,my_club:me.club_id,managers:ms.map(m=>({...m,club:m.club_id&&club(m.club_id).name}))});}));
 
  app.get('/api/rooms/:code/comp/:id/table',auth,wrap(async(r,s)=>{const room=await member(r);const [comp]=await q('SELECT * FROM competitions WHERE id=$1 AND room_id=$2',[r.params.id,room.id]);if(!comp)throw fail('Competição não encontrada',404);
   const ms=await q('SELECT * FROM matches WHERE comp_id=$1 AND played',[comp.id]);const hum=new Map((await q('SELECT m.club_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[room.id])).map(x=>[x.club_id,x.nick]));

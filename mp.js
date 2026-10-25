@@ -15,7 +15,7 @@ module.exports=(app,uni)=>{
  const hash=(p,salt=crypto.randomBytes(16).toString('hex'))=>salt+':'+crypto.scryptSync(p,salt,32).toString('hex');
  const check=(p,h)=>{const [s]=h.split(':');return crypto.timingSafeEqual(Buffer.from(hash(p,s)),Buffer.from(h));};
  const tokenOf=r=>(r.headers.authorization||'').replace('Bearer ','')||(r.headers.cookie||'').match(/mc_token=([a-f0-9]+)/)?.[1];
- const auth=async(r,s,n)=>{await ready;const t=tokenOf(r);const u=t&&(await q('SELECT u.id,u.nick FROM sessions s JOIN users u ON u.id=s.user_id WHERE token=$1',[t]))[0];if(!u)return s.status(401).json({error:'Faça login'});r.user=u;n();};
+ const auth=async(r,s,n)=>{await ready;const t=tokenOf(r);const u=t&&(await q('SELECT u.id,u.nick,u.is_admin FROM sessions s JOIN users u ON u.id=s.user_id WHERE token=$1',[t]))[0];if(!u)return s.status(401).json({error:'Faça login'});u.admin=!!u.is_admin||(process.env.ADMIN_APELIDOS||'').split(',').map(x=>x.trim().toLowerCase()).includes(String(u.nick).toLowerCase());r.user=u;n();};
  const wrap=f=>(r,s)=>f(r,s).catch(e=>{console.error(e);s.status(e.status||500).json({error:e.expose?e.message:'Erro interno'})});
  const fail=(m,st=400)=>Object.assign(new Error(m),{status:st,expose:true});
  const login=async(s,uid)=>{const t=crypto.randomBytes(24).toString('hex');await q('INSERT INTO sessions(token,user_id) VALUES($1,$2)',[t,uid]);s.setHeader('Set-Cookie',`mc_token=${t}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=31536000`);return t;};
@@ -38,10 +38,10 @@ module.exports=(app,uni)=>{
    await c.query('COMMIT');s.json(room);}catch(e){await c.query('ROLLBACK');throw e}finally{c.release()}}));
  app.post('/api/rooms/join',auth,wrap(async(r,s)=>{const cd=String(r.body?.code||'').trim().toUpperCase();const [room]=await q('SELECT * FROM rooms WHERE code=$1',[cd]);if(!room)throw fail('Código não encontrado',404);
   const ms=await q('SELECT user_id FROM room_managers WHERE room_id=$1',[room.id]);if(ms.some(m=>m.user_id===r.user.id))return s.json(room);
-  if(room.status!=='lobby')throw fail('A temporada já começou nesta sala');if(ms.length>=room.max_managers)throw fail('Sala cheia ('+room.max_managers+' técnicos)');
+  if(room.status!=='lobby'&&!r.user.admin)throw fail('A temporada já começou nesta sala');if(ms.length>=room.max_managers&&!r.user.admin)throw fail('Sala cheia ('+room.max_managers+' técnicos)');
   await q('INSERT INTO room_managers(room_id,user_id) VALUES($1,$2)',[room.id,r.user.id]);await bump(room.id,r.user.nick+' entrou na sala');s.json(room);}));
  const bump=(id,t)=>q('INSERT INTO room_events(room_id,text) VALUES($1,$2)',[id,t]).then(()=>q('UPDATE rooms SET version=version+1 WHERE id=$1',[id]));
- const member=async(r)=>{const [room]=await q('SELECT r.* FROM rooms r JOIN room_managers m ON m.room_id=r.id AND m.user_id=$2 WHERE r.code=$1',[String(r.params.code).toUpperCase(),r.user.id]);if(!room)throw fail('Você não está nessa sala',403);return room;};
+ const member=async(r)=>{const [room]=await q('SELECT r.*,(m.user_id IS NOT NULL) is_member FROM rooms r LEFT JOIN room_managers m ON m.room_id=r.id AND m.user_id=$2 WHERE r.code=$1',[String(r.params.code).toUpperCase(),r.user.id]);if(!room||(!room.is_member&&!r.user.admin))throw fail('Você não está nessa sala',403);return room;};
  const clubInfo=id=>id&&uni.prepare('SELECT c.id,c.name,c.overall,l.name league FROM clubs c JOIN leagues l ON l.id=c.league_id WHERE c.id=?').get(id);
  app.get('/api/rooms/:code',auth,wrap(async(r,s)=>{const room=await member(r);
   if(r.query.v&&+r.query.v===room.version)return s.json({version:room.version,unchanged:true});
@@ -53,10 +53,10 @@ module.exports=(app,uni)=>{
   const taken=await q('SELECT u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1 AND club_id=$2 AND user_id<>$3',[room.id,club.id,r.user.id]);if(taken.length)throw fail(club.name+' já é de '+taken[0].nick,409);
   try{await q('UPDATE room_managers SET club_id=$3 WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id,club.id]);}catch(e){if(e.code==='23505')throw fail('Clube já escolhido',409);throw e;}
   await bump(room.id,`${r.user.nick} assumiu o ${club.name} (${club.league})`);s.json({ok:1,club});}));
- app.post('/api/rooms/:code/settings',auth,wrap(async(r,s)=>{const room=await member(r);if(room.owner_id!==r.user.id)throw fail('Só o dono da sala',403);
+ app.post('/api/rooms/:code/settings',auth,wrap(async(r,s)=>{const room=await member(r);if(room.owner_id!==r.user.id&&!r.user.admin)throw fail('Só o dono da sala',403);
   const max=Math.min(Math.max(parseInt(r.body?.max_managers)||room.max_managers,2),20);const [{n}]=await q('SELECT count(*)::int n FROM room_managers WHERE room_id=$1',[room.id]);if(max<n)throw fail('Já há '+n+' técnicos');
   await q('UPDATE rooms SET max_managers=$2 WHERE id=$1',[room.id,max]);await bump(room.id,'Limite de técnicos: '+max);s.json({ok:1});}));
- app.delete('/api/rooms/:code',auth,wrap(async(r,s)=>{const room=await member(r);if(room.owner_id!==r.user.id)throw fail('Só o dono da sala',403);await q('DELETE FROM rooms WHERE id=$1',[room.id]);s.json({ok:1});}));
+ app.delete('/api/rooms/:code',auth,wrap(async(r,s)=>{const room=await member(r);if(room.owner_id!==r.user.id&&!r.user.admin)throw fail('Só o dono da sala',403);await q('DELETE FROM rooms WHERE id=$1',[room.id]);s.json({ok:1});}));
  // Minha carreira: elenco da sala = universo + overrides da sala
  app.get('/api/rooms/:code/career',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);
   if(!m.club_id)return s.json({room,club:null});
