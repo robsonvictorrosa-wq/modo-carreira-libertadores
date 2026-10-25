@@ -1,48 +1,248 @@
 {
-  "_doc": "Configuração única da Libertadores ZC. Orçamentos são PROVISÓRIOS e neutros (iguais p/ todos) até o Robson definir. db: nome exato do clube no banco FC27 (null = clube não existe no FC27). squad: 'db' usa elenco FC27, 'empty' começa com elenco vazio (provisório).",
-  "default_budget": 20000000,
-  "default_wage_budget": 400000,
-  "placeholder_ovr": 68,
-  "clubs": [
-    {"name":"Flamengo","country":"Brasil","db":"Flamengo","squad":"empty"},
-    {"name":"Palmeiras","country":"Brasil","db":"Palmeiras","squad":"empty"},
-    {"name":"Fluminense","country":"Brasil","db":"Fluminense","squad":"empty"},
-    {"name":"Botafogo","country":"Brasil","db":"Botafogo","squad":"db"},
-    {"name":"São Paulo","country":"Brasil","db":"São Paulo","squad":"empty"},
-    {"name":"Corinthians","country":"Brasil","db":"Corinthians","squad":"empty"},
-    {"name":"Atlético Mineiro","country":"Brasil","db":"Atlético-MG","squad":"empty"},
-    {"name":"Grêmio","country":"Brasil","db":"Grêmio","squad":"empty"},
-    {"name":"Internacional","country":"Brasil","db":null,"squad":"empty"},
-    {"name":"Cruzeiro","country":"Brasil","db":"Cruzeiro","squad":"empty"},
-    {"name":"Bahia","country":"Brasil","db":"Bahia","squad":"db"},
-    {"name":"Santos","country":"Brasil","db":"Santos","squad":"empty"},
-    {"name":"Vasco","country":"Brasil","db":"Vasco da Gama","squad":"empty"},
-    {"name":"Athletico-PR","country":"Brasil","db":null,"squad":"empty"},
-    {"name":"River Plate","country":"Argentina","db":"River Plate","squad":"db"},
-    {"name":"Boca Juniors","country":"Argentina","db":"Boca Juniors","squad":"db"},
-    {"name":"Racing","country":"Argentina","db":"Racing Club","squad":"db"},
-    {"name":"Independiente","country":"Argentina","db":"Independiente","squad":"db"},
-    {"name":"San Lorenzo","country":"Argentina","db":"San Lorenzo","squad":"db"},
-    {"name":"Estudiantes","country":"Argentina","db":"Estudiantes","squad":"db"},
-    {"name":"Vélez Sarsfield","country":"Argentina","db":"Vélez Sarsfield","squad":"db"},
-    {"name":"Argentinos Juniors","country":"Argentina","db":"Argentinos Jrs.","squad":"db"},
-    {"name":"Peñarol","country":"Uruguai","db":"Peñarol","squad":"db"},
-    {"name":"Nacional","country":"Uruguai","db":null,"squad":"empty"},
-    {"name":"Atlético Nacional","country":"Colômbia","db":"Atl. Nacional","squad":"db"},
-    {"name":"Once Caldas","country":"Colômbia","db":null,"squad":"empty"},
-    {"name":"Colo-Colo","country":"Chile","db":null,"squad":"empty"},
-    {"name":"Universidad de Chile","country":"Chile","db":null,"squad":"empty"},
-    {"name":"Universidad Católica","country":"Chile","db":"Uni. Católica","squad":"db"},
-    {"name":"Olimpia","country":"Paraguai","db":"Olimpia","squad":"db"},
-    {"name":"Cerro Porteño","country":"Paraguai","db":"Cerro Porteño","squad":"db"},
-    {"name":"Libertad","country":"Paraguai","db":"Libertad","squad":"db"},
-    {"name":"Barcelona de Guayaquil","country":"Equador","db":"Barcelona SC","squad":"db"},
-    {"name":"LDU Quito","country":"Equador","db":"LDU Quito","squad":"db"},
-    {"name":"Independiente del Valle","country":"Equador","db":"IDV","squad":"db"},
-    {"name":"Emelec","country":"Equador","db":null,"squad":"empty"},
-    {"name":"Sporting Cristal","country":"Peru","db":"Sporting Cristal","squad":"db"},
-    {"name":"Alianza Lima","country":"Peru","db":null,"squad":"empty"},
-    {"name":"Bolívar","country":"Bolívia","db":"Bolívar","squad":"db"},
-    {"name":"The Strongest","country":"Bolívia","db":null,"squad":"empty"}
-  ]
+ "_doc": "Configuração única da Libertadores ZC. Orçamentos são PROVISÓRIOS e neutros (iguais p/ todos) até o Robson definir. db: nome exato do clube no banco FC27 (null = clube não existe no FC27). squad: 'db' usa elenco FC27, 'empty' começa com elenco vazio (provisório).",
+ "default_budget": 20000000,
+ "default_wage_budget": 400000,
+ "placeholder_ovr": 68,
+ "clubs": [
+  {
+   "name": "Flamengo",
+   "country": "Brasil",
+   "db": "Flamengo",
+   "squad": "empty"
+  },
+  {
+   "name": "Palmeiras",
+   "country": "Brasil",
+   "db": "Palmeiras",
+   "squad": "empty"
+  },
+  {
+   "name": "Fluminense",
+   "country": "Brasil",
+   "db": "Fluminense",
+   "squad": "empty"
+  },
+  {
+   "name": "Botafogo",
+   "country": "Brasil",
+   "db": "Botafogo",
+   "squad": "db"
+  },
+  {
+   "name": "São Paulo",
+   "country": "Brasil",
+   "db": "São Paulo",
+   "squad": "empty"
+  },
+  {
+   "name": "Corinthians",
+   "country": "Brasil",
+   "db": "Corinthians",
+   "squad": "empty"
+  },
+  {
+   "name": "Atlético Mineiro",
+   "country": "Brasil",
+   "db": "Atlético-MG",
+   "squad": "empty"
+  },
+  {
+   "name": "Grêmio",
+   "country": "Brasil",
+   "db": "Grêmio",
+   "squad": "empty"
+  },
+  {
+   "name": "Internacional",
+   "country": "Brasil",
+   "db": null,
+   "squad": "empty"
+  },
+  {
+   "name": "Cruzeiro",
+   "country": "Brasil",
+   "db": "Cruzeiro",
+   "squad": "empty"
+  },
+  {
+   "name": "Bahia",
+   "country": "Brasil",
+   "db": "Bahia",
+   "squad": "db"
+  },
+  {
+   "name": "Santos",
+   "country": "Brasil",
+   "db": "Santos",
+   "squad": "empty"
+  },
+  {
+   "name": "Vasco",
+   "country": "Brasil",
+   "db": "Vasco da Gama",
+   "squad": "empty"
+  },
+  {
+   "name": "Athletico-PR",
+   "country": "Brasil",
+   "db": null,
+   "squad": "empty"
+  },
+  {
+   "name": "River Plate",
+   "country": "Argentina",
+   "db": "River Plate",
+   "squad": "db"
+  },
+  {
+   "name": "Boca Juniors",
+   "country": "Argentina",
+   "db": "Boca Juniors",
+   "squad": "db"
+  },
+  {
+   "name": "Racing",
+   "country": "Argentina",
+   "db": "Racing Club",
+   "squad": "db"
+  },
+  {
+   "name": "Independiente",
+   "country": "Argentina",
+   "db": "Independiente",
+   "squad": "db"
+  },
+  {
+   "name": "San Lorenzo",
+   "country": "Argentina",
+   "db": "San Lorenzo",
+   "squad": "db"
+  },
+  {
+   "name": "Estudiantes",
+   "country": "Argentina",
+   "db": "Estudiantes",
+   "squad": "db"
+  },
+  {
+   "name": "Vélez Sarsfield",
+   "country": "Argentina",
+   "db": "Vélez Sarsfield",
+   "squad": "db"
+  },
+  {
+   "name": "Argentinos Juniors",
+   "country": "Argentina",
+   "db": "Argentinos Jrs.",
+   "squad": "db"
+  },
+  {
+   "name": "Rosario Central",
+   "country": "Argentina",
+   "db": "Rosario Central",
+   "squad": "db"
+  },
+  {
+   "name": "Belgrano",
+   "country": "Argentina",
+   "db": "Belgrano",
+   "squad": "db"
+  },
+  {
+   "name": "Lanús",
+   "country": "Argentina",
+   "db": "Lanús",
+   "squad": "db"
+  },
+  {
+   "name": "Peñarol",
+   "country": "Uruguai",
+   "db": "Peñarol",
+   "squad": "db"
+  },
+  {
+   "name": "Indep. Santa Fe",
+   "country": "Colômbia",
+   "db": "Indep. Santa Fe",
+   "squad": "db"
+  },
+  {
+   "name": "Universidad Católica",
+   "country": "Chile",
+   "db": "Uni. Católica",
+   "squad": "db"
+  },
+  {
+   "name": "Coquimbo Unido",
+   "country": "Chile",
+   "db": "Coquimbo Unido",
+   "squad": "db"
+  },
+  {
+   "name": "Olimpia",
+   "country": "Paraguai",
+   "db": "Olimpia",
+   "squad": "db"
+  },
+  {
+   "name": "Cerro Porteño",
+   "country": "Paraguai",
+   "db": "Cerro Porteño",
+   "squad": "db"
+  },
+  {
+   "name": "Libertad",
+   "country": "Paraguai",
+   "db": "Libertad",
+   "squad": "db"
+  },
+  {
+   "name": "Barcelona de Guayaquil",
+   "country": "Equador",
+   "db": "Barcelona SC",
+   "squad": "db"
+  },
+  {
+   "name": "LDU Quito",
+   "country": "Equador",
+   "db": "LDU Quito",
+   "squad": "db"
+  },
+  {
+   "name": "Independiente del Valle",
+   "country": "Equador",
+   "db": "IDV",
+   "squad": "db"
+  },
+  {
+   "name": "Sporting Cristal",
+   "country": "Peru",
+   "db": "Sporting Cristal",
+   "squad": "db"
+  },
+  {
+   "name": "Universitario",
+   "country": "Peru",
+   "db": "Universitario",
+   "squad": "db"
+  },
+  {
+   "name": "Bolívar",
+   "country": "Bolívia",
+   "db": "Bolívar",
+   "squad": "db"
+  },
+  {
+   "name": "Always Ready",
+   "country": "Bolívia",
+   "db": "Always Ready",
+   "squad": "db"
+  },
+  {
+   "name": "Caracas FC",
+   "country": "Venezuela",
+   "db": "Caracas FC",
+   "squad": "db"
+  }
+ ]
 }

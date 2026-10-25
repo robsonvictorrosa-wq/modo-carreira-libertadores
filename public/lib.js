@@ -1,7 +1,7 @@
 // Libertadores ZC: os 40 clubes, mata-mata, bolão, histórico e resenha pós-jogo
 const lbl=(plan,r)=>{const s=plan?.[r-1];if(!s)return '';const n={league:'Liga',playin:'Play-in',r16:'Oitavas',qf:'Quartas',sf:'Semi',final:'FINAL'}[s.stage];return ` · ${n}${s.stage==='league'?'':s.leg===1&&s.stage!=='playin'&&s.stage!=='final'?' (ida)':s.leg===2?' (volta)':' (jogo único)'}`;};
 const resBox=r=>r?`<div class="card" style="cursor:default;border-left:4px solid #f5c542"><b>🎙️ Resenha · ${esc(r.stage)}</b><div style="font-size:1.2em;margin:.3em 0">${esc(r.placar)}</div><ul>${r.curiosidades.map(c=>`<li>${esc(c)}</li>`).join('')}</ul><i>😂 ${esc(r.zoeira)}</i></div>`:'';
-const FLAG={Brasil:'🇧🇷',Argentina:'🇦🇷',Uruguai:'🇺🇾',Colômbia:'🇨🇴',Chile:'🇨🇱',Paraguai:'🇵🇾',Equador:'🇪🇨',Peru:'🇵🇪',Bolívia:'🇧🇴'};
+const FLAG={Brasil:'🇧🇷',Argentina:'🇦🇷',Uruguai:'🇺🇾',Colômbia:'🇨🇴',Chile:'🇨🇱',Paraguai:'🇵🇾',Equador:'🇪🇨',Peru:'🇵🇪',Bolívia:'🇧🇴',Venezuela:'🇻🇪'};
 async function clubesLib(){const d=await api('/libertadores/clubs');await whoami();let rs=null;if(ROOM&&ME){try{rs=await get('/rooms/'+ROOM)}catch{}}
  const by={};d.clubs.forEach(c=>(by[c.country]??=[]).push(c));const lobby=rs&&rs.room?.status==='lobby';
  app.innerHTML=`<h1>Os 40 da Libertadores ZC</h1><div class="sub">Todos contra todos (39 rodadas) · 1º–10º direto nas oitavas · 11º–22º play-in em jogo único na casa da melhor campanha · mata-mata ida e volta · final única. ${lobby?'Toque em <b>Escolher</b> para assumir um clube na sala '+esc(ROOM)+'.':'Entre numa sala (aba Salas) para escolher seu clube.'}</div>
