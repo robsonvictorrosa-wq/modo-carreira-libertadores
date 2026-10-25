@@ -225,5 +225,5 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const rows=await q(`SELECT * FROM transfers WHERE room_id=$1 ${r.query.human==='1'?'AND human':''} ORDER BY ${r.query.sort==='fee'?'fee DESC,':''}id DESC LIMIT ${lim}`,[room.id]);
   const ev=await q("SELECT text,created_at FROM room_events WHERE room_id=$1 AND (user_id IS NULL OR user_id=$2) AND (text LIKE '📰%' OR text LIKE '📩%' OR text LIKE '✅%' OR text LIKE '✍️%' OR text LIKE '💥%' OR text LIKE '😠%' OR text LIKE '😕%' OR text LIKE '🔒%' OR text LIKE '🔓%' OR text LIKE '📤%' OR text LIKE '🤝%' OR text LIKE '❌%' OR text LIKE '↩️%' OR text LIKE '🚫%') ORDER BY id DESC LIMIT 40",[room.id,r.user.id]);
   s.json({events:ev,transfers:rows.map(t=>({...t,fee:+t.fee,wage:+t.wage,player:pname(t.player_id),ovr:R.P.get(t.player_id)?.overall,age:R.P.get(t.player_id)?.age,pos:R.P.get(t.player_id)?.primary_position,from:isFree(t.from_club)?'Livre':clubName(t.from_club),to:isFree(t.to_club)?'Livre':clubName(t.to_club),human:hum.has(t.from_club)||hum.has(t.to_club)}))});}));
- return {before,after,onStart,windowOf,mainComp};
+ return {before,after,onStart,windowOf,mainComp,execute,note,finances};
 };

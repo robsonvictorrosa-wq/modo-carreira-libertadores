@@ -1,0 +1,154 @@
+/* Zero Clubistas – Libertadores · shell de UI (abas) sobre o backend existente */
+(function(){
+const TABS=[['campeonato','🏆','Campeonato'],['mercado','🛒','Mercado'],['contratacoes','✍️','Contratações'],['escalacao','📋','Escalação'],['emprestimos','🔁','Empréstimos'],['estatisticas','📊','Estatísticas'],['leilao','🔨','Leilão'],['premiacoes','🥇','Premiações'],['clubes','💰','Clubes e verbas'],['evolucao','📈','Evolução'],['central','⚙️','Central da liga',1]];
+let OV=null;const R=()=>`/rooms/${ROOM}`;
+const POSC={GOL:'#FACC15',GK:'#FACC15',ZAG:'#60A5FA',CB:'#60A5FA',LD:'#38BDF8',LE:'#38BDF8',RB:'#38BDF8',LB:'#38BDF8',VOL:'#34D399',CDM:'#34D399',MC:'#4ADE80',CM:'#4ADE80',MEI:'#A3E635',CAM:'#A3E635',ME:'#86EFAC',MD:'#86EFAC',LM:'#86EFAC',RM:'#86EFAC',PE:'#F87171',PD:'#F87171',LW:'#F87171',RW:'#F87171',ATA:'#EF4444',ST:'#EF4444',SA:'#FB923C',CF:'#FB923C'};
+const pc=p=>POSC[p]||'#9CA3AF';
+const ABR={'Flamengo':'FLA','Palmeiras':'PAL','Fluminense':'FLU','São Paulo':'SAO','Corinthians':'COR','Atlético Mineiro':'CAM','Grêmio':'GRE','Internacional':'INT','Cruzeiro':'CRU','Santos':'SAN','Vasco':'VAS','Athletico-PR':'CAP','Botafogo':'BOT','Bahia':'BAH','River Plate':'RIV','Boca Juniors':'BOC','Racing Club':'RAC','Independiente':'IND','San Lorenzo':'SLO','Estudiantes':'EST','Vélez Sarsfield':'VEL','Argentinos Jrs.':'ARG','Rosario Central':'ROS','Belgrano':'BEL','Lanús':'LAN','Peñarol':'PEÑ','Indep. Santa Fe':'ISF','U. Católica':'UCA','Coquimbo Unido':'COQ','Olimpia':'OLI','Cerro Porteño':'CER','Libertad':'LIB','Barcelona SC':'BSC','LDU Quito':'LDU','Ind. del Valle':'IDV','Sporting Cristal':'CRI','Universitario':'UNI','Bolívar':'BOL','Always Ready':'ALW','Caracas FC':'CAR'};
+const hue=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))%360;return h};
+const abbr=n=>ABR[n]||String(n||'?').normalize('NFD').replace(/[^A-Za-z ]/g,'').replace(/^(CA|FC|SC|CD|Club) /,'').slice(0,3).toUpperCase();
+const badge=n=>`<span class="badge" style="background:hsl(${hue(n)},55%,32%)">${esc(abbr(n))}</span>`;
+const mi=v=>v==null?'—':'€ '+(v/1e6).toFixed(1).replace('.',',')+' mi';
+const psq=p=>`<span class="psq" style="background:${pc(p.primary_position||p.pos)}">${esc(p.primary_position||p.pos||'—')}</span>`;
+const empty=(t,s)=>`<div class="card empty"><b>${t}</b>${s||''}</div>`;
+async function ov(){OV=await get(R()+'/zc/overview');return OV}
+function chrome(tab){const isAdm=OV?.admin;
+ document.getElementById('ztabs').innerHTML=TABS.filter(t=>!t[3]||isAdm).map(t=>`<a href="#/${t[0]}" class="${t[0]===tab?'on':''}">${t[1]} ${t[2]}</a>`).join('');
+ const on=document.querySelector('#ztabs a.on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});
+ document.getElementById('zcrumb').innerHTML=ME?`<span>Zero Clubistas / <b style="color:#fff">Libertadores</b>${OV?.room?' · '+esc(OV.room.name):''}</span><span>${OV?(OV.admin?'Administrador':'Técnico'):'Técnico'} • ${esc(ME.nick)} · <a href="#/salas">Salas</a> · <a href="#" onclick="zSair();return false">Sair</a></span>`:'';}
+window.zSair=async()=>{try{await post('/auth/logout',{})}catch(e){}localStorage.removeItem('room');ROOM=null;ME=null;location.hash='#/';location.reload();};
+async function need(tab){if(!ME&&!(await whoami())){chrome(tab);loginView(route);return false}
+ if(!ROOM){chrome(tab);salas();return false}
+ try{await ov()}catch(e){ROOM=null;localStorage.removeItem('room');chrome(tab);salas();return false}
+ chrome(tab);return true}
+const myClub=()=>OV.clubs.find(c=>c.id===OV.me.club_id);
+const noClub=()=>empty('Sem clube',`Você ainda não comanda um clube nesta sala.<br><br><a class="btn" href="#/sala/${ROOM}">Escolher clube</a>`);
+
+// ---------- CAMPEONATO ----------
+async function campeonato(step){if(!await need('campeonato'))return;const c=OV.comp,mc=myClub();
+ let h=`<div class="hero"><div class="kick">Libertadores · Temporada ${OV.room.season||1}</div><h1>${esc(OV.phase)}</h1><p>40 clubes, liga única de 39 rodadas. Top 10 direto às oitavas; 11º–22º disputam o play-in em jogo único. ${mc?`Você comanda <b>${esc(mc.name)}</b>.`:''}</p>`;
+ if(!c){h+=OV.admin?`<a class="btn" href="#/sala/${ROOM}">Gerenciar sala e iniciar temporada</a>`:`<a class="btn" href="#/sala/${ROOM}">${mc?'Ver sala':'Escolher clube'}</a>`;h+='</div>';app.innerHTML=h+`<div class="z3"><div class="stat"><span>Clubes</span><b>40</b></div><div class="stat"><span>Técnicos</span><b>${OV.managers.length}</b></div><div class="stat"><span>Verba</span><b>€ 20 mi</b></div></div>`;return}
+ h+=`<div style="display:flex;gap:8px;flex-wrap:wrap">${OV.admin?`<button class="btn" onclick="zSim()">▶ Simular próxima etapa</button>`:`<button class="btn sec" onclick="post('${R()}/ready',{}).then(route)">✋ Marcar pronto</button>`}<a class="btn sec" href="#/escalacao">Escalação</a></div></div><div id="zwarn"></div>`;
+ if(c.current_round===0)h+=`<div class="card warn" style="margin-bottom:12px"><div class="kick">Antes da janela</div><p style="margin:6px 0 0">A janela de transferências está ${OV.window?.open?'<b class="ok">aberta</b>':'<b class="no">fechada</b>'}. Monte o elenco e garanta a <b>meta do onze</b>: pelo menos ${OV.meta_need} titulares contratados por você.</p></div>`;
+ const tot=(OV.managers||[]).length;h+=`<div class="z3" style="margin-bottom:14px"><div class="stat"><span>Etapa</span><b>${Math.min(c.current_round+1,47)}/47</b></div><div class="stat"><span>Técnicos</span><b>${tot}</b></div><div class="stat"><span>Janela</span><b>${OV.window?.open?'Aberta':'Fechada'}</b></div></div>`;
+ const r=+step||Math.max(1,c.current_round);let fx;try{fx=await get(`${R()}/comp/${c.id}/fixtures?round=${r}`)}catch(e){fx={matches:[],plan:[]}}
+ const lab=(s,i)=>s.stage==='league'?`Rodada ${s.round??i+1}`:(fx.stages?.[s.stage]||s.stage)+(s.leg===1&&s.stage!=='playin'&&s.stage!=='final'?' · ida':s.leg===2?' · volta':'');
+ h+=`<h2>Central de confrontos</h2><select onchange="location.hash='#/campeonato/'+this.value" style="width:100%;margin-bottom:10px">${(fx.plan||[]).map((s,i)=>`<option value="${i+1}" ${i+1===r?'selected':''}>Etapa ${i+1} – ${lab(s,i)}</option>`).join('')}</select>`;
+ h+=fx.matches.length?`<div class="zg">${fx.matches.map(m=>`<div class="mc" onclick="location.hash='#/jogo/${m.id}'" style="cursor:pointer"><div class="tm">${badge(m.home_name)}<span class="nm">${esc(m.home_name)}${m.home_mgr?` <span class="tag">${esc(m.home_mgr)}</span>`:''}</span></div><div class="sc">${m.played?`${m.hg} × ${m.ag}`:'×'}<span class="st">${m.played?'Encerrado'+(m.pens?' (pên.)':''):'Agendado'}</span></div><div class="tm r"><span class="nm">${m.away_mgr?`<span class="tag">${esc(m.away_mgr)}</span> `:''}${esc(m.away_name)}</span>${badge(m.away_name)}</div></div>`).join('')}</div>`:empty('Sem jogos','Nenhum confronto definido para esta etapa ainda.');
+ try{const t=await get(`${R()}/comp/${c.id}/table`);h+=`<h2 style="margin-top:20px">Classificação</h2><div class="tw"><table><tr><th>#</th><th>Clube</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th>SG</th></tr>${t.rows.map((x,i)=>`<tr class="${x.zone==='oitavas'?'zone-o':x.zone==='playin'?'zone-p':''}"><td>${i+1}</td><td style="display:flex;align-items:center;gap:6px">${badge(x.name)} ${esc(x.name)}${x.manager?` <span class="tag">${esc(x.manager)}</span>`:''}</td><td><b>${x.pts}</b></td><td>${x.j}</td><td>${x.v}</td><td>${x.e}</td><td>${x.d}</td><td>${x.gp-x.gc}</td></tr>`).join('')}</table></div><p class="sub" style="font-size:12px">🟩 1º–10º oitavas · 🟨 11º–22º play-in · <a href="#/matamata">Mata-mata</a> · <a href="#/bolao">Bolão</a> · <a href="#/historico">Histórico</a></p>`}catch(e){}
+ app.innerHTML=h;}
+window.zSim=async(force)=>{const bad=OV.clubs.filter(c=>c.manager&&!c.meta.ok);
+ if(bad.length&&!force){document.getElementById('zwarn').innerHTML=`<div class="card warn" style="margin-bottom:12px"><div class="kick">⚠ Meta do onze</div><p>Clubes humanos abaixo da meta (${OV.meta_need} contratados no XI):</p>${bad.map(c=>`<div class="mgr" style="padding:4px 0">${esc(c.name)} · ${esc(c.manager)} <b class="no">${c.meta.n}/${c.meta.need}</b></div>`).join('')}<button class="btn" style="margin-top:10px" onclick="zSim(1)">Simular mesmo assim</button></div>`;return}
+ try{await post(R()+'/advance',{});}catch(e){return alert(e.message)}route();};
+
+// ---------- MERCADO ----------
+let MS={sub:'todos',chip:'',q:'',pos:'',club:'',max:'',u23:false,page:0,list:[]};
+async function zMercado(sub){if(!await need('mercado'))return;if(sub)MS.sub=sub;
+ let mk;try{mk=await get(R()+'/market')}catch(e){mk={}}let reserved=0;try{const o=await get(R()+'/market/offers');reserved=(o.sent||[]).filter(x=>['pending','countered','club_accepted'].includes(x.status)).reduce((a,x)=>a+(+x.fee||0),0)}catch(e){}
+ const me=mk.me||{};let si=0;try{si=(await get(R()+'/zc/signings')).in.length}catch(e){}
+ app.innerHTML=`<div class="hero"><div class="kick">Mercado · ${mk.window?.open?'janela aberta':'janela fechada'}</div><h1>Mercado</h1><div class="z3"><div class="stat"><span>Orçamento</span><b>${mi(me.budget)}</b></div><div class="stat"><span>Valor reservado</span><b>${mi(reserved)}</b></div><div class="stat"><span>Jogadores na base</span><b>${me.squad_size??'—'}</b></div></div></div>
+ <div class="seg"><a href="#/mercado/todos" class="${MS.sub!=='livres'?'on':''}">Todos</a><a href="#/mercado/livres" class="${MS.sub==='livres'?'on':''}">Livres <span id="nfree"></span></a></div>
+ <div class="chips"><a class="chip" href="#/contratacoes">✍️ Contratações (${si})</a><span class="chip ${MS.chip==='venda'?'on':''}" onclick="zChip('venda')">🏷️ À venda</span><span class="chip ${MS.chip==='obs'?'on':''}" onclick="zChip('obs')">👁 Observados</span><a class="chip" href="#/negociacoes">🤝 Negociações${mk.counts?.received+mk.counts?.to_act?` (${mk.counts.received+mk.counts.to_act})`:''}</a></div>
+ <div class="bar" style="flex-direction:column"><input id="mq" placeholder="Buscar jogador ou clube" value="${esc(MS.q)}" onkeydown="if(event.key==='Enter')zBusca()">
+ <div style="display:flex;gap:6px;flex-wrap:wrap"><select id="mpos" style="flex:1"><option value="">Posição</option>${(window.POS||['GOL','ZAG','LD','LE','VOL','MC','MEI','PE','PD','ATA']).map(p=>`<option ${MS.pos===p?'selected':''}>${p}</option>`).join('')}</select>
+ <select id="mclub" style="flex:2"><option value="">Todos os clubes</option>${OV.clubs.map(c=>`<option value="${c.id}" ${+MS.club===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+ <div style="display:flex;gap:6px;align-items:center"><input id="mmax" type="number" placeholder="Valor máx. (€ mi)" value="${MS.max}" style="flex:1"><label class="tog"><input type="checkbox" id="mu23" ${MS.u23?'checked':''}> Sub-23</label><button class="btn" onclick="zBusca()">Buscar</button></div></div>
+ <div id="mres"><div class="empty">Carregando…</div></div>`;
+ zBusca(true);}
+window.zChip=c=>{MS.chip=MS.chip===c?'':c;MS.page=0;zMercado();};
+window.zBusca=async(keep)=>{const g=id=>document.getElementById(id);if(g('mq')){MS.q=g('mq').value.trim();MS.pos=g('mpos').value;MS.club=g('mclub').value;MS.max=g('mmax').value;MS.u23=g('mu23').checked}if(keep!==true)MS.page=0;
+ let q=MS.q;const cm=q&&OV.clubs.find(c=>c.name.toLowerCase().includes(q.toLowerCase()));const club=MS.club||(cm?cm.id:'');if(cm&&!MS.club)q='';
+ const p=new URLSearchParams();if(q)p.set('q',q);if(MS.pos)p.set('pos',MS.pos);if(club)p.set('club',club);if(MS.max)p.set('maxValue',Math.round(+MS.max*1e6));if(MS.u23)p.set('maxAge',23);if(MS.sub==='livres')p.set('free','1');if(MS.chip==='venda')p.set('listed','1');
+ try{let L;if(MS.chip==='obs'){L=await get(R()+'/market/watch');if(!Array.isArray(L))L=L.players||L.list||[]}else L=await get(R()+'/market/search?'+p);MS.list=L;
+  if(MS.sub==='livres'){const n=document.getElementById('nfree');if(n)n.textContent='('+L.length+')'}zPage(0);}catch(e){document.getElementById('mres').innerHTML=empty('Erro',esc(e.message))}};
+window.zPage=d=>{MS.page=Math.max(0,Math.min(MS.page+d,Math.ceil(MS.list.length/20)-1));const L=MS.list.slice(MS.page*20,MS.page*20+20),el=document.getElementById('mres');if(!el)return;
+ el.innerHTML=MS.list.length?`<div class="card" style="padding:0">${L.map(p=>`<div class="pl" onclick="negociar(${p.id})">${psq(p)}<div class="i"><b>${esc(p.name)}</b><span>${esc(p.club||'')}${p.manager?' · '+esc(p.manager):''} · ${p.age??'—'} anos${p.listed?' · 🏷️ à venda':''}</span></div><div style="text-align:right"><span class="ovr o${p.overall>=85?1:p.overall>=78?2:p.overall>=70?3:4}">${p.overall}</span><div class="sub" style="margin:2px 0 0;font-size:12px">${mi(p.market_value)}</div></div></div>`).join('')}</div>
+ <div class="pager"><button class="btn ghost" onclick="zPage(-1)" ${MS.page?'':'disabled'}>‹ Anterior</button><span class="sub" style="margin:0">Página ${MS.page+1} de ${Math.ceil(MS.list.length/20)} · ${MS.list.length} jogadores</span><button class="btn ghost" onclick="zPage(1)" ${(MS.page+1)*20<MS.list.length?'':'disabled'}>Próxima ›</button></div>`:empty('Nenhum jogador','Ajuste os filtros da busca.');};
+
+// ---------- NEGOCIAÇÕES (propostas) ----------
+async function negociacoes(){if(!await need('mercado'))return;let o;try{o=await get(R()+'/market/offers')}catch(e){app.innerHTML=empty('Mercado indisponível',esc(e.message));return}
+ const st={pending:'Aguardando',countered:'Contraproposta',club_accepted:'Clube aceitou – contrato',accepted:'Concluída',rejected:'Recusada',withdrawn:'Retirada',expired:'Expirada',done:'Concluída'};
+ const row=(x,rec)=>`<div class="card" style="margin-bottom:8px"><div class="mgr"><b>${esc(x.player)} <span class="tag">${x.player_ovr||''}</span></b><span class="tag">${st[x.status]||x.status}</span></div><div class="sub" style="margin:4px 0">${rec?esc(x.buyer)+' → você':'você → '+esc(x.seller)} · ${x.loan?'Empréstimo':'Compra'} · ${mi(x.fee)}${x.counter_fee?' · contra: '+mi(x.counter_fee):''}</div>
+ <div style="display:flex;gap:6px;flex-wrap:wrap">${rec&&x.status==='pending'?`<button class="btn green" onclick="resp(${x.id},'accept')">Aceitar</button><button class="btn red" onclick="resp(${x.id},'reject')">Recusar</button>`:''}${!rec&&x.status==='countered'?`<button class="btn green" onclick="resp(${x.id},'accept')">Aceitar contra</button>`:''}${!rec&&x.status==='club_accepted'?`<button class="btn" onclick="contrato(${x.id},${x.player_id})">Fechar contrato</button>`:''}${!rec&&['pending','countered','club_accepted'].includes(x.status)?`<button class="btn ghost" onclick="retirar(${x.id})">Retirar</button>`:''}</div></div>`;
+ app.innerHTML=`<h1>Negociações</h1><a class="back" href="#/mercado">← Mercado</a><h2>Recebidas</h2>${o.received.length?o.received.map(x=>row(x,1)).join(''):empty('Nenhuma proposta recebida')}<h2>Enviadas</h2>${o.sent.length?o.sent.map(x=>row(x,0)).join(''):empty('Nenhuma proposta enviada')}`;}
+
+// ---------- CONTRATAÇÕES ----------
+async function contratacoes(){if(!await need('contratacoes'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}const s=await get(R()+'/zc/signings'),m=s.meta;
+ const it=x=>`<div class="pl">${psq(x)}<div class="i"><b>${esc(x.player||x.name)}</b><span>${esc(x.from||'')} → ${esc(x.to||'')} · ${x.kind||''}</span></div><b>${mi(x.fee)}</b></div>`;
+ app.innerHTML=`<div class="hero"><div class="kick">Meta do onze</div><h1>${m.n}/${m.need} no XI</h1><p>${m.ok?'<b class="ok">✔ Meta cumprida.</b>':`<b class="no">Faltam ${m.need-m.n} contratados entre os titulares.</b>`} Somente jogadores contratados por você nesta sala contam.</p><a class="btn sec" href="#/escalacao">Ajustar escalação</a></div>
+ <h2>Contratados (${s.in.length})</h2>${s.in.length?`<div class="card" style="padding:0">${s.in.map(it).join('')}</div>`:empty('Nenhuma contratação','Vá ao <a href="#/mercado">Mercado</a> para reforçar o elenco.')}
+ <h2>Vendidos / cedidos (${s.out.length})</h2>${s.out.length?`<div class="card" style="padding:0">${s.out.map(it).join('')}</div>`:empty('Nenhuma saída')}`;}
+
+// ---------- ESCALAÇÃO ----------
+let XI=null;
+async function zEscalacao(){if(!await need('escalacao'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}
+ const [l,s]=await Promise.all([get(R()+'/lineup'),get(R()+'/zc/signings')]);const signed=new Set(s.in.map(x=>x.player_id));XI={f:l.formation,st:new Set(l.starters),signed,l,need:s.meta.need};drawXI();}
+function drawXI(){const {l,st,signed,need}=XI;const n=l.squad.filter(p=>st.has(p.id)&&signed.has(p.id)).length;
+ app.innerHTML=`<div class="hero"><div class="kick">Escalação · ${esc(myClub().name)}</div><h1>Titulares ${st.size}/11</h1><p>Meta do onze: <b class="${n>=need?'ok':'no'}">${n}/${need} contratados no XI</b> · força ${typeof l.strength==='number'?l.strength.toFixed(1):(l.strength?.total??l.strength?.overall??Object.values(l.strength||{}).filter(v=>typeof v==='number').map(v=>v.toFixed(0)).join('/')??'—')}</p>
+ <div style="display:flex;gap:6px;flex-wrap:wrap"><select id="xf">${l.formations.map(f=>`<option ${f===XI.f?'selected':''}>${f}</option>`).join('')}</select><button class="btn" onclick="zXI(0)">Salvar</button><button class="btn sec" onclick="zXI(1)">Escalação automática</button></div></div>
+ <div class="card" style="padding:0">${l.squad.map(p=>`<div class="pl" onclick="zTog(${p.id})" style="${st.has(p.id)?'background:#FACC1514':''}">${psq(p)}<div class="i"><b>${st.has(p.id)?'⭐ ':''}${esc(p.name)}</b><span>${p.age} anos${signed.has(p.id)?' · <b style="color:#FACC15">contratado</b>':''}</span></div><span class="ovr o${p.overall>=85?1:p.overall>=78?2:p.overall>=70?3:4}">${p.overall}</span></div>`).join('')}</div>`;}
+window.zTog=id=>{XI.f=document.getElementById('xf').value;if(XI.st.has(id))XI.st.delete(id);else if(XI.st.size<11)XI.st.add(id);else return alert('Já há 11 titulares. Remova um antes.');drawXI();};
+window.zXI=async auto=>{try{await post(R()+'/lineup',{formation:document.getElementById('xf').value,starters:[...XI.st],auto:!!auto});zEscalacao();}catch(e){alert(e.message)}};
+
+// ---------- EMPRÉSTIMOS ----------
+async function emprestimos(){if(!await need('emprestimos'))return;let L=[],o={sent:[],received:[]};try{[L,o]=await Promise.all([get(R()+'/zc/loanable'),get(R()+'/market/offers')])}catch(e){}
+ const lo=[...o.sent,...o.received].filter(x=>x.loan);
+ app.innerHTML=`<div class="hero"><div class="kick">Empréstimos</div><h1>Reservas disponíveis</h1><p>Jogadores fora do XI dos clubes sem técnico. Clique para propor um empréstimo (a proposta segue o fluxo normal de negociação).</p></div>
+ ${lo.length?`<h2>Seus empréstimos em andamento</h2><div class="card" style="padding:0">${lo.map(x=>`<div class="pl"><div class="i"><b>${esc(x.player)}</b><span>${esc(x.seller)} → ${esc(x.buyer)} · ${x.status}</span></div><b>${mi(x.fee)}</b></div>`).join('')}</div>`:''}
+ <input placeholder="Filtrar por nome, posição ou clube" oninput="zLf(this.value)" style="width:100%;margin:10px 0"><div id="lres"></div>`;window._LL=L;zLf('');}
+window.zLf=t=>{t=t.toLowerCase();const L=(window._LL||[]).filter(p=>!t||(p.name+' '+p.pos+' '+p.club).toLowerCase().includes(t)).slice(0,60);
+ document.getElementById('lres').innerHTML=L.length?`<div class="card" style="padding:0">${L.map(p=>`<div class="pl" onclick="negociar(${p.id})">${psq(p)}<div class="i"><b>${esc(p.name)}</b><span>${esc(p.club)} · ${p.age} anos</span></div><span class="ovr">${p.overall}</span></div>`).join('')}</div>`:empty('Nenhum jogador disponível');};
+
+// ---------- ESTATÍSTICAS ----------
+let EST={stage:'',club:''};
+async function estatisticas(){if(!await need('estatisticas'))return;if(!OV.comp){app.innerHTML=empty('Temporada não iniciada');return}
+ const s=await get(`${R()}/zc/stats?stage=${EST.stage}&club=${EST.club}`);
+ const tb=(t,L,k,lab)=>`<h2>${t}</h2>${L.length?`<div class="card" style="padding:0">${L.map((p,i)=>`<div class="pl"><b style="width:20px">${i+1}</b>${psq(p)}<div class="i"><b>${esc(p.name)}</b><span>${esc(p.club)} · ${p.apps} jogos</span></div><b style="font-size:18px">${p[k]}</b><span class="sub" style="margin:0;font-size:11px">${lab}</span></div>`).join('')}</div>`:empty('Sem dados')}`;
+ app.innerHTML=`<div class="hero"><div class="kick">Estatísticas</div><h1>${s.matches} jogos disputados</h1><div style="display:flex;gap:6px;flex-wrap:wrap"><select onchange="EST_(this.value,null)"><option value="">Todas as fases</option><option value="league" ${EST.stage==='league'?'selected':''}>Fase de liga</option><option value="ko" ${EST.stage==='ko'?'selected':''}>Mata-mata</option></select><select onchange="EST_(null,this.value)"><option value="">Todos os clubes</option>${(s.clubs||OV.clubs).map(c=>`<option value="${c.id}" ${+EST.club===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div></div>
+ ${tb('Artilharia',s.goals||[],'goals','gols')}${tb('Assistências',s.assists||[],'assists','assist.')}${tb('Melhores notas',s.ratings||[],'rating','nota')}`;}
+window.EST_=(st,c)=>{if(st!==null)EST.stage=st;if(c!==null)EST.club=c;estatisticas();};
+
+// ---------- LEILÃO ----------
+async function leilao(){if(!await need('leilao'))return;const a=await get(R()+'/zc/auction');
+ const op=a.lots.filter(l=>l.status==='open'),done=a.lots.filter(l=>l.status!=='open');
+ app.innerHTML=`<div class="hero"><div class="kick">Leilão</div><h1>${a.open?'Leilão aberto':'Leilão fechado'}</h1><p>Ao fim da fase de liga (rodada ${a.league_end}) são abertos lotes com reservas dos clubes sem técnico. Lances são secretos; o maior lance (que caiba no orçamento) leva na próxima etapa simulada.</p></div>
+ <h2>Lotes abertos (${op.length})</h2>${op.length?op.map(l=>`<div class="card" style="margin-bottom:8px"><div class="pl" style="padding:0;border:0" onclick="negociar(${l.player_id})">${psq(l)}<div class="i"><b>${esc(l.name)}</b><span>${esc(l.from||'')} · ${l.bids} lance(s)</span></div><span class="ovr">${l.overall||''}</span></div><div style="display:flex;gap:6px;margin-top:8px;align-items:center"><input type="number" id="b${l.id}" placeholder="Mín. ${(l.min_bid/1e6).toFixed(1)} mi" style="flex:1" value="${l.mine?l.mine/1e6:''}"><button class="btn" onclick="zBid(${l.id})">${l.mine?'Alterar lance':'Dar lance'}</button></div></div>`).join(''):empty('Nenhum lote aberto','Os lotes abrem ao fim da fase de liga.')}
+ ${done.length?`<h2>Encerrados</h2><div class="card" style="padding:0">${done.map(l=>`<div class="pl"><div class="i"><b>${esc(l.name)}</b><span>${l.winner?'Arrematado por '+esc(l.winner):'Sem lances válidos'}</span></div><b>${l.price?mi(l.price):'—'}</b></div>`).join('')}</div>`:''}`;}
+window.zBid=async id=>{const v=+document.getElementById('b'+id).value;if(!v)return;try{await post(R()+'/zc/auction/bid',{lot_id:id,amount:Math.round(v*1e6)});leilao();}catch(e){alert(e.message)}};
+
+// ---------- PREMIAÇÕES ----------
+async function premiacoes(){if(!await need('premiacoes'))return;const P=OV.prizes||[];let rows=[];if(OV.comp)try{rows=(await get(`${R()}/comp/${OV.comp.id}/table`)).rows}catch(e){}
+ const prize=i=>{for(const p of P){const [a,b]=p.range||[p.from,p.to];if(i>=a&&i<=b)return p.amount}return 0};
+ app.innerHTML=`<div class="hero"><div class="kick">Premiações</div><h1>Prêmios da fase de liga</h1><p>Pagos automaticamente ao fim da rodada 39 e somados à verba do clube.${OV.comp?.prizes_paid?' <b class="ok">✔ Já pagos nesta temporada.</b>':''}</p></div>
+ <div class="tw"><table><tr><th>Posição</th><th>Prêmio</th>${rows.length?'<th>Clube atual</th>':''}</tr>${P.map(p=>{const [a,b]=p.range||[p.from,p.to];return `<tr><td>${a===b?a+'º':a+'º–'+b+'º'}</td><td><b style="color:#FACC15">${mi(p.amount)}</b></td>${rows.length?`<td>${rows.slice(a-1,b).map(x=>esc(x.name)).slice(0,3).join(', ')}${b-a>2?'…':''}</td>`:''}</tr>`}).join('')}</table></div>`;}
+
+// ---------- CLUBES E VERBAS ----------
+async function clubes(){if(!await need('clubes'))return;
+ app.innerHTML=`<div class="hero"><div class="kick">Clubes e verbas</div><h1>40 clubes</h1><p>Verba atual de cada clube, técnico e situação da meta do onze.</p></div><div class="zg">${OV.clubs.map(c=>`<div class="card"><div class="mgr"><div style="display:flex;gap:8px;align-items:center">${badge(c.name)}<div><b>${esc(c.name)}</b><div class="sub" style="margin:0;font-size:12px">${esc(c.country)} · ${c.squad==='empty'?'elenco em branco':'elenco FC27'}</div></div></div><b style="color:#FACC15">${mi(c.budget??c.initial)}</b></div><div class="sub" style="margin:8px 0 0;font-size:12px">${c.manager?'👤 '+esc(c.manager)+` · meta <b class="${c.meta.ok?'ok':'no'}">${c.meta.n}/${c.meta.need}</b>`:'🤖 sem técnico'}</div></div>`).join('')}</div>`;}
+
+// ---------- EVOLUÇÃO ----------
+async function evolucao(){if(!await need('evolucao'))return;app.innerHTML=`<div class="hero"><div class="kick">Evolução</div><h1>Sistema de evolução em definição</h1><p>${esc(OV.evolution?.description||'')} Em breve as regras de evolução dos jogadores serão publicadas aqui.</p></div>${empty('Em breve','Nenhuma evolução é aplicada aos jogadores por enquanto.')}`;}
+
+// ---------- CENTRAL DA LIGA (admin) ----------
+async function central(){if(!await need('central'))return;if(!OV.admin){app.innerHTML=empty('Acesso restrito','Somente o administrador da sala.');return}
+ const log=await get(R()+'/zc/log');const free=OV.clubs.filter(c=>!c.manager);
+ app.innerHTML=`<div class="hero"><div class="kick">Central da liga</div><h1>Administração</h1><p>Sala <b>${esc(OV.room.code)}</b> · ${esc(OV.phase)} · janela ${OV.window?.open?'<b class="ok">aberta</b>':'<b class="no">fechada</b>'}</p>
+ <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn green" onclick="zWin('open')">Abrir janela</button><button class="btn red" onclick="zWin('close')">Fechar janela</button><button class="btn sec" onclick="zWin('finalize')">Finalizar janela</button><button class="btn" onclick="zSim()">Simular etapa</button></div><div id="zwarn" style="margin-top:10px"></div></div>
+ <h2>Técnicos</h2><div class="card" style="padding:0">${OV.managers.map(m=>`<div class="pl"><div class="i"><b>${esc(m.nick)}</b><span>${m.club_id?esc(OV.clubs.find(c=>c.id===m.club_id)?.name||''):'sem clube'}</span></div><select onchange="zAssign(${m.user_id},this.value)"><option value="">Definir clube…</option><option value="0">— sem clube —</option>${free.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select>${m.nick!==OV.me.nick?`<button class="btn red" onclick="zRem(${m.user_id})">✕</button>`:''}</div>`).join('')}</div>
+ <h2>Contestar venda</h2><input placeholder="Buscar transferência (jogador ou clube)" oninput="zTr(this.value)" style="width:100%;margin-bottom:8px"><div id="trs"></div>
+ <h2>Log da liga</h2><div class="card">${log.map(e=>`<div class="log">${esc(e.text)}<time>${new Date(e.created_at).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})}</time></div>`).join('')||'<div class="empty">Sem eventos</div>'}</div>`;zTr('');}
+window.zWin=async a=>{try{await post(R()+'/zc/admin/window',{action:a});central();}catch(e){alert(e.message)}};
+window.zAssign=async(u,c)=>{if(c==='')return;try{await post(R()+'/zc/admin/assign',{user_id:u,club_id:+c||null});central();}catch(e){alert(e.message)}};
+window.zRem=async u=>{if(!confirm('Remover este técnico da sala?'))return;try{await post(R()+'/zc/admin/remove',{user_id:u});central();}catch(e){alert(e.message)}};
+window.zTr=async t=>{const L=await get(R()+'/zc/admin/transfers?q='+encodeURIComponent(t));const el=document.getElementById('trs');if(!el)return;el.innerHTML=L.length?`<div class="card" style="padding:0">${L.map(x=>`<div class="pl"><div class="i"><b>${esc(x.player)}</b><span>${esc(x.from)} → ${esc(x.to)} · ${mi(x.fee)}${x.contested?' · contestada':''}</span></div>${x.contested?'':`<button class="btn red" onclick="zCon(${x.id})">Contestar</button>`}</div>`).join('')}</div>`:empty('Nenhuma transferência');};
+window.zCon=async id=>{if(!confirm('Desfazer esta venda e devolver o valor?'))return;try{await post(R()+'/zc/admin/contest',{transfer_id:id});central();}catch(e){alert(e.message)}};
+
+// ---------- roteador ----------
+window.mercado=sub=>sub==='propostas'?(location.hash==='#/negociacoes'?negociacoes():location.hash='#/negociacoes'):zMercado(sub);
+const old=window.route;
+window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
+ const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes,escalacao:zEscalacao,emprestimos,estatisticas,leilao,premiacoes,clubes,evolucao,central};
+ if(map[t])return map[t]();
+ chrome('');return old();};
+route=window.route;
+})();

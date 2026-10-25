@@ -67,6 +67,7 @@ module.exports=(app,uni)=>{
  const R=require('./roster')(uni);
  const M=require('./market')({app,uni,q,pool,auth,wrap,fail,member,bump,R});
  require('./season')({app,uni,q,pool,auth,wrap,fail,member,bump,R,M});
+ require('./extras')({app,uni,q,pool,auth,wrap,fail,member,bump,R,M});
  require('./bolao')({app,uni,q,pool,auth,wrap,fail,member});
  // apagar a própria conta (usado também para limpar usuários de teste): exige PIN
  app.delete('/api/me',auth,wrap(async(r,s)=>{const [u]=await q('SELECT * FROM users WHERE id=$1',[r.user.id]);if(!check(String(r.body?.pin||''),u.pass_hash))throw fail('PIN incorreto',401);

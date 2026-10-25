@@ -40,3 +40,8 @@ ALTER TABLE matches ADD COLUMN IF NOT EXISTS pens TEXT;
 ALTER TABLE matches ADD COLUMN IF NOT EXISTS neutral BOOLEAN NOT NULL DEFAULT false;
 ALTER TABLE competitions ADD COLUMN IF NOT EXISTS champion INT;
 CREATE TABLE IF NOT EXISTS bolao(room_id INT REFERENCES rooms(id) ON DELETE CASCADE,match_id INT REFERENCES matches(id) ON DELETE CASCADE,user_id INT REFERENCES users(id) ON DELETE CASCADE,hg INT NOT NULL,ag INT NOT NULL,updated_at TIMESTAMPTZ DEFAULT now(),PRIMARY KEY(room_id,match_id,user_id));
+
+-- Zero Clubistas: leilão e premiações
+CREATE TABLE IF NOT EXISTS auction_lots(id SERIAL PRIMARY KEY,room_id INT REFERENCES rooms(id) ON DELETE CASCADE,season INT,player_id INT,from_club INT,min_bid BIGINT,status TEXT NOT NULL DEFAULT 'open',winner_club INT,price BIGINT,created_round INT);
+  CREATE TABLE IF NOT EXISTS auction_bids(lot_id INT REFERENCES auction_lots(id) ON DELETE CASCADE,club_id INT,user_id INT,amount BIGINT,created_at TIMESTAMPTZ DEFAULT now(),PRIMARY KEY(lot_id,club_id));
+  ALTER TABLE competitions ADD COLUMN IF NOT EXISTS prizes_paid BOOLEAN NOT NULL DEFAULT false;

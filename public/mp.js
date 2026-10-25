@@ -42,4 +42,4 @@ window.pick=id=>post(`/rooms/${ROOM}/club`,{club_id:id}).then(()=>location.hash=
 async function roomBanner(clubId){if(!ROOM||!localStorage.token)return '';try{RS=await get('/rooms/'+ROOM);}catch{return '';}
  const owner=RS.managers.find(m=>m.club_id===clubId);const mine=RS.managers.find(m=>m.user_id===RS.me);
  return `<div class="banner"><span>Sala <b>${esc(RS.name)}</b>${clubId?owner?` · técnico: <b>${esc(owner.nick)}</b>`:' · clube controlado por bot':' · escolha um clube'}</span>${clubId&&!owner&&RS.status==='lobby'?`<button class="btn" onclick="pick(${clubId})">${mine.club?'Trocar para este clube':'Assumir este clube'}</button>`:''}</div>`;}
-addEventListener('hashchange',route);whoami().then(route);
+addEventListener('hashchange',()=>route());whoami().then(()=>route());

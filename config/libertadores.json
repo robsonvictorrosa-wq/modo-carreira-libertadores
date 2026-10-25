@@ -244,5 +244,42 @@
    "db": "Caracas FC",
    "squad": "db"
   }
- ]
+ ],
+ "meta_onze": 6,
+ "prizes": [
+  {
+   "from": 1,
+   "to": 1,
+   "amount": 100000000
+  },
+  {
+   "from": 2,
+   "to": 2,
+   "amount": 50000000
+  },
+  {
+   "from": 3,
+   "to": 3,
+   "amount": 30000000
+  },
+  {
+   "from": 4,
+   "to": 8,
+   "amount": 20000000
+  },
+  {
+   "from": 9,
+   "to": 24,
+   "amount": 10000000
+  },
+  {
+   "from": 25,
+   "to": 40,
+   "amount": 0
+  }
+ ],
+ "auction": {
+  "lots": 12,
+  "min_bid_pct": 0.5
+ }
 }

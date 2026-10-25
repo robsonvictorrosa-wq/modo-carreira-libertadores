@@ -1,7 +1,7 @@
 // Etapa 3: temporada, calendário, escalação, avanço rodada a rodada
 const S=require('./sim'),L=require('./libertadores'),{resenha}=require('./resenha');
 module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(uni);const LIB=new Set(L.CLUBS);const PLAN=L.plan();const stepOf=r=>PLAN[r-1];
- const vname=id=>id<0?{name:'Provisório',primary_position:'—'}:null;
+ app.locals.xiFor=(...a)=>xiFor(...a);const vname=id=>id<0?{name:'Provisório',primary_position:'—'}:null;
  const club=id=>uni.prepare('SELECT c.id,c.name,c.overall,c.league_id,l.name league FROM clubs c JOIN leagues l ON l.id=c.league_id WHERE c.id=?').get(id);
  const pp=p=>({...p,positions:JSON.parse(p.positions||'[]'),stats:JSON.parse(p.stats||'{}')});
  const squad=(db,roomId,clubId)=>R.squad(db,roomId,clubId);
@@ -66,6 +66,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
  async function advance(roomId,why){const c=await pool.connect();const out=[];
   try{await c.query('BEGIN');const {rows:[room]}=await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[roomId]);if(room.status!=='season')throw fail('A temporada não está em andamento');
    const comps=(await c.query('SELECT * FROM competitions WHERE room_id=$1 AND season=$2 AND current_round<rounds_total ORDER BY id',[roomId,room.season])).rows;if(!comps.length)throw fail('Temporada encerrada');
+   for(const h of (app.locals.beforeRound||[]))await h(c,room);
    if(M)await M.before(c,room);
    const hum=new Map((await c.query('SELECT m.club_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[roomId])).rows.map(x=>[x.club_id,x.nick]));
    for(const comp of comps){const round=comp.current_round+1;const step=stepOf(round);
@@ -87,7 +88,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
      await c.query(`INSERT INTO player_stats(comp_id,player_id,club_id,apps,goals,assists,rating_sum) SELECT $1,* FROM unnest($2::int[],$3::int[],$4::int[],$5::int[],$6::int[],$7::real[]) ON CONFLICT(comp_id,player_id) DO UPDATE SET apps=player_stats.apps+1,goals=player_stats.goals+EXCLUDED.goals,assists=player_stats.assists+EXCLUDED.assists,rating_sum=player_stats.rating_sum+EXCLUDED.rating_sum,club_id=EXCLUDED.club_id`,
       [comp.id,pl.map(x=>x[0].id),pl.map(x=>x[1]),pl.map(()=>1),pl.map(x=>res.goalsBy[x[0].id].g),pl.map(x=>res.goalsBy[x[0].id].a),pl.map(x=>res.ratings[x[0].id])]);
      if(hum.has(m.home)||hum.has(m.away))out.push({id:m.id,comp:comp.name,round,home:club(m.home).name,away:club(m.away).name,hg:res.hg,ag:res.ag,pens:tie?.pens||null});}
-    await c.query('UPDATE competitions SET current_round=$2 WHERE id=$1',[comp.id,round]);}
+    await c.query('UPDATE competitions SET current_round=$2 WHERE id=$1',[comp.id,round]);
+    for(const h of (app.locals.afterRound||[]))out.push(...((await h(c,room,{...comp,current_round:round},step))||[]));}
    if(M)await M.after(c,room);
    await c.query('UPDATE room_managers SET ready=false WHERE room_id=$1',[roomId]);
    const left=(await c.query('SELECT count(*)::int n FROM competitions WHERE room_id=$1 AND season=$2 AND current_round<rounds_total',[roomId,room.season])).rows[0].n;
