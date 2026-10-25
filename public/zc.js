@@ -55,7 +55,7 @@ async function zMercado(sub){if(!await need('mercado'))return;if(sub)MS.sub=sub;
  <div class="bar" style="flex-direction:column"><input id="mq" placeholder="Buscar jogador ou clube" value="${esc(MS.q)}" onkeydown="if(event.key==='Enter')zBusca()">
  <div style="display:flex;gap:6px;flex-wrap:wrap"><select id="mpos" style="flex:1"><option value="">Posição</option>${(window.POS||['GOL','ZAG','LD','LE','VOL','MC','MEI','PE','PD','ATA']).map(p=>`<option ${MS.pos===p?'selected':''}>${p}</option>`).join('')}</select>
  <select id="mclub" style="flex:2"><option value="">Todos os clubes</option>${OV.clubs.map(c=>`<option value="${c.id}" ${+MS.club===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
- <div style="display:flex;gap:6px;align-items:center"><input id="mmax" type="number" placeholder="Valor máx. (€ mi)" value="${MS.max}" style="flex:1"><label class="tog"><input type="checkbox" id="mu23" ${MS.u23?'checked':''}> Sub-23</label><button class="btn" onclick="zBusca()">Buscar</button></div></div>
+ <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><input id="mmax" type="number" placeholder="Valor máx. (€ mi)" value="${MS.max}" style="flex:1 1 150px;min-width:150px"><label class="tog"><input type="checkbox" id="mu23" ${MS.u23?'checked':''}> Sub-23</label><button class="btn" onclick="zBusca()">Buscar</button></div></div>
  <div id="mres"><div class="empty">Carregando…</div></div>`;
  zBusca(true);}
 window.zChip=c=>{MS.chip=MS.chip===c?'':c;MS.page=0;zMercado();};
