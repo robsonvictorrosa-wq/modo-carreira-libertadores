@@ -102,17 +102,6 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   await db.query('UPDATE rooms SET window_was_open=$2 WHERE id=$1',[r.id,win.open]);}
  async function onStart(db,room){const [r]=(await db.query("UPDATE rooms SET market_day=1,window_was_open=true WHERE id=$1 RETURNING *",[room.id])).rows;await note(db,r.id,'🔓 Janela de início de temporada aberta (fecha após a rodada 4).');await tick(db,r,windowOf(r,await mainComp(db,r)));}
  // ---------- rotas ----------
- // TEMP: teste e2e de cancelamento (só com TEST_TRANSFER_SEED=1 e admin) — remover depois
- if(process.env.TEST_TRANSFER_SEED==='1'){const adm=async r=>{const [room]=(await pool.query('SELECT * FROM rooms WHERE code=$1',[String(r.params.code).toUpperCase()])).rows;if(!room||!r.user.admin)throw fail('admin',403);return room;};
-  const bud=async(id,cs)=>Object.fromEntries((await pool.query('SELECT club_id,budget FROM room_clubs WHERE room_id=$1 AND club_id=ANY($2)',[id,cs])).rows.map(x=>[x.club_id,+x.budget]));
-  app.post('/api/rooms/:code/zz-test/seed',auth,wrap(async(r,s)=>{const room=await adm(r);const hum=await humans(pool,room.id);
-   const cl=(await pool.query('SELECT club_id FROM room_clubs WHERE room_id=$1 ORDER BY club_id',[room.id])).rows.map(x=>x.club_id).filter(c=>!hum.has(c)&&!isFree(c));const A=cl[0],B=cl[1];
-   const sq=await R.squad(pool,room.id,A,false);const p=sq[sq.length-1];const ev0=(await pool.query('SELECT COALESCE(max(id),0) m FROM room_events')).rows[0].m;
-   const before={budgets:await bud(room.id,[A,B]),row:(await pool.query('SELECT * FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,p.id])).rows[0]||null};
-   const id=await tx(async c=>{await execute(c,room,{pid:p.id,from:A,to:B,fee:1e6,wage:p.wage,years:2,kind:'teste'});return (await c.query('SELECT max(id) id FROM transfers WHERE room_id=$1',[room.id])).rows[0].id;});
-   s.json({id,A,B,pid:p.id,ev0,before,after:{budgets:await bud(room.id,[A,B]),club:(await R.player(pool,room.id,p.id)).club_id}});}));
-  app.post('/api/rooms/:code/zz-test/state',auth,wrap(async(r,s)=>{const room=await adm(r);const b=r.body;s.json({budgets:await bud(room.id,[b.A,b.B]),club:(await R.player(pool,room.id,b.pid)).club_id,row:(await pool.query('SELECT * FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,b.pid])).rows[0]||null,t:(await pool.query('SELECT id,status,contested_by,cancelled_by,created_at,cancelled_at FROM transfers WHERE id=$1',[b.id])).rows[0]});}));
-  app.post('/api/rooms/:code/zz-test/clean',auth,wrap(async(r,s)=>{const room=await adm(r);const b=r.body;const d1=(await pool.query("DELETE FROM transfers WHERE id=$1 AND kind='teste'",[b.id])).rowCount;const d2=(await pool.query('DELETE FROM room_events WHERE room_id=$1 AND id>$2 AND text LIKE $3',[room.id,b.ev0,'%'+R.P.get(b.pid).name+'%'])).rowCount;s.json({d1,d2});}));}
  const tx=async f=>{const c=await pool.connect();try{await c.query('BEGIN');const r=await f(c);await c.query('COMMIT');return r;}catch(e){await c.query('ROLLBACK');throw e}finally{c.release()}};
  const lockRoom=async(c,r)=>{const [room]=(await c.query('SELECT r.* FROM rooms r JOIN room_managers m ON m.room_id=r.id AND m.user_id=$2 WHERE r.code=$1 FOR UPDATE OF r',[String(r.params.code).toUpperCase(),r.user.id])).rows;if(!room)throw fail('Você não está nessa sala',403);return room;};
  const needOpen=async(c,room)=>{const w=windowOf(room,await mainComp(c,room));if(!w.open)throw fail('A janela de transferências está fechada');return w;};
