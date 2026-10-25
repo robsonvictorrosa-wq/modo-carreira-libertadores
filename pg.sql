@@ -57,3 +57,4 @@ ALTER TABLE transfers ADD COLUMN IF NOT EXISTS cancelled_by TEXT;
 ALTER TABLE transfers ADD COLUMN IF NOT EXISTS cancelled_at TIMESTAMPTZ;
 ALTER TABLE transfers ADD COLUMN IF NOT EXISTS prev JSONB;
 UPDATE transfers SET created_at=now() WHERE created_at IS NULL;
+ALTER TABLE offers ADD COLUMN IF NOT EXISTS history JSONB NOT NULL DEFAULT '[]'::jsonb;
