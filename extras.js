@@ -10,7 +10,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  const prizeOf=pos=>(CF.prizes||[]).find(p=>pos>=p.from&&pos<=p.to)?.amount||0;
  const phase=comp=>{if(!comp)return 'Pré-temporada';const s=PLAN[comp.current_round];if(!s)return 'Temporada encerrada';return s.stage==='league'?`Fase de liga – rodada ${s.round??comp.current_round+1}/${LEAGUE_END}`:L.STAGE_NAMES[s.stage]+(s.leg===1&&s.stage!=='playin'&&s.stage!=='final'?' (ida)':s.leg===2?' (volta)':'');};
 
- const signedSet=async(db,room,cid)=>new Set((await db.query('SELECT player_id FROM transfers WHERE room_id=$1 AND to_club=$2',[room.id,cid])).rows.map(x=>x.player_id));
+ const signedSet=async(db,room,cid)=>new Set((await db.query("SELECT player_id FROM transfers WHERE room_id=$1 AND to_club=$2 AND kind<>'empréstimo'",[room.id,cid])).rows.map(x=>x.player_id));
  async function meta(db,room,cid){const x=await app.locals.xiFor(db,room.id,cid);const s=await signedSet(db,room,cid);const n=x.xi.filter(p=>s.has(p.id)).length;return {n,need:CF.meta_onze||6,ok:n>=(CF.meta_onze||6)};}
  // ---------- ganchos de rodada ----------
  (app.locals.afterRound??=[]).push(async(c,room,comp,step)=>{const out=[];const round=comp.current_round;

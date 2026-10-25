@@ -1,6 +1,6 @@
 /* Zero Clubistas – Libertadores · shell de UI (abas) sobre o backend existente */
 (function(){
-const TABS=[['campeonato','🏆','Campeonato'],['mercado','🛒','Mercado'],['contratacoes','✍️','Contratações'],['escalacao','📋','Escalação'],['emprestimos','🔁','Empréstimos'],['estatisticas','📊','Estatísticas'],['leilao','🔨','Leilão'],['premiacoes','🥇','Premiações'],['clubes','💰','Clubes e verbas'],['evolucao','📈','Evolução'],['central','⚙️','Central da liga',1]];
+const TABS=[['campeonato','🏆','Campeonato'],['mercado','🛒','Mercado'],['contratacoes','✍️','Contratações'],['escalacao','📋','Escalação'],['estatisticas','📊','Estatísticas'],['leilao','🔨','Leilão'],['premiacoes','🥇','Premiações'],['clubes','💰','Clubes e verbas'],['evolucao','📈','Evolução'],['central','⚙️','Central da liga',1]];
 let OV=null;const R=()=>`/rooms/${ROOM}`;
 const POSC={GOL:'#FACC15',GK:'#FACC15',ZAG:'#60A5FA',CB:'#60A5FA',LD:'#38BDF8',LE:'#38BDF8',RB:'#38BDF8',LB:'#38BDF8',VOL:'#34D399',CDM:'#34D399',MC:'#4ADE80',CM:'#4ADE80',MEI:'#A3E635',CAM:'#A3E635',ME:'#86EFAC',MD:'#86EFAC',LM:'#86EFAC',RM:'#86EFAC',PE:'#F87171',PD:'#F87171',LW:'#F87171',RW:'#F87171',ATA:'#EF4444',ST:'#EF4444',SA:'#FB923C',CF:'#FB923C'};
 const pc=p=>POSC[p]||'#9CA3AF';
@@ -77,7 +77,7 @@ async function negociacoes(){if(!await need('mercado'))return;let o;try{o=await 
 // ---------- CONTRATAÇÕES ----------
 async function contratacoes(){if(!await need('contratacoes'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}const s=await get(R()+'/zc/signings'),m=s.meta;
  const it=x=>`<div class="pl">${psq(x)}<div class="i"><b>${esc(x.player||x.name)}</b><span>${esc(x.from||'')} → ${esc(x.to||'')} · ${x.kind||''}${x.loan_left!=null?` · <b style="color:#FACC15">volta em ${x.loan_left} rodada(s)</b>`:''}</span></div><b>${mi(x.fee)}</b></div>`;
- app.innerHTML=`<div class="hero"><div class="kick">Meta do onze</div><h1>${m.n}/${m.need} no XI</h1><p>${m.ok?'<b class="ok">✔ Meta cumprida.</b>':`<b class="no">Faltam ${m.need-m.n} contratados entre os titulares.</b>`} Somente jogadores contratados por você nesta sala contam.</p><a class="btn sec" href="#/escalacao">Ajustar escalação</a></div>
+ app.innerHTML=`<div class="hero"><div class="kick">Meta do onze</div><h1>${m.n}/${m.need} no XI</h1><p>${m.ok?'<b class="ok">✔ Meta cumprida.</b>':`<b class="no">Faltam ${m.need-m.n} contratados entre os titulares.</b>`} Somente jogadores contratados por você no campeonato contam.</p><a class="btn sec" href="#/escalacao">Ajustar escalação</a></div>
  <h2>Contratados (${s.in.length})</h2>${s.in.length?`<div class="card" style="padding:0">${s.in.map(it).join('')}</div>`:empty('Nenhuma contratação','Vá ao <a href="#/mercado">Mercado</a> para reforçar o elenco.')}
  <h2>Vendidos / cedidos (${s.out.length})</h2>${s.out.length?`<div class="card" style="padding:0">${s.out.map(it).join('')}</div>`:empty('Nenhuma saída')}`;}
 
@@ -161,7 +161,7 @@ window.zCon=async id=>{if(!confirm('Desfazer esta venda e devolver o valor?'))re
 window.mercado=sub=>sub==='propostas'?(location.hash==='#/negociacoes'?negociacoes():location.hash='#/negociacoes'):zMercado(sub);
 const old=window.route;
 window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
- const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes,escalacao:zEscalacao,emprestimos,estatisticas,leilao,premiacoes,clubes,evolucao,central};
+ const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes,escalacao:zEscalacao,emprestimos:()=>location.hash='#/mercado',estatisticas,leilao,premiacoes,clubes,evolucao,central};
  if(['salas','sala','entrar','carreira',''].includes(t)&&t!=='')return location.hash='#/campeonato';
  if(map[t])return map[t]();
  chrome('');return old();};

@@ -134,7 +134,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  // nova proposta
  app.post('/api/rooms/:code/market/offer',auth,wrap(async(r,s)=>s.json(await tx(async c=>{const room=await lockRoom(c,r);const win=await needOpen(c,room);const buyer=await myClub(c,room,r.user.id);const hum=await humans(c,room.id);
   const pid=+r.body?.player_id,fee=Math.max(0,Math.round(+r.body?.fee||0)),loan=!!r.body?.loan,swap=r.body?.swap_player_id?+r.body.swap_player_id:null;const p=await R.player(c,room.id,pid);if(!p)throw fail('Jogador não encontrado');
-  if(!LIB.has(p.club_id)||!LIB.has(buyer))throw fail('Por enquanto só há transferências entre os 40 clubes da liga');const lr=loan?Math.round(+r.body?.loan_rounds||0):null;if(loan&&!(lr>=1&&lr<=39))throw fail('Informe por quantas rodadas (1 a 39) é o empréstimo');
+  if(!LIB.has(p.club_id)||!LIB.has(buyer))throw fail('Por enquanto só há transferências entre os 40 clubes da liga');if(loan)throw fail('Empréstimos estão desativados');const lr=loan?Math.round(+r.body?.loan_rounds||0):null;if(loan&&!(lr>=1&&lr<=39))throw fail('Informe por quantas rodadas (1 a 39) é o empréstimo');
   if(p.club_id===buyer)throw fail('Esse jogador já é seu');const bc=C.get(buyer),sc=C.get(p.club_id);if(sc.gender!==bc.gender)throw fail('Jogador de outra modalidade (masculino/feminino)');
   const f=await finances(c,room.id,buyer);if(f.squad.length+(swap?0:1)>X.MAX_SQ)throw fail(`Elenco cheio (máximo ${X.MAX_SQ})`);if(fee>f.budget)throw fail(`Orçamento insuficiente: você tem ${X.fmt(f.budget)}`);
   if(swap&&!f.squad.some(x=>x.id===swap))throw fail('Jogador de troca não é do seu elenco');if(p.loan_from)throw fail('Jogador emprestado não pode ser negociado');
