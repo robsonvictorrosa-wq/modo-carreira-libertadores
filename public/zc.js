@@ -13,7 +13,7 @@ const badge=n=>CREST[n]?`<span class="badge crest"><img src="/crests/${CREST[n]}
 const mi=v=>v==null?'—':'€ '+(v/1e6).toFixed(1).replace('.',',')+' mi';
 const psq=p=>`<span class="psq" style="background:${pc(p.primary_position||p.pos)}">${esc(p.primary_position||p.pos||'—')}</span>`;
 const empty=(t,s)=>`<div class="card empty"><b>${t}</b>${s||''}</div>`;
-async function ov(){OV=await get(R()+'/zc/overview');return OV}
+async function ov(){OV=await get(R()+'/zc/overview');window.zOV=OV;return OV}
 function chrome(tab){const isAdm=OV?.admin;
  document.getElementById('ztabs').innerHTML=TABS.filter(t=>!t[3]||isAdm).map(t=>`<a href="#/${t[0]}" class="${t[0]===tab?'on':''}">${t[1]} ${t[2]}</a>`).join('');
  const on=document.querySelector('#ztabs a.on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});
@@ -183,7 +183,7 @@ route=window.route;
 })();
 
 // ---------- calendário do mercado (fase + contagem regressiva) ----------
-window.calBox=(cal)=>{cal=cal||OV?.cal;if(!cal)return '';const lb=esc(cal.label||'Leilão');
+window.calBox=(cal)=>{cal=cal||window.zOV?.cal;if(!cal)return '';const lb=esc(cal.label||'Leilão');
  if(cal.state==='auction')return `<div class="card warn" style="margin:10px 0"><div class="kick">🔨 ${lb}</div><p style="margin:6px 0 0"><b>Leilão aberto</b> · mercado fechado. Lances visíveis: cada novo lance precisa superar o maior. Cada clube leva no máximo 1 jogador. Os admins encerram e o mercado abre por ${cal.hours>=48?cal.hours/24+' dias':cal.hours+' horas'}.</p>${cal.excl_names?.length?`<p class="sub" style="margin:4px 0 0">Não podem dar lance (5 maiores overs): ${cal.excl_names.map(esc).join(', ')}</p>`:''}<a class="btn sec" href="#/leilao" style="margin-top:8px">Ir ao leilão</a></div>`;
  if(cal.state==='market')return `<div class="card" style="margin:10px 0;border-color:#2e7d32"><div class="kick">🔓 ${esc(cal.mlabel||'Mercado')}</div><p style="margin:6px 0 0"><b class="ok">Mercado aberto até ${esc(cal.until_txt)}</b> (Brasília) · fecha em <b data-until="${cal.until}">…</b></p></div>`;
  if(cal.state==='waiting')return `<div class="card warn" style="margin:10px 0"><div class="kick">🔒 Mercado fechado · leilão bloqueado</div><p style="margin:6px 0 0">${cal.lots?'<a href="#/leilao">Ver os jogadores do leilão</a>. ':''}O <b>${lb}</b> está bloqueado até um administrador desbloquear (${cal.lots}/${cal.lots_max} jogadores escolhidos pelos admins). Depois dele o mercado abre por ${cal.hours>=48?cal.hours/24+' dias':cal.hours+' horas'}.${cal.blocks_rounds?' As rodadas ficam paradas até lá.':''}</p>${cal.excl_names?.length?`<p class="sub" style="margin:4px 0 0">Não poderão dar lance (5 maiores médias dos 18 melhores overs${cal.excl_preview?', prévia':''}): ${cal.excl_names.map(esc).join(', ')}</p>`:''}</div>`;
