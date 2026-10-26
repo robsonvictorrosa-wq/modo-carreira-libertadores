@@ -189,7 +189,7 @@ async function leilao(){if(!await need('leilao'))return;const a=await get(R()+'/
  ${l.mine&&a.open?`<p style="margin:2px 0"><span class="sub">Seu lance: <b>${mi(l.mine)}</b></span> <button class="btn sec" style="padding:2px 8px;font-size:12px" onclick="zUnbid(${l.id},null,${l.mine},'${esc(l.name).replace(/'/g,"&#39;")}')">Remover lance</button></p>`:''}
  ${l.history?.length>1||(a.admin&&l.history?.length)?`<details><summary class="sub">Histórico (${l.bids} lance${l.bids>1?'s':''})</summary>${l.history.map(h=>`<div class="sub">${mi(h.amount)} · ${esc(h.club)} · ${when(h.at)}${a.admin&&a.open?` <a href="#" onclick="zUnbid(${l.id},${h.club_id},${h.amount},'${esc(l.name).replace(/'/g,"&#39;")}','${esc(h.club).replace(/'/g,"&#39;")}');return false" class="no" style="font-size:12px">remover lance do clube</a>`:''}</div>`).join('')}</details>`:''}
  <div style="display:flex;gap:6px;margin-top:8px;align-items:center"><input type="number" step="0.1" id="b${l.id}" placeholder="Mín. ${(nx/1e6).toFixed(1)} mi" style="flex:1"><button class="btn" onclick="zBid(${l.id})" ${a.open&&!a.excluded&&!l.leader_mine?'':'disabled'}>${a.locked?'🔒 Bloqueado':l.leader_mine?'Você lidera':'Dar lance'}</button></div></div>`}).join(''):empty('Nenhum jogador','Aguardando os administradores escolherem os jogadores.')}
- ${done.length?`<h2>Encerrados</h2><div class="card" style="padding:0">${done.map(l=>`<div class="pl"><div class="i"><b>${esc(l.name)}</b><span>${l.winner?'Arrematado por '+esc(l.winner):'Sem lances válidos'}</span></div><b>${l.price?mi(l.price):'—'}</b></div>`).join('')}</div>`:''}`;}
+ ${done.length?`<h2>Encerrados</h2><div class="card" style="padding:0">${done.map(l=>`<div class="pl"><div class="i"><b>${esc(l.name)}</b><span>${l.winner?'Arrematado por '+esc(l.winner):l.locked?'🔒 Travado — aguardando leilão no grupo':'Sem lances válidos'}</span>${l.locked&&a.admin?`<button class="btn" onclick="zcAtribuir(${l.player_id},'${esc(l.name).replace(/'/g,'')}')">Definir clube</button>`:''}</div><b>${l.price?mi(l.price):'—'}</b></div>`).join('')}</div>`:''}`;}
 window.zUnbid=async(id,club,amt,nm,cl)=>{if(!confirm(`Remover ${cl?'o lance do '+cl:'seu lance'} de ${mi(amt)} em ${nm}?\n\nO maior lance restante volta a liderar.`))return;try{await post(R()+'/zc/auction/unbid',club==null?{lot_id:id}:{lot_id:id,club_id:club});leilao();}catch(e){alert(e.message)}};
 window.zBid=async id=>{const v=+document.getElementById('b'+id).value;if(!v)return;try{await post(R()+'/zc/auction/bid',{lot_id:id,amount:Math.round(v*1e6)});leilao();}catch(e){alert(e.message)}};
 
@@ -246,6 +246,8 @@ window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.h
  if(map[t]){const pr=map[t]();if(pr&&pr.catch)pr.catch(e=>{console.error(e);window.zFail&&zFail(e&&e.zNet?null:'Algo deu errado ao abrir esta tela: '+esc(e&&e.message||e))});return pr}
  chrome('');return old();};
 route=window.route;window.zBooted=true;
+window.zcAtribuir=async(pid,nome)=>{const clube=prompt('Clube para '+nome+' (nome exato do clube):');if(!clube)return;const v=prompt('Valor pago em milhões de € (0 se nenhum):','0');if(v===null)return;
+ try{const j=await post(`${R()}/zc/admin/auction/assign`,{player_id:pid,club_name:clube,fee:Math.round((+String(v).replace(',','.')||0)*1e6)});alert(j.player+' agora é do '+j.club);location.reload();}catch(e){alert(e.message)}};
 })();
 
 // ---------- calendário do mercado (fase + contagem regressiva) ----------
@@ -264,3 +266,4 @@ window.calAdmin=cal=>{if(!cal)return '';const b=[];if(cal.state==='waiting'){b.p
 
 window.zObsRefresh=()=>{if(typeof MS!=='undefined'&&MS.chip==='obs'&&document.getElementById('mres'))zBusca(true);};
 window.zDesobs=id=>fetch('/api'+R()+'/market/watch/'+id,{method:'DELETE',headers:H()}).then(r=>{if(!r.ok)throw new Error('Erro ao remover');zBusca(true)}).catch(e=>alert(e.message));
+
