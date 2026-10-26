@@ -38,7 +38,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   await bump(room.id,`Temporada ${room.season}/${room.season+1} iniciada! Clubes travados.`);return {ok:1,ai_signings:ai,penalties:pen};}
  // ===== Tabela publicada antes do início (config/agenda-zc.json): mesmo calendário que será usado no início; 2 rodadas por dia =====
  const AGZ=JSON.parse(require('fs').readFileSync(__dirname+'/config/agenda-zc.json','utf8'));
- const slotAt=k=>{const W=AGZ.windows||{};let base=AGZ.matches_start,i=k-1;for(const w of [W.mid,W.end])if(w&&k>w.after_round){base=w.resume;i=k-w.after_round-1;}const n=AGZ.slots.length,[d,h]=[Math.floor(i/n),AGZ.slots[i%n]];return new Date(Date.parse(base+'T'+h+':00-03:00')+d*864e5).toISOString();};
+ const slotAt=k=>{if(AGZ.final_at&&PLAN[k-1]&&PLAN[k-1].stage==='final')return new Date(AGZ.final_at).toISOString();const W=AGZ.windows||{};let base=AGZ.matches_start,i=k-1;for(const w of [W.mid,W.end])if(w&&k>w.after_round){base=w.resume;i=k-w.after_round-1;}const n=AGZ.slots.length,[d,h]=[Math.floor(i/n),AGZ.slots[i%n]];return new Date(Date.parse(base+'T'+h+':00-03:00')+d*864e5).toISOString();};
  app.locals.slotAt=slotAt;
  async function fixtures(roomId){const [x]=(await q('SELECT id,status,fixtures FROM rooms WHERE id=$1',[roomId]));if(x.fixtures)return x.fixtures;
   const avg=new Map();for(const cid of L.CLUBS){const sq=(await R.squad(pool,roomId,cid,false)).map(p=>+p.overall||0).sort((a,b)=>b-a).slice(0,18);avg.set(cid,sq.reduce((a,b)=>a+b,0)/(sq.length||1));}
