@@ -1,0 +1,113 @@
+{
+ "_doc": "Potenciais corrigidos pelo Robson (26/10/2026). Só altera o potencial.",
+ "players": [
+  {
+   "player_id": 183898,
+   "name": "Ángel Di María",
+   "club": "Rosario Central",
+   "potential": 82
+  },
+  {
+   "player_id": 205632,
+   "name": "Lucas Ocampos",
+   "club": "LDU Quito",
+   "potential": 78
+  },
+  {
+   "player_id": 207439,
+   "name": "Leandro Paredes",
+   "club": "Boca Juniors",
+   "potential": 81
+  },
+  {
+   "player_id": 95000336,
+   "name": "Neymar",
+   "club": "Santos",
+   "potential": 81
+  },
+  {
+   "player_id": 95000565,
+   "name": "Giorgian de Arrascaeta",
+   "club": "Flamengo",
+   "potential": 81
+  },
+  {
+   "player_id": 95000499,
+   "name": "Matheus Pereira",
+   "club": "Cruzeiro",
+   "potential": 81
+  },
+  {
+   "player_id": 188988,
+   "name": "Manuel Lanzini",
+   "club": "Vélez Sarsfield",
+   "potential": 78
+  },
+  {
+   "player_id": 230977,
+   "name": "Miguel Almirón",
+   "club": "Universidad Católica",
+   "potential": 77
+  },
+  {
+   "player_id": 215330,
+   "name": "Joaquín Correa",
+   "club": "Estudiantes",
+   "potential": 76
+  },
+  {
+   "player_id": 198710,
+   "name": "James Rodríguez",
+   "club": "Atlético Nacional",
+   "potential": 80
+  },
+  {
+   "player_id": 232665,
+   "name": "Mauro Arambarri",
+   "club": "River Plate",
+   "potential": 80
+  },
+  {
+   "player_id": 214997,
+   "name": "Ángel Correa",
+   "club": "River Plate",
+   "potential": 80
+  },
+  {
+   "player_id": 210513,
+   "name": "Juan Fernando Quintero",
+   "club": "Olimpia",
+   "potential": 77
+  },
+  {
+   "player_id": 220523,
+   "name": "Yerry Mina",
+   "club": "Universitario",
+   "potential": 78
+  },
+  {
+   "player_id": 228520,
+   "name": "Chimy Ávila",
+   "club": "Independiente",
+   "potential": 73
+  },
+  {
+   "player_id": 223061,
+   "name": "Franco Cervi",
+   "club": "Rosario Central",
+   "potential": 73
+  },
+  {
+   "player_id": 229270,
+   "name": "Mauricio Lemos",
+   "club": "Peñarol",
+   "potential": 72
+  },
+  {
+   "player_id": 215353,
+   "name": "Lucas Alario",
+   "club": "Estudiantes",
+   "potential": 71
+  }
+ ]
+}
