@@ -96,3 +96,4 @@ DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM zc_migs WHERE name='sorteio2510') THEN
 END IF; END $$;
 -- 26/10: potenciais corrigidos pelo Robson (só o potencial; evolução respeita o teto)
 UPDATE room_players r SET potential=v.pot FROM (VALUES(183898,82),(205632,78),(207439,81),(95000336,81),(95000565,81),(95000499,81),(188988,78),(230977,77),(215330,76),(198710,80),(232665,80),(214997,80),(210513,77),(220523,78),(228520,73),(223061,73),(229270,72),(215353,71)) v(pid,pot) WHERE r.player_id=v.pid AND r.potential IS NOT NULL AND r.potential<>v.pot;
+ALTER TABLE rooms ADD COLUMN IF NOT EXISTS fixtures JSONB;
