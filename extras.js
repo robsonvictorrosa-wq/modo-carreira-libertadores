@@ -148,6 +148,10 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
     await note(c,rm.id,`🔨 Leilão de pré-temporada encerrado: ${n} jogador(es) arrematado(s). O mercado abre ${M.brt(AG.market_open)} (horário de Brasília).`);});console.log('agenda: leilão fechado');}
   else if(st==='pre'&&state==='auction'&&!rm.auction_open&&now>=Date.parse(AG.market_open)){await calAction(rm,'auction_close','Agenda automática');console.log('agenda: mercado aberto');}
   const [x]=(await pool.query('SELECT * FROM rooms WHERE id=$1',[rm.id])).rows;if(x.mkt_stage==='pre'&&x.mkt_state==='market'&&new Date(x.mkt_until).getTime()!==Date.parse(AG.market_close)){await pool.query('UPDATE rooms SET mkt_until=$2,version=version+1 WHERE id=$1',[x.id,AG.market_close]);console.log('agenda: fim do mercado ajustado');}
+  const W=(AG.windows||{})[st];if(W&&rm.status==='season'){const [y]=(await pool.query('SELECT * FROM rooms WHERE id=$1',[rm.id])).rows,sy=stateOf(y);
+   if(sy==='waiting'&&now>=Date.parse(W.auction_start)){try{await calAction(y,now<Date.parse(W.auction_close)?'auction_start':'open_market','Agenda automática');}catch(e){if(now>=Date.parse(W.auction_close))await calAction(y,'open_market','Agenda automática');}await pool.query('UPDATE rooms SET version=version+1 WHERE id=$1',[y.id]);console.log('agenda: janela',st);}
+   else if(sy==='auction'&&now>=Date.parse(W.auction_close)){await calAction(y,'auction_close','Agenda automática');console.log('agenda: leilão fechado',st);}
+   else if(y.mkt_state==='market'&&y.mkt_stage===st&&new Date(y.mkt_until).getTime()!==Date.parse(W.market_close)&&!y.zc_mkt_fixed){await pool.query('UPDATE rooms SET mkt_until=$2,version=version+1 WHERE id=$1',[y.id,W.market_close]);console.log('agenda: fim do mercado',st);}}
  }catch(e){console.error('agenda',e.message)}}
  setInterval(agenda,15000);setTimeout(agenda,3000);
  app.get('/api/rooms/:code/zc/loans',auth,wrap(async(r,s)=>{const room=await member(r);const comp=await comp0(pool,room);const cr=comp?.current_round||0;

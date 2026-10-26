@@ -38,7 +38,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   await bump(room.id,`Temporada ${room.season}/${room.season+1} iniciada! Clubes travados.`);return {ok:1,ai_signings:ai,penalties:pen};}
  // ===== Tabela publicada antes do início (config/agenda-zc.json): mesmo calendário que será usado no início; 2 rodadas por dia =====
  const AGZ=JSON.parse(require('fs').readFileSync(__dirname+'/config/agenda-zc.json','utf8'));
- const slotAt=k=>{const [d,h]=[Math.floor((k-1)/(AGZ.slots.length)),AGZ.slots[(k-1)%AGZ.slots.length]];const t=new Date(Date.parse(AGZ.matches_start+'T'+h+':00-03:00')+d*864e5);return t.toISOString();};
+ const slotAt=k=>{const W=AGZ.windows||{};let base=AGZ.matches_start,i=k-1;for(const w of [W.mid,W.end])if(w&&k>w.after_round){base=w.resume;i=k-w.after_round-1;}const n=AGZ.slots.length,[d,h]=[Math.floor(i/n),AGZ.slots[i%n]];return new Date(Date.parse(base+'T'+h+':00-03:00')+d*864e5).toISOString();};
  app.locals.slotAt=slotAt;
  async function fixtures(roomId){const [x]=(await q('SELECT id,status,fixtures FROM rooms WHERE id=$1',[roomId]));if(x.fixtures)return x.fixtures;
   const avg=new Map();for(const cid of L.CLUBS){const sq=(await R.squad(pool,roomId,cid,false)).map(p=>+p.overall||0).sort((a,b)=>b-a).slice(0,18);avg.set(cid,sq.reduce((a,b)=>a+b,0)/(sq.length||1));}
@@ -47,7 +47,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   if(room.status==='lobby')rounds=(await fixtures(room.id)).map((g,i)=>g.map(([h,a])=>({home:h,away:a})));
   else{const [comp]=await q('SELECT id FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY id LIMIT 1',[room.id,room.season]);const ms=comp?await q('SELECT id,round,home,away,hg,ag,played,pens FROM matches WHERE comp_id=$1 ORDER BY round,id',[comp.id]):[];rounds=[];for(const m of ms)(rounds[m.round-1]??=[]).push(m);rounds=[...rounds].map(x=>x||[]);}
   const nm=id=>club(id)?.name||'A definir';
-  s.json({status:room.status,rounds:PLAN.map((st,i)=>({round:i+1,stage:st.stage,label:st.label||st.name||null,at:slotAt(i+1),games:(rounds[i]||[]).map(g=>({...g,home_name:nm(g.home),away_name:nm(g.away)}))}))});}));
+  s.json({status:room.status,rounds:PLAN.map((st,i)=>({round:i+1,stage:st.stage,label:st.label||st.name||null,at:slotAt(i+1),win:Object.entries(AGZ.windows||{}).filter(([,w])=>w.after_round===i+1).map(([k,w])=>({stage:k,...w}))[0]||null,games:(rounds[i]||[]).map(g=>({...g,home_name:nm(g.home),away_name:nm(g.away)}))}))});}));
  // ===== Agenda automática: inicia a temporada antes do 1º jogo e simula cada rodada no horário =====
  let agBusy=false;async function agendaJogos(){if(agBusy)return;agBusy=true;try{const [room]=await q('SELECT * FROM rooms WHERE code=$1',[AGZ.room]);if(!room)return;const now=Date.now();
   if(room.status==='lobby'){if(!room.fixtures)await fixtures(room.id);if(now>=Date.parse(slotAt(1))-10*60e3){try{await startSeason(room);console.log('agenda: temporada iniciada');}catch(e){console.error('agenda start',e.message);}}return;}
