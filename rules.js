@@ -2,7 +2,7 @@
 const S=require('./sim');
 const EXPORT=new Set(['Brasil','Argentina','Portugal','Holanda','Bélgica','Colômbia','Uruguai','Equador','Chile','Paraguai','Peru','Venezuela','Bolívia','México']);
 const VET_DEST=new Set(['Arábia Saudita','EUA','China','Índia','Austrália','Catar']);
-const MIN_SQ=16,MAX_SQ=32,BOT_MAX_SQ=30;
+const MIN_SQ=11,MAX_SQ=32,BOT_MAX_SQ=30;
 // arredondamento "de mercado"
 const mround=v=>{v=Math.max(0,v);const st=v<1e6?25e3:v<1e7?1e5:v<5e7?5e5:1e6;return Math.round(v/st)*st;};
 const wround=v=>{v=Math.max(500,v);const st=v<1e4?250:v<1e5?1e3:5e3;return Math.round(v/st)*st;};

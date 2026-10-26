@@ -128,3 +128,8 @@ DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM zc_migs WHERE name='otavio-ovr-2610') TH
  INSERT INTO room_players(room_id,player_id,club_id,overall,potential,age) SELECT id,275070,358,74,78,24 FROM rooms ON CONFLICT(room_id,player_id) DO UPDATE SET overall=74,potential=78;
  INSERT INTO zc_migs(name) VALUES('otavio-ovr-2610');
 END IF; END $$;
+-- 26/10 (Robson, uma vez só): Brian Rodríguez tem 26 anos
+DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM zc_migs WHERE name='brian-idade-2610') THEN
+ UPDATE room_players SET age=26 WHERE player_id=253061;
+ INSERT INTO zc_migs(name) VALUES('brian-idade-2610');
+END IF; END $$;
