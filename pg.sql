@@ -115,3 +115,11 @@ DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM zc_migs WHERE name='coates-tenaglia-2610
  UPDATE room_players SET club_id=358 WHERE player_id=240953;
  INSERT INTO zc_migs(name) VALUES('coates-tenaglia-2610');
 END IF; END $$;
+-- 26/10 (Robson, uma vez só): troca o substituto do Coates: Tenaglia volta ao D. Alavés (69); Otávio (ZAG, Paris FC) vai para o Universitario (358)
+DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM zc_migs WHERE name='otavio-2610') THEN
+ UPDATE lineups SET starters=array_remove(starters,240953),slotted=false WHERE club_id=358 AND 240953=ANY(starters);
+ UPDATE offers SET status='rejected' WHERE player_id=240953 AND status IN ('pending','countered','club_accepted');
+ UPDATE room_players SET club_id=69 WHERE player_id=240953 AND club_id=358;
+ UPDATE room_players SET club_id=358 WHERE player_id=275070;
+ INSERT INTO zc_migs(name) VALUES('otavio-2610');
+END IF; END $$;
