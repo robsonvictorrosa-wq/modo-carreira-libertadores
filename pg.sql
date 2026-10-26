@@ -99,3 +99,11 @@ UPDATE room_players r SET potential=v.pot FROM (VALUES(183898,82),(205632,78),(2
 ALTER TABLE rooms ADD COLUMN IF NOT EXISTS fixtures JSONB;
 
 ALTER TABLE auction_bid_log ADD COLUMN IF NOT EXISTS removed_at TIMESTAMPTZ;
+-- 26/10 (Robson, uma vez só): Armani volta ao Atlético Nacional (692); Lucas Perri (GOL, 76/80) entra no lugar dele no Indep. Santa Fe (676)
+DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM zc_migs WHERE name='armani-perri-2610') THEN
+ UPDATE room_players SET club_id=692,listed=false,shielded=false,shielded_at=NULL WHERE player_id=214584 AND club_id=676;
+ UPDATE lineups SET starters=array_remove(starters,214584),slotted=false WHERE club_id=676 AND 214584=ANY(starters);
+ UPDATE offers SET status='rejected' WHERE player_id=214584 AND status IN ('pending','countered','club_accepted');
+ INSERT INTO room_players(room_id,player_id,club_id,overall,potential,age) SELECT id,230670,676,76,80,28 FROM rooms ON CONFLICT(room_id,player_id) DO UPDATE SET club_id=676,overall=76,potential=80;
+ INSERT INTO zc_migs(name) VALUES('armani-perri-2610');
+END IF; END $$;

@@ -79,6 +79,10 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
   db.transaction(()=>{for(const a of SZ)n+=db.prepare('UPDATE players SET club_id=?,base_club_id=? WHERE id=?').run(a.club_id,a.club_id,a.player_id).changes;
    db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();})();
   console.log('Sorteio Libertadores ZC:',n,'jogadores movidos');}
+ // ===== 26/10 (Robson): Armani volta ao Atlético Nacional; Lucas Perri (GOL, 76/80) entra no lugar dele no Indep. Santa Fe =====
+ {db.prepare('UPDATE players SET club_id=692,base_club_id=692 WHERE id=214584').run();
+  db.prepare('UPDATE players SET club_id=676,base_club_id=676,overall=76,potential=80 WHERE id=230670').run();
+  db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();console.log('Armani/Perri ajustados');}
  // ===== Potenciais corrigidos (config/potenciais-zc.json, lista do Robson): só o potencial =====
  {const PZ=JSON.parse(fs.readFileSync(__dirname+'/config/potenciais-zc.json','utf8')).players;let n=0;
   for(const a of PZ)n+=db.prepare('UPDATE players SET potential=? WHERE id=?').run(a.potential,a.player_id).changes;
