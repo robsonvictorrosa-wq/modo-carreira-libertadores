@@ -229,7 +229,30 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    await c.query("UPDATE transfers SET status='cancelled',cancelled_by=$2,cancelled_at=now() WHERE id=$1",[t.id,r.user.nick]);
    await note(c,room.id,`↩️ ${r.user.nick} cancelou a transferência de ${desc(t)}: jogador voltou e valores devolvidos.`);});s.json({ok:1});}));
  app.get('/api/rooms/:code/zc/log',auth,wrap(async(r,s)=>{const room=await member(r);s.json(await q('SELECT id,text,created_at FROM room_events WHERE room_id=$1 ORDER BY id DESC LIMIT 150',[room.id]));}));
- // diagnóstico SÓ LEITURA (Kaiki Bruno): loga lances do lote, inclusive removidos
- setTimeout(async()=>{const c=await pool.connect();try{await c.query('BEGIN READ ONLY');const r=(await c.query("SELECT b.id,l.id lot,l.status,l.price,l.winner_club,b.club_id,b.amount,b.created_at,b.removed_at,b.user_id FROM auction_bid_log b JOIN auction_lots l ON l.id=b.lot_id WHERE l.player_id=ANY($1) ORDER BY b.id",[[...R.P.values()].filter(p=>/kaiki/i.test(p.name)).map(p=>p.id)])).rows;
-  for(const x of r)console.log('DIAGKAIKI',JSON.stringify({...x,club:cname(x.club_id),winner:cname(x.winner_club)}));console.log('DIAGKAIKI_END',r.length);await c.query('ROLLBACK');}catch(e){console.log('DIAGKAIKI_ERR',e.message);await c.query('ROLLBACK').catch(()=>{});}finally{c.release();}},15000);
+ // correção pontual (Robson 26/10): Kaiki Bruno (lote 5) vai do Santos (25,5 mi) para o Universitario (23,2 mi). Idempotente.
+ setTimeout(async()=>{const c=await pool.connect();try{await c.query('BEGIN');
+  const [l]=(await c.query("SELECT * FROM auction_lots WHERE id=5 AND status='sold' FOR UPDATE")).rows;
+  const SAN=L.CLUBS.find(id=>cname(id)==='Santos'),UNI=L.CLUBS.find(id=>/^universitario/i.test(cname(id)||''));
+  const OLD=25.5e6,FEE=23.2e6;const pn=l?pname(l.player_id):'';
+  if(!l||!/kaiki/i.test(pn)||l.winner_club!==SAN||+l.price!==OLD){console.log('FIXKAIKI_SKIP',JSON.stringify({lot:!!l,pn,w:l&&cname(l.winner_club),price:l&&+l.price}));await c.query('ROLLBACK');return;}
+  const room={id:l.room_id};const p=await R.player(c,l.room_id,l.player_id);
+  const [rc]=(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[l.room_id,UNI])).rows;const av=await avail(c,room,UNI);
+  const sqU=await R.squad(c,l.room_id,UNI,false),sqS=await R.squad(c,l.room_id,SAN,false);
+  const wonU=(await c.query("SELECT id FROM auction_lots WHERE room_id=$1 AND season=$2 AND status='sold' AND winner_club=$3 AND id<>$4",[l.room_id,l.season,UNI,l.id])).rows;
+  const [t]=(await c.query("SELECT id FROM transfers WHERE room_id=$1 AND player_id=$2 AND to_club=$3 AND fee=$4 AND kind='leilão' ORDER BY id DESC LIMIT 1",[l.room_id,l.player_id,SAN,OLD])).rows;
+  const info={uni:cname(UNI),uni_budget:+rc?.budget,uni_avail:av,uni_squad:sqU.length,san_squad:sqS.length,uni_other_wins:wonU.length,shielded:!!p?.shielded,club_now:cname(p?.club_id),transfer:!!t,from:cname(l.from_club),from_free:!!(R.isFree&&R.isFree(l.from_club))};
+  const bad=[];if(!UNI)bad.push('sem Universitario');if(p?.club_id!==SAN)bad.push('jogador não está no Santos');if(p?.shielded)bad.push('blindado');if(av+0<FEE)bad.push('Universitario sem caixa');if(sqU.length+1>32)bad.push('elenco Universitario cheio');if(sqS.length-1<11)bad.push('Santos abaixo do mínimo');if(wonU.length)bad.push('Universitario já levou outro lote');if(!t)bad.push('transferência não achada');
+  if(bad.length){console.log('FIXKAIKI_STOP',JSON.stringify({bad,...info}));await c.query('ROLLBACK');return;}
+  await c.query('UPDATE room_players SET club_id=$3 WHERE room_id=$1 AND player_id=$2',[l.room_id,l.player_id,UNI]);
+  await c.query('UPDATE lineups SET starters=NULL WHERE room_id=$1 AND club_id=$2 AND $3=ANY(starters)',[l.room_id,SAN,l.player_id]);
+  await c.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[l.room_id,SAN,OLD]);
+  await c.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[l.room_id,UNI,FEE]);
+  if(!info.from_free)await c.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[l.room_id,l.from_club,OLD-FEE]);
+  await c.query('UPDATE transfers SET to_club=$2,fee=$3 WHERE id=$1',[t.id,UNI,FEE]);
+  await c.query('UPDATE auction_lots SET winner_club=$2,price=$3 WHERE id=$1',[l.id,UNI,FEE]);
+  await c.query('DELETE FROM auction_bids WHERE lot_id=$1 AND club_id=$2',[l.id,SAN]);
+  await c.query('UPDATE auction_bid_log SET removed_at=now() WHERE lot_id=$1 AND club_id=$2 AND amount=$3 AND removed_at IS NULL',[l.id,SAN,OLD]);
+  await note(c,l.room_id,`⚖️ Correção da administração: ${pn} vai para o ${cname(UNI)} por € 23.2 mi (último lance do ${cname(UNI)}). O Santos recebeu de volta € 25.5 mi.`);
+  await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[l.room_id]);await c.query('COMMIT');console.log('FIXKAIKI_OK',JSON.stringify(info));
+ }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log('FIXKAIKI_ERR',e.message);}finally{c.release();}},15000);
 };
