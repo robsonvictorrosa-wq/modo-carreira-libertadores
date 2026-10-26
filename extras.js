@@ -144,7 +144,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  const AG=JSON.parse(require('fs').readFileSync(__dirname+'/config/agenda-zc.json','utf8'));
  async function agenda(){try{const [rm]=(await pool.query('SELECT * FROM rooms WHERE code=$1',[AG.room])).rows;if(!rm)return;const now=Date.now(),st=stOf(rm),state=stateOf(rm);
   if(st==='pre'&&state==='waiting'&&now>=Date.parse(AG.auction_start)&&now<Date.parse(AG.auction_close)){await calAction(rm,'auction_start','Agenda automática');await pool.query('UPDATE rooms SET version=version+1 WHERE id=$1',[rm.id]);console.log('agenda: leilão aberto');}
-  else if(st==='pre'&&state==='auction'&&now>=Date.parse(AG.auction_close)){await calAction(rm,'auction_close','Agenda automática');console.log('agenda: leilão fechado');}
+  else if(st==='pre'&&state==='auction'&&rm.auction_open&&now>=Date.parse(AG.auction_close)){await tx(rm,async c=>{const [x]=(await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[rm.id])).rows;if(!x.auction_open)return;await c.query('UPDATE rooms SET auction_open=false WHERE id=$1',[rm.id]);const n=await resolveAuction(c,{...x,auction_open:false});
+    await note(c,rm.id,`🔨 Leilão de pré-temporada encerrado: ${n} jogador(es) arrematado(s). O mercado abre ${M.brt(AG.market_open)} (horário de Brasília).`);});console.log('agenda: leilão fechado');}
+  else if(st==='pre'&&state==='auction'&&!rm.auction_open&&now>=Date.parse(AG.market_open)){await calAction(rm,'auction_close','Agenda automática');console.log('agenda: mercado aberto');}
   const [x]=(await pool.query('SELECT * FROM rooms WHERE id=$1',[rm.id])).rows;if(x.mkt_stage==='pre'&&x.mkt_state==='market'&&new Date(x.mkt_until).getTime()!==Date.parse(AG.market_close)){await pool.query('UPDATE rooms SET mkt_until=$2,version=version+1 WHERE id=$1',[x.id,AG.market_close]);console.log('agenda: fim do mercado ajustado');}
  }catch(e){console.error('agenda',e.message)}}
  setInterval(agenda,15000);setTimeout(agenda,3000);
