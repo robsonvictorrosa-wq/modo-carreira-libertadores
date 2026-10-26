@@ -65,7 +65,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  async function calInfo(db,room){const st=stOf(room),state=stateOf(room),c=CAL[st]||null;const [n]=(await db.query("SELECT count(*)::int n FROM auction_lots WHERE room_id=$1 AND season=$2 AND status='open'",[room.id,room.season])).rows;
   let excl=(room.auction_excl||[]),excl_preview=false;if(st==='pre'&&state==='waiting'){const k=room.id+':'+room.season,h=T5C.get(k);if(h&&h.t>Date.now()-60000)excl=h.v;else{excl=await top5(db,room);T5C.set(k,{t:Date.now(),v:excl});}excl_preview=true;}let next=null;if(state==='done'&&room.status==='season')next=st==='pre'?`Próximo: leilão após a rodada ${MID_ROUND}`:st==='mid'?'Próximo: leilão ao fim da fase de liga':'Sem mais janelas nesta temporada';
   return {stage:st,state,label:c?.label||null,mlabel:c?.mlabel||null,lots_max:c?.lots||0,hours:c?.hours||0,lots:n.n,until:state==='market'?new Date(room.mkt_until).toISOString():null,until_txt:state==='market'?M.brt(room.mkt_until):null,excl:st==='pre'?excl:[],excl_names:st==='pre'?excl.map(cname):[],excl_preview,next,mid_round:MID_ROUND,
-   blocks_rounds:room.status==='season'&&['waiting','auction','market'].includes(state)};}
+   auction_open:!!room.auction_open,blocks_rounds:room.status==='season'&&['waiting','auction','market'].includes(state)};}
  app.locals.canStart=async room=>{const s=stateOf(room);if(s==='auction')throw fail('O leilão de pré-temporada ainda está aberto. Encerre o leilão e espere o mercado fechar.');
   if(s==='market')throw fail(`O mercado da pré-temporada está aberto até ${M.brt(room.mkt_until)}. Espere fechar ou feche na Central.`);
   if(s==='waiting')throw fail('Primeiro faça o leilão de pré-temporada e o mercado (ou pule pela Central).');};
