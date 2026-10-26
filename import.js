@@ -83,6 +83,10 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
  {db.prepare('UPDATE players SET club_id=692,base_club_id=692 WHERE id=214584').run();
   db.prepare('UPDATE players SET club_id=676,base_club_id=676,overall=76,potential=80 WHERE id=230670').run();
   db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();console.log('Armani/Perri ajustados');}
+ // ===== 26/10 (Robson): Coates volta ao Nacional; Nahuel Tenaglia (ZAG, ex-Alavés) entra no lugar dele no Universitario =====
+ {db.prepare('UPDATE players SET club_id=774,base_club_id=774 WHERE id=197655').run();
+  db.prepare('UPDATE players SET club_id=358,base_club_id=358 WHERE id=240953').run();
+  db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();console.log('Coates/Tenaglia ajustados');}
  // ===== Potenciais corrigidos (config/potenciais-zc.json, lista do Robson): só o potencial =====
  {const PZ=JSON.parse(fs.readFileSync(__dirname+'/config/potenciais-zc.json','utf8')).players;let n=0;
   for(const a of PZ)n+=db.prepare('UPDATE players SET potential=? WHERE id=?').run(a.potential,a.player_id).changes;
