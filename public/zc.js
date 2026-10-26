@@ -17,7 +17,7 @@ async function ov(){OV=await get(R()+'/zc/overview');window.zOV=OV;return OV}
 function chrome(tab){const isAdm=OV?.admin;
  document.getElementById('ztabs').innerHTML=TABS.filter(t=>!t[3]||isAdm).map(t=>`<a href="#/${t[0]}" class="${t[0]===tab?'on':''}">${t[1]} ${t[2]}</a>`).join('');
  const on=document.querySelector('#ztabs a.on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});
- document.getElementById('zcrumb').innerHTML=ME?`<span>Zero Clubistas / <b style="color:#fff">Libertadores</b>${OV?.room?' · '+esc(OV.room.name):''}</span><span>${OV?(OV.admin?'Administrador':'Técnico'):'Técnico'} • ${esc(ME.nick)} · <a href="#" onclick="zSair();return false">Sair</a></span>`:'';}
+ document.getElementById('zcrumb').innerHTML=ME?`<span>Zero Clubistas / <b style="color:#fff">Libertadores</b>${OV?.room?' · '+esc(OV.room.name):''}</span><span>${OV?(OV.admin?'Administrador':'Técnico'):'Técnico'} • ${esc(ME.nick)} · <a href="#/ligas" style="opacity:.7">Trocar liga</a> · <a href="#" onclick="zSair();return false">Sair</a></span>`:'';}
 window.zSair=async()=>{try{await post('/auth/logout',{})}catch(e){}localStorage.removeItem('room');ROOM=null;ME=null;location.hash='#/';location.reload();};
 let LIGA=null;
 async function need(tab){if(window.zLastTab!==tab){window.zLastTab=tab;app.innerHTML='<div class="card empty" style="text-align:center;padding:28px">Carregando…</div>';}if(!ME&&!(await whoami())){chrome(tab);loginView(route);return false}
@@ -236,7 +236,9 @@ window.mercado=sub=>sub==='propostas'?(location.hash==='#/negociacoes'?negociaco
 const old=window.route;
 window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
  const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:zEscalacao,emprestimos:()=>location.hash='#/mercado',estatisticas,jogos:()=>jogos(m[2]),tabela,leilao,premiacoes,clubes,evolucao,central};
- if(['salas','sala','entrar','carreira',''].includes(t)&&t!=='')return location.hash='#/campeonato';
+ if(t==='ligas'){chrome('');return salas();}
+ const OKOLD=['jogo','matamata','bolao','historico','artilharia','como-funciona','clube'];
+ if(!map[t]&&!OKOLD.includes(t))return location.hash='#/campeonato';
  if(map[t]){const pr=map[t]();if(pr&&pr.catch)pr.catch(e=>{console.error(e);window.zFail&&zFail(e&&e.zNet?null:'Algo deu errado ao abrir esta tela: '+esc(e&&e.message||e))});return pr}
  chrome('');return old();};
 route=window.route;window.zBooted=true;
