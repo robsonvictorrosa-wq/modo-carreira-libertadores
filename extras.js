@@ -140,6 +140,14 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
     // só incrementa a versão se algo mudou (antes: +1 a cada 30 s, fazendo todo celular recarregar tudo e travando o servidor)
     if(ch)await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[x.id]);await c.query('COMMIT');if(!ch)sweepSkip.add(x.id);}catch(e){await c.query('ROLLBACK');console.error('sweep',e.message)}finally{c.release()}}}catch(e){console.error('sweep',e.message)}}
  setInterval(sweep,+process.env.SWEEP_MS||30000);setTimeout(sweep,5000);
+ // agenda automática (config/agenda-zc.json): desbloqueia o leilão, fecha o leilão (abre o mercado) e fixa o fim do mercado, mesmo sem ninguém online
+ const AG=JSON.parse(require('fs').readFileSync(__dirname+'/config/agenda-zc.json','utf8'));
+ async function agenda(){try{const [rm]=(await pool.query('SELECT * FROM rooms WHERE code=$1',[AG.room])).rows;if(!rm)return;const now=Date.now(),st=stOf(rm),state=stateOf(rm);
+  if(st==='pre'&&state==='waiting'&&now>=Date.parse(AG.auction_start)&&now<Date.parse(AG.auction_close)){await calAction(rm,'auction_start','Agenda automática');await pool.query('UPDATE rooms SET version=version+1 WHERE id=$1',[rm.id]);console.log('agenda: leilão aberto');}
+  else if(st==='pre'&&state==='auction'&&now>=Date.parse(AG.auction_close)){await calAction(rm,'auction_close','Agenda automática');console.log('agenda: leilão fechado');}
+  const [x]=(await pool.query('SELECT * FROM rooms WHERE id=$1',[rm.id])).rows;if(x.mkt_stage==='pre'&&x.mkt_state==='market'&&new Date(x.mkt_until).getTime()!==Date.parse(AG.market_close)){await pool.query('UPDATE rooms SET mkt_until=$2,version=version+1 WHERE id=$1',[x.id,AG.market_close]);console.log('agenda: fim do mercado ajustado');}
+ }catch(e){console.error('agenda',e.message)}}
+ setInterval(agenda,15000);setTimeout(agenda,3000);
  app.get('/api/rooms/:code/zc/loans',auth,wrap(async(r,s)=>{const room=await member(r);const comp=await comp0(pool,room);const cr=comp?.current_round||0;
   const rows=await q('SELECT player_id,club_id,loan_from,loan_until FROM room_players WHERE room_id=$1 AND loan_from IS NOT NULL',[room.id]);
   s.json(rows.filter(x=>L.CLUBS.includes(x.club_id)||L.CLUBS.includes(x.loan_from)).map(x=>({player_id:x.player_id,player:pname(x.player_id),pos:R.P.get(x.player_id)?.primary_position,overall:R.P.get(x.player_id)?.overall,to:cname(x.club_id),to_id:x.club_id,from:cname(x.loan_from),from_id:x.loan_from,loan_until:x.loan_until,remaining:x.loan_until==null?null:Math.max(0,x.loan_until-cr)})));}));
