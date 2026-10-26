@@ -10,7 +10,7 @@ module.exports=(app,uni)=>{
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
- const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(()=>purgeRooms());
+ const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(syncIdades).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
  // Migração única: primeiro leilão (config/leilao-pre.json) -> jogadores vão para o clube "Leilão ZC" com over/pot/idade do Robson e viram lotes do leilão de pré-temporada (bloqueado até um admin desbloquear)
  async function migLeilaoPre2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='leilao-pre-2610'")).rows.length)return;
@@ -33,6 +33,12 @@ module.exports=(app,uni)=>{
     console.log('leilao-pre-2610 sala',room.code,'lotes novos',lots,'saíram de clubes:',moved.join(', ')||'nenhum');}
    await c.query("INSERT INTO lib_migrations(name) VALUES('leilao-pre-2610')");await c.query('COMMIT');console.log('Migração leilao-pre-2610 OK',rooms.length,'sala(s)');}catch(e){await c.query('ROLLBACK');console.error('leilao-pre-2610',e)}finally{c.release()}}
  // Migração única: idade real (Transfermarkt) dos elencos brasileiros -> atualiza idade, potencial (34+ = over) e valor de mercado nas salas
+ // Idade = data de nascimento (roda a cada start e a cada 6h; só a coluna age, não mexe em over/potencial)
+ async function syncIdades(){try{const BD=require('./birth');BD.load(uni);const ids=(await pool.query('SELECT DISTINCT player_id FROM room_players')).rows.map(r=>r.player_id);
+  const u=ids.map(i=>[i,BD.ageOf(i)]).filter(x=>x[1]!=null);
+  const r=await pool.query('UPDATE room_players rp SET age=u.a FROM unnest($1::int[],$2::int[]) u(i,a) WHERE rp.player_id=u.i AND rp.age IS DISTINCT FROM u.a',[u.map(x=>x[0]),u.map(x=>x[1])]);
+  console.log('syncIdades OK',r.rowCount);}catch(e){console.error('syncIdades',e.message)}}
+ setInterval(()=>syncIdades(),6*3600e3).unref();
  async function migIdadesBR2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='idades-br-2610'")).rows.length)return;
   const ps=uni.prepare('SELECT id,age,potential,market_value FROM players WHERE id>=95000000 AND id<96000000').all();
   const c=await pool.connect();try{await c.query('BEGIN');
