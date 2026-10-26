@@ -72,3 +72,7 @@ ALTER TABLE lineups ADD COLUMN IF NOT EXISTS tactics JSONB;
 ALTER TABLE lineups ADD COLUMN IF NOT EXISTS takers JSONB;
 ALTER TABLE lineups ADD COLUMN IF NOT EXISTS slotted BOOLEAN NOT NULL DEFAULT false;
 ALTER TABLE room_players ADD COLUMN IF NOT EXISTS shielded BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE room_players ADD COLUMN IF NOT EXISTS shielded_at TIMESTAMPTZ;
+UPDATE room_players SET shielded_at=now() WHERE shielded AND shielded_at IS NULL;
+-- Blindagem: no máximo 3 por clube (mantém os 3 blindados primeiro)
+UPDATE room_players r SET shielded=false,shielded_at=NULL FROM (SELECT room_id,player_id,row_number() OVER (PARTITION BY room_id,club_id ORDER BY shielded_at,player_id) n FROM room_players WHERE shielded) x WHERE r.room_id=x.room_id AND r.player_id=x.player_id AND x.n>3;

@@ -244,11 +244,11 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  app.post('/api/rooms/:code/market/list/:pid',auth,wrap(async(r,s)=>{const room=await member(r);const cid=await myClub(pool,room,r.user.id);const p=await R.player(pool,room.id,+r.params.pid);if(p?.club_id!==cid)throw fail('Jogador não é seu');
   const want=r.body?.on!=null?!!r.body.on:!p.listed;
   await q('INSERT INTO room_players(room_id,player_id,club_id,listed,shielded) VALUES($1,$2,$3,$4,false) ON CONFLICT(room_id,player_id) DO UPDATE SET listed=$4,shielded=CASE WHEN $4 THEN false ELSE room_players.shielded END',[room.id,p.id,cid,want]);s.json({ok:1,listed:want});}));
- // Blindagem: até 5 por clube; blindado não recebe proposta. Ao blindar, propostas abertas por ele são recusadas (o dinheiro reservado volta ao comprador).
+ // Blindagem: até 3 por clube; blindado não recebe proposta. Ao blindar, propostas abertas por ele são recusadas (o dinheiro reservado volta ao comprador).
  app.post('/api/rooms/:code/market/shield/:pid',auth,wrap(async(r,s)=>s.json(await tx(async c=>{const room=await lockRoom(c,r);const cid=await myClub(c,room,r.user.id);const p=await R.player(c,room.id,+r.params.pid);if(p?.club_id!==cid)throw fail('Jogador não é seu');
   const want=r.body?.on!=null?!!r.body.on:!p.shielded;
-  if(want){const n=+(await c.query('SELECT count(*) n FROM room_players WHERE room_id=$1 AND club_id=$2 AND shielded AND player_id<>$3',[room.id,cid,p.id])).rows[0].n;if(n>=5)throw fail('Limite de 5 jogadores blindados. Desblinde outro antes.');}
-  await c.query('INSERT INTO room_players(room_id,player_id,club_id,shielded,listed) VALUES($1,$2,$3,$4,false) ON CONFLICT(room_id,player_id) DO UPDATE SET shielded=$4,listed=CASE WHEN $4 THEN false ELSE room_players.listed END',[room.id,p.id,cid,want]);
+  if(want){const n=+(await c.query('SELECT count(*) n FROM room_players WHERE room_id=$1 AND club_id=$2 AND shielded AND player_id<>$3',[room.id,cid,p.id])).rows[0].n;if(n>=3)throw fail('Limite de 3 jogadores blindados. Desblinde outro antes.');}
+  await c.query('INSERT INTO room_players(room_id,player_id,club_id,shielded,listed) VALUES($1,$2,$3,$4,false) ON CONFLICT(room_id,player_id) DO UPDATE SET shielded=$4,shielded_at=CASE WHEN $4 THEN coalesce(room_players.shielded_at,now()) ELSE NULL END,listed=CASE WHEN $4 THEN false ELSE room_players.listed END',[room.id,p.id,cid,want]);
   let cancelled=0;if(want){const o=await c.query(`UPDATE offers SET status='rejected' WHERE room_id=$1 AND player_id=$2 AND seller_club=$3 AND status IN ${OPEN} RETURNING id`,[room.id,p.id,cid]);cancelled=o.rowCount;
    if(cancelled)await note(c,room.id,`🛡️ ${p.name} foi blindado pelo ${clubName(cid)}: ${cancelled} proposta(s) recusada(s) e o dinheiro reservado voltou aos compradores.`);}
   return {ok:1,shielded:want,cancelled};}))));

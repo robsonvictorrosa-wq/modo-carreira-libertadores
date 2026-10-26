@@ -27,7 +27,7 @@ const FORMATIONS={};for(const k in FORMS)FORMATIONS[k]=counts(k);
 function fit1(pp,slot){if(!pp)return .8;if(pp===slot)return 1;if((pp==='GOL')!==(slot==='GOL'))return .45;
  if(slot==='VOL'&&pp==='MC')return 1;if((slot==='ADD'&&pp==='LD')||(slot==='ADE'&&pp==='LE')||(slot==='LD'&&pp==='ADD')||(slot==='LE'&&pp==='ADE'))return .99;
  const a=XY[pp]||[50,50],b=XY[slot]||[50,50];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);return Math.max(.7,1-d*.0042);}
-function fit(p,slot){let f=fit1(p.primary_position,slot);for(const q of (p.positions||[]))if(q!==p.primary_position)f=Math.max(f,fit1(q,slot)-.02);return f;}
+function fit(p,slot){let f=fit1(p.primary_position,slot);for(const q of (p.positions||[]))if(q!==p.primary_position)f=Math.max(f,fit1(q,slot));return f;}
 const val=(p,slot)=>(p.overall||50)*fit(p,slot);
 // distribui 11 jogadores nas vagas (guloso pela melhor combinação)
 function assign(xi,formation){const sl=FORMS[formation]||FORMS['4-3-3'];const pairs=[];sl.forEach((s,i)=>xi.forEach(p=>pairs.push([fit(p,s[0]),p.overall||50,i,p])));

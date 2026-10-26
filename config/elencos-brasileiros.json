@@ -12,7 +12,10 @@
       "birthdate": "2004-03-12",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "743586"
+      "tm_id": "743586",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Santos",
@@ -24,7 +27,10 @@
       "birthdate": "1990-03-17",
       "age": 36,
       "nationality": "Brasil",
-      "tm_id": "140811"
+      "tm_id": "140811",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Matheus Soares",
@@ -36,7 +42,10 @@
       "birthdate": "2005-01-10",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1122597"
+      "tm_id": "1122597",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Arthur Dias",
@@ -48,7 +57,11 @@
       "birthdate": "2007-04-10",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1233473"
+      "tm_id": "1233473",
+      "positions_sofascore": [
+        "ZAG",
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Carlos Terán",
@@ -60,7 +73,11 @@
       "birthdate": "2000-09-24",
       "age": 26,
       "nationality": "Colômbia",
-      "tm_id": "649184"
+      "tm_id": "649184",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Juan Felipe Aguirre",
@@ -72,7 +89,10 @@
       "birthdate": "1996-08-29",
       "age": 30,
       "nationality": "Colômbia",
-      "tm_id": "570521"
+      "tm_id": "570521",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Léo",
@@ -84,7 +104,10 @@
       "birthdate": "1996-03-06",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "403296"
+      "tm_id": "403296",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Dantas",
@@ -96,7 +119,11 @@
       "birthdate": "2004-07-25",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1093926"
+      "tm_id": "1093926",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Lucas Esquivel",
@@ -108,7 +135,11 @@
       "birthdate": "2001-10-14",
       "age": 25,
       "nationality": "Argentina",
-      "tm_id": "829969"
+      "tm_id": "829969",
+      "positions_sofascore": [
+        "LE",
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Léo Derik",
@@ -120,7 +151,10 @@
       "birthdate": "2005-07-24",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1052819"
+      "tm_id": "1052819",
+      "positions_sofascore": [
+        "ME"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Claudinho",
@@ -132,7 +166,10 @@
       "birthdate": "2005-10-26",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1223243"
+      "tm_id": "1223243",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Gastón Benavídez",
@@ -144,7 +181,11 @@
       "birthdate": "1995-10-23",
       "age": 31,
       "nationality": "Argentina",
-      "tm_id": "696719"
+      "tm_id": "696719",
+      "positions_sofascore": [
+        "LD",
+        "MD"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Gilberto Junior",
@@ -156,7 +197,10 @@
       "birthdate": "2005-03-27",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1093864"
+      "tm_id": "1093864",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Gilberto",
@@ -168,7 +212,10 @@
       "birthdate": "1993-03-07",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "231614"
+      "tm_id": "231614",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Diogo Riquelme",
@@ -180,7 +227,10 @@
       "birthdate": "2005-04-23",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1221388"
+      "tm_id": "1221388",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Luiz Gustavo",
@@ -192,7 +242,11 @@
       "birthdate": "1987-07-23",
       "age": 39,
       "nationality": "Brasil",
-      "tm_id": "10471"
+      "tm_id": "10471",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:João Cruz",
@@ -204,7 +258,10 @@
       "birthdate": "2006-05-12",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1004738"
+      "tm_id": "1004738",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Juan Portilla",
@@ -216,7 +273,11 @@
       "birthdate": "1998-09-12",
       "age": 28,
       "nationality": "Colômbia",
-      "tm_id": "585747"
+      "tm_id": "585747",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Felipinho",
@@ -228,7 +289,11 @@
       "birthdate": "2001-10-18",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "1115489"
+      "tm_id": "1115489",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Jádson",
@@ -240,7 +305,11 @@
       "birthdate": "1993-08-30",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "205179"
+      "tm_id": "205179",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Alejandro García",
@@ -252,7 +321,11 @@
       "birthdate": "2001-02-28",
       "age": 25,
       "nationality": "Colômbia",
-      "tm_id": "632246"
+      "tm_id": "632246",
+      "positions_sofascore": [
+        "MEI",
+        "MC"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Dudu",
@@ -264,7 +337,10 @@
       "birthdate": "2006-01-01",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1004728"
+      "tm_id": "1004728",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Bruno Zapelli",
@@ -276,7 +352,11 @@
       "birthdate": "2002-05-16",
       "age": 24,
       "nationality": "Argentina",
-      "tm_id": "711600"
+      "tm_id": "711600",
+      "positions_sofascore": [
+        "MEI",
+        "MC"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Chiqueti",
@@ -288,7 +368,10 @@
       "birthdate": "2005-09-02",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1094387"
+      "tm_id": "1094387",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Stiven Mendoza",
@@ -312,7 +395,11 @@
       "birthdate": "2002-01-02",
       "age": 24,
       "nationality": "Colômbia",
-      "tm_id": "907649"
+      "tm_id": "907649",
+      "positions_sofascore": [
+        "PD",
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Leozinho",
@@ -324,7 +411,10 @@
       "birthdate": "1998-12-05",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "1110658"
+      "tm_id": "1110658",
+      "positions_sofascore": [
+        "MD"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Kevin Viveros",
@@ -336,7 +426,10 @@
       "birthdate": "2000-04-26",
       "age": 26,
       "nationality": "Colômbia",
-      "tm_id": "580461"
+      "tm_id": "580461",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Jorge Rivaldo",
@@ -348,7 +441,10 @@
       "birthdate": "2003-09-28",
       "age": 23,
       "nationality": "Colômbia",
-      "tm_id": "1071293"
+      "tm_id": "1071293",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Renan Peixoto",
@@ -360,7 +456,10 @@
       "birthdate": "2000-02-21",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "883623"
+      "tm_id": "883623",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Athletico-PR:Renan Viana",
@@ -384,7 +483,10 @@
       "birthdate": "1996-08-22",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "387925"
+      "tm_id": "387925",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Guido Herrera",
@@ -396,7 +498,10 @@
       "birthdate": "1992-02-29",
       "age": 34,
       "nationality": "Argentina",
-      "tm_id": "230014"
+      "tm_id": "230014",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Bahia:Léo Vieira",
@@ -408,7 +513,10 @@
       "birthdate": "1990-09-22",
       "age": 36,
       "nationality": "Brasil",
-      "tm_id": "67144"
+      "tm_id": "67144",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Bahia:Victor",
@@ -432,7 +540,10 @@
       "birthdate": "1997-03-07",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "524446"
+      "tm_id": "524446",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v6:Bahia:David Duarte",
@@ -444,7 +555,10 @@
       "birthdate": "1995-01-24",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "373446"
+      "tm_id": "373446",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Marco Moreno",
@@ -456,7 +570,10 @@
       "birthdate": "2001-02-20",
       "age": 25,
       "nationality": "Espanha",
-      "tm_id": "534376"
+      "tm_id": "534376",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Luiz Gustavo",
@@ -468,7 +585,10 @@
       "birthdate": "2006-04-12",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1220468"
+      "tm_id": "1220468",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Marcos Victor",
@@ -480,7 +600,10 @@
       "birthdate": "2001-12-26",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "980463"
+      "tm_id": "980463",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Bahia:Fredi Gomes",
@@ -492,7 +615,10 @@
       "birthdate": "2006-05-23",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1254082"
+      "tm_id": "1254082",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "cbf2026:Bahia:Luciano Juba",
@@ -504,7 +630,10 @@
       "birthdate": "1999-08-29",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "676035"
+      "tm_id": "676035",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Zé Guilherme",
@@ -516,7 +645,10 @@
       "birthdate": "2005-03-16",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1084816"
+      "tm_id": "1084816",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Roman Gomez",
@@ -528,7 +660,10 @@
       "birthdate": "2004-07-14",
       "age": 22,
       "nationality": "Argentina",
-      "tm_id": "1241022"
+      "tm_id": "1241022",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Nicolás Acevedo",
@@ -540,7 +675,11 @@
       "birthdate": "1999-04-14",
       "age": 27,
       "nationality": "Uruguai",
-      "tm_id": "625569"
+      "tm_id": "625569",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Caio Alexandre",
@@ -552,7 +691,11 @@
       "birthdate": "1999-02-24",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "727751"
+      "tm_id": "727751",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Erick",
@@ -564,7 +707,11 @@
       "birthdate": "1997-11-14",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "633212"
+      "tm_id": "633212",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Lautaro Lopez",
@@ -576,7 +723,10 @@
       "birthdate": "2005-03-30",
       "age": 21,
       "nationality": "Argentina",
-      "tm_id": "1036450"
+      "tm_id": "1036450",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Jean Lucas",
@@ -588,7 +738,10 @@
       "birthdate": "1998-06-22",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "578872"
+      "tm_id": "578872",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Rodrigo Nestor",
@@ -600,7 +753,11 @@
       "birthdate": "2000-08-09",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "468304"
+      "tm_id": "468304",
+      "positions_sofascore": [
+        "MC",
+        "PE"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Everton Ribeiro",
@@ -612,7 +769,11 @@
       "birthdate": "1989-04-10",
       "age": 37,
       "nationality": "Brasil",
-      "tm_id": "52896"
+      "tm_id": "52896",
+      "positions_sofascore": [
+        "MC",
+        "MEI"
+      ]
     },
     {
       "id": "br2026v6:Bahia:David Martins",
@@ -624,7 +785,10 @@
       "birthdate": "2007-09-15",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1255012"
+      "tm_id": "1255012",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "tm2026:Bahia:Roger Gabriel",
@@ -636,7 +800,10 @@
       "birthdate": "2007-02-12",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1044131"
+      "tm_id": "1044131",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Bahia:Erick Pulga",
@@ -648,7 +815,10 @@
       "birthdate": "2000-10-02",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "936544"
+      "tm_id": "936544",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Bahia:Ruan Pablo",
@@ -660,7 +830,10 @@
       "birthdate": "2008-07-23",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1220614"
+      "tm_id": "1220614",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Bahia:Mateo Sanabria",
@@ -672,7 +845,10 @@
       "birthdate": "2004-03-31",
       "age": 22,
       "nationality": "Argentina",
-      "tm_id": "984480"
+      "tm_id": "984480",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Bahia:Cristian Olivera",
@@ -684,7 +860,10 @@
       "birthdate": "2002-04-17",
       "age": 24,
       "nationality": "Uruguai",
-      "tm_id": "657746"
+      "tm_id": "657746",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Kauê Furquim",
@@ -696,7 +875,10 @@
       "birthdate": "2009-02-27",
       "age": 17,
       "nationality": "Brasil",
-      "tm_id": "1423021"
+      "tm_id": "1423021",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Bahia:Michel Araújo",
@@ -708,7 +890,11 @@
       "birthdate": "1996-09-28",
       "age": 30,
       "nationality": "Uruguai",
-      "tm_id": "482144"
+      "tm_id": "482144",
+      "positions_sofascore": [
+        "PE",
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Bahia:Ademir",
@@ -720,7 +906,10 @@
       "birthdate": "1995-02-16",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "544259"
+      "tm_id": "544259",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Alejo Véliz",
@@ -732,7 +921,10 @@
       "birthdate": "2003-09-19",
       "age": 23,
       "nationality": "Argentina",
-      "tm_id": "888493"
+      "tm_id": "888493",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Bahia:Dell",
@@ -744,7 +936,10 @@
       "birthdate": "2008-06-09",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1328021"
+      "tm_id": "1328021",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Willian José",
@@ -756,7 +951,10 @@
       "birthdate": "1991-11-23",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "122155"
+      "tm_id": "122155",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v6:Bahia:Everaldo",
@@ -768,7 +966,10 @@
       "birthdate": "1991-07-05",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "205041"
+      "tm_id": "205041",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Gabriel Delfim:1",
@@ -780,7 +981,10 @@
       "birthdate": "2002-07-10",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "978121"
+      "tm_id": "978121",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Everson:22",
@@ -792,7 +996,10 @@
       "birthdate": "1990-07-22",
       "age": 36,
       "nationality": "Brasil",
-      "tm_id": "106032"
+      "tm_id": "106032",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Pedro Cobra:46",
@@ -804,7 +1011,10 @@
       "birthdate": "2006-05-15",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1193865"
+      "tm_id": "1193865",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Robert:31",
@@ -816,7 +1026,10 @@
       "birthdate": "2005-02-03",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1124553"
+      "tm_id": "1124553",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Lyanco:13",
@@ -828,7 +1041,10 @@
       "birthdate": "1997-02-01",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "379807"
+      "tm_id": "379807",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Ruan:4",
@@ -840,7 +1056,10 @@
       "birthdate": "1999-06-07",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "555015"
+      "tm_id": "555015",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Léo Duarte:3",
@@ -852,7 +1071,11 @@
       "birthdate": "1996-07-17",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "312678"
+      "tm_id": "312678",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Vitão:40",
@@ -864,7 +1087,10 @@
       "birthdate": "2008-03-04",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1355486"
+      "tm_id": "1355486",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Vitor Hugo:14",
@@ -876,7 +1102,10 @@
       "birthdate": "1991-05-20",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "149752"
+      "tm_id": "149752",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Renan Lodi:6",
@@ -888,7 +1117,10 @@
       "birthdate": "1998-04-08",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "476352"
+      "tm_id": "476352",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Kauã Pascini:36",
@@ -900,7 +1132,10 @@
       "birthdate": "2008-03-05",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1355484"
+      "tm_id": "1355484",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Natanael:2",
@@ -912,7 +1147,10 @@
       "birthdate": "2002-01-05",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "740295"
+      "tm_id": "740295",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Ángelo Preciado:23",
@@ -924,7 +1162,11 @@
       "birthdate": "1998-02-18",
       "age": 28,
       "nationality": "Equador",
-      "tm_id": "450241"
+      "tm_id": "450241",
+      "positions_sofascore": [
+        "MD",
+        "LD"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Alexsander:5",
@@ -936,7 +1178,11 @@
       "birthdate": "2003-10-08",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "997714"
+      "tm_id": "997714",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Kevin Castaño:15",
@@ -948,7 +1194,11 @@
       "birthdate": "2000-09-29",
       "age": 26,
       "nationality": "Colômbia",
-      "tm_id": "857948"
+      "tm_id": "857948",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Tomás Pérez:25",
@@ -960,7 +1210,11 @@
       "birthdate": "2005-08-26",
       "age": 21,
       "nationality": "Argentina",
-      "tm_id": "1152154"
+      "tm_id": "1152154",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Victor Hugo:30",
@@ -972,7 +1226,11 @@
       "birthdate": "2004-05-11",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "749559"
+      "tm_id": "749559",
+      "positions_sofascore": [
+        "MC",
+        "MEI"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Fred:7",
@@ -984,7 +1242,12 @@
       "birthdate": "1993-03-05",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "191614"
+      "tm_id": "191614",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "MEI"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Alan Franco:21",
@@ -996,7 +1259,11 @@
       "birthdate": "1998-08-21",
       "age": 28,
       "nationality": "Equador",
-      "tm_id": "400960"
+      "tm_id": "400960",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Mamady Cissé:39",
@@ -1008,7 +1275,10 @@
       "birthdate": "2007-07-01",
       "age": 19,
       "nationality": "Guiné",
-      "tm_id": "1410674"
+      "tm_id": "1410674",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Maycon:8",
@@ -1020,7 +1290,11 @@
       "birthdate": "1997-07-15",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "421935"
+      "tm_id": "421935",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Índio:38",
@@ -1032,7 +1306,10 @@
       "birthdate": "2008-04-03",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1339551"
+      "tm_id": "1339551",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Gustavo Scarpa:10",
@@ -1044,7 +1321,11 @@
       "birthdate": "1994-01-05",
       "age": 32,
       "nationality": "Brasil",
-      "tm_id": "330085"
+      "tm_id": "330085",
+      "positions_sofascore": [
+        "MD",
+        "MEI"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Reinier:19",
@@ -1056,7 +1337,11 @@
       "birthdate": "2002-01-19",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "627226"
+      "tm_id": "627226",
+      "positions_sofascore": [
+        "MEI",
+        "ATA"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Igor Gomes:17",
@@ -1068,7 +1353,12 @@
       "birthdate": "1999-03-17",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "553459"
+      "tm_id": "553459",
+      "positions_sofascore": [
+        "MC",
+        "MEI",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Tomás Cuello:28",
@@ -1080,7 +1370,11 @@
       "birthdate": "2000-03-05",
       "age": 26,
       "nationality": "Argentina",
-      "tm_id": "503052"
+      "tm_id": "503052",
+      "positions_sofascore": [
+        "PD",
+        "PE"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Dudu:92",
@@ -1092,7 +1386,10 @@
       "birthdate": "1992-01-07",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "114937"
+      "tm_id": "114937",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Alan Minda:27",
@@ -1104,7 +1401,10 @@
       "birthdate": "2003-05-14",
       "age": 23,
       "nationality": "Equador",
-      "tm_id": "897051"
+      "tm_id": "897051",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Mateo Cassierra:9",
@@ -1116,7 +1416,10 @@
       "birthdate": "1997-04-13",
       "age": 29,
       "nationality": "Colômbia",
-      "tm_id": "362667"
+      "tm_id": "362667",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Thiago Borbas:18",
@@ -1128,7 +1431,10 @@
       "birthdate": "2002-04-07",
       "age": 24,
       "nationality": "Uruguai",
-      "tm_id": "743951"
+      "tm_id": "743951",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Cauã Soares:29",
@@ -1140,7 +1446,10 @@
       "birthdate": "2008-06-30",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1365061"
+      "tm_id": "1365061",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Bernard:11",
@@ -1152,7 +1461,11 @@
       "birthdate": "1992-09-08",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "175169"
+      "tm_id": "175169",
+      "positions_sofascore": [
+        "MEI",
+        "PE"
+      ]
     },
     {
       "id": "print2026:Atlético-MG:Gabriel Veneno:U17",
@@ -1176,7 +1489,10 @@
       "birthdate": "1998-06-03",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "401535"
+      "tm_id": "401535",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Warleson:17",
@@ -1188,7 +1504,10 @@
       "birthdate": "1996-08-31",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "477460"
+      "tm_id": "477460",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Cristhian Loor:40",
@@ -1200,7 +1519,10 @@
       "birthdate": "2006-03-09",
       "age": 20,
       "nationality": "Equador",
-      "tm_id": "1074501"
+      "tm_id": "1074501",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Arthur Chaves:3",
@@ -1212,7 +1534,11 @@
       "birthdate": "2001-01-29",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "875332"
+      "tm_id": "875332",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Nahuel Ferraresi:5",
@@ -1224,7 +1550,11 @@
       "birthdate": "1998-11-19",
       "age": 27,
       "nationality": "Venezuela",
-      "tm_id": "466336"
+      "tm_id": "466336",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Kaio:31",
@@ -1236,7 +1566,10 @@
       "birthdate": "1995-09-18",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "523363"
+      "tm_id": "523363",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Lucas Monzón:33",
@@ -1248,7 +1581,10 @@
       "birthdate": "2001-09-29",
       "age": 25,
       "nationality": "Uruguai",
-      "tm_id": "796973"
+      "tm_id": "796973",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Gabriel Justino:34",
@@ -1260,7 +1596,10 @@
       "birthdate": "2006-04-16",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1127043"
+      "tm_id": "1127043",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Anthony:26",
@@ -1272,7 +1611,10 @@
       "birthdate": "2005-07-12",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1092623"
+      "tm_id": "1092623",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Kawan:sem-numero",
@@ -1284,7 +1626,10 @@
       "birthdate": "2003-04-10",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "996691"
+      "tm_id": "996691",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Alex Telles:13",
@@ -1296,7 +1641,10 @@
       "birthdate": "1992-12-15",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "255755"
+      "tm_id": "255755",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Paulinho:29",
@@ -1308,7 +1656,10 @@
       "birthdate": "1995-01-03",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "520492"
+      "tm_id": "520492",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Marçal:21",
@@ -1320,7 +1671,10 @@
       "birthdate": "1989-02-19",
       "age": 37,
       "nationality": "Brasil",
-      "tm_id": "137745"
+      "tm_id": "137745",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Jhoan Hernández:67",
@@ -1332,7 +1686,10 @@
       "birthdate": "2006-02-20",
       "age": 20,
       "nationality": "Colômbia",
-      "tm_id": "1112486"
+      "tm_id": "1112486",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Vitinho:2",
@@ -1344,7 +1701,10 @@
       "birthdate": "1999-07-23",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "468249"
+      "tm_id": "468249",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Mateo Ponte:4",
@@ -1356,7 +1716,10 @@
       "birthdate": "2003-05-24",
       "age": 23,
       "nationality": "Uruguai",
-      "tm_id": "856047"
+      "tm_id": "856047",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Kadu Santos:42",
@@ -1368,7 +1731,10 @@
       "birthdate": "2005-08-16",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1095624"
+      "tm_id": "1095624",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Huguinho:75",
@@ -1380,7 +1746,10 @@
       "birthdate": "2007-06-04",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1364573"
+      "tm_id": "1364573",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Domingos Andrade:91",
@@ -1392,7 +1761,11 @@
       "birthdate": "2003-05-07",
       "age": 23,
       "nationality": "Angola",
-      "tm_id": "666541"
+      "tm_id": "666541",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Allan:25",
@@ -1404,7 +1777,11 @@
       "birthdate": "1991-01-08",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "126422"
+      "tm_id": "126422",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Wallace Davi:55",
@@ -1416,7 +1793,10 @@
       "birthdate": "2007-05-10",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1279908"
+      "tm_id": "1279908",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Danilo:8",
@@ -1440,7 +1820,11 @@
       "birthdate": "2002-06-01",
       "age": 24,
       "nationality": "Argentina",
-      "tm_id": "661133"
+      "tm_id": "661133",
+      "positions_sofascore": [
+        "MC",
+        "MEI"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Edenílson:88",
@@ -1452,7 +1836,11 @@
       "birthdate": "1989-12-18",
       "age": 36,
       "nationality": "Brasil",
-      "tm_id": "169052"
+      "tm_id": "169052",
+      "positions_sofascore": [
+        "MEI",
+        "MC"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Jordan Barrera:14",
@@ -1464,7 +1852,10 @@
       "birthdate": "2006-04-11",
       "age": 20,
       "nationality": "Colômbia",
-      "tm_id": "1087334"
+      "tm_id": "1087334",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Álvaro Montoro:10",
@@ -1476,7 +1867,11 @@
       "birthdate": "2007-04-17",
       "age": 19,
       "nationality": "Argentina",
-      "tm_id": "1228194"
+      "tm_id": "1228194",
+      "positions_sofascore": [
+        "PE",
+        "MEI"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Matheus Martins:11",
@@ -1488,7 +1883,11 @@
       "birthdate": "2003-07-16",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "668228"
+      "tm_id": "668228",
+      "positions_sofascore": [
+        "PE",
+        "PD"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Júnior Santos:7",
@@ -1500,7 +1899,11 @@
       "birthdate": "1994-10-11",
       "age": 32,
       "nationality": "Brasil",
-      "tm_id": "592347"
+      "tm_id": "592347",
+      "positions_sofascore": [
+        "PD",
+        "ATA"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Hakim Ziyech:22",
@@ -1512,7 +1915,11 @@
       "birthdate": "1993-03-19",
       "age": 33,
       "nationality": "Marrocos",
-      "tm_id": "217111"
+      "tm_id": "217111",
+      "positions_sofascore": [
+        "PD",
+        "MEI"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Lucas Villalba:77",
@@ -1524,7 +1931,10 @@
       "birthdate": "2001-05-11",
       "age": 25,
       "nationality": "Uruguai",
-      "tm_id": "874844"
+      "tm_id": "874844",
+      "positions_sofascore": [
+        "MD"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Kauan Toledo:59",
@@ -1536,7 +1946,10 @@
       "birthdate": "2006-04-15",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1096605"
+      "tm_id": "1096605",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Arthur Cabral:19",
@@ -1548,7 +1961,10 @@
       "birthdate": "1998-04-25",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "390638"
+      "tm_id": "390638",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Kadir Barría:37",
@@ -1560,7 +1976,10 @@
       "birthdate": "2007-07-18",
       "age": 19,
       "nationality": "Panamá",
-      "tm_id": "1464878"
+      "tm_id": "1464878",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Lucas Emanuel:79",
@@ -1572,7 +1991,10 @@
       "birthdate": "2009-06-03",
       "age": 17,
       "nationality": "Brasil",
-      "tm_id": "1568045"
+      "tm_id": "1568045",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Danilo:90",
@@ -1584,7 +2006,10 @@
       "birthdate": "1999-04-07",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "519731"
+      "tm_id": "519731",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v8:Botafogo:Tiquinho Soares:9",
@@ -1596,7 +2021,10 @@
       "birthdate": "1991-01-17",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "103381"
+      "tm_id": "103381",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Hugo Souza:1",
@@ -1608,7 +2036,10 @@
       "birthdate": "1999-01-31",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "574901"
+      "tm_id": "574901",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Kauê:51",
@@ -1620,7 +2051,10 @@
       "birthdate": "2004-02-08",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1005653"
+      "tm_id": "1005653",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Felipe Longo:40",
@@ -1632,7 +2066,10 @@
       "birthdate": "2005-03-05",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1005656"
+      "tm_id": "1005656",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:João Pedro Tchoça:4",
@@ -1644,7 +2081,10 @@
       "birthdate": "2003-12-31",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1005650"
+      "tm_id": "1005650",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Iago Machado:55",
@@ -1656,7 +2096,10 @@
       "birthdate": "2009-02-17",
       "age": 17,
       "nationality": "Brasil",
-      "tm_id": "1497709"
+      "tm_id": "1497709",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:André Ramalho:5",
@@ -1668,7 +2111,10 @@
       "birthdate": "1992-02-16",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "175792"
+      "tm_id": "175792",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Gustavo Henrique:13",
@@ -1680,7 +2126,10 @@
       "birthdate": "1993-03-24",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "208681"
+      "tm_id": "208681",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Gabriel Paulista:3",
@@ -1692,7 +2141,10 @@
       "birthdate": "1990-11-26",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "149498"
+      "tm_id": "149498",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Renato Santos:sem-numero",
@@ -1704,7 +2156,10 @@
       "birthdate": "2004-10-11",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "743831"
+      "tm_id": "743831",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Matheus Bidu:21",
@@ -1716,7 +2171,10 @@
       "birthdate": "1999-05-04",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "670021"
+      "tm_id": "670021",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Hugo:46",
@@ -1728,7 +2186,10 @@
       "birthdate": "1997-08-29",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "730708"
+      "tm_id": "730708",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Fabrizio Angileri:sem-numero",
@@ -1740,7 +2201,10 @@
       "birthdate": "1994-03-15",
       "age": 32,
       "nationality": "Argentina",
-      "tm_id": "268506"
+      "tm_id": "268506",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Matheuzinho:2",
@@ -1752,7 +2216,10 @@
       "birthdate": "2000-09-08",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "594226"
+      "tm_id": "594226",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Pedro Milans:20",
@@ -1764,7 +2231,10 @@
       "birthdate": "2002-03-24",
       "age": 24,
       "nationality": "Uruguai",
-      "tm_id": "657743"
+      "tm_id": "657743",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Léo Mana:sem-numero",
@@ -1776,7 +2246,10 @@
       "birthdate": "2004-04-06",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "838387"
+      "tm_id": "838387",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Raniele:14",
@@ -1788,7 +2261,11 @@
       "birthdate": "1996-12-31",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "546530"
+      "tm_id": "546530",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Allan:29",
@@ -1800,7 +2277,11 @@
       "birthdate": "1997-03-03",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "385271"
+      "tm_id": "385271",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Charles:35",
@@ -1812,7 +2293,11 @@
       "birthdate": "1996-06-19",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "486078"
+      "tm_id": "486078",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Breno Bidon:7",
@@ -1824,7 +2309,10 @@
       "birthdate": "2005-02-20",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1029227"
+      "tm_id": "1029227",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:André:49",
@@ -1836,7 +2324,10 @@
       "birthdate": "2006-06-20",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1221818"
+      "tm_id": "1221818",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Matheus Pereira:23",
@@ -1848,7 +2339,11 @@
       "birthdate": "1998-02-25",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "323934"
+      "tm_id": "323934",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Alex Santana:80",
@@ -1860,7 +2355,11 @@
       "birthdate": "1995-05-13",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "219835"
+      "tm_id": "219835",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:André Carrillo:19",
@@ -1872,7 +2371,10 @@
       "birthdate": "1991-06-14",
       "age": 35,
       "nationality": "Peru",
-      "tm_id": "135057"
+      "tm_id": "135057",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Bahia:54",
@@ -1896,7 +2398,10 @@
       "birthdate": "1998-01-04",
       "age": 28,
       "nationality": "Argentina",
-      "tm_id": "565009"
+      "tm_id": "565009",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Jesse Lingard:77",
@@ -1908,7 +2413,11 @@
       "birthdate": "1992-12-15",
       "age": 33,
       "nationality": "Inglaterra",
-      "tm_id": "141660"
+      "tm_id": "141660",
+      "positions_sofascore": [
+        "ATA",
+        "MEI"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Zakaria Labyad:52",
@@ -1920,7 +2429,10 @@
       "birthdate": "1993-03-09",
       "age": 33,
       "nationality": "Marrocos",
-      "tm_id": "123349"
+      "tm_id": "123349",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Kayke:31",
@@ -1932,7 +2444,10 @@
       "birthdate": "2004-04-28",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1082700"
+      "tm_id": "1082700",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Vitinho:11",
@@ -1944,7 +2459,12 @@
       "birthdate": "1993-10-09",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "213605"
+      "tm_id": "213605",
+      "positions_sofascore": [
+        "PE",
+        "MEI",
+        "ATA"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Kaio César:37",
@@ -1956,7 +2476,10 @@
       "birthdate": "2004-02-15",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "766258"
+      "tm_id": "766258",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Dieguinho:61",
@@ -1968,7 +2491,10 @@
       "birthdate": "2007-09-16",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1257132"
+      "tm_id": "1257132",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Yuri Alberto:9",
@@ -1980,7 +2506,10 @@
       "birthdate": "2001-03-18",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "489893"
+      "tm_id": "489893",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Memphis Depay:10",
@@ -1992,7 +2521,10 @@
       "birthdate": "1994-02-13",
       "age": 32,
       "nationality": "Países Baixos",
-      "tm_id": "167850"
+      "tm_id": "167850",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Gui Negão:56",
@@ -2004,7 +2536,10 @@
       "birthdate": "2007-02-06",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1257133"
+      "tm_id": "1257133",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v11:Corinthians:Pedro Raul:18",
@@ -2016,7 +2551,10 @@
       "birthdate": "1996-11-05",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "547443"
+      "tm_id": "547443",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v10:Chapecoense:Anderson:98",
@@ -2588,7 +3126,10 @@
       "birthdate": "1995-03-20",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "288415"
+      "tm_id": "288415",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Vasco:Daniel Fuzato",
@@ -2600,7 +3141,10 @@
       "birthdate": "1997-07-04",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "438682"
+      "tm_id": "438682",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Vasco:Pablo",
@@ -2624,7 +3168,11 @@
       "birthdate": "2003-10-11",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "958598"
+      "tm_id": "958598",
+      "positions_sofascore": [
+        "ZAG",
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Carlos Cuesta",
@@ -2636,7 +3184,10 @@
       "birthdate": "1999-03-09",
       "age": 27,
       "nationality": "Colômbia",
-      "tm_id": "474589"
+      "tm_id": "474589",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Vasco:Gabriel Pereira",
@@ -2648,7 +3199,10 @@
       "birthdate": "2000-05-07",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "742095"
+      "tm_id": "742095",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Vasco:Lucas Freitas",
@@ -2660,7 +3214,10 @@
       "birthdate": "2001-01-20",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "809716"
+      "tm_id": "809716",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Vasco:Alan Saldivia",
@@ -2672,7 +3229,11 @@
       "birthdate": "2002-04-06",
       "age": 24,
       "nationality": "Uruguai",
-      "tm_id": "989455"
+      "tm_id": "989455",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Vasco:Walace Falcão",
@@ -2684,7 +3245,10 @@
       "birthdate": "2005-03-07",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1221660"
+      "tm_id": "1221660",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Vasco:Cuiabano",
@@ -2696,7 +3260,10 @@
       "birthdate": "2003-02-16",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "891353"
+      "tm_id": "891353",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Lucas Piton",
@@ -2708,7 +3275,10 @@
       "birthdate": "2000-10-09",
       "age": 26,
       "nationality": "Itália",
-      "tm_id": "670201"
+      "tm_id": "670201",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Riquelme",
@@ -2720,7 +3290,10 @@
       "birthdate": "2002-08-28",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "643119"
+      "tm_id": "643119",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Paulinho",
@@ -2732,7 +3305,10 @@
       "birthdate": "2004-06-29",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1082692"
+      "tm_id": "1082692",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Paulo Henrique",
@@ -2744,7 +3320,10 @@
       "birthdate": "1996-07-25",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "412594"
+      "tm_id": "412594",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Vasco:José Luis Rodríguez",
@@ -2756,7 +3335,10 @@
       "birthdate": "1997-03-14",
       "age": 29,
       "nationality": "Uruguai",
-      "tm_id": "430339"
+      "tm_id": "430339",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Vasco:João Mutano",
@@ -2780,7 +3362,12 @@
       "birthdate": "1999-05-03",
       "age": 27,
       "nationality": "Argentina",
-      "tm_id": "576026"
+      "tm_id": "576026",
+      "positions_sofascore": [
+        "MC",
+        "ZAG",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Vasco:Cauan Barros",
@@ -2792,7 +3379,11 @@
       "birthdate": "2004-05-06",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1083966"
+      "tm_id": "1083966",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Vasco:Mateus Carvalho",
@@ -2804,7 +3395,11 @@
       "birthdate": "2002-03-18",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "862574"
+      "tm_id": "862574",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Vasco:Thiago Mendes",
@@ -2816,7 +3411,11 @@
       "birthdate": "1992-03-15",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "135617"
+      "tm_id": "135617",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Vasco:Jair",
@@ -2828,7 +3427,11 @@
       "birthdate": "1994-08-26",
       "age": 32,
       "nationality": "Brasil",
-      "tm_id": "239294"
+      "tm_id": "239294",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Vasco:Euder",
@@ -2840,7 +3443,10 @@
       "birthdate": "2005-03-18",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1159259"
+      "tm_id": "1159259",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "tm2026:Vasco:Ramon Rique",
@@ -2852,7 +3458,10 @@
       "birthdate": "2007-10-02",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1221773"
+      "tm_id": "1221773",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "tm2026:Vasco:Tchê Tchê",
@@ -2864,7 +3473,11 @@
       "birthdate": "1992-08-30",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "364261"
+      "tm_id": "364261",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Vasco:Alan Lescano",
@@ -2876,7 +3489,11 @@
       "birthdate": "2001-11-11",
       "age": 24,
       "nationality": "Argentina",
-      "tm_id": "991134"
+      "tm_id": "991134",
+      "positions_sofascore": [
+        "MC",
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Vasco:Johan Rojas",
@@ -2888,7 +3505,11 @@
       "birthdate": "2002-09-20",
       "age": 24,
       "nationality": "Colômbia",
-      "tm_id": "974652"
+      "tm_id": "974652",
+      "positions_sofascore": [
+        "MEI",
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Guilherme Estrella",
@@ -2900,7 +3521,10 @@
       "birthdate": "2005-01-06",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1083969"
+      "tm_id": "1083969",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Vasco:Andrés Gómez",
@@ -2912,7 +3536,11 @@
       "birthdate": "2002-09-12",
       "age": 24,
       "nationality": "Colômbia",
-      "tm_id": "957461"
+      "tm_id": "957461",
+      "positions_sofascore": [
+        "PD",
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Vasco:David",
@@ -2924,7 +3552,11 @@
       "birthdate": "1995-10-17",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "373189"
+      "tm_id": "373189",
+      "positions_sofascore": [
+        "PE",
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Vasco:Nuno Moreira",
@@ -2936,7 +3568,10 @@
       "birthdate": "1999-06-16",
       "age": 27,
       "nationality": "Portugal",
-      "tm_id": "461937"
+      "tm_id": "461937",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Marino Hinestroza",
@@ -2948,7 +3583,10 @@
       "birthdate": "2002-07-08",
       "age": 24,
       "nationality": "Colômbia",
-      "tm_id": "663319"
+      "tm_id": "663319",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Vasco:Adson",
@@ -2960,7 +3598,10 @@
       "birthdate": "2000-10-06",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "868891"
+      "tm_id": "868891",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Vasco:Loide Augusto",
@@ -2972,7 +3613,11 @@
       "birthdate": "2000-02-26",
       "age": 26,
       "nationality": "Angola",
-      "tm_id": "696693"
+      "tm_id": "696693",
+      "positions_sofascore": [
+        "PD",
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Facundo Colidio",
@@ -2984,7 +3629,11 @@
       "birthdate": "2000-01-04",
       "age": 26,
       "nationality": "Argentina",
-      "tm_id": "491705"
+      "tm_id": "491705",
+      "positions_sofascore": [
+        "ATA",
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Vasco:Bruno Duarte",
@@ -2996,7 +3645,10 @@
       "birthdate": "1996-03-24",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "598629"
+      "tm_id": "598629",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Vasco:Brenner",
@@ -3008,7 +3660,10 @@
       "birthdate": "2000-01-16",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "412366"
+      "tm_id": "412366",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Vasco:Claudio Spinelli",
@@ -3020,7 +3675,10 @@
       "birthdate": "1997-01-21",
       "age": 29,
       "nationality": "Argentina",
-      "tm_id": "504882"
+      "tm_id": "504882",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:São Paulo:Carlos Coronel",
@@ -3032,7 +3690,10 @@
       "birthdate": "1996-12-29",
       "age": 29,
       "nationality": "Paraguai",
-      "tm_id": "378871"
+      "tm_id": "378871",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:São Paulo:Rafael",
@@ -3044,7 +3705,10 @@
       "birthdate": "1989-06-23",
       "age": 37,
       "nationality": "Brasil",
-      "tm_id": "68097"
+      "tm_id": "68097",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:São Paulo:Young",
@@ -3068,7 +3732,10 @@
       "birthdate": "2006-04-10",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1202380"
+      "tm_id": "1202380",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:São Paulo:Felipe Preis",
@@ -3080,7 +3747,10 @@
       "birthdate": "2005-11-19",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1202381"
+      "tm_id": "1202381",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Sabino",
@@ -3092,7 +3762,11 @@
       "birthdate": "1996-10-25",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "546033"
+      "tm_id": "546033",
+      "positions_sofascore": [
+        "ZAG",
+        "LE"
+      ]
     },
     {
       "id": "print2026:São Paulo:Matheus Belém",
@@ -3104,7 +3778,10 @@
       "birthdate": "2003-03-13",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "980825"
+      "tm_id": "980825",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "print2026:São Paulo:Rafael Tolói",
@@ -3116,7 +3793,11 @@
       "birthdate": "1990-10-10",
       "age": 36,
       "nationality": "Itália",
-      "tm_id": "72441"
+      "tm_id": "72441",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Domingos Duarte",
@@ -3128,7 +3809,10 @@
       "birthdate": "1995-03-10",
       "age": 31,
       "nationality": "Portugal",
-      "tm_id": "257376"
+      "tm_id": "257376",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "print2026:São Paulo:Luis Osorio",
@@ -3140,7 +3824,10 @@
       "birthdate": "2006-09-06",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1221747"
+      "tm_id": "1221747",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "print2026:São Paulo:Robert Arboleda",
@@ -3152,7 +3839,10 @@
       "birthdate": "1991-10-22",
       "age": 35,
       "nationality": "Equador",
-      "tm_id": "139867"
+      "tm_id": "139867",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Isac",
@@ -3176,7 +3866,11 @@
       "birthdate": "1997-03-23",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "520468"
+      "tm_id": "520468",
+      "positions_sofascore": [
+        "LE",
+        "ME"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Enzo Díaz",
@@ -3188,7 +3882,11 @@
       "birthdate": "1995-12-07",
       "age": 30,
       "nationality": "Argentina",
-      "tm_id": "540458"
+      "tm_id": "540458",
+      "positions_sofascore": [
+        "LE",
+        "ME"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Wendell",
@@ -3200,7 +3898,10 @@
       "birthdate": "1993-07-20",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "228433"
+      "tm_id": "228433",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "print2026:São Paulo:Nicolas",
@@ -3212,7 +3913,10 @@
       "birthdate": "2007-04-08",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1387007"
+      "tm_id": "1387007",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Pedro Lima",
@@ -3224,7 +3928,10 @@
       "birthdate": "2006-07-01",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1193867"
+      "tm_id": "1193867",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "print2026:São Paulo:Aurélio Buta",
@@ -3236,7 +3943,11 @@
       "birthdate": "1997-02-10",
       "age": 29,
       "nationality": "Portugal",
-      "tm_id": "258039"
+      "tm_id": "258039",
+      "positions_sofascore": [
+        "LD",
+        "MD"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Lucas Ramon",
@@ -3248,7 +3959,10 @@
       "birthdate": "1994-03-07",
       "age": 32,
       "nationality": "Brasil",
-      "tm_id": "378189"
+      "tm_id": "378189",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Cédric Soares",
@@ -3260,7 +3974,11 @@
       "birthdate": "1991-08-31",
       "age": 35,
       "nationality": "Portugal",
-      "tm_id": "112988"
+      "tm_id": "112988",
+      "positions_sofascore": [
+        "LD",
+        "MD"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Igor Felisberto",
@@ -3284,7 +4002,11 @@
       "birthdate": "2002-01-10",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "892089"
+      "tm_id": "892089",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:São Paulo:Newton",
@@ -3296,7 +4018,11 @@
       "birthdate": "2000-03-12",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "811219"
+      "tm_id": "811219",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Marcos Antônio",
@@ -3308,7 +4034,11 @@
       "birthdate": "2000-06-13",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "468301"
+      "tm_id": "468301",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:São Paulo:Damián Bobadilla",
@@ -3320,7 +4050,11 @@
       "birthdate": "2001-07-11",
       "age": 25,
       "nationality": "Paraguai",
-      "tm_id": "861852"
+      "tm_id": "861852",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:São Paulo:Dj hordeney",
@@ -3332,7 +4066,10 @@
       "birthdate": "2007-06-17",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1383716"
+      "tm_id": "1383716",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "print2026:São Paulo:Danielzinho",
@@ -3344,7 +4081,11 @@
       "birthdate": "1994-11-04",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "292731"
+      "tm_id": "292731",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Cauly",
@@ -3356,7 +4097,10 @@
       "birthdate": "1995-09-15",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "162812"
+      "tm_id": "162812",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "print2026:São Paulo:Pedro Ferreira",
@@ -3368,7 +4112,10 @@
       "birthdate": "2007-04-24",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1362701"
+      "tm_id": "1362701",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "print2026:São Paulo:Ferreirinha",
@@ -3380,7 +4127,10 @@
       "birthdate": "1997-12-31",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "689017"
+      "tm_id": "689017",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Lucca",
@@ -3392,7 +4142,10 @@
       "birthdate": "2007-06-14",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1269378"
+      "tm_id": "1269378",
+      "positions_sofascore": [
+        "ME"
+      ]
     },
     {
       "id": "print2026:São Paulo:Victor Sá",
@@ -3404,7 +4157,10 @@
       "birthdate": "1994-03-27",
       "age": 32,
       "nationality": "Brasil",
-      "tm_id": "381724"
+      "tm_id": "381724",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Tetê",
@@ -3416,7 +4172,10 @@
       "birthdate": "2007-04-14",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1355277"
+      "tm_id": "1355277",
+      "positions_sofascore": [
+        "ME"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Artur",
@@ -3428,7 +4187,10 @@
       "birthdate": "1998-02-15",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "440658"
+      "tm_id": "440658",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Lucas Moura",
@@ -3440,7 +4202,11 @@
       "birthdate": "1992-08-13",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "77100"
+      "tm_id": "77100",
+      "positions_sofascore": [
+        "PD",
+        "MEI"
+      ]
     },
     {
       "id": "print2026:São Paulo:Ryan Francisco",
@@ -3452,7 +4218,10 @@
       "birthdate": "2006-11-21",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1202387"
+      "tm_id": "1202387",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:André Silva",
@@ -3464,7 +4233,10 @@
       "birthdate": "1997-06-03",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "565232"
+      "tm_id": "565232",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "print2026:São Paulo:Jonathan Calleri",
@@ -3476,7 +4248,10 @@
       "birthdate": "1993-09-23",
       "age": 33,
       "nationality": "Argentina",
-      "tm_id": "284727"
+      "tm_id": "284727",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "cbf2026:São Paulo:Luciano",
@@ -3488,7 +4263,11 @@
       "birthdate": "1993-05-18",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "223560"
+      "tm_id": "223560",
+      "positions_sofascore": [
+        "MEI",
+        "ATA"
+      ]
     },
     {
       "id": "br2026v7:São Paulo:Gustavo Santana",
@@ -3500,7 +4279,10 @@
       "birthdate": "2005-09-02",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1095834"
+      "tm_id": "1095834",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Santos:Gabriel Brazão",
@@ -3512,7 +4294,10 @@
       "birthdate": "2000-10-05",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "371247"
+      "tm_id": "371247",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Santos:João Paulo",
@@ -3524,7 +4309,10 @@
       "birthdate": "1995-06-29",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "275412"
+      "tm_id": "275412",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Santos:Diógenes",
@@ -3536,7 +4324,10 @@
       "birthdate": "2001-01-06",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "907359"
+      "tm_id": "907359",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Santos:João Fernandes",
@@ -3560,7 +4351,10 @@
       "birthdate": "2005-03-23",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1089956"
+      "tm_id": "1089956",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Santos:João Ananias",
@@ -3572,7 +4366,10 @@
       "birthdate": "2007-02-12",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1256755"
+      "tm_id": "1256755",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Santos:Lucas Veríssimo",
@@ -3584,7 +4381,10 @@
       "birthdate": "1995-07-02",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "411662"
+      "tm_id": "411662",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Santos:Alexis Duarte",
@@ -3596,7 +4396,10 @@
       "birthdate": "2000-03-12",
       "age": 26,
       "nationality": "Paraguai",
-      "tm_id": "491587"
+      "tm_id": "491587",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Santos:Willian Arão",
@@ -3608,7 +4411,12 @@
       "birthdate": "1992-03-12",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "210747"
+      "tm_id": "210747",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Santos:Luan Peres",
@@ -3620,7 +4428,11 @@
       "birthdate": "1994-07-19",
       "age": 32,
       "nationality": "Brasil",
-      "tm_id": "347913"
+      "tm_id": "347913",
+      "positions_sofascore": [
+        "ZAG",
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Santos:João Alencar",
@@ -3632,7 +4444,10 @@
       "birthdate": "2007-06-25",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1117807"
+      "tm_id": "1117807",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Santos:Vinicius Lira",
@@ -3644,7 +4459,10 @@
       "birthdate": "2007-10-12",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1253844"
+      "tm_id": "1253844",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Santos:Gonzalo Escobar",
@@ -3656,7 +4474,10 @@
       "birthdate": "1997-03-16",
       "age": 29,
       "nationality": "Argentina",
-      "tm_id": "440377"
+      "tm_id": "440377",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Santos:Gabriel Menino",
@@ -3668,7 +4489,11 @@
       "birthdate": "2000-09-29",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "608216"
+      "tm_id": "608216",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Santos:Igor Vinícius",
@@ -3680,7 +4505,10 @@
       "birthdate": "1997-04-01",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "552240"
+      "tm_id": "552240",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Santos:Rodinei",
@@ -3692,7 +4520,11 @@
       "birthdate": "1992-01-29",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "185966"
+      "tm_id": "185966",
+      "positions_sofascore": [
+        "LD",
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Santos:Arthur Melo",
@@ -3704,7 +4536,11 @@
       "birthdate": "1996-08-12",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "362842"
+      "tm_id": "362842",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Santos:Gustavinho",
@@ -3716,7 +4552,11 @@
       "birthdate": "2005-04-07",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1101124"
+      "tm_id": "1101124",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Santos:Christian Oliva",
@@ -3728,7 +4568,11 @@
       "birthdate": "1996-06-01",
       "age": 30,
       "nationality": "Uruguai",
-      "tm_id": "563812"
+      "tm_id": "563812",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Santos:João Schmidt",
@@ -3740,7 +4584,11 @@
       "birthdate": "1993-05-19",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "198859"
+      "tm_id": "198859",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Santos:Gabriel Bontempo",
@@ -3752,7 +4600,11 @@
       "birthdate": "2005-01-16",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1089958"
+      "tm_id": "1089958",
+      "positions_sofascore": [
+        "MC",
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Santos:Neymar",
@@ -3764,7 +4616,11 @@
       "birthdate": "1992-02-05",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "68290"
+      "tm_id": "68290",
+      "positions_sofascore": [
+        "MEI",
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Santos:Miguelito",
@@ -3776,7 +4632,10 @@
       "birthdate": "2004-04-25",
       "age": 22,
       "nationality": "Bolívia",
-      "tm_id": "1063811"
+      "tm_id": "1063811",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Santos:Philippe Coutinho",
@@ -3788,7 +4647,10 @@
       "birthdate": "1992-06-12",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "80444"
+      "tm_id": "80444",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Santos:Lima",
@@ -3800,7 +4662,12 @@
       "birthdate": "1996-06-11",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "387611"
+      "tm_id": "387611",
+      "positions_sofascore": [
+        "MC",
+        "MEI",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Santos:Thaciano",
@@ -3812,7 +4679,10 @@
       "birthdate": "1995-05-12",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "392487"
+      "tm_id": "392487",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Santos:Nadson",
@@ -3824,7 +4694,10 @@
       "birthdate": "2009-01-24",
       "age": 17,
       "nationality": "Brasil",
-      "tm_id": "1355386"
+      "tm_id": "1355386",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Santos:Pepê Firmino",
@@ -3836,7 +4709,10 @@
       "birthdate": "2007-02-12",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1005585"
+      "tm_id": "1005585",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Santos:Álvaro Barreal",
@@ -3848,7 +4724,11 @@
       "birthdate": "2000-08-17",
       "age": 26,
       "nationality": "Argentina",
-      "tm_id": "613873"
+      "tm_id": "613873",
+      "positions_sofascore": [
+        "PE",
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Santos:Everton",
@@ -3860,7 +4740,10 @@
       "birthdate": "1996-03-22",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "321239"
+      "tm_id": "321239",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Santos:Moisés",
@@ -3872,7 +4755,11 @@
       "birthdate": "1996-09-02",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "788361"
+      "tm_id": "788361",
+      "positions_sofascore": [
+        "PE",
+        "ME"
+      ]
     },
     {
       "id": "tm2026:Santos:Gustavo Caballero",
@@ -3884,7 +4771,11 @@
       "birthdate": "2001-09-21",
       "age": 25,
       "nationality": "Paraguai",
-      "tm_id": "891672"
+      "tm_id": "891672",
+      "positions_sofascore": [
+        "MD",
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Santos:Mateus Xavier",
@@ -3896,7 +4787,10 @@
       "birthdate": "2007-06-29",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1220141"
+      "tm_id": "1220141",
+      "positions_sofascore": [
+        "ME"
+      ]
     },
     {
       "id": "tm2026:Santos:Benjamín Rollheiser",
@@ -3908,7 +4802,10 @@
       "birthdate": "2000-03-24",
       "age": 26,
       "nationality": "Argentina",
-      "tm_id": "491704"
+      "tm_id": "491704",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Santos:Andrey Quintino",
@@ -3932,7 +4829,10 @@
       "birthdate": "2005-01-06",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1088816"
+      "tm_id": "1088816",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Santos:Gabriel Barbosa",
@@ -3944,7 +4844,10 @@
       "birthdate": "1996-08-30",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "244275"
+      "tm_id": "244275",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Santos:Rony",
@@ -3956,7 +4859,10 @@
       "birthdate": "1995-05-11",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "371009"
+      "tm_id": "371009",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Carlos Miguel",
@@ -3968,7 +4874,10 @@
       "birthdate": "1998-10-09",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "641458"
+      "tm_id": "641458",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Marcelo Lomba",
@@ -3980,7 +4889,10 @@
       "birthdate": "1986-12-18",
       "age": 39,
       "nationality": "Brasil",
-      "tm_id": "53015"
+      "tm_id": "53015",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Bruno Bertinato",
@@ -3992,7 +4904,10 @@
       "birthdate": "1998-05-31",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "323929"
+      "tm_id": "323929",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Murilo",
@@ -4004,7 +4919,10 @@
       "birthdate": "1997-03-27",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "458710"
+      "tm_id": "458710",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Alexander Barboza",
@@ -4016,7 +4934,11 @@
       "birthdate": "1995-03-16",
       "age": 31,
       "nationality": "Uruguai",
-      "tm_id": "379752"
+      "tm_id": "379752",
+      "positions_sofascore": [
+        "ZAG",
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Bruno Fuchs",
@@ -4028,7 +4950,11 @@
       "birthdate": "1999-04-01",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "563692"
+      "tm_id": "563692",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Luis Benedetti",
@@ -4040,7 +4966,10 @@
       "birthdate": "2006-06-07",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1253807"
+      "tm_id": "1253807",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Gustavo Gómez",
@@ -4052,7 +4981,10 @@
       "birthdate": "1993-05-06",
       "age": 33,
       "nationality": "Paraguai",
-      "tm_id": "215390"
+      "tm_id": "215390",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Joaquín Piquerez",
@@ -4064,7 +4996,11 @@
       "birthdate": "1998-08-24",
       "age": 28,
       "nationality": "Uruguai",
-      "tm_id": "496268"
+      "tm_id": "496268",
+      "positions_sofascore": [
+        "LE",
+        "ME"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Jefté",
@@ -4076,7 +5012,10 @@
       "birthdate": "2003-12-21",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "851595"
+      "tm_id": "851595",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Arthur Gabriel",
@@ -4088,7 +5027,10 @@
       "birthdate": "2005-09-04",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1115722"
+      "tm_id": "1115722",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Agustín Giay",
@@ -4100,7 +5042,11 @@
       "birthdate": "2004-01-16",
       "age": 22,
       "nationality": "Argentina",
-      "tm_id": "849582"
+      "tm_id": "849582",
+      "positions_sofascore": [
+        "LD",
+        "MD"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Khellven",
@@ -4112,7 +5058,11 @@
       "birthdate": "2001-02-25",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "653348"
+      "tm_id": "653348",
+      "positions_sofascore": [
+        "MD",
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Marlon Freitas",
@@ -4124,7 +5074,11 @@
       "birthdate": "1995-03-27",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "364972"
+      "tm_id": "364972",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Emiliano Martínez",
@@ -4136,7 +5090,11 @@
       "birthdate": "1999-08-17",
       "age": 27,
       "nationality": "Uruguai",
-      "tm_id": "707447"
+      "tm_id": "707447",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Luis Pacheco",
@@ -4148,7 +5106,10 @@
       "birthdate": "2008-02-02",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1268048"
+      "tm_id": "1268048",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Andreas Pereira",
@@ -4160,7 +5121,12 @@
       "birthdate": "1996-01-01",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "203394"
+      "tm_id": "203394",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Lucas Evangelista",
@@ -4172,7 +5138,11 @@
       "birthdate": "1995-02-06",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "270188"
+      "tm_id": "270188",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Larson",
@@ -4184,7 +5154,10 @@
       "birthdate": "2005-07-10",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1116605"
+      "tm_id": "1116605",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Maurício",
@@ -4196,7 +5169,10 @@
       "birthdate": "2001-06-22",
       "age": 25,
       "nationality": "Paraguai",
-      "tm_id": "678439"
+      "tm_id": "678439",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Erick Belé",
@@ -4208,7 +5184,10 @@
       "birthdate": "2007-01-21",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1180021"
+      "tm_id": "1180021",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Ramón Sosa",
@@ -4220,7 +5199,10 @@
       "birthdate": "1999-08-31",
       "age": 27,
       "nationality": "Paraguai",
-      "tm_id": "745191"
+      "tm_id": "745191",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Felipe Anderson",
@@ -4232,7 +5214,11 @@
       "birthdate": "1993-04-15",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "159372"
+      "tm_id": "159372",
+      "positions_sofascore": [
+        "PE",
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Jhon Arias",
@@ -4244,7 +5230,11 @@
       "birthdate": "1997-09-21",
       "age": 29,
       "nationality": "Colômbia",
-      "tm_id": "588989"
+      "tm_id": "588989",
+      "positions_sofascore": [
+        "PD",
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Paulinho",
@@ -4256,7 +5246,10 @@
       "birthdate": "2000-07-15",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "428791"
+      "tm_id": "428791",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:Vitor Roque",
@@ -4268,7 +5261,10 @@
       "birthdate": "2005-02-28",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "943837"
+      "tm_id": "943837",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Palmeiras:José Manuel López",
@@ -4280,7 +5276,10 @@
       "birthdate": "2000-12-06",
       "age": 25,
       "nationality": "Argentina",
-      "tm_id": "844797"
+      "tm_id": "844797",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Gabriel Grando",
@@ -4292,7 +5291,10 @@
       "birthdate": "2000-03-29",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "878037"
+      "tm_id": "878037",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Weverton",
@@ -4304,7 +5306,10 @@
       "birthdate": "1987-12-13",
       "age": 38,
       "nationality": "Brasil",
-      "tm_id": "69400"
+      "tm_id": "69400",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Thiago Beltrame",
@@ -4328,7 +5333,10 @@
       "birthdate": "2008-10-14",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1446971"
+      "tm_id": "1446971",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Gustavo Martins",
@@ -4340,7 +5348,10 @@
       "birthdate": "2002-08-11",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "874223"
+      "tm_id": "874223",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Wallace",
@@ -4352,7 +5363,10 @@
       "birthdate": "2004-12-06",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1219466"
+      "tm_id": "1219466",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Wagner Leonardo",
@@ -4364,7 +5378,10 @@
       "birthdate": "1999-07-23",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "671572"
+      "tm_id": "671572",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Fabián Balbuena",
@@ -4376,7 +5393,10 @@
       "birthdate": "1991-08-23",
       "age": 35,
       "nationality": "Paraguai",
-      "tm_id": "285548"
+      "tm_id": "285548",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Luis Eduardo",
@@ -4388,7 +5408,10 @@
       "birthdate": "2008-01-16",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1355268"
+      "tm_id": "1355268",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Walter Kannemann",
@@ -4400,7 +5423,10 @@
       "birthdate": "1991-03-14",
       "age": 35,
       "nationality": "Argentina",
-      "tm_id": "145400"
+      "tm_id": "145400",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Athos Thawan",
@@ -4424,7 +5450,10 @@
       "birthdate": "1997-05-20",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "406675"
+      "tm_id": "406675",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Pedro Gabriel",
@@ -4436,7 +5465,10 @@
       "birthdate": "2007-06-06",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1253927"
+      "tm_id": "1253927",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Caio Paulista",
@@ -4448,7 +5480,10 @@
       "birthdate": "1998-05-11",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "601011"
+      "tm_id": "601011",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Diego Caito",
@@ -4460,7 +5495,10 @@
       "birthdate": "2004-06-07",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1092620"
+      "tm_id": "1092620",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Grêmio:João Pedro",
@@ -4472,7 +5510,10 @@
       "birthdate": "1996-11-15",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "342024"
+      "tm_id": "342024",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Marcos Rocha",
@@ -4484,7 +5525,10 @@
       "birthdate": "1988-12-11",
       "age": 37,
       "nationality": "Brasil",
-      "tm_id": "75435"
+      "tm_id": "75435",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Erick Noriega",
@@ -4496,7 +5540,12 @@
       "birthdate": "2001-10-22",
       "age": 25,
       "nationality": "Peru",
-      "tm_id": "723853"
+      "tm_id": "723853",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Mathías Villasanti",
@@ -4508,7 +5557,11 @@
       "birthdate": "1997-01-24",
       "age": 29,
       "nationality": "Paraguai",
-      "tm_id": "436385"
+      "tm_id": "436385",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Danilo Barbosa",
@@ -4520,7 +5573,12 @@
       "birthdate": "1996-02-28",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "273438"
+      "tm_id": "273438",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Filip Krovínović",
@@ -4532,7 +5590,11 @@
       "birthdate": "1995-08-29",
       "age": 31,
       "nationality": "Croácia",
-      "tm_id": "261988"
+      "tm_id": "261988",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Dodi",
@@ -4544,7 +5606,11 @@
       "birthdate": "1996-04-17",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "373174"
+      "tm_id": "373174",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Juan Nardoni",
@@ -4556,7 +5622,12 @@
       "birthdate": "2002-07-14",
       "age": 24,
       "nationality": "Argentina",
-      "tm_id": "689211"
+      "tm_id": "689211",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Tiago Augusto",
@@ -4568,7 +5639,10 @@
       "birthdate": "2008-02-02",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1285798"
+      "tm_id": "1285798",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Riquelme",
@@ -4580,7 +5654,10 @@
       "birthdate": "2006-08-13",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1221317"
+      "tm_id": "1221317",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Francis Amuzu",
@@ -4592,7 +5669,10 @@
       "birthdate": "1999-08-23",
       "age": 27,
       "nationality": "Gana",
-      "tm_id": "423604"
+      "tm_id": "423604",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Jovane Cabral",
@@ -4604,7 +5684,11 @@
       "birthdate": "1998-06-14",
       "age": 28,
       "nationality": "Cabo Verde",
-      "tm_id": "448466"
+      "tm_id": "448466",
+      "positions_sofascore": [
+        "PE",
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Tetê",
@@ -4616,7 +5700,10 @@
       "birthdate": "2000-02-15",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "371256"
+      "tm_id": "371256",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Cristian Pavón",
@@ -4628,7 +5715,11 @@
       "birthdate": "1996-01-21",
       "age": 30,
       "nationality": "Argentina",
-      "tm_id": "373170"
+      "tm_id": "373170",
+      "positions_sofascore": [
+        "PD",
+        "LD"
+      ]
     },
     {
       "id": "tm2026:Grêmio:José Enamorado",
@@ -4640,7 +5731,10 @@
       "birthdate": "1999-01-13",
       "age": 27,
       "nationality": "Colômbia",
-      "tm_id": "633428"
+      "tm_id": "633428",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Roger",
@@ -4652,7 +5746,10 @@
       "birthdate": "2008-04-29",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1260202"
+      "tm_id": "1260202",
+      "positions_sofascore": [
+        "MD"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Carlos Vinícius",
@@ -4664,7 +5761,10 @@
       "birthdate": "1995-03-25",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "525287"
+      "tm_id": "525287",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Matheus Nascimento",
@@ -4676,7 +5776,10 @@
       "birthdate": "2004-03-03",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "743594"
+      "tm_id": "743594",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Grêmio:Martin Braithwaite",
@@ -4688,7 +5791,10 @@
       "birthdate": "1991-06-05",
       "age": 35,
       "nationality": "Dinamarca",
-      "tm_id": "95732"
+      "tm_id": "95732",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Internacional:Anthoni",
@@ -4700,7 +5806,10 @@
       "birthdate": "2002-01-23",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "869437"
+      "tm_id": "869437",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Matheus Cunha",
@@ -4712,7 +5821,10 @@
       "birthdate": "2001-05-24",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "876739"
+      "tm_id": "876739",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Internacional:Sergio Rochet",
@@ -4724,7 +5836,10 @@
       "birthdate": "1993-03-23",
       "age": 33,
       "nationality": "Uruguai",
-      "tm_id": "264014"
+      "tm_id": "264014",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Internacional:Kauan",
@@ -4748,7 +5863,10 @@
       "birthdate": "2005-04-13",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1116612"
+      "tm_id": "1116612",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Internacional:Victor Gabriel",
@@ -4760,7 +5878,10 @@
       "birthdate": "2004-04-28",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "834444"
+      "tm_id": "834444",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Internacional:Guillermo Maripán",
@@ -4772,7 +5893,10 @@
       "birthdate": "1994-05-06",
       "age": 32,
       "nationality": "Chile",
-      "tm_id": "249730"
+      "tm_id": "249730",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Internacional:Félix Torres",
@@ -4784,7 +5908,10 @@
       "birthdate": "1997-01-11",
       "age": 29,
       "nationality": "Equador",
-      "tm_id": "468174"
+      "tm_id": "468174",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Internacional:Juninho",
@@ -4796,7 +5923,11 @@
       "birthdate": "1995-02-01",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "383638"
+      "tm_id": "383638",
+      "positions_sofascore": [
+        "ZAG",
+        "LE"
+      ]
     },
     {
       "id": "tm2026:Internacional:Gabriel Mercado",
@@ -4808,7 +5939,10 @@
       "birthdate": "1987-03-18",
       "age": 39,
       "nationality": "Argentina",
-      "tm_id": "45319"
+      "tm_id": "45319",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "tm2026:Internacional:Alexandro Bernabei",
@@ -4820,7 +5954,11 @@
       "birthdate": "2000-09-24",
       "age": 26,
       "nationality": "Argentina",
-      "tm_id": "719635"
+      "tm_id": "719635",
+      "positions_sofascore": [
+        "LE",
+        "ME"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Matheus Bahia",
@@ -4832,7 +5970,10 @@
       "birthdate": "1999-08-11",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "741021"
+      "tm_id": "741021",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Bruno Gomes",
@@ -4844,7 +5985,12 @@
       "birthdate": "2001-04-04",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "703322"
+      "tm_id": "703322",
+      "positions_sofascore": [
+        "LD",
+        "MC",
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Braian Aguirre",
@@ -4856,7 +6002,10 @@
       "birthdate": "2000-07-28",
       "age": 26,
       "nationality": "Argentina",
-      "tm_id": "829378"
+      "tm_id": "829378",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Rodrigo Villagra",
@@ -4868,7 +6017,11 @@
       "birthdate": "2001-02-14",
       "age": 25,
       "nationality": "Argentina",
-      "tm_id": "657220"
+      "tm_id": "657220",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Ronaldo",
@@ -4880,7 +6033,11 @@
       "birthdate": "1996-10-23",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "405768"
+      "tm_id": "405768",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Thiago Maia",
@@ -4892,7 +6049,11 @@
       "birthdate": "1997-03-23",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "294873"
+      "tm_id": "294873",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Internacional:Benjamin",
@@ -4904,7 +6065,10 @@
       "birthdate": "2006-05-29",
       "age": 20,
       "nationality": "Gana",
-      "tm_id": "1312046"
+      "tm_id": "1312046",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Paulinho Paula",
@@ -4916,7 +6080,12 @@
       "birthdate": "1997-01-08",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "534473"
+      "tm_id": "534473",
+      "positions_sofascore": [
+        "MC",
+        "MEI",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Bruno Henrique",
@@ -4928,7 +6097,11 @@
       "birthdate": "1989-10-21",
       "age": 37,
       "nationality": "Brasil",
-      "tm_id": "277335"
+      "tm_id": "277335",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Internacional:Niclas Eliasson",
@@ -4940,7 +6113,11 @@
       "birthdate": "1995-12-07",
       "age": 30,
       "nationality": "Suécia",
-      "tm_id": "251813"
+      "tm_id": "251813",
+      "positions_sofascore": [
+        "PD",
+        "MC"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Alan Patrick",
@@ -4952,7 +6129,11 @@
       "birthdate": "1991-05-13",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "104505"
+      "tm_id": "104505",
+      "positions_sofascore": [
+        "MEI",
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Internacional:Calebe",
@@ -4964,7 +6145,11 @@
       "birthdate": "2000-04-30",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "798114"
+      "tm_id": "798114",
+      "positions_sofascore": [
+        "MD",
+        "MC"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Allex",
@@ -4976,7 +6161,10 @@
       "birthdate": "2006-05-04",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1220008"
+      "tm_id": "1220008",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Internacional:Yago Noal",
@@ -5000,7 +6188,10 @@
       "birthdate": "1999-07-20",
       "age": 27,
       "nationality": "Colômbia",
-      "tm_id": "572042"
+      "tm_id": "572042",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Vitinho",
@@ -5012,7 +6203,12 @@
       "birthdate": "1999-04-01",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "670965"
+      "tm_id": "670965",
+      "positions_sofascore": [
+        "PE",
+        "MD",
+        "PD"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Kayky",
@@ -5024,7 +6220,11 @@
       "birthdate": "2003-06-11",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "668265"
+      "tm_id": "668265",
+      "positions_sofascore": [
+        "PD",
+        "PE"
+      ]
     },
     {
       "id": "br2026v6:Internacional:Alerrandro",
@@ -5036,7 +6236,10 @@
       "birthdate": "2000-01-12",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "371996"
+      "tm_id": "371996",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Internacional:Antonio Sanabria",
@@ -5048,7 +6251,10 @@
       "birthdate": "1996-03-04",
       "age": 30,
       "nationality": "Paraguai",
-      "tm_id": "234523"
+      "tm_id": "234523",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Internacional:Raykkonen",
@@ -5072,7 +6278,10 @@
       "birthdate": "1998-10-21",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "590039"
+      "tm_id": "590039",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Fluminense:Marcelo Pitaluga",
@@ -5084,7 +6293,10 @@
       "birthdate": "2002-12-20",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "662334"
+      "tm_id": "662334",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Fluminense:Fábio",
@@ -5096,7 +6308,10 @@
       "birthdate": "1980-09-30",
       "age": 46,
       "nationality": "Brasil",
-      "tm_id": "22415"
+      "tm_id": "22415",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "print2026:Fluminense:Juan Pablo Freytes",
@@ -5108,7 +6323,10 @@
       "birthdate": "2000-01-11",
       "age": 26,
       "nationality": "Argentina",
-      "tm_id": "628750"
+      "tm_id": "628750",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "print2026:Fluminense:Julián Millán",
@@ -5120,7 +6338,10 @@
       "birthdate": "1998-03-27",
       "age": 28,
       "nationality": "Colômbia",
-      "tm_id": "495689"
+      "tm_id": "495689",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Ignacio",
@@ -5132,7 +6353,10 @@
       "birthdate": "1996-12-01",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "624291"
+      "tm_id": "624291",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Jemmes",
@@ -5144,7 +6368,10 @@
       "birthdate": "2000-04-09",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "1141364"
+      "tm_id": "1141364",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Igor Rabello",
@@ -5156,7 +6383,10 @@
       "birthdate": "1995-04-28",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "341701"
+      "tm_id": "341701",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "cbf2026:Fluminense:Thiago Silva",
@@ -5168,7 +6398,10 @@
       "birthdate": "1984-09-22",
       "age": 42,
       "nationality": "Brasil",
-      "tm_id": "29241"
+      "tm_id": "29241",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Guilherme Arana",
@@ -5180,7 +6413,11 @@
       "birthdate": "1997-04-14",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "346766"
+      "tm_id": "346766",
+      "positions_sofascore": [
+        "LE",
+        "ME"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Renê",
@@ -5192,7 +6429,10 @@
       "birthdate": "1992-09-14",
       "age": 34,
       "nationality": "Brasil",
-      "tm_id": "212209"
+      "tm_id": "212209",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "print2026:Fluminense:Léo Jance",
@@ -5204,7 +6444,10 @@
       "birthdate": "2005-03-23",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1219751"
+      "tm_id": "1219751",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Guga",
@@ -5216,7 +6459,10 @@
       "birthdate": "1998-08-29",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "592344"
+      "tm_id": "592344",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "print2026:Fluminense:Julio Fidelis",
@@ -5228,7 +6474,10 @@
       "birthdate": "2006-11-06",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1119008"
+      "tm_id": "1119008",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "print2026:Fluminense:Jhonny",
@@ -5240,7 +6489,10 @@
       "birthdate": "2002-04-16",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "992534"
+      "tm_id": "992534",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Samuel Xavier",
@@ -5252,7 +6504,10 @@
       "birthdate": "1990-06-06",
       "age": 36,
       "nationality": "Brasil",
-      "tm_id": "198250"
+      "tm_id": "198250",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Martinelli",
@@ -5264,7 +6519,11 @@
       "birthdate": "2001-10-05",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "815558"
+      "tm_id": "815558",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Otávio",
@@ -5276,7 +6535,11 @@
       "birthdate": "1994-05-04",
       "age": 32,
       "nationality": "Brasil",
-      "tm_id": "312314"
+      "tm_id": "312314",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "print2026:Fluminense:Luis Fernando",
@@ -5300,7 +6563,11 @@
       "birthdate": "2000-10-20",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "982617"
+      "tm_id": "982617",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Nonato",
@@ -5312,7 +6579,12 @@
       "birthdate": "1998-03-03",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "546172"
+      "tm_id": "546172",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "MEI"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Alisson",
@@ -5324,7 +6596,11 @@
       "birthdate": "1993-06-25",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "229736"
+      "tm_id": "229736",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Jefferson Savarino",
@@ -5336,7 +6612,11 @@
       "birthdate": "1996-11-11",
       "age": 29,
       "nationality": "Venezuela",
-      "tm_id": "309193"
+      "tm_id": "309193",
+      "positions_sofascore": [
+        "MEI",
+        "PE"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Luciano Acosta",
@@ -5348,7 +6628,10 @@
       "birthdate": "1994-05-31",
       "age": 32,
       "nationality": "Argentina",
-      "tm_id": "315169"
+      "tm_id": "315169",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "print2026:Fluminense:Ganso",
@@ -5360,7 +6643,10 @@
       "birthdate": "1989-10-12",
       "age": 37,
       "nationality": "Brasil",
-      "tm_id": "67920"
+      "tm_id": "67920",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "print2026:Fluminense:Yago Ferreira",
@@ -5372,7 +6658,10 @@
       "birthdate": "2001-08-02",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "984365"
+      "tm_id": "984365",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Yeferson Soteldo",
@@ -5384,7 +6673,10 @@
       "birthdate": "1997-06-30",
       "age": 29,
       "nationality": "Venezuela",
-      "tm_id": "312294"
+      "tm_id": "312294",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "print2026:Fluminense:Wesley Natã",
@@ -5396,7 +6688,10 @@
       "birthdate": "2008-04-18",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1339559"
+      "tm_id": "1339559",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "print2026:Fluminense:Matheus Reis",
@@ -5420,7 +6715,11 @@
       "birthdate": "1998-10-01",
       "age": 28,
       "nationality": "Uruguai",
-      "tm_id": "457533"
+      "tm_id": "457533",
+      "positions_sofascore": [
+        "PD",
+        "PE"
+      ]
     },
     {
       "id": "print2026:Fluminense:Riquelme",
@@ -5432,7 +6731,10 @@
       "birthdate": "2007-03-13",
       "age": 19,
       "nationality": "Brasil",
-      "tm_id": "1219749"
+      "tm_id": "1219749",
+      "positions_sofascore": [
+        "MD"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Kevin Serna",
@@ -5444,7 +6746,11 @@
       "birthdate": "1997-12-17",
       "age": 28,
       "nationality": "Colômbia",
-      "tm_id": "745927"
+      "tm_id": "745927",
+      "positions_sofascore": [
+        "PE",
+        "PD"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:John Kennedy",
@@ -5456,7 +6762,10 @@
       "birthdate": "2002-05-18",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "856085"
+      "tm_id": "856085",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Rodrigo Castillo",
@@ -5468,7 +6777,10 @@
       "birthdate": "1999-02-26",
       "age": 27,
       "nationality": "Argentina",
-      "tm_id": "984416"
+      "tm_id": "984416",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "cbf2026:Fluminense:Hulk",
@@ -5480,7 +6792,10 @@
       "birthdate": "1986-07-25",
       "age": 40,
       "nationality": "Brasil",
-      "tm_id": "80562"
+      "tm_id": "80562",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026plus:Fluminense:Germán Cano",
@@ -5492,7 +6807,10 @@
       "birthdate": "1988-01-02",
       "age": 38,
       "nationality": "Argentina",
-      "tm_id": "54590"
+      "tm_id": "54590",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Otávio:81",
@@ -5504,7 +6822,10 @@
       "birthdate": "2005-12-27",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "997947"
+      "tm_id": "997947",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Léo Aragão:41",
@@ -5516,7 +6837,10 @@
       "birthdate": "2002-04-19",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "1022342"
+      "tm_id": "1022342",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Cássio:1",
@@ -5528,7 +6852,10 @@
       "birthdate": "1987-06-06",
       "age": 39,
       "nationality": "Brasil",
-      "tm_id": "50144"
+      "tm_id": "50144",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Jonathan Jesus:34",
@@ -5540,7 +6867,10 @@
       "birthdate": "2004-05-27",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1083207"
+      "tm_id": "1083207",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Fabrício Bruno:15",
@@ -5552,7 +6882,10 @@
       "birthdate": "1996-02-12",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "432773"
+      "tm_id": "432773",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:João Marcelo:43",
@@ -5564,7 +6897,10 @@
       "birthdate": "2000-06-13",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "744024"
+      "tm_id": "744024",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Lucas Villalba:25",
@@ -5576,7 +6912,11 @@
       "birthdate": "1994-08-19",
       "age": 32,
       "nationality": "Argentina",
-      "tm_id": "240913"
+      "tm_id": "240913",
+      "positions_sofascore": [
+        "ZAG",
+        "LE"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Gabriel Rojas:27",
@@ -5588,7 +6928,11 @@
       "birthdate": "1997-06-22",
       "age": 29,
       "nationality": "Argentina",
-      "tm_id": "471639"
+      "tm_id": "471639",
+      "positions_sofascore": [
+        "LE",
+        "ME"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Matías Viña:6",
@@ -5600,7 +6944,10 @@
       "birthdate": "1997-11-09",
       "age": 28,
       "nationality": "Uruguai",
-      "tm_id": "439072"
+      "tm_id": "439072",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Kauã Moraes:2",
@@ -5612,7 +6959,10 @@
       "birthdate": "2006-09-29",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1388409"
+      "tm_id": "1388409",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:William:12",
@@ -5624,7 +6974,10 @@
       "birthdate": "1995-04-03",
       "age": 31,
       "nationality": "Brasil",
-      "tm_id": "341710"
+      "tm_id": "341710",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Fagner:23",
@@ -5636,7 +6989,10 @@
       "birthdate": "1989-06-11",
       "age": 37,
       "nationality": "Brasil",
-      "tm_id": "47592"
+      "tm_id": "47592",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Zé Lucas:5",
@@ -5648,7 +7004,11 @@
       "birthdate": "2008-03-23",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1365897"
+      "tm_id": "1365897",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Lucas Romero:29",
@@ -5660,7 +7020,11 @@
       "birthdate": "1994-04-18",
       "age": 32,
       "nationality": "Argentina",
-      "tm_id": "242201"
+      "tm_id": "242201",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Lucas Silva:16",
@@ -5672,7 +7036,11 @@
       "birthdate": "1993-02-16",
       "age": 33,
       "nationality": "Brasil",
-      "tm_id": "218118"
+      "tm_id": "218118",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Gerson:8",
@@ -5684,7 +7052,12 @@
       "birthdate": "1997-05-20",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "341705"
+      "tm_id": "341705",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "PD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Matheus Henrique:7",
@@ -5696,7 +7069,11 @@
       "birthdate": "1997-12-19",
       "age": 28,
       "nationality": "Brasil",
-      "tm_id": "552549"
+      "tm_id": "552549",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Fabrizio Peralta:sem-numero",
@@ -5708,7 +7085,10 @@
       "birthdate": "2002-08-02",
       "age": 24,
       "nationality": "Paraguai",
-      "tm_id": "661270"
+      "tm_id": "661270",
+      "positions_sofascore": [
+        "MC"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Matheus Pereira:10",
@@ -5720,7 +7100,10 @@
       "birthdate": "1996-05-05",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "225984"
+      "tm_id": "225984",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Felipe Morais:38",
@@ -5732,7 +7115,10 @@
       "birthdate": "2008-08-29",
       "age": 18,
       "nationality": "Brasil",
-      "tm_id": "1360820"
+      "tm_id": "1360820",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Luis Sinisterra:17",
@@ -5744,7 +7130,10 @@
       "birthdate": "1999-06-17",
       "age": 27,
       "nationality": "Colômbia",
-      "tm_id": "512385"
+      "tm_id": "512385",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Wesley:20",
@@ -5756,7 +7145,10 @@
       "birthdate": "2005-03-05",
       "age": 21,
       "nationality": "Brasil",
-      "tm_id": "1007378"
+      "tm_id": "1007378",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Kaique Kenji:70",
@@ -5768,7 +7160,10 @@
       "birthdate": "2006-01-29",
       "age": 20,
       "nationality": "Brasil",
-      "tm_id": "1253814"
+      "tm_id": "1253814",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Wanderson:94",
@@ -5780,7 +7175,10 @@
       "birthdate": "1994-10-07",
       "age": 32,
       "nationality": "Brasil",
-      "tm_id": "236202"
+      "tm_id": "236202",
+      "positions_sofascore": [
+        "PE"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Bruno Rodrigues:9",
@@ -5792,7 +7190,11 @@
       "birthdate": "1997-03-07",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "406766"
+      "tm_id": "406766",
+      "positions_sofascore": [
+        "PE",
+        "ATA"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Keny Arroyo:99",
@@ -5804,7 +7206,10 @@
       "birthdate": "2006-02-14",
       "age": 20,
       "nationality": "Equador",
-      "tm_id": "1074584"
+      "tm_id": "1074584",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Gabriel Pec:77",
@@ -5816,7 +7221,10 @@
       "birthdate": "2001-02-11",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "703321"
+      "tm_id": "703321",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Marquinhos:11",
@@ -5828,7 +7236,10 @@
       "birthdate": "2003-04-07",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "668268"
+      "tm_id": "668268",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:João Costa:67",
@@ -5840,7 +7251,10 @@
       "birthdate": "2005-03-28",
       "age": 21,
       "nationality": "Portugal",
-      "tm_id": "936536"
+      "tm_id": "936536",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Kaio Jorge:19",
@@ -5852,7 +7266,10 @@
       "birthdate": "2002-01-24",
       "age": 24,
       "nationality": "Brasil",
-      "tm_id": "620477"
+      "tm_id": "620477",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Luciano Rodríguez:97",
@@ -5864,7 +7281,11 @@
       "birthdate": "2003-07-16",
       "age": 23,
       "nationality": "Uruguai",
-      "tm_id": "856143"
+      "tm_id": "856143",
+      "positions_sofascore": [
+        "ATA",
+        "PD"
+      ]
     },
     {
       "id": "br2026v13:Cruzeiro:Néiser Villarreal:22",
@@ -5876,7 +7297,10 @@
       "birthdate": "2005-04-24",
       "age": 21,
       "nationality": "Colômbia",
-      "tm_id": "1182665"
+      "tm_id": "1182665",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v12:Coritiba:Pedro Morisco:1",
@@ -6152,7 +7576,10 @@
       "birthdate": "1995-08-21",
       "age": 31,
       "nationality": "Argentina",
-      "tm_id": "352324"
+      "tm_id": "352324",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Flamengo:Andrew",
@@ -6164,7 +7591,10 @@
       "birthdate": "2001-07-01",
       "age": 25,
       "nationality": "Brasil",
-      "tm_id": "610417"
+      "tm_id": "610417",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Flamengo:Dyogo Alves",
@@ -6176,7 +7606,10 @@
       "birthdate": "2004-01-09",
       "age": 22,
       "nationality": "Brasil",
-      "tm_id": "1082543"
+      "tm_id": "1082543",
+      "positions_sofascore": [
+        "GOL"
+      ]
     },
     {
       "id": "tm2026:Flamengo:Léo Ortiz",
@@ -6188,7 +7621,10 @@
       "birthdate": "1996-01-03",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "374136"
+      "tm_id": "374136",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Léo Pereira",
@@ -6200,7 +7636,10 @@
       "birthdate": "1996-01-31",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "288431"
+      "tm_id": "288431",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Vitão",
@@ -6212,7 +7651,10 @@
       "birthdate": "2000-02-02",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "428783"
+      "tm_id": "428783",
+      "positions_sofascore": [
+        "ZAG"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Danilo",
@@ -6224,7 +7666,11 @@
       "birthdate": "1991-07-15",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "145707"
+      "tm_id": "145707",
+      "positions_sofascore": [
+        "ZAG",
+        "LD"
+      ]
     },
     {
       "id": "br2026v7:Flamengo:João Souza",
@@ -6248,7 +7694,10 @@
       "birthdate": "1997-06-19",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "349585"
+      "tm_id": "349585",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Alex Sandro",
@@ -6260,7 +7709,10 @@
       "birthdate": "1991-01-26",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "79960"
+      "tm_id": "79960",
+      "positions_sofascore": [
+        "LE"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Emerson Royal",
@@ -6272,7 +7724,10 @@
       "birthdate": "1999-01-14",
       "age": 27,
       "nationality": "Brasil",
-      "tm_id": "476344"
+      "tm_id": "476344",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Guillermo Varela",
@@ -6284,7 +7739,10 @@
       "birthdate": "1993-03-24",
       "age": 33,
       "nationality": "Uruguai",
-      "tm_id": "188862"
+      "tm_id": "188862",
+      "positions_sofascore": [
+        "LD"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Evertton Araújo",
@@ -6296,7 +7754,11 @@
       "birthdate": "2003-02-28",
       "age": 23,
       "nationality": "Brasil",
-      "tm_id": "931007"
+      "tm_id": "931007",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "tm2026:Flamengo:Erick Pulgar",
@@ -6308,7 +7770,11 @@
       "birthdate": "1994-01-15",
       "age": 32,
       "nationality": "Chile",
-      "tm_id": "215616"
+      "tm_id": "215616",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Jorginho",
@@ -6320,7 +7786,11 @@
       "birthdate": "1991-12-20",
       "age": 34,
       "nationality": "Itália",
-      "tm_id": "102017"
+      "tm_id": "102017",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Nicolás de la Cruz",
@@ -6332,7 +7802,12 @@
       "birthdate": "1997-06-01",
       "age": 29,
       "nationality": "Uruguai",
-      "tm_id": "397458"
+      "tm_id": "397458",
+      "positions_sofascore": [
+        "MC",
+        "VOL",
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Flamengo:Saúl Ñíguez",
@@ -6344,7 +7819,11 @@
       "birthdate": "1994-11-21",
       "age": 31,
       "nationality": "Espanha",
-      "tm_id": "148928"
+      "tm_id": "148928",
+      "positions_sofascore": [
+        "MC",
+        "VOL"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Lucas Paquetá",
@@ -6356,7 +7835,11 @@
       "birthdate": "1997-08-27",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "444523"
+      "tm_id": "444523",
+      "positions_sofascore": [
+        "MEI",
+        "MC"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Jorge Carrascal",
@@ -6368,7 +7851,11 @@
       "birthdate": "1998-05-25",
       "age": 28,
       "nationality": "Colômbia",
-      "tm_id": "354145"
+      "tm_id": "354145",
+      "positions_sofascore": [
+        "PD",
+        "MEI"
+      ]
     },
     {
       "id": "tm2026:Flamengo:Giorgian de Arrascaeta",
@@ -6380,7 +7867,10 @@
       "birthdate": "1994-06-01",
       "age": 32,
       "nationality": "Uruguai",
-      "tm_id": "248410"
+      "tm_id": "248410",
+      "positions_sofascore": [
+        "MEI"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Samuel Lino",
@@ -6392,7 +7882,11 @@
       "birthdate": "1999-12-23",
       "age": 26,
       "nationality": "Brasil",
-      "tm_id": "694928"
+      "tm_id": "694928",
+      "positions_sofascore": [
+        "PE",
+        "ME"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Gonzalo Plata",
@@ -6404,7 +7898,11 @@
       "birthdate": "2000-11-01",
       "age": 25,
       "nationality": "Equador",
-      "tm_id": "592735"
+      "tm_id": "592735",
+      "positions_sofascore": [
+        "PD",
+        "ATA"
+      ]
     },
     {
       "id": "tm2026:Flamengo:Luiz Araújo",
@@ -6416,7 +7914,10 @@
       "birthdate": "1996-06-02",
       "age": 30,
       "nationality": "Brasil",
-      "tm_id": "435485"
+      "tm_id": "435485",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026v7:Flamengo:Anthony Valencia",
@@ -6428,7 +7929,10 @@
       "birthdate": "2003-07-21",
       "age": 23,
       "nationality": "Equador",
-      "tm_id": "974374"
+      "tm_id": "974374",
+      "positions_sofascore": [
+        "PD"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Pedro",
@@ -6440,7 +7944,10 @@
       "birthdate": "1997-06-20",
       "age": 29,
       "nationality": "Brasil",
-      "tm_id": "432895"
+      "tm_id": "432895",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026v7:Flamengo:Joaquín Freitas",
@@ -6452,7 +7959,10 @@
       "birthdate": "2006-12-02",
       "age": 19,
       "nationality": "Argentina",
-      "tm_id": "1324003"
+      "tm_id": "1324003",
+      "positions_sofascore": [
+        "ATA"
+      ]
     },
     {
       "id": "br2026plus:Flamengo:Bruno Henrique",
@@ -6464,8 +7974,13 @@
       "birthdate": "1990-12-30",
       "age": 35,
       "nationality": "Brasil",
-      "tm_id": "353108"
+      "tm_id": "353108",
+      "positions_sofascore": [
+        "ATA",
+        "PE"
+      ]
     }
   ],
-  "ages_source": "Transfermarkt (idade em 25/10/2026)"
+  "ages_source": "Transfermarkt (idade em 25/10/2026)",
+  "positions_source": "Sofascore (positionsDetailed), coletado em 25/10/2026; posição do arquivo continua a principal, as do Sofascore entram como posições adicionais"
 }

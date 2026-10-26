@@ -46,8 +46,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   for(const m of ms){const d=m.details||{};for(const side of ['home','away'])for(const p of (d.lineups?.[side]||[])){const x=g(p.id,m[side]);x.apps++;x.rs+=+(d.ratings?.[p.id]||0);}
    for(const e of d.events||[]){if(e.scorer)g(e.scorer,e.club).goals++;if(e.assist)g(e.assist,e.club).assists++;}}
   let L2=Object.values(P).filter(p=>p.id>0&&(!club||p.club_id===club)).map(p=>({...p,rating:p.apps?+(p.rs/p.apps).toFixed(2):0}));
+  const MA=Math.max(1,Math.round(Math.max(0,...L2.map(p=>p.apps))*0.3));
   const top=(k,n=15)=>[...L2].sort((a,b)=>b[k]-a[k]||b.rating-a.rating).filter(p=>p[k]>0).slice(0,n);
-  s.json({matches:ms.length,goals:top('goals'),assists:top('assists'),ratings:[...L2].filter(p=>p.apps>=Math.max(1,Math.floor(ms.length/40/2))).sort((a,b)=>b.rating-a.rating).slice(0,15),
+  s.json({matches:ms.length,goals:top('goals'),assists:top('assists'),min_apps:MA,ratings:[...L2].filter(p=>p.apps>=MA).sort((a,b)=>b.rating-a.rating||b.apps-a.apps).slice(0,20),
    clubs:L.CLUBS.map(id=>({id,name:cname(id)}))});}));
  app.get('/api/rooms/:code/zc/loanable',auth,wrap(async(r,s)=>{const room=await member(r);const hum=new Set((await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND club_id IS NOT NULL',[room.id])).map(x=>x.club_id));const out=[];
   for(const cid of L.CLUBS.filter(x=>!hum.has(x))){const sq=await R.squad(pool,room.id,cid,false);if(!sq.length)continue;const x=await app.locals.xiFor(pool,room.id,cid);const xi=new Set(x.xi.map(p=>p.id));sq.filter(p=>!xi.has(p.id)&&!p.loan_from).forEach(p=>out.push({id:p.id,name:p.name,pos:p.primary_position,overall:p.overall,age:p.age,club:cname(cid)}));}
