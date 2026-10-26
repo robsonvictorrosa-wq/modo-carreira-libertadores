@@ -91,5 +91,5 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
  {const PZ=JSON.parse(fs.readFileSync(__dirname+'/config/potenciais-zc.json','utf8')).players;let n=0;
   const VZ=require('./value');for(const a of PZ){n+=db.prepare('UPDATE players SET potential=? WHERE id=?').run(a.potential,a.player_id).changes;const q=db.prepare('SELECT overall,potential,age FROM players WHERE id=?').get(a.player_id);if(q)db.prepare('UPDATE players SET market_value=? WHERE id=?').run(VZ({...q}),a.player_id);}
   console.log('Potenciais corrigidos:',n);}
- db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad));
+ db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad)); require('./gen-attrs')(db);
  console.log('Libertadores ZC: 40 clubes; fora do FC27 (criados vazios):',miss.join(', '));}
