@@ -43,9 +43,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
  async function fixtures(roomId){const [x]=(await q('SELECT id,status,fixtures FROM rooms WHERE id=$1',[roomId]));if(x.fixtures)return x.fixtures;
   const avg=new Map();for(const cid of L.CLUBS){const sq=(await R.squad(pool,roomId,cid,false)).map(p=>+p.overall||0).sort((a,b)=>b-a).slice(0,18);avg.set(cid,sq.reduce((a,b)=>a+b,0)/(sq.length||1));}
   const rounds=require('./leaguesched').leagueSchedule(L.CLUBS,avg,20261026);await q('UPDATE rooms SET fixtures=$2,version=version+1 WHERE id=$1 AND fixtures IS NULL',[roomId,JSON.stringify(rounds)]);return (await q('SELECT fixtures FROM rooms WHERE id=$1',[roomId]))[0].fixtures;}
- app.get('/api/rooms/:code/zc/fixtures',auth,wrap(async(r,s)=>{const room=await member(r);let rounds;
+ const FXC=new Map();app.get('/api/rooms/:code/zc/fixtures',auth,wrap(async(r,s)=>{const room=await member(r);let rounds;const ck=room.id+':'+room.version,hit=FXC.get(room.id);if(hit&&hit.k===ck&&Date.now()-hit.t<60e3)return s.json(hit.v);const _j=s.json.bind(s);s.json=v=>{FXC.set(room.id,{k:ck,t:Date.now(),v});return _j(v)};
   if(room.status==='lobby')rounds=(await fixtures(room.id)).map((g,i)=>g.map(([h,a])=>({home:h,away:a})));
-  else{const [comp]=await q('SELECT id FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY id LIMIT 1',[room.id,room.season]);const ms=comp?await q('SELECT round,home,away,hg,ag,played FROM matches WHERE comp_id=$1 ORDER BY round,id',[comp.id]):[];rounds=[];for(const m of ms)(rounds[m.round-1]??=[]).push(m);rounds=[...rounds].map(x=>x||[]);}
+  else{const [comp]=await q('SELECT id FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY id LIMIT 1',[room.id,room.season]);const ms=comp?await q('SELECT id,round,home,away,hg,ag,played,pens FROM matches WHERE comp_id=$1 ORDER BY round,id',[comp.id]):[];rounds=[];for(const m of ms)(rounds[m.round-1]??=[]).push(m);rounds=[...rounds].map(x=>x||[]);}
   const nm=id=>club(id)?.name||'A definir';
   s.json({status:room.status,rounds:PLAN.map((st,i)=>({round:i+1,stage:st.stage,label:st.label||st.name||null,at:slotAt(i+1),games:(rounds[i]||[]).map(g=>({...g,home_name:nm(g.home),away_name:nm(g.away)}))}))});}));
  // ===== Agenda automática: inicia a temporada antes do 1º jogo e simula cada rodada no horário =====
