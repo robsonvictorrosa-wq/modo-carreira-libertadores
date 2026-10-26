@@ -63,17 +63,6 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
    ins.run(95000000+i,p.name,p.nationality||'Brasil',cid,cid,JSON.stringify(pss),pos,o,pl.potential,age,require('./value')(pl),wageOf(o));});
    for(const id of Object.values(byName))db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),overall=coalesce((SELECT round(avg(overall),1) FROM (SELECT overall FROM players WHERE club_id=clubs.id ORDER BY overall DESC LIMIT 11)),overall) WHERE id=?').run(id);})();
   console.log('Elencos brasileiros: fora da liga (ignorados):',JSON.stringify(skip));}
- // ===== Reforços: jogadores que faltavam nos clubes fora de Brasil/Argentina/Atl. Nacional (config/reforcos-fora-br-arg.json) =====
- {const RF=JSON.parse(fs.readFileSync(__dirname+'/config/reforcos-fora-br-arg.json','utf8')).players;const VAL=require('./value');const byN=Object.fromEntries(CF.clubs.map(c=>[c.name,c.id]));let nm=0,nc=0;
-  const tpl=(cid,pos,o)=>db.prepare("SELECT stats,wage,height_cm,weight_kg,preferred_foot,weak_foot,skill_moves,overall FROM players WHERE primary_position=? AND stats IS NOT NULL AND stats!='{}' AND overall IS NOT NULL ORDER BY (club_id=?) DESC,abs(overall-?) LIMIT 1").get(pos,cid,o);
-  db.transaction(()=>{RF.forEach((r,i)=>{const cid=byN[r.club];if(!cid)throw new Error('reforço: clube desconhecido '+r.club);
-   if(r.fc27_id&&db.prepare('SELECT 1 FROM players WHERE id=?').get(r.fc27_id)){db.prepare('UPDATE players SET club_id=?,base_club_id=? WHERE id=?').run(cid,cid,r.fc27_id);nm++;return;}
-   const t=tpl(cid,r.pos,r.ovr)||{};const k=t.overall?r.ovr/t.overall:1;const st=JSON.parse(t.stats||'{}');for(const x in st)if(typeof st[x]==='number'&&x!=='total')st[x]=Math.max(1,Math.min(99,Math.round(st[x]*k)));
-   const pot=r.age>33?r.ovr:Math.max(r.ovr,r.pot);
-   db.prepare(`INSERT INTO players(id,name,nationality,club_id,base_club_id,positions,primary_position,overall,potential,age,height_cm,weight_kg,preferred_foot,weak_foot,skill_moves,gender,market_value,wage,contract_end,stats) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'Homem',?,?,2028,?)`)
-    .run(97000000+i,r.name,r.nat,cid,cid,JSON.stringify(r.positions),r.pos,r.ovr,pot,r.age,t.height_cm??null,t.weight_kg??null,t.preferred_foot??null,t.weak_foot??null,t.skill_moves??null,VAL({overall:r.ovr,potential:pot,age:r.age}),t.wage?Math.round(t.wage*k):30000,JSON.stringify(st));nc++;});
-   db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id),squad_value=(SELECT coalesce(sum(market_value),0) FROM players WHERE club_id=clubs.id),overall=coalesce((SELECT round(avg(overall),1) FROM (SELECT overall FROM players WHERE club_id=clubs.id AND overall IS NOT NULL ORDER BY overall DESC LIMIT 11)),overall)').run();})();
-  console.log('Reforços fora BR/ARG:',nm,'movidos do FC27,',nc,'criados');}
  // ===== Primeiro leilão (config/leilao-pre.json, lista do Robson): jogadores saem dos clubes e ficam no clube técnico "Leilão ZC" =====
  {const AU=JSON.parse(fs.readFileSync(__dirname+'/config/leilao-pre.json','utf8')).players;const VAL=require('./value');
   const auc=db.prepare('INSERT INTO clubs(name,league_id) VALUES(?,?)').run('Leilão ZC',lg).lastInsertRowid;db.exec('CREATE TABLE lib_auction(ord INT,player_id INT,stage TEXT)');

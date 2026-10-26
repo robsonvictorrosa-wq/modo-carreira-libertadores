@@ -76,3 +76,13 @@ ALTER TABLE room_players ADD COLUMN IF NOT EXISTS shielded_at TIMESTAMPTZ;
 UPDATE room_players SET shielded_at=now() WHERE shielded AND shielded_at IS NULL;
 -- Blindagem: no máximo 3 por clube (mantém os 3 blindados primeiro)
 UPDATE room_players r SET shielded=false,shielded_at=NULL FROM (SELECT room_id,player_id,row_number() OVER (PARTITION BY room_id,club_id ORDER BY shielded_at,player_id) n FROM room_players WHERE shielded) x WHERE r.room_id=x.room_id AND r.player_id=x.player_id AND x.n>3;
+-- 25/10: reverte reforços fora BR/ARG (ids 97000000+ e 4 jogadores movidos do FC27)
+DELETE FROM offers WHERE (player_id BETWEEN 97000000 AND 97999999) OR (swap_player_id BETWEEN 97000000 AND 97999999);
+DELETE FROM negotiations WHERE player_id BETWEEN 97000000 AND 97999999;
+DELETE FROM watchlist WHERE player_id BETWEEN 97000000 AND 97999999;
+DELETE FROM auction_lots WHERE player_id BETWEEN 97000000 AND 97999999;
+DELETE FROM transfers WHERE player_id BETWEEN 97000000 AND 97999999;
+DELETE FROM player_stats WHERE player_id BETWEEN 97000000 AND 97999999;
+DELETE FROM room_players WHERE player_id BETWEEN 97000000 AND 97999999;
+UPDATE lineups SET starters=ARRAY(SELECT x FROM unnest(starters) x WHERE x NOT BETWEEN 97000000 AND 97999999),slotted=false WHERE EXISTS(SELECT 1 FROM unnest(starters) x WHERE x BETWEEN 97000000 AND 97999999);
+UPDATE room_players r SET club_id=v.orig FROM (VALUES(211302,358,118),(226286,339,118),(258846,261,655),(275257,339,57)) v(pid,moved,orig) WHERE r.player_id=v.pid AND r.club_id=v.moved AND NOT EXISTS(SELECT 1 FROM transfers t WHERE t.room_id=r.room_id AND t.player_id=r.player_id);
