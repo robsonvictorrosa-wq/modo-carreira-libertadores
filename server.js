@@ -1,7 +1,7 @@
 const express=require('express'),D=require('better-sqlite3'),path=require('path');
 const db=new D(path.join(__dirname,'data/game.db'),{readonly:true});
 const app=express();app.use(require('compression')());app.use(express.json());app.use(express.static(path.join(__dirname,'public'),{setHeaders:(r,f)=>{if(/\.(js|css|html|webmanifest)$/.test(f))r.setHeader('Cache-Control','no-cache');else if(/crests|icons|\.png$/.test(f))r.setHeader('Cache-Control','public, max-age=604800');}}));
-const parse=p=>p&&({...p,positions:JSON.parse(p.positions),stats:JSON.parse(p.stats)});
+const BD=require('./birth');const parse=p=>{if(!p)return p;BD.load(db);const a=BD.ageOf(p.id);return {...p,age:a!=null?a:p.age,birth_date:BD.birth(p.id)||null,positions:JSON.parse(p.positions),stats:JSON.parse(p.stats)};};
 app.get('/api/health',(q,r)=>r.json({ok:true}));
 app.get('/api/leagues',(q,r)=>r.json(db.prepare(`SELECT l.*,count(c.id) n_clubs,round(avg(c.overall),1) overall,sum(c.squad_value) value FROM leagues l JOIN clubs c ON c.league_id=l.id GROUP BY l.id ORDER BY CASE l.kind WHEN 'conmebol' THEN 1 WHEN 'league' THEN 0 ELSE 2 END,l.gender DESC,overall DESC`).all()));
 app.get('/api/leagues/:id/clubs',(q,r)=>r.json({league:db.prepare('SELECT * FROM leagues WHERE id=?').get(q.params.id),clubs:db.prepare('SELECT * FROM clubs WHERE league_id=? ORDER BY overall DESC').all(q.params.id)}));
