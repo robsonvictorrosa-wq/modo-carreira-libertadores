@@ -65,3 +65,4 @@ details.card summary{cursor:pointer;list-style:none}details.card summary::-webki
 @media (max-width:420px){.pnm{font-size:10px}.pnum{font-size:13px}.tcards{grid-template-columns:1fr 1fr}.tkg{grid-template-columns:1fr}}
 
 .pl.tec{flex-wrap:wrap}.pl.tec .i b{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word}.pl.tec select{max-width:100%}
+.ovr:not(.o1):not(.o2):not(.o3):not(.o4):not(.o5){color:#fff}.ovr:not(.o1):not(.o2):not(.o3):not(.o4):not(.o5) .pot{color:#e5e7eb!important;opacity:1!important}
