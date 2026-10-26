@@ -170,6 +170,24 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    else if(y.mkt_state==='market'&&y.mkt_stage===st&&new Date(y.mkt_until).getTime()!==Date.parse(W.market_close)&&!y.zc_mkt_fixed){await pool.query('UPDATE rooms SET mkt_until=$2,version=version+1 WHERE id=$1',[y.id,W.market_close]);console.log('agenda: fim do mercado',st);}}
  }catch(e){console.error('agenda',e.message)}}
  setInterval(agenda,15000);setTimeout(agenda,3000);
+ // correção pontual (pedido do Robson 26/10): vale o maior lance removido. Idempotente: só age se o valor antigo ainda estiver lá.
+ async function fixLancesRemovidos(){const FX=[{lot:9,pid:76624,club:758,old:20e6,fee:50e6},{lot:10,pid:247257,club:123,old:76e6,fee:80e6}];
+  for(const f of FX){const c=await pool.connect();try{await c.query('BEGIN');
+   const [l]=(await c.query("SELECT * FROM auction_lots WHERE id=$1 AND player_id=$2 AND winner_club=$3 AND status='sold' FOR UPDATE",[f.lot,f.pid,f.club])).rows;
+   if(!l||+l.price!==f.old){await c.query('ROLLBACK');continue;}
+   const [t]=(await c.query("SELECT id FROM transfers WHERE room_id=$1 AND player_id=$2 AND to_club=$3 AND fee=$4 AND kind='leilão' ORDER BY id DESC LIMIT 1",[l.room_id,f.pid,f.club,f.old])).rows;
+   if(!t){await c.query('ROLLBACK');console.log('fixLances: transfer não achado',f.lot);continue;}
+   const d=f.fee-f.old;
+   await c.query('UPDATE transfers SET fee=$2 WHERE id=$1',[t.id,f.fee]);
+   await c.query('UPDATE auction_lots SET price=$2 WHERE id=$1',[l.id,f.fee]);
+   await c.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[l.room_id,f.club,d]);
+   if(!R.isFree||!R.isFree(l.from_club))await c.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[l.room_id,l.from_club,d]);
+   await c.query('UPDATE auction_bids SET amount=$3 WHERE lot_id=$1 AND club_id=$2',[l.id,f.club,f.fee]);
+   await c.query('UPDATE auction_bid_log SET removed_at=NULL WHERE id=(SELECT id FROM auction_bid_log WHERE lot_id=$1 AND club_id=$2 AND amount=$3 ORDER BY id DESC LIMIT 1)',[l.id,f.club,f.fee]);
+   await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[l.room_id]);
+   await c.query('COMMIT');console.log('fixLances: lote',f.lot,'corrigido');}catch(e){await c.query('ROLLBACK').catch(()=>{});console.log('fixLances erro',e.message);}finally{c.release();}}}
+ setTimeout(()=>fixLancesRemovidos().catch(e=>console.log('fixLances',e.message)),8000);
+
  app.get('/api/rooms/:code/zc/loans',auth,wrap(async(r,s)=>{const room=await member(r);const comp=await comp0(pool,room);const cr=comp?.current_round||0;
   const rows=await q('SELECT player_id,club_id,loan_from,loan_until FROM room_players WHERE room_id=$1 AND loan_from IS NOT NULL',[room.id]);
   s.json(rows.filter(x=>L.CLUBS.includes(x.club_id)||L.CLUBS.includes(x.loan_from)).map(x=>({player_id:x.player_id,player:pname(x.player_id),pos:R.P.get(x.player_id)?.primary_position,overall:R.P.get(x.player_id)?.overall,to:cname(x.club_id),to_id:x.club_id,from:cname(x.loan_from),from_id:x.loan_from,loan_until:x.loan_until,remaining:x.loan_until==null?null:Math.max(0,x.loan_until-cr)})));}));
