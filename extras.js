@@ -229,4 +229,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    await c.query("UPDATE transfers SET status='cancelled',cancelled_by=$2,cancelled_at=now() WHERE id=$1",[t.id,r.user.nick]);
    await note(c,room.id,`↩️ ${r.user.nick} cancelou a transferência de ${desc(t)}: jogador voltou e valores devolvidos.`);});s.json({ok:1});}));
  app.get('/api/rooms/:code/zc/log',auth,wrap(async(r,s)=>{const room=await member(r);s.json(await q('SELECT id,text,created_at FROM room_events WHERE room_id=$1 ORDER BY id DESC LIMIT 150',[room.id]));}));
+ // diagnóstico SÓ LEITURA (Kaiki Bruno): loga lances do lote, inclusive removidos
+ setTimeout(async()=>{const c=await pool.connect();try{await c.query('BEGIN READ ONLY');const r=(await c.query("SELECT b.id,l.id lot,l.status,l.price,l.winner_club,b.club_id,b.amount,b.created_at,b.removed_at,b.user_id FROM auction_bid_log b JOIN auction_lots l ON l.id=b.lot_id WHERE l.player_id=ANY($1) ORDER BY b.id",[[...R.P.values()].filter(p=>/kaiki/i.test(p.name)).map(p=>p.id)])).rows;
+  for(const x of r)console.log('DIAGKAIKI',JSON.stringify({...x,club:cname(x.club_id),winner:cname(x.winner_club)}));console.log('DIAGKAIKI_END',r.length);await c.query('ROLLBACK');}catch(e){console.log('DIAGKAIKI_ERR',e.message);await c.query('ROLLBACK').catch(()=>{});}finally{c.release();}},15000);
 };
