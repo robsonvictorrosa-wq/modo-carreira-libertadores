@@ -1,5 +1,5 @@
 {
- "_doc": "Potenciais corrigidos pelo Robson (26/10/2026). Só altera o potencial.",
+ "_doc": "Potenciais corrigidos pelo Robson (26/10/2026). Só altera o potencial. 26/10: +18 jogadores com potencial = min(pot, over+2).",
  "players": [
   {
    "player_id": 183898,
@@ -108,6 +108,114 @@
    "name": "Lucas Alario",
    "club": "Estudiantes",
    "potential": 71
+  },
+  {
+   "player_id": 230865,
+   "name": "Abel Luciatti",
+   "club": "Cerro Porteño",
+   "potential": 68
+  },
+  {
+   "player_id": 234178,
+   "name": "Luis Abram",
+   "club": "Sporting Cristal",
+   "potential": 68
+  },
+  {
+   "player_id": 246914,
+   "name": "Robert Rojas",
+   "club": "Libertad",
+   "potential": 70
+  },
+  {
+   "player_id": 213400,
+   "name": "Diego Laxalt",
+   "club": "Peñarol",
+   "potential": 72
+  },
+  {
+   "player_id": 267573,
+   "name": "Luciano Sánchez",
+   "club": "Argentinos Juniors",
+   "potential": 66
+  },
+  {
+   "player_id": 214977,
+   "name": "Matías Kranevitter",
+   "club": "Racing",
+   "potential": 71
+  },
+  {
+   "player_id": 192342,
+   "name": "Edwin Cardona",
+   "club": "Atlético Nacional",
+   "potential": 75
+  },
+  {
+   "player_id": 228271,
+   "name": "Christofer Gonzáles",
+   "club": "Sporting Cristal",
+   "potential": 68
+  },
+  {
+   "player_id": 210112,
+   "name": "Cristian Benavente",
+   "club": "Sporting Cristal",
+   "potential": 65
+  },
+  {
+   "player_id": 220332,
+   "name": "Ángel Romero",
+   "club": "Boca Juniors",
+   "potential": 73
+  },
+  {
+   "player_id": 237183,
+   "name": "Matías Rojas",
+   "club": "Libertad",
+   "potential": 72
+  },
+  {
+   "player_id": 232709,
+   "name": "Damián Batallini",
+   "club": "Bolívar",
+   "potential": 71
+  },
+  {
+   "player_id": 209523,
+   "name": "Derlis González",
+   "club": "Olimpia",
+   "potential": 73
+  },
+  {
+   "player_id": 239207,
+   "name": "Maximiliano Gómez",
+   "club": "Nacional",
+   "potential": 77
+  },
+  {
+   "player_id": 95000092,
+   "name": "Mateo Cassierra",
+   "club": "Atlético Mineiro",
+   "potential": 74
+  },
+  {
+   "player_id": 235008,
+   "name": "Lucas Robertone",
+   "club": "Vélez Sarsfield",
+   "potential": 76
+  },
+  {
+   "player_id": 232646,
+   "name": "Claudio Bravo",
+   "club": "Argentinos Juniors",
+   "potential": 69
+  },
+  {
+   "player_id": 253289,
+   "name": "Guzmán Corujo",
+   "club": "San Lorenzo",
+   "potential": 70
   }
  ]
 }
