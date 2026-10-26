@@ -1,0 +1,215 @@
+{
+ "_doc": "Sorteio Libertadores ZC (aprovado pelo Robson em 25/10/2026): move jogadores existentes para o clube sorteado. Não cria jogadores.",
+ "players": [
+  {
+   "player_id": 143076,
+   "name": "Alejandro Gómez",
+   "club": "Peñarol",
+   "club_id": 506,
+   "from_club_id": 234
+  },
+  {
+   "player_id": 227153,
+   "name": "Cristian Borja",
+   "club": "Cerro Porteño",
+   "club_id": 166,
+   "from_club_id": 746
+  },
+  {
+   "player_id": 210513,
+   "name": "Juan Fernando Quintero",
+   "club": "Olimpia",
+   "club_id": 339,
+   "from_club_id": 118
+  },
+  {
+   "player_id": 205632,
+   "name": "Lucas Ocampos",
+   "club": "LDU Quito",
+   "club_id": 73,
+   "from_club_id": 667
+  },
+  {
+   "player_id": 210822,
+   "name": "Douglas Santos",
+   "club": "Independiente del Valle",
+   "club_id": 167,
+   "from_club_id": 118
+  },
+  {
+   "player_id": 226385,
+   "name": "Cristian Espinoza",
+   "club": "Indep. Santa Fe",
+   "club_id": 676,
+   "from_club_id": 633
+  },
+  {
+   "player_id": 214584,
+   "name": "Franco Armani",
+   "club": "Indep. Santa Fe",
+   "club_id": 676,
+   "from_club_id": 692
+  },
+  {
+   "player_id": 259848,
+   "name": "Jon Mikel Aramburu",
+   "club": "Nacional",
+   "club_id": 774,
+   "from_club_id": 577
+  },
+  {
+   "player_id": 241907,
+   "name": "Diego Rossi",
+   "club": "Nacional",
+   "club_id": 774,
+   "from_club_id": 667
+  },
+  {
+   "player_id": 230977,
+   "name": "Miguel Almirón",
+   "club": "Universidad Católica",
+   "club_id": 707,
+   "from_club_id": 609
+  },
+  {
+   "player_id": 176919,
+   "name": "Nahuel Guzmán",
+   "club": "Universidad Católica",
+   "club_id": 707,
+   "from_club_id": 736
+  },
+  {
+   "player_id": 240471,
+   "name": "Fernando Gorriarán",
+   "club": "Sporting Cristal",
+   "club_id": 261,
+   "from_club_id": 736
+  },
+  {
+   "player_id": 233084,
+   "name": "Nahuel Molina",
+   "club": "Sporting Cristal",
+   "club_id": 261,
+   "from_club_id": 480
+  },
+  {
+   "player_id": 233092,
+   "name": "Joaquín Pereyra",
+   "club": "Barcelona de Guayaquil",
+   "club_id": 274,
+   "from_club_id": 509
+  },
+  {
+   "player_id": 247450,
+   "name": "Agustín Palavecino",
+   "club": "Barcelona de Guayaquil",
+   "club_id": 274,
+   "from_club_id": 117
+  },
+  {
+   "player_id": 197655,
+   "name": "Sebastián Coates",
+   "club": "Universitario",
+   "club_id": 358,
+   "from_club_id": 774
+  },
+  {
+   "player_id": 188803,
+   "name": "Taison",
+   "club": "Universitario",
+   "club_id": 358,
+   "from_club_id": 630
+  },
+  {
+   "player_id": 220523,
+   "name": "Yerry Mina",
+   "club": "Universitario",
+   "club_id": 358,
+   "from_club_id": 496
+  },
+  {
+   "player_id": 215076,
+   "name": "Lorenzo Faravelli",
+   "club": "Bolívar",
+   "club_id": 245,
+   "from_club_id": 510
+  },
+  {
+   "player_id": 221342,
+   "name": "Maffeo",
+   "club": "Bolívar",
+   "club_id": 245,
+   "from_club_id": 621
+  },
+  {
+   "player_id": 176550,
+   "name": "David Ospina",
+   "club": "Bolívar",
+   "club_id": 245,
+   "from_club_id": 118
+  },
+  {
+   "player_id": 184941,
+   "name": "Alexis Sánchez",
+   "club": "Libertad",
+   "club_id": 243,
+   "from_club_id": 610
+  },
+  {
+   "player_id": 238896,
+   "name": "Pepê",
+   "club": "Libertad",
+   "club_id": 243,
+   "from_club_id": 389
+  },
+  {
+   "player_id": 186537,
+   "name": "Cristhian Stuani",
+   "club": "Libertad",
+   "club_id": 243,
+   "from_club_id": 662
+  },
+  {
+   "player_id": 200752,
+   "name": "Juan Jesus",
+   "club": "Coquimbo Unido",
+   "club_id": 315,
+   "from_club_id": 222
+  },
+  {
+   "player_id": 235949,
+   "name": "Gabriel Strefezza",
+   "club": "Coquimbo Unido",
+   "club_id": 315,
+   "from_club_id": 604
+  },
+  {
+   "player_id": 213991,
+   "name": "Jefferson Lerma",
+   "club": "Coquimbo Unido",
+   "club_id": 315,
+   "from_club_id": 207
+  },
+  {
+   "player_id": 211625,
+   "name": "Rodrigo Dourado",
+   "club": "Caracas FC",
+   "club_id": 185,
+   "from_club_id": 681
+  },
+  {
+   "player_id": 214026,
+   "name": "Johan Mojica",
+   "club": "Caracas FC",
+   "club_id": 185,
+   "from_club_id": 369
+  },
+  {
+   "player_id": 216816,
+   "name": "Giovanni Simeone",
+   "club": "Caracas FC",
+   "club_id": 185,
+   "from_club_id": 402
+  }
+ ]
+}

@@ -74,5 +74,10 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
    db.prepare("INSERT INTO lib_auction VALUES(?,?,'pre')").run(i,id);});
    db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();})();
   console.log('Leilão de pré-temporada:',AU.length,'jogadores no clube Leilão ZC',auc);}
+ // ===== Sorteio Libertadores ZC (config/sorteio-zc.json, aprovado pelo Robson): move jogadores existentes para o clube sorteado =====
+ {const SZ=JSON.parse(fs.readFileSync(__dirname+'/config/sorteio-zc.json','utf8')).players;let n=0;
+  db.transaction(()=>{for(const a of SZ)n+=db.prepare('UPDATE players SET club_id=?,base_club_id=? WHERE id=?').run(a.club_id,a.club_id,a.player_id).changes;
+   db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();})();
+  console.log('Sorteio Libertadores ZC:',n,'jogadores movidos');}
  db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad));
  console.log('Libertadores ZC: 40 clubes; fora do FC27 (criados vazios):',miss.join(', '));}
