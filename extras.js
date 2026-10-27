@@ -259,7 +259,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   info.after={[f.from]:await bud(FROMC),[f.to]:await bud(TOC)};if(!free)info.after[cname(l.from_club)]=await bud(l.from_club);console.log(T,'OK',JSON.stringify(info));
  }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
  // lotes SUSPENSOS (Robson 26/10): desfaz a venda e volta ao estado TRAVADO (unsold no Leilão ZC), mantendo o histórico de lances
- const SUSP=[['Vanderson','Grêmio',18.1e6],['Yan Couto','Cerro Porteño',20e6],['Valentín Gómez','Vasco',26e6],['Gabriel Sara','Bahia',67e6],['Luiz Henrique','Barcelona',55e6],['David Neres','Racing',65e6],['Brian Rodr','Olimpia',50e6],['Marcos Leonardo','Vélez',130e6]].map(([n,c,v])=>({n,c,v}));
+ const SUSP=[['Vanderson','Grêmio',18.1e6],['Yan Couto','Cerro Porteño',20e6],['Valentín Gómez','Vasco',26e6],['Gabriel Sara','Bahia',67e6],['Luiz Henrique','Barcelona',55e6],['David Neres','Racing',65e6],['Brian Rodr','Olimpia',50e6]].map(([n,c,v])=>({n,c,v}));
  async function suspendLot(f){const c=await pool.connect();const T='FIXSUSP '+f.n;try{await c.query('BEGIN');
   const ls=(await c.query("SELECT * FROM auction_lots WHERE status='sold' AND price=$1 FOR UPDATE",[f.v])).rows.filter(l=>(pname(l.player_id)||'').startsWith(f.n)&&(cname(l.winner_club)||'').startsWith(f.c));
   if(ls.length!==1){console.log(T,'SKIP',ls.length);await c.query('ROLLBACK');return;}const l=ls[0],W=l.winner_club,rid=l.room_id;
@@ -281,18 +281,18 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   info.after={[cname(W)]:await bud(W),'Leilão ZC':free?'n/c':await bud(l.from_club)};console.log(T,'OK',JSON.stringify(info));
  }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
  // Jair: suspensão desfeita (Robson 26/10) -> volta vendido ao São Paulo por 40 mi. Idempotente.
- async function unsuspendJair(){const c=await pool.connect();const T='FIXJAIR';try{await c.query('BEGIN');
-  const SP=L.CLUBS.find(id=>cname(id)==='São Paulo');const [l]=(await c.query("SELECT * FROM auction_lots WHERE id=7 AND status='unsold' FOR UPDATE")).rows;
-  if(!l||!/^jair/i.test(pname(l.player_id)||'')){console.log(T,'SKIP');await c.query('ROLLBACK');return;}const rid=l.room_id;
-  const p=await R.player(c,rid,l.player_id);const [t]=(await c.query("SELECT * FROM transfers WHERE room_id=$1 AND player_id=$2 AND to_club=$3 AND fee=40000000 AND status='cancelled' ORDER BY id DESC LIMIT 1",[rid,l.player_id,SP])).rows;
+ async function unsuspend(LOT,RE,CN,FEE){const c=await pool.connect();const T='FIXUNSUSP '+LOT;try{await c.query('BEGIN');
+  const SP=L.CLUBS.find(id=>cname(id)===CN);const [l]=(await c.query("SELECT * FROM auction_lots WHERE id=$1 AND status='unsold' FOR UPDATE",[LOT])).rows;
+  if(!l||!RE.test(pname(l.player_id)||'')){console.log(T,'SKIP');await c.query('ROLLBACK');return;}const rid=l.room_id;
+  const p=await R.player(c,rid,l.player_id);const [t]=(await c.query("SELECT * FROM transfers WHERE room_id=$1 AND player_id=$2 AND to_club=$3 AND fee=$4 AND status='cancelled' ORDER BY id DESC LIMIT 1",[rid,l.player_id,SP,FEE])).rows;
   const bud=async id=>+(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[rid,id])).rows[0]?.budget;const b0=await bud(SP);
   if(p?.club_id!==l.from_club||!t){console.log(T,'STOP',JSON.stringify({club:cname(p?.club_id),t:!!t}));await c.query('ROLLBACK');return;}
   await c.query('UPDATE room_players SET club_id=$3,wage=$4,contract_end=$5,morale=75,wants_out=false,listed=false,loan_from=NULL,loan_until=NULL,release_clause=NULL WHERE room_id=$1 AND player_id=$2',[rid,l.player_id,SP,t.wage,l.season+3]);
-  await c.query('UPDATE room_clubs SET budget=budget-40000000 WHERE room_id=$1 AND club_id=$2',[rid,SP]);
-  if(!(R.isFree&&R.isFree(l.from_club)))await c.query('UPDATE room_clubs SET budget=budget+40000000 WHERE room_id=$1 AND club_id=$2',[rid,l.from_club]);
+  await c.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[rid,SP,FEE]);
+  if(!(R.isFree&&R.isFree(l.from_club)))await c.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[rid,l.from_club,FEE]);
   await c.query("UPDATE transfers SET status='ok',cancelled_by=NULL,cancelled_at=NULL WHERE id=$1",[t.id]);
-  await c.query("UPDATE auction_lots SET status='sold',winner_club=$2,price=40000000 WHERE id=$1",[l.id,SP]);
-  await note(c,rid,`↩️ Correção da administração: a suspensão do ${pname(l.player_id)} foi desfeita. Ele continua no São Paulo por € 40.0 mi.`);
+  await c.query("UPDATE auction_lots SET status='sold',winner_club=$2,price=$3 WHERE id=$1",[l.id,SP,FEE]);
+  await note(c,rid,`↩️ Correção da administração: a suspensão do ${pname(l.player_id)} foi desfeita. Ele continua no ${CN} por € ${(FEE/1e6).toFixed(1)} mi.`);
   await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[rid]);await c.query('COMMIT');console.log(T,'OK',JSON.stringify({before:b0,after:await bud(SP)}));
  }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
  // Talisca: site mostra LDU como vencedora (lances do Santa Fe removidos do histórico; lance de 95 mi da LDU volta se tiver sido removido)
@@ -303,5 +303,5 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   await q('DELETE FROM auction_bids WHERE lot_id=16 AND club_id=$1',[SF]);await pool.query('UPDATE rooms SET version=version+1 WHERE id=(SELECT room_id FROM auction_lots WHERE id=16)');console.log('FIXTALOG OK',a.length,b.length);}catch(e){console.log('FIXTALOG ERR',e.message);}}
  setTimeout(async()=>{await moveLot({tag:'kaiki',re:/kaiki/i,from:'Santos',to:'Universitario',old:25.5e6,fee:23.2e6});
   await moveLot({tag:'talisca',re:/talisca/i,from:'Indep. Santa Fe',to:'LDU Quito',old:46e6,fee:95e6});
-  for(const f of SUSP)await suspendLot(f);await unsuspendJair();await taliscaLog();},15000);
+  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();},15000);
 };
