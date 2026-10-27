@@ -301,7 +301,18 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const a=await q('UPDATE auction_bid_log SET removed_at=now() WHERE lot_id=16 AND club_id=$1 AND removed_at IS NULL RETURNING id',[SF]);
   const b=await q('UPDATE auction_bid_log SET removed_at=NULL WHERE id=(SELECT id FROM auction_bid_log WHERE lot_id=16 AND club_id=$1 AND amount=95000000 ORDER BY id DESC LIMIT 1) AND removed_at IS NOT NULL RETURNING id',[LDU]);
   await q('DELETE FROM auction_bids WHERE lot_id=16 AND club_id=$1',[SF]);await pool.query('UPDATE rooms SET version=version+1 WHERE id=(SELECT room_id FROM auction_lots WHERE id=16)');console.log('FIXTALOG OK',a.length,b.length);}catch(e){console.log('FIXTALOG ERR',e.message);}}
+ // Savinho (lote 19): Universidad Católica paga 90 mi em vez de 95 mi (Robson 26/10). Idempotente.
+ async function savinho90(){const c=await pool.connect();const T='FIXSAV';try{await c.query('BEGIN');
+  const UC=L.CLUBS.find(id=>cname(id)==='Universidad Católica');const [l]=(await c.query("SELECT * FROM auction_lots WHERE id=19 AND status='sold' AND winner_club=$1 AND price=95000000 FOR UPDATE",[UC])).rows;
+  if(!l||!/^savinho/i.test(pname(l.player_id)||'')){console.log(T,'SKIP');await c.query('ROLLBACK');return;}
+  const [t]=(await c.query("SELECT id FROM transfers WHERE room_id=$1 AND player_id=$2 AND to_club=$3 AND fee=95000000 AND kind='leilão' AND status IS DISTINCT FROM 'cancelled' ORDER BY id DESC LIMIT 1",[l.room_id,l.player_id,UC])).rows;
+  if(!t){console.log(T,'STOP sem transferência');await c.query('ROLLBACK');return;}
+  const bud=async()=>+(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[l.room_id,UC])).rows[0]?.budget;const b0=await bud();
+  await c.query('UPDATE transfers SET fee=90000000 WHERE id=$1',[t.id]);await c.query('UPDATE auction_lots SET price=90000000 WHERE id=$1',[l.id]);
+  await c.query('UPDATE room_clubs SET budget=budget+5000000 WHERE room_id=$1 AND club_id=$2',[l.room_id,UC]);
+  await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[l.room_id]);await c.query('COMMIT');console.log(T,'OK',JSON.stringify({before:b0,after:await bud()}));
+ }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
  setTimeout(async()=>{await moveLot({tag:'kaiki',re:/kaiki/i,from:'Santos',to:'Universitario',old:25.5e6,fee:23.2e6});
   await moveLot({tag:'talisca',re:/talisca/i,from:'Indep. Santa Fe',to:'LDU Quito',old:46e6,fee:95e6});
-  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();},15000);
+  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();await savinho90();},15000);
 };
