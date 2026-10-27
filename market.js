@@ -60,7 +60,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  const SEC_TARGET={GK:3,DEF:8,MID:8,ATT:5};
  async function tick(db,room,win){const day=room.market_day;const hum=await humans(db,room.id);const rnd=Math.random;const W=await R.world(db,room.id);
   // ofertas vencidas
-  const exp=(await db.query("UPDATE offers SET status='expired',reason='Prazo esgotado',updated_at=now() WHERE room_id=$1 AND status IN ('pending','countered','club_accepted') AND deadline_day<$2 RETURNING *",[room.id,day])).rows;
+  // Robson 27/10: proposta a clube sem técnico fica pendente; quando um técnico assume, ganha prazo novo a partir de hoje
+  {const hids=[...hum.keys()];if(hids.length)await db.query("UPDATE offers o SET seller_user=m.user_id,deadline_day=$2+2,reason='Aguardando resposta do técnico.',updated_at=now() FROM room_managers m WHERE o.room_id=$1 AND m.room_id=$1 AND m.club_id=o.seller_club AND o.status='pending' AND o.seller_user IS DISTINCT FROM m.user_id AND o.buyer_user IS NOT NULL",[room.id,day]);}
+  const exp=(await db.query("UPDATE offers SET status='expired',reason='Prazo esgotado',updated_at=now() WHERE room_id=$1 AND status IN ('pending','countered','club_accepted') AND deadline_day<$2 AND NOT (status='pending' AND buyer_user IS NOT NULL AND NOT EXISTS(SELECT 1 FROM room_managers m WHERE m.room_id=offers.room_id AND m.club_id=offers.seller_club)) RETURNING *",[room.id,day])).rows;
   for(const o of exp)if(!o.buyer_user&&o.seller_user)await upsetPlayer(db,room,o,hum);
   const moved=new Set(),rows=[],touched=new Set(),news=[];
   const summer=win.days===4;const pBuy=summer?0.55:0.25;
@@ -119,7 +121,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  async function before(db,room){const comp=await mainComp(db,room);const win=windowOf(room,comp);if(!win.open)return;
   await db.query('UPDATE rooms SET market_day=market_day+1 WHERE id=$1',[room.id]);room.market_day++;await tick(db,room,win);}
  async function after(db,room){const [r]=(await db.query('SELECT * FROM rooms WHERE id=$1',[room.id])).rows;const win=windowOf(r,await mainComp(db,r));
-  if(r.window_was_open&&!win.open){const n=(await db.query("UPDATE offers SET status='expired',reason='Janela fechada',updated_at=now() WHERE room_id=$1 AND status IN ('pending','countered','club_accepted') RETURNING id",[r.id])).rowCount;
+  if(r.window_was_open&&!win.open){const n=(await db.query("UPDATE offers SET status='expired',reason='Janela fechada',updated_at=now() WHERE room_id=$1 AND status IN ('pending','countered','club_accepted') AND NOT (status='pending' AND buyer_user IS NOT NULL AND NOT EXISTS(SELECT 1 FROM room_managers m WHERE m.room_id=offers.room_id AND m.club_id=offers.seller_club)) RETURNING id",[r.id])).rowCount;
    await note(db,r.id,`🔒 Janela de transferências fechada.${n?` ${n} negociação(ões) em aberto expiraram.`:''}`);}
   if(!r.window_was_open&&win.open)await note(db,r.id,`🔓 ${win.name} aberta (fecha ${win.closes||'quando o dono decidir'}).`);
   await db.query('UPDATE rooms SET window_was_open=$2 WHERE id=$1',[r.id,win.open]);}
@@ -168,6 +170,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const ins=(st,extra={})=>c.query('INSERT INTO offers(room_id,player_id,buyer_club,seller_club,buyer_user,seller_user,fee,swap_player_id,loan,deadline_day,created_day,loan_rounds,status,counter_fee,reason) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *',[...base,st,extra.counter||null,extra.msg||null]).then(async x=>{const o=x.rows[0];await addH(c,o.id,[{by:'comprador',club:bc.name,act:'proposta',fee}].concat(extra.counter?[{by:'vendedor',club:sc.name,act:'contraproposta',fee:extra.counter}]:st==='club_accepted'&&!isFree(p.club_id)?[{by:'vendedor',club:sc.name,act:'aceitou',fee}]:st==='rejected'?[{by:'vendedor',club:sc.name,act:'recusou'}]:[]));return st==='club_accepted'?await closeNow(c,room,o):o;});
   if(isFree(p.club_id)){if(swap)throw fail('Jogador livre: não há troca, você paga o valor de mercado dele');const price=Math.round(+p.market_value||0);if(price>f.available||f.available<=0)throw noMoney(price,f);base[6]=price;const o=await ins('club_accepted',{msg:`Jogador livre: custa ${X.fmt(price)} (valor de mercado). Negocie o contrato direto com ele.`});return {offer:o,decision:'accept',message:o.reason};}
   if(hum.has(p.club_id)){const o=await ins('pending',{msg:'Aguardando resposta do técnico.'});await note(c,room.id,`📩 ${r.user.nick} (${bc.name}) ofereceu ${X.fmt(fee)}${swap?' + '+pname(swap):''}${loan?' (empréstimo)':''} por ${p.name}.`,hum.get(p.club_id).user_id);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);return {offer:o,decision:'pending',message:'Proposta enviada ao técnico do '+sc.name+'.'};}
+  // Robson 27/10: clube da liga sem técnico humano não responde sozinho; a proposta fica pendente até um técnico assumir e decidir
+  if(LIB.has(p.club_id)){const o=await ins('pending',{msg:'O '+sc.name+' está sem técnico: a proposta fica em aberto até um técnico assumir o clube e decidir.'});await note(c,room.id,`📩 ${r.user.nick} (${bc.name}) ofereceu ${X.fmt(fee)} por ${p.name} (${sc.name} sem técnico: proposta em aberto).`);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);return {offer:o,decision:'pending',message:o.reason};}
   // clube bot decide
   const sq=await R.squad(c,room.id,p.club_id,false);const imp=X.importance(p,sq);let swapValue=0;if(swap){const sp=await R.player(c,room.id,swap);swapValue=Math.round(sp.market_value*X.ageF(sp.age)*0.6);}
   const [rc]=(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[room.id,p.club_id])).rows;
