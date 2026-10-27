@@ -258,6 +258,29 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[l.room_id]);await c.query('COMMIT');
   info.after={[f.from]:await bud(FROMC),[f.to]:await bud(TOC)};if(!free)info.after[cname(l.from_club)]=await bud(l.from_club);console.log(T,'OK',JSON.stringify(info));
  }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
+ // lotes SUSPENSOS (Robson 26/10): desfaz a venda e volta ao estado TRAVADO (unsold no Leilão ZC), mantendo o histórico de lances
+ const SUSP=[['Vanderson','Grêmio',18.1e6],['Yan Couto','Cerro Porteño',20e6],['Jair','São Paulo',40e6],['Valentín Gómez','Vasco',26e6],['Gabriel Sara','Bahia',67e6],['Luiz Henrique','Barcelona',55e6],['David Neres','Racing',65e6],['Brian Rodr','Olimpia',50e6],['Marcos Leonardo','Vélez',130e6]].map(([n,c,v])=>({n,c,v}));
+ async function suspendLot(f){const c=await pool.connect();const T='FIXSUSP '+f.n;try{await c.query('BEGIN');
+  const ls=(await c.query("SELECT * FROM auction_lots WHERE status='sold' AND price=$1 FOR UPDATE",[f.v])).rows.filter(l=>(pname(l.player_id)||'').startsWith(f.n)&&(cname(l.winner_club)||'').startsWith(f.c));
+  if(ls.length!==1){console.log(T,'SKIP',ls.length);await c.query('ROLLBACK');return;}const l=ls[0],W=l.winner_club,rid=l.room_id;
+  const bud=async id=>+(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[rid,id])).rows[0]?.budget;
+  const p=await R.player(c,rid,l.player_id);const [t]=(await c.query("SELECT * FROM transfers WHERE room_id=$1 AND player_id=$2 AND to_club=$3 AND fee=$4 AND kind='leilão' AND status IS DISTINCT FROM 'cancelled' ORDER BY id DESC LIMIT 1",[rid,l.player_id,W,f.v])).rows;
+  const later=t?(await c.query("SELECT 1 FROM transfers WHERE room_id=$1 AND player_id=$2 AND id>$3 AND status IS DISTINCT FROM 'cancelled'",[rid,l.player_id,t.id])).rows.length:0;
+  const free=!!(R.isFree&&R.isFree(l.from_club));const info={lot:l.id,player:pname(l.player_id),club:cname(W),before:{[cname(W)]:await bud(W),'Leilão ZC':free?'n/c':await bud(l.from_club)}};
+  const bad=[];if(p?.club_id!==W)bad.push('jogador não está no comprador');if(!t)bad.push('transferência não achada');if(later)bad.push('transferido depois');
+  if(bad.length){console.log(T,'STOP',JSON.stringify({bad,...info}));await c.query('ROLLBACK');return;}
+  const pv=t.prev;if(pv&&!pv.none){const cols=Object.keys(pv).filter(k=>!['room_id','player_id'].includes(k));await c.query(`UPDATE room_players SET ${cols.map((k,i)=>`${k}=$${i+3}`).join(',')} WHERE room_id=$1 AND player_id=$2`,[rid,l.player_id,...cols.map(k=>pv[k])]);}
+  await c.query('UPDATE room_players SET club_id=$3,loan_from=NULL,loan_until=NULL,listed=false,shielded=false WHERE room_id=$1 AND player_id=$2',[rid,l.player_id,l.from_club]);
+  await c.query('UPDATE lineups SET starters=NULL WHERE room_id=$1 AND club_id=$2 AND $3=ANY(starters)',[rid,W,l.player_id]);
+  await c.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[rid,W,f.v]);
+  if(!free)await c.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[rid,l.from_club,f.v]);
+  await c.query("UPDATE transfers SET status='cancelled',cancelled_by='admin (lote suspenso)',cancelled_at=now() WHERE id=$1",[t.id]);
+  await c.query("UPDATE auction_lots SET status='unsold',winner_club=NULL,price=NULL WHERE id=$1",[l.id]);
+  await note(c,rid,`🔒 Lote SUSPENSO pela administração: ${pname(l.player_id)} volta a ficar TRAVADO (venda ao ${cname(W)} desfeita, € ${(f.v/1e6).toFixed(1)} mi devolvidos). A administração vai definir o clube.`);
+  await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[rid]);await c.query('COMMIT');
+  info.after={[cname(W)]:await bud(W),'Leilão ZC':free?'n/c':await bud(l.from_club)};console.log(T,'OK',JSON.stringify(info));
+ }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
  setTimeout(async()=>{await moveLot({tag:'kaiki',re:/kaiki/i,from:'Santos',to:'Universitario',old:25.5e6,fee:23.2e6});
-  await moveLot({tag:'talisca',re:/talisca/i,from:'Indep. Santa Fe',to:'LDU Quito',old:46e6,fee:95e6});},15000);
+  await moveLot({tag:'talisca',re:/talisca/i,from:'Indep. Santa Fe',to:'LDU Quito',old:46e6,fee:95e6});
+  for(const f of SUSP)await suspendLot(f);},15000);
 };
