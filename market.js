@@ -151,7 +151,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   s.json(list.map(p=>view(p,hum)));}));
  app.get('/api/rooms/:code/market/player/:pid',auth,wrap(async(r,s)=>{const room=await member(r);const p=await R.player(pool,room.id,+r.params.pid);if(!p||!inGame(p.id))throw fail('Jogador não encontrado',404);const hum=await humans(pool,room.id);
   let ctx={};try{const cid=await myClub(pool,room,r.user.id);const mine=await R.squad(pool,room.id,cid,false);const n=(await q('SELECT * FROM negotiations WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3',[room.id,cid,p.id]))[0];
-   ctx={my_club:cid,own:p.club_id===cid,expected_role:p.club_id===cid?null:X.expectedRole(p,mine),blocked:n&&n.blocked_until>=room.market_day,club_fails:n?.club_fails||0,player_fails:n?.player_fails||0,watched:!!(await q('SELECT 1 FROM watchlist WHERE room_id=$1 AND user_id=$2 AND player_id=$3',[room.id,r.user.id,p.id])).length};}catch(e){}
+   ctx={my_club:cid,own:p.club_id===cid,expected_role:p.club_id===cid?null:X.expectedRole(p,mine),blocked:false,club_fails:n?.club_fails||0,player_fails:n?.player_fails||0,watched:!!(await q('SELECT 1 FROM watchlist WHERE room_id=$1 AND user_id=$2 AND player_id=$3',[room.id,r.user.id,p.id])).length};}catch(e){}
   let imp=null;if(!isFree(p.club_id)){const sq=await R.squad(pool,room.id,p.club_id,false);imp=X.importance(p,sq).k;}
   const hist=await q('SELECT * FROM transfers WHERE room_id=$1 AND player_id=$2 ORDER BY id DESC',[room.id,p.id]);
   s.json({...view(p,hum),positions:p.positions,stats:p.stats,importance:imp,...ctx,history:hist.map(t=>({...t,...TRX(t),from:clubName(t.from_club),to:clubName(t.to_club)}))});}));
@@ -162,7 +162,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   if(p.club_id===buyer)throw fail('Esse jogador já é seu');if(!loan&&!swap&&!isFree(p.club_id)&&!(fee>0))throw fail('Informe o valor da proposta (maior que zero).');if(p.shielded)throw fail('Jogador blindado: o clube não aceita propostas por ele');capChk(p,fee);const bc=C.get(buyer),sc=C.get(p.club_id);if(sc.gender!==bc.gender)throw fail('Jogador de outra modalidade (masculino/feminino)');
   const f=await finances(c,room.id,buyer);if(fee>f.available||f.available<=0)throw noMoney(fee,f);
   if(swap&&!f.squad.some(x=>x.id===swap))throw fail('Jogador de troca não é do seu elenco');if(p.loan_from)throw fail('Jogador emprestado não pode ser negociado');
-  const n=await neg(c,room.id,buyer,pid);if(n.blocked_until>=room.market_day)throw fail('As negociações estão esfriadas: tente de novo em alguns dias de mercado.');
+  const n=await neg(c,room.id,buyer,pid);
   const dup=(await c.query("SELECT 1 FROM offers WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3 AND status IN ('pending','countered','club_accepted')",[room.id,buyer,pid])).rows.length;if(dup)throw fail('Você já tem uma negociação em andamento por esse jogador');
   const base=[room.id,pid,buyer,p.club_id,r.user.id,hum.get(p.club_id)?.user_id||null,fee,swap,loan,room.market_day+2,room.market_day,lr];
   const ins=(st,extra={})=>c.query('INSERT INTO offers(room_id,player_id,buyer_club,seller_club,buyer_user,seller_user,fee,swap_player_id,loan,deadline_day,created_day,loan_rounds,status,counter_fee,reason) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *',[...base,st,extra.counter||null,extra.msg||null]).then(async x=>{const o=x.rows[0];await addH(c,o.id,[{by:'comprador',club:bc.name,act:'proposta',fee}].concat(extra.counter?[{by:'vendedor',club:sc.name,act:'contraproposta',fee:extra.counter}]:st==='club_accepted'&&!isFree(p.club_id)?[{by:'vendedor',club:sc.name,act:'aceitou',fee}]:st==='rejected'?[{by:'vendedor',club:sc.name,act:'recusou'}]:[]));return st==='club_accepted'?await closeNow(c,room,o):o;});
@@ -173,7 +173,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const [rc]=(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[room.id,p.club_id])).rows;
   const d=X.clubDecision(p,{fee,swapValue,loan},{imp,season:room.season,day:win.day,days:win.days,fails:n.club_fails,rival:sc.league_id===bc.league_id,sellerBudget:+rc.budget,clause:p.release_clause,sellerSquad:sq.length,biggerSeller:repOf(sc)>repOf(bc)+5,salt:room.id});
   if(d.d==='accept'){const o=await ins('club_accepted',{msg:d.msg});if(d.forced)await note(c,room.id,`💥 ${bc.name} pagou a cláusula de rescisão de ${p.name} (${X.fmt(p.release_clause)}).`);return {offer:o,decision:'accept',forced:!!d.forced,message:d.msg+' Transferência concluída!'};}
-  if(d.d==='counter'&&d.counter)d.counter=Math.min(d.counter,CAP(p));const fails=n.club_fails+1;const block=fails>=4;await c.query('UPDATE negotiations SET club_fails=$4,blocked_until=$5 WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3',[room.id,buyer,pid,block?0:fails,block?room.market_day+3:n.blocked_until]);
+  if(d.d==='counter'&&d.counter)d.counter=Math.min(d.counter,CAP(p));const fails=n.club_fails+1;const block=false;await c.query('UPDATE negotiations SET club_fails=$4,blocked_until=$5 WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3',[room.id,buyer,pid,block?0:fails,block?room.market_day+3:n.blocked_until]);
   const msg=d.msg+(block?' Depois de tantas tentativas, o clube encerrou as conversas por alguns dias.':'');
   const o=await ins(d.d==='counter'&&!block?'countered':'rejected',{counter:d.counter,msg});return {offer:o,decision:block?'reject':d.d,counter:d.counter,message:msg};}))));
  // responder (vendedor humano a proposta pendente; comprador a contraproposta)
@@ -233,7 +233,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
    await note(c,room.id,`✍️ ${p.name} assinou com o ${clubName(cid)}${+o.fee?` por ${X.fmt(+o.fee)}${from?'':' (agente livre)'}`:from?'':' (livre)'}${o.loan?' (empréstimo)':''}${o.swap_player_id?' + '+pname(o.swap_player_id)+' na troca':''}.`);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);
    return {decision:'accept',message:d.msg+' Transferência concluída!'};}
   const fails=n.player_fails+1;const end=d.hard||fails>=3;
-  await c.query('UPDATE negotiations SET player_fails=$4,blocked_until=$5 WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3',[room.id,cid,p.id,end?0:fails,end?room.market_day+3:n.blocked_until]);
+  await c.query('UPDATE negotiations SET player_fails=$4,blocked_until=$5 WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3',[room.id,cid,p.id,end?0:fails,end?n.blocked_until:n.blocked_until]);
   const msg=d.msg+(end&&!d.hard?' Após tantas tentativas, o jogador encerrou as conversas.':'');
   await c.query('UPDATE offers SET status=$2,counter_wage=$3,reason=$4,updated_at=now() WHERE id=$1',[o.id,end?'player_rejected':'club_accepted',d.ask||null,msg]);
   if(end&&o.seller_user)await note(c,room.id,`🚫 ${p.name} recusou a transferência para o ${clubName(cid)}: ${d.msg}`,o.seller_user);
