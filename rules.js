@@ -60,7 +60,7 @@ function playerDecision(p,o,ctx){const {from,to,L,fromImp,expected,fails=0,salt=
  let m=free?1.0:1.15;if(dClub<-3)m+=0.04*(-dClub-3);if(dLeague<-3)m+=0.03*(-dLeague-3);if(dClub>4)m-=Math.min(0.12,0.015*(dClub-4));
  if(role==='estrela')m+=0.1;if(vet&&years<2)m+=0.1;if(p.age>=33&&years>2)m-=0.05;if(p.wants_out)m-=0.1;m*=1+0.05*fails;m*=0.97+0.06*noise(salt,p.id,'w');
  const base=free?Math.max(p.wage,Math.round(p.market_value/220)):p.wage;const ask=wround(base*m);
- if(o.wage>=ask)return {d:'accept',ask,msg:'O jogador aceitou os termos pessoais.'};
+ return {d:'accept',ask,msg:'O jogador aceitou os termos pessoais.'}; // Robson 26/10: salário não pesa mais
  if(o.wage>=ask*0.85)return {d:'counter',ask,msg:`O jogador pede ${fmt(ask)}/semana para assinar.`};
  return {d:'reject',ask,msg:`Salário abaixo do esperado. O jogador quer algo perto de ${fmt(ask)}/semana.`};}
 module.exports={EXPORT,VET_DEST,MIN_SQ,BOT_MAX_SQ,mround,wround,noise,ageF,potF,importance,askPrice,clubDecision,expectedRole,playerDecision,rep,fmt,ROLES};

@@ -41,7 +41,7 @@ async function carreira(){if(!ME&&!(await whoami()))return loginView(carreira);i
  if(!d.club){app.innerHTML=`<h1>${esc(d.room.name)}</h1><div class="sub">Você ainda não escolheu um clube.</div><a class="btn" href="#/">Escolher clube</a>`;return;}
  const c=d.club;squad=c.players;sortK='overall';sortD=-1;
  app.innerHTML=`<a class="back" href="#/sala/${ROOM}">← Sala ${esc(d.room.name)}</a><h1>${esc(c.name)} <span class="tag">${esc(c.league)}</span></h1><div class="sub">Técnico: ${esc(ME.nick)} · Temporada ${d.room.season}/${d.room.season+1}</div>
- <div class="kpis"><div class="kpi"><span>Orçamento de transferências</span><b>${fm(c.budget)}</b></div><div class="kpi"><span>Folha atual</span><b>${fm(c.wage_bill)}</b></div><div class="kpi"><span>Valor do elenco</span><b>${fm(c.squad_value)}</b></div><div class="kpi"><span>OVR (top 11)</span><b>${c.overall}</b></div></div><div class="tw"><table id="sq"></table></div>`;drawSquad();}
+ <div class="kpis"><div class="kpi"><span>Orçamento de transferências</span><b>${fm(c.budget)}</b></div><div class="kpi"><span>Valor do elenco</span><b>${fm(c.squad_value)}</b></div><div class="kpi"><span>OVR (top 11)</span><b>${c.overall}</b></div></div><div class="tw"><table id="sq"></table></div>`;drawSquad();}
 // botão de escolher clube na página do clube / lista
 window.pick=id=>post(`/rooms/${ROOM}/club`,{club_id:id}).then(()=>location.hash='#/sala/'+ROOM).catch(e=>alert(e.message));
 async function roomBanner(clubId){if(!ROOM||!localStorage.token)return '';try{RS=await get('/rooms/'+ROOM);}catch{return '';}

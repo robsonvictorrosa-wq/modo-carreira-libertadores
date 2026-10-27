@@ -340,7 +340,15 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   let canc=[];if(pend.length)canc=(await pool.query("UPDATE offers SET status='withdrawn',reason='Cancelada pela administração (proposta zerada)',updated_at=now() WHERE id=ANY($1) AND status IN ('pending','countered','club_accepted') RETURNING *",[pend])).rows;
   console.log(T,'OK',JSON.stringify({canceladas:canc.length,lista:canc.map(fmt),concluidas_zeradas:done,todas_zeradas:rows.map(fmt)}));
  }catch(e){console.log(T,'ERR',e.message);}}
+
+ // Auditoria somente leitura (Robson 26/10 22:03/22:04): negociações aceitas sem dinheiro movimentado e rescisões (salários cobrados) — não corrige nada.
+ async function auditMoney(){const T='FIXAUDIT';try{const RID="(SELECT id FROM rooms WHERE code='LIGA')";const br=d=>new Date(d).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});
+  const acc=(await pool.query(`SELECT * FROM offers WHERE room_id=${RID} AND status='club_accepted' ORDER BY id`)).rows.map(o=>({id:o.id,jogador:pname(o.player_id),comprador:cname(o.buyer_club),vendedor:cname(o.seller_club),valor:+o.fee,aceita_em:br(o.updated_at),criada:br(o.created_at)}));
+  const tr=(await pool.query(`SELECT * FROM transfers WHERE room_id=${RID} AND created_at>='2026-10-26T21:40:00-03:00' ORDER BY id`).catch(()=>pool.query(`SELECT * FROM transfers WHERE room_id=${RID} ORDER BY id DESC LIMIT 40`))).rows.map(t=>({id:t.id,jogador:pname(t.player_id),de:cname(t.from_club),para:cname(t.to_club),valor:+t.fee,tipo:t.kind,quando:t.created_at?br(t.created_at):null}));
+  const resc=(await pool.query(`SELECT * FROM transfers WHERE room_id=${RID} AND kind='rescisão' ORDER BY id`)).rows.map(t=>({jogador:pname(t.player_id),clube:cname(t.from_club),salario_sem:+t.wage}));
+  console.log(T,JSON.stringify({aceitas_sem_dinheiro:acc,transferencias_desde_2140:tr,rescisoes:resc}));
+ }catch(e){console.log(T,'ERR',e.message);}}
  setTimeout(async()=>{await moveLot({tag:'kaiki',re:/kaiki/i,from:'Santos',to:'Universitario',old:25.5e6,fee:23.2e6});
   await moveLot({tag:'talisca',re:/talisca/i,from:'Indep. Santa Fe',to:'LDU Quito',old:46e6,fee:95e6});
-  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();await savinho90();await assignLot(4,/^yan couto/i,'Atlético Nacional',16e6);await assignLot(17,/^luiz henrique/i,'Barcelona de Guayaquil',55e6);await assignLot(18,/^david neres/i,'Racing',65e6);await assignLot(15,/^gabriel sara/i,'Lanús',130e6);await assignLot(20,/^brian rodr/i,'Olimpia',100e6);await zeroOffers();},15000);
+  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();await savinho90();await assignLot(4,/^yan couto/i,'Atlético Nacional',16e6);await assignLot(17,/^luiz henrique/i,'Barcelona de Guayaquil',55e6);await assignLot(18,/^david neres/i,'Racing',65e6);await assignLot(15,/^gabriel sara/i,'Lanús',130e6);await assignLot(20,/^brian rodr/i,'Olimpia',100e6);await zeroOffers();await auditMoney();},15000);
 };
