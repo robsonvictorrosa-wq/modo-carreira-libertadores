@@ -18,6 +18,11 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   // empréstimos por rodadas: devolve quem cumpriu o prazo
   const back=(await c.query('UPDATE room_players SET club_id=loan_from,loan_from=NULL,loan_until=NULL,role=NULL WHERE room_id=$1 AND loan_from IS NOT NULL AND loan_until IS NOT NULL AND loan_until<=$2 RETURNING player_id,club_id',[room.id,round])).rows;
   for(const x of back){await c.query('UPDATE lineups SET starters=NULL WHERE room_id=$1 AND $2=ANY(starters)',[room.id,x.player_id]);await note(c,room.id,`↩️ Fim do empréstimo: ${pname(x.player_id)} voltou ao ${cname(x.club_id)}.`);}
+  // premiação por jogo (Robson 27/10): 1 mi por vitória, 0,3 mi por empate, 0 por derrota. Cada jogo paga uma vez só (prize_paid).
+  {const MP=await c.query('UPDATE matches SET prize_paid=true WHERE comp_id=$1 AND round=$2 AND played AND prize_paid IS NULL RETURNING home,away,hg,ag',[comp.id,round]);const pay=new Map();
+   for(const m of MP.rows){const [h,a]=m.hg>m.ag?[1e6,0]:m.hg<m.ag?[0,1e6]:[3e5,3e5];if(h)pay.set(m.home,(pay.get(m.home)||0)+h);if(a)pay.set(m.away,(pay.get(m.away)||0)+a);}
+   for(const [cid,v] of pay)await c.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[room.id,cid,v]);
+   if(MP.rows.length)await note(c,room.id,`💰 Premiação por jogo da rodada ${round}: vitória € 1 mi, empate € 0,3 mi, derrota € 0 (${pay.size} clubes premiados).`);}
   // fim da fase de liga: premiação + abertura do leilão
   if(step.stage==='league'&&round===LEAGUE_END&&!comp.prizes_paid){const ms=(await c.query("SELECT * FROM matches WHERE comp_id=$1 AND played AND stage='league'",[comp.id])).rows;
    const tb=L.standings(ms,L.CLUBS,cname,new Map((await c.query('SELECT club_id,penalty_pts FROM room_clubs WHERE room_id=$1 AND penalty_pts<>0',[room.id])).rows.map(x=>[x.club_id,x.penalty_pts])));for(const t of tb){const v=prizeOf(t.pos);if(v)await c.query('UPDATE room_clubs SET budget=budget+$3 WHERE room_id=$1 AND club_id=$2',[room.id,t.club_id,v]);}

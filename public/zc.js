@@ -196,7 +196,7 @@ window.zBid=async id=>{const v=miParse(document.getElementById('b'+id).value);if
 // ---------- PREMIAÇÕES ----------
 async function premiacoes(){if(!await need('premiacoes'))return;const P=OV.prizes||[];let rows=[];if(OV.comp)try{rows=(await get(`${R()}/comp/${OV.comp.id}/table`)).rows}catch(e){}
  const prize=i=>{for(const p of P){const [a,b]=p.range||[p.from,p.to];if(i>=a&&i<=b)return p.amount}return 0};
- app.innerHTML=`<div class="hero"><div class="kick">Premiações</div><h1>Prêmios da fase de liga</h1><p>Pagos automaticamente ao fim da rodada 39 e somados à verba do clube.${OV.comp?.prizes_paid?' <b class="ok">✔ Já pagos nesta temporada.</b>':''}</p></div>
+ app.innerHTML=`<div class="hero"><div class="kick">Premiações</div><h1>Prêmios da fase de liga</h1><p><b>Por jogo:</b> vitória € 1 mi · empate € 0,3 mi · derrota € 0 — pago no caixa logo após cada partida.</p><p>Prêmios por posição: pagos automaticamente ao fim da rodada 39 e somados à verba do clube.${OV.comp?.prizes_paid?' <b class="ok">✔ Já pagos nesta temporada.</b>':''}</p></div>
  <div class="tw"><table><tr><th>Posição</th><th>Prêmio</th>${rows.length?'<th>Clube atual</th>':''}</tr>${P.map(p=>{const [a,b]=p.range||[p.from,p.to];return `<tr><td>${a===b?a+'º':a+'º–'+b+'º'}</td><td><b style="color:#FACC15">${mi(p.amount)}</b></td>${rows.length?`<td>${rows.slice(a-1,b).map(x=>esc(x.name)).slice(0,3).join(', ')}${b-a>2?'…':''}</td>`:''}</tr>`}).join('')}</table></div>`;}
 
 // ---------- CLUBES E VERBAS ----------
