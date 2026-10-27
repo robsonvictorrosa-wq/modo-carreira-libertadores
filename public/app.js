@@ -1,6 +1,7 @@
 const $=s=>document.querySelector(s),app=$('#app');
 const api=u=>(typeof zFetch==='function'?zFetch('/api'+u):fetch('/api'+u)).then(r=>r.json());
 const fm=v=>v==null?'—':v>=1e6?'€ '+(v/1e6).toFixed(1).replace('.',',')+' M':v>=1e3?'€ '+Math.round(v/1e3)+' mil':'€ '+v;
+window.miParse=v=>{v=String(v??'').trim().toLowerCase().replace(/€|\s|mi(lh[õo]es)?$|m$/g,'').replace(',','.');if(!/^\d+(\.\d+)?$/.test(v))return NaN;const n=Math.round(parseFloat(v)*1e6);return n>0?n:NaN;};window.miTxt=v=>String(Math.round((+v||0)/1e5)/10).replace('.',',');
 const oc=o=>o>=85?'o1':o>=78?'o2':o>=70?'o3':o>=60?'o4':'o5';const ov=o=>`<span class="ovr ${oc(o)}">${o??'—'}</span>`;const pt=p=>p&&p.potential>p.overall?`<small class="pot" style="opacity:.75;font-size:.85em;margin-left:3px">↗${p.potential}</small>`:'';const ovp=p=>ov(p.overall)+pt(p);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const FAV=['Cruzeiro','FC Barcelona','Barcelona'];
