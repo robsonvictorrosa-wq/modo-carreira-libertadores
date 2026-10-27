@@ -295,7 +295,13 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   await note(c,rid,`↩️ Correção da administração: a suspensão do ${pname(l.player_id)} foi desfeita. Ele continua no São Paulo por € 40.0 mi.`);
   await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[rid]);await c.query('COMMIT');console.log(T,'OK',JSON.stringify({before:b0,after:await bud(SP)}));
  }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
+ // Talisca: site mostra LDU como vencedora (lances do Santa Fe removidos do histórico; lance de 95 mi da LDU volta se tiver sido removido)
+ async function taliscaLog(){try{const SF=L.CLUBS.find(id=>cname(id)==='Indep. Santa Fe'),LDU=L.CLUBS.find(id=>cname(id)==='LDU Quito');
+  const [l]=await q("SELECT id FROM auction_lots WHERE id=16 AND status='sold' AND winner_club=$1 AND price=95000000",[LDU]);if(!l){console.log('FIXTALOG SKIP');return;}
+  const a=await q('UPDATE auction_bid_log SET removed_at=now() WHERE lot_id=16 AND club_id=$1 AND removed_at IS NULL RETURNING id',[SF]);
+  const b=await q('UPDATE auction_bid_log SET removed_at=NULL WHERE id=(SELECT id FROM auction_bid_log WHERE lot_id=16 AND club_id=$1 AND amount=95000000 ORDER BY id DESC LIMIT 1) AND removed_at IS NOT NULL RETURNING id',[LDU]);
+  await q('DELETE FROM auction_bids WHERE lot_id=16 AND club_id=$1',[SF]);await pool.query('UPDATE rooms SET version=version+1 WHERE id=(SELECT room_id FROM auction_lots WHERE id=16)');console.log('FIXTALOG OK',a.length,b.length);}catch(e){console.log('FIXTALOG ERR',e.message);}}
  setTimeout(async()=>{await moveLot({tag:'kaiki',re:/kaiki/i,from:'Santos',to:'Universitario',old:25.5e6,fee:23.2e6});
   await moveLot({tag:'talisca',re:/talisca/i,from:'Indep. Santa Fe',to:'LDU Quito',old:46e6,fee:95e6});
-  for(const f of SUSP)await suspendLot(f);await unsuspendJair();},15000);
+  for(const f of SUSP)await suspendLot(f);await unsuspendJair();await taliscaLog();},15000);
 };
