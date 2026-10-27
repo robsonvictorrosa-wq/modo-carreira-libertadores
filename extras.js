@@ -363,7 +363,24 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
 
  // Robson 26/10 22:33: lista (somente leitura) propostas com troca ainda abertas criadas depois de 22:09.
  async function auditSwaps(){const T='FIXSWAPLIST';try{const r=await pool.query(`SELECT * FROM offers WHERE room_id=(SELECT id FROM rooms WHERE code='LIGA') AND swap_player_id IS NOT NULL AND status IN ('pending','countered','club_accepted') AND created_at>'2026-10-26T22:09:00-03:00' ORDER BY id`);console.log(T,JSON.stringify({total:r.rowCount,lista:r.rows.map(o=>({id:o.id,jogador:pname(o.player_id),de:cname(o.seller_club),para:cname(o.buyer_club),valor:+o.fee,troca:pname(o.swap_player_id),status:o.status,criada:new Date(o.created_at).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})}))}));}catch(e){console.log(T,'ERR',e.message);}}
+
+ // Robson 27/10 09:10: Hugo Bueno (261224, ex-Wolves) no Santos por 25,5 mi (valor do Kaiki no leilão). Decisão da administração; o valor não é creditado a ninguém.
+ async function hugoBueno(){const T='FIXHUGO';const PID=261224,SAN=766,FEE=25.5e6;const c=await pool.connect();try{await c.query('BEGIN');
+  const [rm]=(await c.query("SELECT * FROM rooms WHERE code='LIGA' FOR UPDATE")).rows;const rid=rm.id;
+  const [ex]=(await c.query('SELECT club_id FROM room_players WHERE room_id=$1 AND player_id=$2',[rid,PID])).rows;
+  const bud=async()=>+(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[rid,SAN])).rows[0]?.budget;const b0=await bud();
+  if(ex){console.log(T,'SKIP já aplicado',JSON.stringify({clube:cname(ex.club_id),caixa_santos:b0}));await c.query('ROLLBACK');return;}
+  const av=await avail(c,rm,SAN);if(!(b0>=FEE)){console.log(T,'STOP sem caixa',JSON.stringify({caixa_santos:b0,disponivel:av}));await c.query('ROLLBACK');return;}
+  if((await c.query('SELECT 1 FROM room_clubs WHERE room_id=$1 AND club_id=626',[rid])).rowCount){console.log(T,'STOP Wolves tem caixa na sala');await c.query('ROLLBACK');return;}
+  await M.execute(c,rm,{pid:PID,from:626,to:SAN,fee:FEE,kind:'decisão da administração'});
+  const born=new Date('2002-09-18'),now=new Date();const age=now.getFullYear()-born.getFullYear()-((now.getMonth()<8||(now.getMonth()===8&&now.getDate()<18))?1:0);
+  await c.query('UPDATE room_players SET age=$3 WHERE room_id=$1 AND player_id=$2',[rid,PID,age]);
+  await note(c,rid,`🛡️ Decisão da administração: Hugo Bueno (LE, 75) foi para o Santos por € 25,5 mi.`);
+  await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[rid]);const b1=await bud();
+  const [rp]=(await c.query('SELECT * FROM room_players WHERE room_id=$1 AND player_id=$2',[rid,PID])).rows;
+  await c.query('COMMIT');console.log(T,'OK',JSON.stringify({caixa_antes:b0,caixa_depois:b1,disponivel_antes:av,clube:cname(rp?.club_id),idade:rp?.age}));
+ }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
  setTimeout(async()=>{await moveLot({tag:'kaiki',re:/kaiki/i,from:'Santos',to:'Universitario',old:25.5e6,fee:23.2e6});
   await moveLot({tag:'talisca',re:/talisca/i,from:'Indep. Santa Fe',to:'LDU Quito',old:46e6,fee:95e6});
-  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();await savinho90();await assignLot(4,/^yan couto/i,'Atlético Nacional',16e6);await assignLot(17,/^luiz henrique/i,'Barcelona de Guayaquil',55e6);await assignLot(18,/^david neres/i,'Racing',65e6);await assignLot(15,/^gabriel sara/i,'Lanús',130e6);await assignLot(20,/^brian rodr/i,'Olimpia',100e6);await zeroOffers();await auditMoney();await cancelAll2209();await clearCooldowns();await auditSwaps();},15000);
+  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();await savinho90();await assignLot(4,/^yan couto/i,'Atlético Nacional',16e6);await assignLot(17,/^luiz henrique/i,'Barcelona de Guayaquil',55e6);await assignLot(18,/^david neres/i,'Racing',65e6);await assignLot(15,/^gabriel sara/i,'Lanús',130e6);await assignLot(20,/^brian rodr/i,'Olimpia',100e6);await zeroOffers();await auditMoney();await cancelAll2209();await clearCooldowns();await auditSwaps();await hugoBueno();},15000);
 };
