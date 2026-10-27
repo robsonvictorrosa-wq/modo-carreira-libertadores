@@ -86,6 +86,8 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
  // ===== 26/10 (Robson): Coates volta ao Nacional; Otávio (ZAG, ex-Paris FC, escolha do Robson) entra no lugar dele no Universitario =====
  {db.prepare('UPDATE players SET club_id=774,base_club_id=774 WHERE id=197655').run();
   db.prepare('UPDATE players SET club_id=358,base_club_id=358,overall=74,potential=78 WHERE id=275070').run();
+  // 27/10 (Robson): Hugo Bueno (ex-Wolves) no Santos — caixa debitado em extras.js (FIXHUGO)
+  db.prepare('UPDATE players SET club_id=766,base_club_id=766 WHERE id=261224').run();
   db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();console.log('Coates/Tenaglia ajustados');}
  // ===== Potenciais corrigidos (config/potenciais-zc.json, lista do Robson): só o potencial =====
  {const PZ=JSON.parse(fs.readFileSync(__dirname+'/config/potenciais-zc.json','utf8')).players;let n=0;
