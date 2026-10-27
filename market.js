@@ -125,7 +125,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   try{const cid=await myClub(pool,room,r.user.id);const f=await finances(pool,room.id,cid);me={club_id:cid,club:clubName(cid),budget:f.budget,reserved:f.reserved,available:f.available,wage_budget:f.wage_budget,wage_bill:f.wage_bill,squad_size:f.squad.length};}catch(e){}
   const [cnt]=await q("SELECT count(*) FILTER (WHERE seller_club=$2 AND status='pending')::int received,count(*) FILTER (WHERE buyer_club=$2 AND status IN ('countered','club_accepted'))::int to_act FROM offers WHERE room_id=$1",[room.id,me?.club_id||0]);
   const [tc]=await q('SELECT count(*)::int n FROM transfers WHERE room_id=$1 AND season=$2',[room.id,room.season]);
-  s.json({window:win,owner:room.owner_id===r.user.id||!!r.user.admin,me,limits:{min_squad:X.MIN_SQ,max_squad:X.MAX_SQ},counts:{...cnt,season_transfers:tc.n},roles:X.ROLES});}));
+  s.json({window:win,owner:room.owner_id===r.user.id||!!r.user.admin,me,limits:{min_squad:X.MIN_SQ},counts:{...cnt,season_transfers:tc.n},roles:X.ROLES});}));
  app.post('/api/rooms/:code/market/window',auth,wrap(async(r,s)=>{const room=await member(r);if(room.owner_id!==r.user.id&&!r.user.admin)throw fail('Só o dono da sala',403);const m=r.body?.mode;if(!['open','closed','auto'].includes(m))throw fail('Modo inválido');
   await tx(async c=>{await c.query('UPDATE rooms SET window_override=$2 WHERE id=$1',[room.id,m==='auto'?null:m]);await after(c,room);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);});
   await bump(room.id,`${r.user.nick} ${m==='open'?'abriu':m==='closed'?'fechou':'devolveu ao automático'} a janela de transferências`);s.json({ok:1});}));
@@ -151,7 +151,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const pid=+r.body?.player_id,fee=Math.max(0,Math.round(+r.body?.fee||0)),loan=!!r.body?.loan,swap=r.body?.swap_player_id?+r.body.swap_player_id:null;const p=await R.player(c,room.id,pid);if(!p)throw fail('Jogador não encontrado');
   if(!inGame(p.id)||!(LIB.has(p.club_id)||isFree(p.club_id))||!LIB.has(buyer))throw fail('Por enquanto só há transferências entre os 40 clubes da liga');if(loan)throw fail('Empréstimos estão desativados');const lr=loan?Math.round(+r.body?.loan_rounds||0):null;if(loan&&!(lr>=1&&lr<=39))throw fail('Informe por quantas rodadas (1 a 39) é o empréstimo');
   if(p.club_id===buyer)throw fail('Esse jogador já é seu');if(p.shielded)throw fail('Jogador blindado: o clube não aceita propostas por ele');capChk(p,fee);const bc=C.get(buyer),sc=C.get(p.club_id);if(sc.gender!==bc.gender)throw fail('Jogador de outra modalidade (masculino/feminino)');
-  const f=await finances(c,room.id,buyer);if(f.squad.length+(swap?0:1)>X.MAX_SQ)throw fail(`Elenco cheio (máximo ${X.MAX_SQ})`);if(fee>f.available||f.available<=0)throw noMoney(fee,f);
+  const f=await finances(c,room.id,buyer);if(fee>f.available||f.available<=0)throw noMoney(fee,f);
   if(swap&&!f.squad.some(x=>x.id===swap))throw fail('Jogador de troca não é do seu elenco');if(p.loan_from)throw fail('Jogador emprestado não pode ser negociado');
   const n=await neg(c,room.id,buyer,pid);if(n.blocked_until>=room.market_day)throw fail('As negociações estão esfriadas: tente de novo em alguns dias de mercado.');
   const dup=(await c.query("SELECT 1 FROM offers WHERE room_id=$1 AND buyer_club=$2 AND player_id=$3 AND status IN ('pending','countered','club_accepted')",[room.id,buyer,pid])).rows.length;if(dup)throw fail('Você já tem uma negociação em andamento por esse jogador');

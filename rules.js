@@ -2,7 +2,7 @@
 const S=require('./sim');
 const EXPORT=new Set(['Brasil','Argentina','Portugal','Holanda','Bélgica','Colômbia','Uruguai','Equador','Chile','Paraguai','Peru','Venezuela','Bolívia','México']);
 const VET_DEST=new Set(['Arábia Saudita','EUA','China','Índia','Austrália','Catar']);
-const MIN_SQ=11,MAX_SQ=32,BOT_MAX_SQ=30;
+const MIN_SQ=11,BOT_MAX_SQ=30;
 // arredondamento "de mercado"
 const mround=v=>{v=Math.max(0,v);const st=v<1e6?25e3:v<1e7?1e5:v<5e7?5e5:1e6;return Math.round(v/st)*st;};
 const wround=v=>{v=Math.max(500,v);const st=v<1e4?250:v<1e5?1e3:5e3;return Math.round(v/st)*st;};
@@ -63,4 +63,4 @@ function playerDecision(p,o,ctx){const {from,to,L,fromImp,expected,fails=0,salt=
  if(o.wage>=ask)return {d:'accept',ask,msg:'O jogador aceitou os termos pessoais.'};
  if(o.wage>=ask*0.85)return {d:'counter',ask,msg:`O jogador pede ${fmt(ask)}/semana para assinar.`};
  return {d:'reject',ask,msg:`Salário abaixo do esperado. O jogador quer algo perto de ${fmt(ask)}/semana.`};}
-module.exports={EXPORT,VET_DEST,MIN_SQ,MAX_SQ,BOT_MAX_SQ,mround,wround,noise,ageF,potF,importance,askPrice,clubDecision,expectedRole,playerDecision,rep,fmt,ROLES};
+module.exports={EXPORT,VET_DEST,MIN_SQ,BOT_MAX_SQ,mround,wround,noise,ageF,potF,importance,askPrice,clubDecision,expectedRole,playerDecision,rep,fmt,ROLES};

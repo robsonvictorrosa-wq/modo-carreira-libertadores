@@ -241,7 +241,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const [t]=(await c.query("SELECT id FROM transfers WHERE room_id=$1 AND player_id=$2 AND to_club=$3 AND fee=$4 AND kind='leilão' ORDER BY id DESC LIMIT 1",[l.room_id,l.player_id,FROMC,f.old])).rows;
   const free=!!(R.isFree&&R.isFree(l.from_club));
   const info={lot:l.id,player:pn,before:{[f.from]:await bud(FROMC),[f.to]:await bud(TOC),[cname(l.from_club)]:free?'não contabilizado':await bud(l.from_club)},to_avail:av,to_squad:sqT.length,from_squad:sqF.length,to_other_wins:wonT.map(x=>x.id),shielded:!!p?.shielded};
-  const bad=[];if(!TOC)bad.push('clube destino não achado');if(p?.club_id!==FROMC)bad.push('jogador não está no clube');if(p?.shielded)bad.push('blindado');if(av<f.fee)bad.push('sem caixa');if(sqT.length+1>32)bad.push('elenco destino cheio');if(sqF.length-1<11)bad.push('origem abaixo do mínimo');if(wonT.length)bad.push('destino já levou outro lote');if(!t)bad.push('transferência não achada');
+  const bad=[];if(!TOC)bad.push('clube destino não achado');if(p?.club_id!==FROMC)bad.push('jogador não está no clube');if(p?.shielded)bad.push('blindado');if(av<f.fee)bad.push('sem caixa');if(sqF.length-1<11)bad.push('origem abaixo do mínimo');if(wonT.length)bad.push('destino já levou outro lote');if(!t)bad.push('transferência não achada');
   if(bad.length){console.log(T,'STOP',JSON.stringify({bad,...info}));await c.query('ROLLBACK');return;}
   await c.query('UPDATE room_players SET club_id=$3 WHERE room_id=$1 AND player_id=$2',[l.room_id,l.player_id,TOC]);
   await c.query('UPDATE lineups SET starters=NULL WHERE room_id=$1 AND club_id=$2 AND $3=ANY(starters)',[l.room_id,FROMC,l.player_id]);
