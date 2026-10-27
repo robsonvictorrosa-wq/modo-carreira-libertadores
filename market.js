@@ -79,7 +79,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
     if(!free&&imp.k==='chave'&&(dClub<3||rnd()<0.75))continue;if(!free&&p.age>=33&&!X.VET_DEST.has(c.country)&&rnd()<0.85)continue;                          // titular-chave só sai para clube maior
     let loan=false,price=free?Math.round(+p.market_value||0):X.askPrice(p,{imp,season:room.season,day:win.day,days:win.days,sellerBudget:s.budget,salt:room.id});
     
-    if(av(c)<=0||price>av(c)*(win.pre?0.9:0.7)||price>av(c))continue;const wage=X.wround((p.wage||1000)*(free?1:1.15+(dClub<-3?0.04*(-dClub-3):0)));if(c.wage_bill+wage>c.wage_budget*1.02&&wage>(p.wage||0))continue;
+    if(av(c)<=0||price>av(c)*(win.pre?0.9:0.7)||price>av(c))continue;const wage=X.wround((p.wage||1000)*(free?1:1.15+(dClub<-3?0.04*(-dClub-3):0)));
     let sc=(p.overall-c.xiavg)+(p.potential-p.overall)*0.15-3*price/Math.max(1,c.budget)+rnd()*2;
     if(X.EXPORT.has(s.country)&&p.age<=23&&la(c)>la(s)+3)sc+=4;if(p.age>=31&&X.VET_DEST.has(c.country))sc+=4;if(dLeague<-3&&p.age<30)sc-=4;if(loan)sc+=1;if(p.wants_out||p.listed)sc+=2;
     if(!best||sc>best.sc)best={p,s,price,wage,loan,sc};}
@@ -208,7 +208,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const [o]=(await c.query("SELECT * FROM offers WHERE id=$1 AND room_id=$2 AND buyer_club=$3 AND status='club_accepted' FOR UPDATE",[+r.params.id,room.id,cid])).rows;if(!o)throw fail('Negociação não está na fase de contrato',404);
   const p=await R.player(c,room.id,o.player_id);if(p.club_id!==o.seller_club)throw fail('O jogador não está mais nesse clube');const wage=Math.round(+r.body?.wage||0),years=Math.min(5,Math.max(1,parseInt(r.body?.years)||3)),role=r.body?.role;
   if(role&&!X.ROLES.includes(role))throw fail('Papel inválido');const f=await finances(c,room.id,cid);const swapW=o.swap_player_id?(f.squad.find(x=>x.id===o.swap_player_id)?.wage||0):0;
-  if(+o.fee>f.available+ +o.fee)throw noMoney(+o.fee,{...f,available:f.available+ +o.fee});if(f.wage_bill-swapW+wage>f.wage_budget)throw fail(`Teto salarial estourado: folha ${X.fmt(f.wage_bill)} + ${X.fmt(wage)} > limite ${X.fmt(f.wage_budget)}/semana`);
+  if(+o.fee>f.available+ +o.fee)throw noMoney(+o.fee,{...f,available:f.available+ +o.fee});
   if(!isFree(o.seller_club)){const ss=await R.squad(c,room.id,o.seller_club,false);if(ss.length-1+(o.swap_player_id?1:0)<X.MIN_SQ)throw fail('O clube vendedor ficaria abaixo do mínimo de elenco');}
   const n=await neg(c,room.id,cid,p.id);const from=isFree(o.seller_club)?null:C.get(o.seller_club);const fromImp=from?X.importance(p,await R.squad(c,room.id,o.seller_club,false)):null;
   const expected=X.expectedRole(p,f.squad);let d;
