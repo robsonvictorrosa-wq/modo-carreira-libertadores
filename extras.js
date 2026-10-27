@@ -371,8 +371,11 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const bud=async()=>+(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[rid,SAN])).rows[0]?.budget;const b0=await bud();
   if(ex){console.log(T,'SKIP já aplicado',JSON.stringify({clube:cname(ex.club_id),caixa_santos:b0}));await c.query('ROLLBACK');return;}
   const av=await avail(c,rm,SAN);if(!(b0>=FEE)){console.log(T,'STOP sem caixa',JSON.stringify({caixa_santos:b0,disponivel:av}));await c.query('ROLLBACK');return;}
-  if((await c.query('SELECT 1 FROM room_clubs WHERE room_id=$1 AND club_id=626',[rid])).rowCount){console.log(T,'STOP Wolves tem caixa na sala');await c.query('ROLLBACK');return;}
-  await M.execute(c,rm,{pid:PID,from:626,to:SAN,fee:FEE,kind:'decisão da administração'});
+  const w0=+(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=626',[rid])).rows[0]?.budget;
+  await M.execute(c,rm,{pid:PID,from:626,to:SAN,fee:0,kind:'decisão da administração'}); // fee 0: nada é creditado ao Wolves
+  await c.query('UPDATE room_clubs SET budget=budget-$3 WHERE room_id=$1 AND club_id=$2',[rid,SAN,FEE]);
+  await c.query("UPDATE transfers SET fee=$3 WHERE id=(SELECT max(id) FROM transfers WHERE room_id=$1 AND player_id=$2)",[rid,PID,FEE]).catch(()=>{});
+  const w1=+(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=626',[rid])).rows[0]?.budget;if(w0!==w1)throw new Error('caixa do Wolves mudou');
   const born=new Date('2002-09-18'),now=new Date();const age=now.getFullYear()-born.getFullYear()-((now.getMonth()<8||(now.getMonth()===8&&now.getDate()<18))?1:0);
   await c.query('UPDATE room_players SET age=$3 WHERE room_id=$1 AND player_id=$2',[rid,PID,age]);
   await note(c,rid,`🛡️ Decisão da administração: Hugo Bueno (LE, 75) foi para o Santos por € 25,5 mi.`);
