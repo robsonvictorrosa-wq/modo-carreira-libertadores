@@ -7,6 +7,7 @@ function load(uni){if(B)return B;B=new Map();
  try{const el=JSON.parse(fs.readFileSync(__dirname+'/config/elencos-brasileiros.json','utf8')).players||[];const m=new Map();
   for(const p of el)if(p.birthdate){const c=norm(p.club);m.set((CLUB_ALIAS[c]||c)+'|'+norm(p.name),p.birthdate);}
   if(uni)for(const r of uni.prepare('SELECT p.id,p.name,c.name club FROM players p JOIN clubs c ON c.id=p.base_club_id WHERE p.id>=95000000 AND p.id<96000000').all()){const d=m.get(norm(r.club)+'|'+norm(r.name));if(d)B.set(r.id,d);}}catch(e){console.error('birth br',e.message)}
+ try{(JSON.parse(fs.readFileSync(__dirname+'/config/leilao-surpresa.json','utf8')).players||[]).forEach((p,i)=>{if(p.dob&&!p.id)B.set(96100000+i,p.dob);});}catch(e){console.error('birth surpresa',e.message)} // criados do leilão surpresa (data real)
  return B;}
 // hoje no fuso de São Paulo
 const today=()=>new Date(Date.now()-3*3600e3).toISOString().slice(0,10);

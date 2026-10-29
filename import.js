@@ -93,5 +93,16 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
  {const PZ=JSON.parse(fs.readFileSync(__dirname+'/config/potenciais-zc.json','utf8')).players;let n=0;
   const VZ=require('./value');for(const a of PZ){n+=db.prepare('UPDATE players SET potential=? WHERE id=?').run(a.potential,a.player_id).changes;const q=db.prepare('SELECT overall,potential,age FROM players WHERE id=?').get(a.player_id);if(q)db.prepare('UPDATE players SET market_value=? WHERE id=?').run(VZ({...q}),a.player_id);}
   console.log('Potenciais corrigidos:',n);}
+ // ===== Leilão surpresa (config/leilao-surpresa.json, lista do Robson 29/10): jogadores vão para o clube "Leilão ZC" com over/pot exatamente estes =====
+ {const AS=JSON.parse(fs.readFileSync(__dirname+'/config/leilao-surpresa.json','utf8')).players;const VAL=require('./value');const auc=db.prepare("SELECT id FROM clubs WHERE name='Leilão ZC'").get().id;
+  const ageAt=d=>{const b=new Date(d+'T12:00:00Z'),n=new Date('2026-10-29T12:00:00Z');let a=n.getUTCFullYear()-b.getUTCFullYear();if(n.getUTCMonth()<b.getUTCMonth()||(n.getUTCMonth()===b.getUTCMonth()&&n.getUTCDate()<b.getUTCDate()))a--;return a;};
+  db.transaction(()=>{AS.forEach((a,i)=>{let id=a.id;
+   if(id&&db.prepare('SELECT 1 FROM players WHERE id=?').get(id)){const o=db.prepare('SELECT positions,age FROM players WHERE id=?').get(id);const old=JSON.parse(o.positions||'[]');const mv=VAL({overall:a.ovr,potential:a.pot,age:o.age});
+    db.prepare('UPDATE players SET name=?,club_id=?,base_club_id=?,primary_position=?,positions=?,overall=?,potential=?,market_value=? WHERE id=?').run(a.name,auc,auc,a.pos,JSON.stringify([a.pos,...old.filter(x=>x!==a.pos)]),a.ovr,a.pot,mv,id);}
+   else{id=96100000+i;const age=ageAt(a.dob);const mv=VAL({overall:a.ovr,potential:a.pot,age});const st=a.stats_from&&db.prepare('SELECT stats,wage,weak_foot,skill_moves FROM players WHERE id=?').get(a.stats_from)||{};
+    db.prepare(`INSERT INTO players(id,name,nationality,club_id,base_club_id,positions,primary_position,overall,potential,age,height_cm,weight_kg,preferred_foot,weak_foot,skill_moves,gender,market_value,wage,contract_end,stats) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'Homem',?,?,2028,?)`).run(id,a.name,a.nat,auc,auc,JSON.stringify([a.pos]),a.pos,a.ovr,a.pot,age,a.height_cm??null,a.weight_kg??null,a.foot??null,st.weak_foot??null,st.skill_moves??null,mv,st.wage||50000,st.stats||'{}');}
+   db.prepare("INSERT INTO lib_auction VALUES(?,?,'surpresa')").run(i,id);});
+   db.prepare('UPDATE clubs SET n_players=(SELECT count(*) FROM players WHERE club_id=clubs.id)').run();})();
+  console.log('Leilão surpresa:',AS.length,'jogadores no clube Leilão ZC');}
  db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad)); require('./gen-attrs')(db);
  console.log('Libertadores ZC: 40 clubes; fora do FC27 (criados vazios):',miss.join(', '));}

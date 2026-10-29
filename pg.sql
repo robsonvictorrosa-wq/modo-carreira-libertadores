@@ -135,3 +135,6 @@ DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM zc_migs WHERE name='brian-idade-2610') T
  UPDATE room_players SET age=26 WHERE player_id=253061;
  INSERT INTO zc_migs(name) VALUES('brian-idade-2610');
 END IF; END $$;
+
+ALTER TABLE auction_lots ADD COLUMN IF NOT EXISTS opens_at TIMESTAMPTZ;
+ALTER TABLE auction_lots ADD COLUMN IF NOT EXISTS closes_at TIMESTAMPTZ;
