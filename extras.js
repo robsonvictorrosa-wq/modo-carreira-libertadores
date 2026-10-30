@@ -335,14 +335,14 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[l.room_id]);await c.query('COMMIT');console.log(T,'OK',JSON.stringify({before:b0,after:await bud()}));
  }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
  // Yan Couto (lote 4, travado) -> Atlético Nacional por 16 mi, como o botão "Definir clube" (Robson 26/10). Idempotente.
- // definir clube de lote travado (Robson 26/10): Yan Couto, Luiz Henrique, David Neres, Gabriel Sara, Brian Rodríguez, Vanderson (27/10). Idempotente.
+ // definir clube de lote travado (Robson 26/10): Yan Couto, Luiz Henrique, David Neres, Gabriel Sara, Brian Rodríguez, Vanderson (27/10), Valentín Gómez -> Libertad 26 mi (30/10). Idempotente (o leilão surpresa não conta como 'outro lote').
  async function assignLot(LOT,RE,CN,FEE){const c=await pool.connect();const T='FIXASSIGN '+LOT;try{await c.query('BEGIN');
   const AN=L.CLUBS.find(id=>cname(id)===CN);const AUCZ=[...R.C.values()].find(x=>x.name==='Leilão ZC')?.id;
   const [l]=(await c.query("SELECT * FROM auction_lots WHERE id=$1 AND status='unsold' AND winner_club IS NULL FOR UPDATE",[LOT])).rows;
   if(!l||!RE.test(pname(l.player_id)||'')){console.log(T,'SKIP');await c.query('ROLLBACK');return;}const rid=l.room_id;
   const [rm]=(await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[rid])).rows;const p=await R.player(c,rid,l.player_id);
   const bud=async()=>+(await c.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[rid,AN])).rows[0]?.budget;const b0=await bud();const av=await avail(c,rm,AN);
-  const won=(await c.query("SELECT id FROM auction_lots WHERE room_id=$1 AND season=$2 AND winner_club=$3",[rid,l.season,AN])).rows;
+  const won=(await c.query("SELECT id FROM auction_lots WHERE room_id=$1 AND season=$2 AND winner_club=$3 AND COALESCE(stage,'')<>'surpresa'",[rid,l.season,AN])).rows;
   const lastBid=(await c.query('SELECT amount FROM auction_bid_log WHERE lot_id=$1 AND club_id=$2 ORDER BY id DESC LIMIT 1',[l.id,AN])).rows[0];
   const info={before:b0,avail:av,other_wins:won.map(x=>x.id),last_bid:lastBid&&+lastBid.amount,club_now:cname(p?.club_id),shielded:!!p?.shielded};
   const bad=[];if(!AN)bad.push('clube não achado');if(p?.club_id!==AUCZ)bad.push('não está travado');if(av<FEE)bad.push('sem caixa');if(won.length)bad.push('já levou outro lote');
@@ -407,5 +407,5 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log(T,'ERR',e.message);}finally{c.release();}}
  setTimeout(async()=>{await moveLot({tag:'kaiki',re:/kaiki/i,from:'Santos',to:'Universitario',old:25.5e6,fee:23.2e6});
   await moveLot({tag:'talisca',re:/talisca/i,from:'Indep. Santa Fe',to:'LDU Quito',old:46e6,fee:95e6});
-  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();await savinho90();await assignLot(4,/^yan couto/i,'Atlético Nacional',16e6);await assignLot(17,/^luiz henrique/i,'Barcelona de Guayaquil',55e6);await assignLot(18,/^david neres/i,'Racing',65e6);await assignLot(15,/^gabriel sara/i,'Lanús',130e6);await assignLot(20,/^brian rodr/i,'Olimpia',100e6);await assignLot(3,/^vanderson/i,'Cruzeiro',50e6);await zeroOffers();await auditMoney();await cancelAll2209();await clearCooldowns();await auditSwaps();await hugoBueno();},15000);
+  for(const f of SUSP)await suspendLot(f);await unsuspend(7,/^jair/i,'São Paulo',40e6);await unsuspend(22,/^marcos leonardo/i,'Vélez Sarsfield',130e6);await taliscaLog();await savinho90();await assignLot(4,/^yan couto/i,'Atlético Nacional',16e6);await assignLot(17,/^luiz henrique/i,'Barcelona de Guayaquil',55e6);await assignLot(18,/^david neres/i,'Racing',65e6);await assignLot(15,/^gabriel sara/i,'Lanús',130e6);await assignLot(20,/^brian rodr/i,'Olimpia',100e6);await assignLot(3,/^vanderson/i,'Cruzeiro',50e6);await assignLot(8,/^valent[ií]n g[oó]mez/i,'Libertad',26e6);await zeroOffers();await auditMoney();await cancelAll2209();await clearCooldowns();await auditSwaps();await hugoBueno();},15000);
 };
