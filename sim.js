@@ -52,7 +52,7 @@ function playMatch(H,A,r=Math.random){ // H/A = {club_id,xi,bench?,form,alt?}
   for(let k=0;k<n;k++){const min=55+Math.floor(r()*31);const outs=T.xi.filter(p=>sec(p)!=='GK'&&S0[p.id].out===90&&S0[p.id].in===0);if(!outs.length)break;
    const o=outs[Math.floor(r()*outs.length)];const cand=bench.filter(p=>!used.has(p)&&sec(p)===sec(o));const inn=(cand.length?cand:bench.filter(p=>!used.has(p)&&sec(p)!=='GK'))[0];if(!inn)break;used.add(inn);
    S0[o.id].out=min;mk(inn,T,min,90);subs[T.club_id].push({min,out:o.id,in:inn.id,inn});}}
- const field=(T,m)=>[...T.xi,...subs[T.club_id].map(s=>s.inn)].filter(p=>S0[p.id].in<=m&&S0[p.id].out>m);
+ const field=(T,m)=>[...T.xi,...subs[T.club_id].map(s=>s.inn)].filter(p=>S0[p.id].in<=m&&(S0[p.id].out>m||S0[p.id].out>=90)); // quem joga até o fim está em campo no minuto 90
  const goals=(T,O,n)=>{for(let i=0;i<n;i++){const min=T===H&&AD>0?(r()<0.5+0.06*AD?46+Math.floor(r()*45):1+Math.floor(r()*45)):1+Math.floor(r()*90);const fl=field(T,min);
   if(r()<.03){const d=field(O,min).filter(p=>sec(p)==='DEF');if(d.length){const og=d[Math.floor(r()*d.length)];S0[og.id].og++;events.push({min,club:T.club_id,scorer:og.id,scorer_name:og.name,og:true,assist:null,assist_name:null});continue;}}
   if(!fl.length)continue;const tk=PL.get(T).tk,onf=id=>fl.find(p=>p.id===id);let kind=null,sc=null,as=null;const u=r();
