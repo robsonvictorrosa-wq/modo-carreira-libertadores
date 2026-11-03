@@ -193,6 +193,17 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    else if(y.mkt_state==='market'&&y.mkt_stage===st&&new Date(y.mkt_until).getTime()!==Date.parse(W.market_close)&&!y.zc_mkt_fixed){await pool.query('UPDATE rooms SET mkt_until=$2,version=version+1 WHERE id=$1',[y.id,W.market_close]);console.log('agenda: fim do mercado',st);}}
  }catch(e){console.error('agenda',e.message)}}
  setInterval(agenda,15000);setTimeout(agenda,3000);
+ // Robson 03/11: punição da pré-temporada (meta de contratações) só depois que o mercado fecha (AG.market_close), uma única vez (marca em lib_migrations).
+ let penBusy=false;async function penaltyAfterClose(){if(!AG.penalty_at_market_close||penBusy||Date.now()<Date.parse(AG.market_close))return;penBusy=true;const TAG='penalty-pre-'+AG.market_close.slice(0,10);
+  try{if((await pool.query('SELECT 1 FROM lib_migrations WHERE name=$1',[TAG])).rows.length)return;const [rm]=(await pool.query('SELECT * FROM rooms WHERE code=$1',[AG.room])).rows;if(!rm||rm.status!=='season'||stateOf(rm)==='market'||rm.mkt_state==='market')return;
+   const c=await pool.connect();try{await c.query('BEGIN');const [x]=(await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[rm.id])).rows;
+    if((await c.query('SELECT 1 FROM lib_migrations WHERE name=$1',[TAG])).rows.length){await c.query('ROLLBACK');return;}
+    const bad=await M.applyPenalties(c,x);await c.query('INSERT INTO lib_migrations(name) VALUES($1)',[TAG]);await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[x.id]);await c.query('COMMIT');
+    console.log('PENALTY OK',JSON.stringify({punidos:bad.length,lista:bad.map(b=>`${b.club} ${b.n}/${b.need} -${b.pts}pts -${b.money/1e6}mi`)}));
+   }catch(e){await c.query('ROLLBACK').catch(()=>{});console.log('PENALTY ERR',e.message);}finally{c.release();}
+  }catch(e){console.log('PENALTY ERR',e.message);}finally{penBusy=false;}}
+ setInterval(penaltyAfterClose,20000);
+
  // correção pontual (pedido do Robson 26/10): vale o maior lance removido. Idempotente: só age se o valor antigo ainda estiver lá.
  async function fixLancesRemovidos(){const FX=[{lot:9,pid:76624,club:758,old:20e6,fee:50e6},{lot:10,pid:247257,club:123,old:76e6,fee:80e6}];
   for(const f of FX){const c=await pool.connect();try{await c.query('BEGIN');

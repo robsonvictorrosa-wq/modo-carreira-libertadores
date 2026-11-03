@@ -1,10 +1,11 @@
 {
- "_doc": "Agenda da Libertadores ZC (horário de Brasília). Aplicada sozinha pelo servidor. start_slot=1: a 1ª rodada usa o 2º horário do dia (19:00). pre_market_during_rounds: exceção aprovada pelo Robson (03/11) para jogar com o mercado da pré-temporada aberto até market_close.",
+ "_doc": "Agenda da Libertadores ZC (horário de Brasília). Aplicada sozinha pelo servidor. start_slot=1: a 1ª rodada usa o 2º horário do dia (19:00). pre_market_during_rounds: exceção aprovada pelo Robson (03/11) para jogar com o mercado da pré-temporada aberto até market_close. penalty_at_market_close: punição da meta de contratações aplicada uma vez logo após market_close (não no início da temporada).",
  "room": "LIGA",
  "auction_start": "2026-10-26T12:00:00-03:00",
  "auction_close": "2026-10-26T20:00:00-03:00",
  "market_close": "2026-11-03T23:59:00-03:00",
  "pre_market_during_rounds": true,
+ "penalty_at_market_close": true,
  "market_open": "2026-10-26T21:40:00-03:00",
  "matches_start": "2026-11-03",
  "start_slot": 1,
