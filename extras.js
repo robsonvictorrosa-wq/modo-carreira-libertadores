@@ -361,7 +361,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const pend=rows.filter(o=>['pending','countered','club_accepted'].includes(o.status)).map(o=>o.id);
   const done=rows.filter(o=>o.status==='done').map(fmt);
   let canc=[];if(pend.length)canc=(await pool.query("UPDATE offers SET status='withdrawn',reason='Cancelada pela administração (proposta zerada)',updated_at=now() WHERE id=ANY($1) AND status IN ('pending','countered','club_accepted') RETURNING *",[pend])).rows;
-  console.log(T,'OK',JSON.stringify({canceladas:canc.length,lista:canc.map(fmt),concluidas_zeradas:done,todas_zeradas:rows.map(fmt)}));
+  console.log(T,'OK',JSON.stringify({canceladas:canc.length,concluidas_zeradas:done.length,todas_zeradas:rows.length}));
  }catch(e){console.log(T,'ERR',e.message);}}
 
  // Auditoria somente leitura (Robson 26/10 22:03/22:04): negociações aceitas sem dinheiro movimentado e rescisões (salários cobrados) — não corrige nada.
@@ -369,7 +369,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const acc=(await pool.query(`SELECT * FROM offers WHERE room_id=${RID} AND status='club_accepted' ORDER BY id`)).rows.map(o=>({id:o.id,jogador:pname(o.player_id),comprador:cname(o.buyer_club),vendedor:cname(o.seller_club),valor:+o.fee,aceita_em:br(o.updated_at),criada:br(o.created_at)}));
   const tr=(await pool.query(`SELECT * FROM transfers WHERE room_id=${RID} AND created_at>='2026-10-26T21:40:00-03:00' ORDER BY id`).catch(()=>pool.query(`SELECT * FROM transfers WHERE room_id=${RID} ORDER BY id DESC LIMIT 40`))).rows.map(t=>({id:t.id,jogador:pname(t.player_id),de:cname(t.from_club),para:cname(t.to_club),valor:+t.fee,tipo:t.kind,quando:t.created_at?br(t.created_at):null}));
   const resc=(await pool.query(`SELECT * FROM transfers WHERE room_id=${RID} AND kind='rescisão' ORDER BY id`)).rows.map(t=>({jogador:pname(t.player_id),clube:cname(t.from_club),salario_sem:+t.wage}));
-  console.log(T,JSON.stringify({aceitas_sem_dinheiro:acc,transferencias_desde_2140:tr,rescisoes:resc}));
+  console.log(T,JSON.stringify({aceitas_sem_dinheiro:acc.length,transferencias_desde_2140:tr.length,rescisoes:resc.length}));
  }catch(e){console.log(T,'ERR',e.message);}}
 
  // Robson 26/10 22:09: cancela TODAS as propostas/negociações em aberto criadas até 22:09 (Brasília). Não apaga linhas; caixa reservado é liberado pela mudança de status. Concluídas não são tocadas.
@@ -378,14 +378,14 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const lista=r.rows.map(o=>({id:o.id,jogador:pname(o.player_id),de:cname(o.seller_club),para:cname(o.buyer_club),valor:+o.fee,etapa_anterior:'aberta'}));
   if(r.rowCount)await pool.query(`UPDATE rooms SET version=version+1 WHERE id=${RID}`).catch(()=>{});
   const tudo=(await pool.query(`SELECT * FROM offers WHERE room_id=${RID} AND reason LIKE '%até 26/10 22:09%' ORDER BY id`)).rows.map(o=>`${o.id} ${pname(o.player_id)}: ${cname(o.seller_club)} -> ${cname(o.buyer_club)}`);
-  console.log(T,JSON.stringify({canceladas_agora:r.rowCount,lista,total_canceladas_por_esta_ordem:tudo.length,todas:tudo}));
+  console.log(T,JSON.stringify({canceladas_agora:r.rowCount,total_canceladas_por_esta_ordem:tudo.length}));
  }catch(e){console.log(T,'ERR',e.message);}}
 
  // Robson 26/10 22:18: fim do esfriamento — zera bloqueios ativos (só a coluna blocked_until).
  async function clearCooldowns(){const T='FIXCOOL';try{const r=await pool.query(`UPDATE negotiations n SET blocked_until=-1,club_fails=0,player_fails=0 FROM rooms r WHERE r.id=n.room_id AND n.blocked_until>=r.market_day RETURNING n.player_id,n.buyer_club`);const left=(await pool.query(`SELECT count(*)::int c FROM negotiations n JOIN rooms r ON r.id=n.room_id WHERE n.blocked_until>=r.market_day`)).rows[0].c;console.log(T,JSON.stringify({limpos:r.rowCount,lista:r.rows.map(x=>`${pname(x.player_id)} / ${cname(x.buyer_club)}`),ativos_restantes:left}));}catch(e){console.log(T,'ERR',e.message);}}
 
  // Robson 26/10 22:33: lista (somente leitura) propostas com troca ainda abertas criadas depois de 22:09.
- async function auditSwaps(){const T='FIXSWAPLIST';try{const r=await pool.query(`SELECT * FROM offers WHERE room_id=(SELECT id FROM rooms WHERE code='LIGA') AND swap_player_id IS NOT NULL AND status IN ('pending','countered','club_accepted') AND created_at>'2026-10-26T22:09:00-03:00' ORDER BY id`);console.log(T,JSON.stringify({total:r.rowCount,lista:r.rows.map(o=>({id:o.id,jogador:pname(o.player_id),de:cname(o.seller_club),para:cname(o.buyer_club),valor:+o.fee,troca:pname(o.swap_player_id),status:o.status,criada:new Date(o.created_at).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})}))}));}catch(e){console.log(T,'ERR',e.message);}}
+ async function auditSwaps(){const T='FIXSWAPLIST';try{const r=await pool.query(`SELECT * FROM offers WHERE room_id=(SELECT id FROM rooms WHERE code='LIGA') AND swap_player_id IS NOT NULL AND status IN ('pending','countered','club_accepted') AND created_at>'2026-10-26T22:09:00-03:00' ORDER BY id`);console.log(T,JSON.stringify({total:r.rowCount,lista:r.rows.slice(0,10).map(o=>({id:o.id,jogador:pname(o.player_id),de:cname(o.seller_club),para:cname(o.buyer_club),valor:+o.fee,troca:pname(o.swap_player_id),status:o.status,criada:new Date(o.created_at).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})}))}));}catch(e){console.log(T,'ERR',e.message);}}
 
  // Robson 27/10 09:10: Hugo Bueno (261224, ex-Wolves) no Santos por 25,5 mi (valor do Kaiki no leilão). Decisão da administração; o valor não é creditado a ninguém.
  async function hugoBueno(){const T='FIXHUGO';const PID=261224,SAN=766,FEE=25.5e6;const c=await pool.connect();try{await c.query('BEGIN');
