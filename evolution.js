@@ -20,7 +20,10 @@ async function afterRound(db,room,comp){
  const ids=[...rt.keys()];
  const ps=(await db.query('SELECT p.player_id,p.overall,p.potential,p.age,p.evo_acc,p.ovr_start,s.apps,s.rating_sum FROM room_players p LEFT JOIN player_stats s ON s.comp_id=$2 AND s.player_id=p.player_id WHERE p.room_id=$1 AND p.player_id=ANY($3::int[])',[room.id,comp.id,ids])).rows;
  const up=[];
- for(const p of ps){if(VAL.frozen(p))continue;const media=p.apps?p.rating_sum/p.apps:null;let acc=(+p.evo_acc||0)+gain(p,rt.get(p.player_id),media);let ov=+p.overall;
+ // Robson 03/11: linha de override sem overall (contratados) virava 0 com +null; usa o valor base do universo
+ const U=require('better-sqlite3')(__dirname+'/data/game.db',{readonly:true});const bq=U.prepare('SELECT overall,potential,age FROM players WHERE id=?');
+ for(const p of ps){const b=bq.get(p.player_id)||{};for(const k of ['overall','potential','age'])if(!(+p[k]>0))p[k]=b[k];}U.close();
+ for(const p of ps){if(!(+p.overall>0))continue;if(VAL.frozen(p))continue;const media=p.apps?p.rating_sum/p.apps:null;let acc=(+p.evo_acc||0)+gain(p,rt.get(p.player_id),media);let ov=+p.overall;
   while(acc>=1){const n=VAL.capOverall(p,ov+1);if(n<=ov){acc=0;break;}ov=n;acc-=1;}
   const mv=ov!==+p.overall?VAL({...p,overall:ov}):null;
   await db.query('UPDATE room_players SET evo_acc=$3,ovr_start=COALESCE(ovr_start,$4),overall=$5,market_value=COALESCE($6,market_value) WHERE room_id=$1 AND player_id=$2',[room.id,p.player_id,acc,+p.overall,ov,mv]);
