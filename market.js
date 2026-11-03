@@ -127,7 +127,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
    await note(db,r.id,`🔒 Janela de transferências fechada.${n?` ${n} negociação(ões) em aberto expiraram.`:''}`);}
   if(!r.window_was_open&&win.open)await note(db,r.id,`🔓 ${win.name} aberta (fecha ${win.closes||'quando o dono decidir'}).`);
   await db.query('UPDATE rooms SET window_was_open=$2 WHERE id=$1',[r.id,win.open]);}
- async function onStart(db,room){await db.query("UPDATE rooms SET market_day=1,window_was_open=false,mkt_stage='pre',mkt_state='done',auction_open=false WHERE id=$1",[room.id]);}
+ async function onStart(db,room){// exceção (Robson 03/11): com pre_market_during_rounds, o mercado da pré-temporada continua aberto até o prazo mesmo com a temporada iniciada
+  const keep=!!require('./config/agenda-zc.json').pre_market_during_rounds&&room.mkt_state==='market'&&room.mkt_until&&new Date(room.mkt_until)>Date.now();
+  await db.query("UPDATE rooms SET market_day=1,window_was_open=$2,mkt_stage='pre',mkt_state=$3,auction_open=false WHERE id=$1",[room.id,keep,keep?'market':'done']);}
  // ---------- rotas ----------
  const tx=async f=>{const c=await pool.connect();try{await c.query('BEGIN');const r=await f(c);await c.query('COMMIT');return r;}catch(e){await c.query('ROLLBACK');throw e}finally{c.release()}};
  const lockRoom=async(c,r)=>{const [room]=(await c.query('SELECT r.* FROM rooms r JOIN room_managers m ON m.room_id=r.id AND m.user_id=$2 WHERE r.code=$1 FOR UPDATE OF r',[String(r.params.code).toUpperCase(),r.user.id])).rows;if(!room)throw fail('Você não está nessa sala',403);return room;};
