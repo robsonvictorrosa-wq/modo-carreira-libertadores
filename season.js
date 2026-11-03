@@ -105,7 +105,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   try{await c.query('BEGIN');const {rows:[room]}=await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[roomId]);if(room.status!=='season')throw fail('A temporada não está em andamento');
    const comps=(await c.query('SELECT * FROM competitions WHERE room_id=$1 AND season=$2 AND current_round<rounds_total ORDER BY id',[roomId,room.season])).rows;if(!comps.length)throw fail('Temporada encerrada');
    for(const h of (app.locals.beforeRound||[]))await h(c,room);
-   if(M)await M.before(c,room);
+   // Robson 03/11: com o mercado da pré-temporada aberto durante as rodadas, não roda o 'dia de mercado' da IA na rodada (era o que travava a rodada 1)
+   if(M&&!(AGZ.pre_market_during_rounds&&room.mkt_stage==='pre'&&room.mkt_state==='market')){try{await c.query('SAVEPOINT mb');await M.before(c,room);await c.query('RELEASE SAVEPOINT mb');}catch(e){await c.query('ROLLBACK TO SAVEPOINT mb');console.error('agenda: mercado antes da rodada falhou, rodada segue:',e.message);}}
    const hum=new Map((await c.query('SELECT m.club_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[roomId])).rows.map(x=>[x.club_id,x.nick]));
    for(const comp of comps){const round=comp.current_round+1;const step=stepOf(round);
     const prev=(await c.query('SELECT * FROM matches WHERE comp_id=$1 AND played ORDER BY round,id',[comp.id])).rows;
