@@ -115,7 +115,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
      if(!ex)for(const g of L.koMatches(step,{rank,prev}))await c.query('INSERT INTO matches(comp_id,round,home,away,stage,leg,tie,neutral) VALUES($1,$2,$3,$4,$5,$6,$7,$8)',[comp.id,round,g.home,g.away,g.stage,g.leg,g.tie,!!g.neutral]);
      if(step.stage==='playin'&&!ex)out.push({info:'Fase de liga encerrada! Top 10 nas oitavas, 11º–22º no play-in.'});}
     const ms=(await c.query('SELECT * FROM matches WHERE comp_id=$1 AND round=$2',[comp.id,round])).rows;
-    for(const m of ms){const H={club_id:m.home,...await xiFor(c,roomId,m.home),form:await form(c,comp.id,m.home)},A={club_id:m.away,...await xiFor(c,roomId,m.away),form:await form(c,comp.id,m.away)};H.alt=ALT(m.home);A.alt=ALT(m.away);H.neutral=!!m.neutral;
+    for(const m of ms){const H={club_id:m.home,...await xiFor(c,roomId,m.home),form:await form(c,comp.id,m.home)},A={club_id:m.away,...await xiFor(c,roomId,m.away),form:await form(c,comp.id,m.away)};H.alt=ALT(m.home);A.alt=ALT(m.away);H.bench=[];A.bench=[];/* regra ZC (Robson 03/11): só o XI titular joga, sem substituições */H.neutral=!!m.neutral;
      const res=S.playMatch(H,A);let tie=null;
      if(m.stage!=='league'){const decisive=m.stage==='playin'||m.leg===2||(m.stage==='final'?L.CFG.FINAL_SINGLE:!L.CFG.KO_TWO_LEGS);
       if(decisive){const legs=(await c.query('SELECT * FROM matches WHERE comp_id=$1 AND stage=$2 AND tie=$3 AND played',[comp.id,m.stage,m.tie])).rows;tie=L.decideTie([...legs,{...m,hg:res.hg,ag:res.ag}],{...m,hg:res.hg,ag:res.ag});if(legs.length===0)tie.agg=null;}}
