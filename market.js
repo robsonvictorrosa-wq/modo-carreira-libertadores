@@ -14,7 +14,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  const CAL_LBL={pre:'pré-temporada',mid:'meio da fase de liga',end:'fim da fase de liga'};
  const brt=d=>new Date(d).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).replace(',','');
  function windowOf(room,comp){const st=room.mkt_stage||(room.status==='lobby'?'pre':null),lb=CAL_LBL[st]||'';
-  if(room.auction_open)return {open:false,auction:true,stage:st,name:('Leilão '+(lb?'de '+lb:'')).trim()+' em andamento',day:0,days:3};
+  // Robson 04/11: mercado e leilão podem ficar abertos juntos (jogadores do leilão ficam bloqueados no mercado)
+  if(room.auction_open&&!(room.mkt_state==='market'&&room.mkt_until&&new Date(room.mkt_until)>Date.now()))return {open:false,auction:true,stage:st,name:('Leilão '+(lb?'de '+lb:'')).trim()+' em andamento',day:0,days:3};
   const u=room.mkt_until?new Date(room.mkt_until):null;
   if(room.mkt_state==='market'&&u&&u>Date.now())return {open:true,stage:st,name:`Mercado aberto até ${brt(u)}`,until:u.toISOString(),closes:brt(u),day:0,days:3};
   return {open:false,stage:st,name:'Mercado fechado',day:0,days:3};}
@@ -43,7 +44,9 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const [d]=(await c.query("UPDATE offers SET status='done',wage=$2,role=$3,years=$4,reason=$5,updated_at=now() WHERE id=$1 RETURNING *",[o.id,wage,role,years,'Transferência concluída: valor pago na hora.'])).rows;
   await note(c,room.id,`✍️ ${p.name} foi para o ${clubName(o.buyer_club)}${+o.fee?` por ${X.fmt(+o.fee)}${from?'':' (agente livre)'}`:from?'':' (livre)'}${o.loan?' (empréstimo)':''}${o.swap_player_id?' + '+pname(o.swap_player_id)+' na troca':''}.`);
   await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);return d;}
- async function execute(db,room,t){const p=await R.player(db,room.id,t.pid);const day=room.market_day;
+ // Robson 04/11: jogador em leilão aberto não pode ser negociado pelo mercado
+ async function inAuction(db,room,pid){const {rows:[x]}=await db.query("SELECT 1 FROM auction_lots l JOIN rooms r ON r.id=l.room_id WHERE l.room_id=$1 AND l.season=$2 AND l.player_id=$3 AND l.status='open' AND (r.auction_open OR (l.stage='surpresa' AND now()>=COALESCE(l.opens_at,now()) AND now()<COALESCE(l.closes_at,now()+interval '1 day'))) LIMIT 1",[room.id,room.season,pid]);return !!x;}
+ async function execute(db,room,t){if(!/^(leilão|decisão)/.test(t.kind||'')&&await inAuction(db,room,t.pid))throw fail('Jogador está no leilão: não pode ser negociado pelo mercado enquanto o leilão estiver aberto');const p=await R.player(db,room.id,t.pid);const day=room.market_day;
   const prev=(await db.query('SELECT * FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,t.pid])).rows[0]||{none:true};
   const contract=t.loan?p.contract_end:room.season+(t.years||3);
   await db.query(`INSERT INTO room_players(room_id,player_id,club_id,wage,contract_end,morale,wants_out,listed,loan_from,release_clause,role) VALUES($1,$2,$3,$4,$5,75,false,false,$6,NULL,$7)
@@ -162,7 +165,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const hist=await q('SELECT * FROM transfers WHERE room_id=$1 AND player_id=$2 ORDER BY id DESC',[room.id,p.id]);
   s.json({...view(p,hum),positions:p.positions,stats:p.stats,importance:imp,...ctx,history:hist.map(t=>({...t,...TRX(t),from:clubName(t.from_club),to:clubName(t.to_club)}))});}));
  // nova proposta
- app.post('/api/rooms/:code/market/offer',auth,wrap(async(r,s)=>s.json(await tx(async c=>{const room=await lockRoom(c,r);const win=await needOpen(c,room);const buyer=await myClub(c,room,r.user.id);const hum=await humans(c,room.id);
+ app.post('/api/rooms/:code/market/offer',auth,wrap(async(r,s)=>s.json(await tx(async c=>{const room=await lockRoom(c,r);const win=await needOpen(c,room);if(await inAuction(c,room,+r.body?.player_id))throw fail('Jogador está no leilão: não pode receber ofertas enquanto o leilão estiver aberto');const buyer=await myClub(c,room,r.user.id);const hum=await humans(c,room.id);
   const pid=+r.body?.player_id,fee=Math.max(0,Math.round(+r.body?.fee||0)),loan=!!r.body?.loan,swap=r.body?.swap_player_id?+r.body.swap_player_id:null;const p=await R.player(c,room.id,pid);if(!p)throw fail('Jogador não encontrado');
   if(!inGame(p.id)||!(LIB.has(p.club_id)||isFree(p.club_id))||!LIB.has(buyer))throw fail('Por enquanto só há transferências entre os 40 clubes da liga');if(loan)throw fail('Empréstimos estão desativados');const lr=loan?Math.round(+r.body?.loan_rounds||0):null;if(loan&&!(lr>=1&&lr<=39))throw fail('Informe por quantas rodadas (1 a 39) é o empréstimo');
   if(r.body?.swap_player_id)throw fail('Troca de jogadores não é mais permitida.');if(p.club_id===buyer)throw fail('Esse jogador já é seu');if(!loan&&!isFree(p.club_id)&&!(fee>0))throw fail('Informe o valor da proposta (maior que zero).');if(p.shielded)throw fail('Jogador blindado: o clube não aceita propostas por ele');capChk(p,fee);const bc=C.get(buyer),sc=C.get(p.club_id);if(sc.gender!==bc.gender)throw fail('Jogador de outra modalidade (masculino/feminino)');
