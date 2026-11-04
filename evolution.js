@@ -2,21 +2,22 @@
 // A cada jogo disputado o jogador acumula uma fração de over (evo_acc); ao passar de 1.0 sobe 1 over.
 // Ganho por jogo = faixa da MÉDIA de nota × idade × distância ao potencial × variação (±40%).
 // Jovem (≤21) longe do potencial: 6,00–6,35 ~10–11 jogos por +1 · 6,35–6,75 ~7–8 · 6,75–7,25 ~5–6 · 7,25+ ~3–4. Abaixo de 6,00 não evolui.
-// Idade: 24–25 leva ~1,25x · 26–27 ~1,5x · 30–31 ~2x; 33+ não evolui. Perto do potencial, um pouco mais lento.
-// Limite rígido: over nunca passa do potencial.
+// Idade: 24–25 leva ~1,25x · 26–27 ~1,5x · 30–31 ~2x; 33+ não evolui.
+// Limite rígido: over nunca passa do potencial. O último ponto (falta 1) só com média 7,25+ (Excelente) e leva 4x mais.
 // Nunca regride. O campo potencial nunca é alterado.
 const VAL=require('./value');
 const TIERS=[[7.25,0.29],[6.75,0.18],[6.35,0.135],[6.0,0.095]];
 const EXC=7.25,NOEVO_AGE=33,VERSION='evo-0411';
 function base(r){r=+r;if(!(r>=6))return 0;for(const [t,v] of TIERS)if(r>=t)return v;return 0;}
 function ageF(a){a=+a||25;return a<=21?1:a<=23?0.9:a<=25?0.8:a<=27?0.667:a<=29?0.57:a<=31?0.5:a<=32?0.45:0;}
-const gapF=g=>g<=0?0:Math.min(1,0.7+0.06*g); // suave: 5+ de distância = 1,0; 1 de distância = 0,76
+// distância ao potencial: 2+ = velocidade normal; último ponto (falta 1) só na fase Excelente e leva 4x
+const gapF=(g,r)=>g<=0?0:g>=2?1:(r>=EXC?0.25:0);
 const noEvo=p=>(+p.age||0)>=NOEVO_AGE;
 const maxOv=(p)=>+p.potential||+p.overall; // teto rígido: nunca passa do potencial
 // ganho de um jogo (media = média da temporada incluindo este jogo)
 function gain(p,nota,media,rnd=Math.random){const r=media==null?nota:media;const b=base(r);if(!b||noEvo(p))return 0;
  const pot=+p.potential||+p.overall,ov=+p.overall;if(ov>=maxOv(p,r))return 0;
- return b*ageF(p.age)*gapF(pot-ov)*(0.6+0.8*rnd());}
+ return b*ageF(p.age)*gapF(pot-ov,r)*(0.6+0.8*rnd());}
 // aplica um jogo: devolve {ov,acc}; nunca regride, nunca passa do limite
 function step(p,ov,acc,nota,media,rnd){const q={...p,overall:ov};const g=gain(q,nota,media,rnd);if(!g)return {ov,acc};acc+=g;
  while(acc>=1){if(ov+1>maxOv(p,media)){acc=0;break;}ov++;acc-=1;}if(ov>=maxOv(p,media))acc=0;return {ov,acc};}
@@ -61,5 +62,5 @@ async function replay(pool,compName){await pool.query('CREATE TABLE IF NOT EXIST
   U.close();await c.query('INSERT INTO lib_migrations(name) VALUES($1)',[VERSION]);await c.query('COMMIT');console.log('EVOREPLAY OK',n,'players',JSON.stringify({salas:comps.length,subiram:up,versao:VERSION}));}
  catch(e){await c.query('ROLLBACK');console.log('EVOREPLAY erro',e.message);}finally{c.release();}}
 module.exports={frozen:noEvo,applyOverall:VAL.capOverall,enabled:true,base,ageF,gapF,gain,step,maxOv,replay,VERSION,
- description:'Evolução natural, jogo a jogo, pela MÉDIA de nota na temporada. Jovem (até 21) longe do potencial sobe +1 em: ~10–11 jogos com média 6,00–6,35; ~7–8 com 6,35–6,75; ~5–6 com 6,75–7,25; ~3–4 com 7,25+. Abaixo de 6,00 não evolui. Mais velho demora mais (24–25 ~1,25x, 26–27 ~1,5x, 30–31 ~2x); 33+ não evolui. Perto do potencial fica um pouco mais lento. Nunca passa do potencial. Variação aleatória de ±40% por jogo. Ninguém perde over.',
+ description:'Evolução natural, jogo a jogo, pela MÉDIA de nota na temporada. Jovem (até 21) longe do potencial sobe +1 em: ~10–11 jogos com média 6,00–6,35; ~7–8 com 6,35–6,75; ~5–6 com 6,75–7,25; ~3–4 com 7,25+. Abaixo de 6,00 não evolui. Mais velho demora mais (24–25 ~1,25x, 26–27 ~1,5x, 30–31 ~2x); 33+ não evolui. O último ponto até o potencial só vem na fase Excelente (7,25+) e leva 4x mais. Nunca passa do potencial. Variação aleatória de ±40% por jogo. Ninguém perde over.',
  afterRound};
