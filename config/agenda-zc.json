@@ -1,5 +1,5 @@
 {
- "_doc": "Agenda da Libertadores ZC (horário de Brasília). Aplicada sozinha pelo servidor. start_slot=1: a 1ª rodada usa o 2º horário do dia (19:00). pre_market_during_rounds: exceção aprovada pelo Robson (03/11) para jogar com o mercado da pré-temporada aberto até market_close. penalty_at_market_close: punição da meta de contratações aplicada uma vez logo após market_close (não no início da temporada). windows.mid.market_open (Robson 04/11): mercado do meio abre antes da R19 e a R19 roda com ele aberto; leilão do meio roda no meio do mercado (mercado segue aberto; jogadores do leilão bloqueados no mercado).",
+ "_doc": "Agenda da Libertadores ZC (horário de Brasília). Aplicada sozinha pelo servidor. start_slot=1: a 1ª rodada usa o 2º horário do dia (19:00). pre_market_during_rounds: exceção aprovada pelo Robson (03/11) para jogar com o mercado da pré-temporada aberto até market_close. penalty_at_market_close: punição da meta de contratações aplicada uma vez logo após market_close (não no início da temporada). windows.mid.market_open (Robson 04/11): mercado do meio abre antes da R19 e a R19 roda com ele aberto; leilão do meio roda no meio do mercado (mercado segue aberto; jogadores do leilão bloqueados no mercado). windows.*.resume_slot: índice do horário do 1º jogo após a janela (1 = 19:00).",
  "room": "LIGA",
  "auction_start": "2026-10-26T12:00:00-03:00",
  "auction_close": "2026-10-26T20:00:00-03:00",
@@ -19,8 +19,9 @@
    "auction_start": "2026-11-12T19:01:00-03:00",
    "auction_close": "2026-11-13T19:01:00-03:00",
    "market_close": "2026-11-15T12:01:00-03:00",
-   "resume": "2026-11-17",
-   "market_open": "2026-11-12T12:01:00-03:00"
+   "resume": "2026-11-15",
+   "market_open": "2026-11-12T12:01:00-03:00",
+   "resume_slot": 1
   },
   "end": {
    "after_round": 39,
