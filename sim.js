@@ -7,13 +7,15 @@ const st=(p,k)=>(p.stats&&p.stats[k])??p.overall??50;
 function autoXI(squad,formation='4-3-3'){if(TT.FORMS[formation])return TT.autoXI(squad,formation);const f=FORMATIONS[formation]||FORMATIONS['4-3-3'];const need={GK:1,...f};const pool=[...squad].filter(p=>p.overall).sort((a,b)=>b.overall-a.overall);const xi=[];
  for(const s of ['GK','DEF','MID','ATT'])for(const p of pool.filter(p=>sec(p)===s&&!xi.includes(p)).slice(0,need[s]))xi.push(p);
  for(const p of pool){if(xi.length>=11)break;if(!xi.includes(p))xi.push(p);}return xi;}
+// Meio por função do slot: VOL pesa mais defesa que MC; MEI/demais sem defesa
+const MIDW={VOL:[.30,.15,.30],MC:[.38,.22,.15]},midW=p=>{const w=MIDW[p.primary_position]||[.45,.30,0];return w[0]*st(p,'passing')+w[1]*st(p,'dribbling')+w[2]*st(p,'defense')+0.25*(p.overall||50);};
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:50;
 // Força por setor dos 11 titulares
 function strength(xi){const by=s=>xi.filter(p=>sec(p)===s);const fb=(arr,alt)=>arr.length?arr:alt;
  const gk=by('GK')[0];
  return {GK:gk?avg(['gk_diving','gk_handling','gk_reflexes','gk_positioning'].map(k=>st(gk,k))):35,
   DEF:avg(fb(by('DEF'),xi).map(p=>0.55*st(p,'defense')+0.3*st(p,'physical')+0.15*st(p,'pace'))),
-  MID:avg(fb(by('MID'),xi).map(p=>0.45*st(p,'passing')+0.3*st(p,'dribbling')+0.25*(p.overall||50))),
+  MID:avg(fb(by('MID'),xi).map(midW)),
   ATT:avg(fb(by('ATT'),xi).map(p=>0.5*st(p,'shooting')+0.25*st(p,'pace')+0.25*st(p,'dribbling')))};}
 const poisson=(l,r)=>{let L=Math.exp(-l),k=0,p=1;do{k++;p*=r();}while(p>L);return Math.min(k-1,9);};
 const pick=(arr,w,r)=>{const t=w.reduce((a,b)=>a+b,0);let x=r()*t;for(let i=0;i<arr.length;i++){x-=w[i];if(x<=0)return arr[i];}return arr[arr.length-1];};

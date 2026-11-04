@@ -16,7 +16,7 @@ A temporada **não é simulada de uma vez**. O dono da sala clica em "Simular pr
 |---|---|
 | Goleiro | média de elasticidade, manejo, reflexos e posicionamento |
 | Defesa | 55% defesa + 30% físico + 15% ritmo |
-| Meio | 45% passe + 30% drible + 25% OVR |
+| Meio | VOL: 30% passe + 15% drible + 30% defesa + 25% OVR · MC: 38% passe + 22% drible + 15% defesa + 25% OVR · MEI e demais: 45% passe + 30% drible + 25% OVR |
 | Ataque | 50% chute + 25% ritmo + 25% drible |
 
 - **Poder ofensivo** = 65% ataque + 35% meio.
