@@ -63,7 +63,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   await note(db,room.id,out?`😠 ${p.name} ficou insatisfeito por não ir para o ${buyer.name} e pediu para sair do ${seller.name}.`:`😕 A moral de ${p.name} caiu após a recusa da proposta do ${buyer.name}.`,hum?.get(o.seller_club)?.user_id);}
  // ---------- tick dos bots (um "dia" de janela) ----------
  const SEC_TARGET={GK:3,DEF:8,MID:8,ATT:5};
- async function tick(db,room,win){const day=room.market_day;const hum=await humans(db,room.id);const rnd=Math.random;const W=await R.world(db,room.id);
+ async function tick(db,room,win){const day=room.market_day;const hum=await humans(db,room.id);const rnd=Math.random;const W=await R.world(db,room.id);const AUC=new Set((await db.query("SELECT l.player_id FROM auction_lots l JOIN rooms r ON r.id=l.room_id WHERE l.room_id=$1 AND l.season=$2 AND l.status='open' AND (r.auction_open OR (l.stage='surpresa' AND now()>=COALESCE(l.opens_at,now()) AND now()<COALESCE(l.closes_at,now()+interval '1 day')))",[room.id,room.season])).rows.map(x=>+x.player_id));// Robson 04/11: IA pula jogadores em leilão aberto
+
   // ofertas vencidas
   // Robson 27/10: proposta a clube sem técnico fica pendente; quando um técnico assume, ganha prazo novo a partir de hoje
   {const hids=[...hum.keys()];if(hids.length)await db.query("UPDATE offers o SET seller_user=m.user_id,deadline_day=$2+2,reason='Aguardando resposta do técnico.',updated_at=now() FROM room_managers m WHERE o.room_id=$1 AND m.room_id=$1 AND m.club_id=o.seller_club AND o.status='pending' AND o.seller_user IS DISTINCT FROM m.user_id AND o.buyer_user IS NOT NULL",[room.id,day]);}
@@ -73,7 +74,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const summer=win.days===4;const pBuy=summer?0.55:0.25;
   // índice por setor+gênero ordenado por OVR
   const dism=new Set((await db.query('SELECT player_id FROM room_players WHERE room_id=$1 AND club_id=ANY($2::int[])',[room.id,[FREE.M,FREE.F].filter(Boolean)])).rows.map(x=>x.player_id));
-  const idx={};for(const p of W.players.values()){const c=W.clubs.get(p.club_id);if(!c||!inGame(p.id)||!(LIB.has(p.club_id)||(isFree(p.club_id)&&dism.has(p.id)))||hum.has(p.club_id)||p.loan_from)continue;const k=c.gender+S.sec(p);(idx[k]=idx[k]||[]).push(p);}
+  const idx={};for(const p of W.players.values()){const c=W.clubs.get(p.club_id);if(!c||AUC.has(p.id)||!inGame(p.id)||!(LIB.has(p.club_id)||(isFree(p.club_id)&&dism.has(p.id)))||hum.has(p.club_id)||p.loan_from)continue;const k=c.gender+S.sec(p);(idx[k]=idx[k]||[]).push(p);}
   for(const k in idx)idx[k].sort((a,b)=>a.overall-b.overall);
   const lower=(a,v)=>{let l=0,h=a.length;while(l<h){const m=(l+h)>>1;if(a[m].overall<v)l=m+1;else h=m;}return l;};
   const move=(p,from,to,fee,wage,kind,loan)=>{const fc=W.clubs.get(from),tc=W.clubs.get(to);if(fc){const i=fc.squad.indexOf(p);if(i>=0)fc.squad.splice(i,1);}if(tc)tc.squad.push(p);tc&&tc.squad.sort((a,b)=>b.overall-a.overall);
@@ -102,7 +103,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
    if(best&&(best.sc>-3||win.pre)){if(win.pre)win.signed.set(c.id,(win.signed.get(c.id)||0)+1);move(best.p,best.s.id,c.id,best.price,best.wage,best.loan?'empréstimo':isFree(best.s.id)?'livre':'compra',best.loan);}}
   // propostas dos bots para os humanos
   const pend=new Set((await db.query("SELECT player_id FROM offers WHERE room_id=$1 AND status IN ('pending','countered')",[room.id])).rows.map(x=>x.player_id));
-  if(!win.pre)for(const [hc,h] of hum){const club=W.clubs.get(hc);if(!club)continue;const listed=club.squad.filter(p=>(p.listed||p.wants_out)&&!p.shielded);
+  if(!win.pre)for(const [hc,h] of hum){const club=W.clubs.get(hc);if(!club)continue;const listed=club.squad.filter(p=>(p.listed||p.wants_out)&&!p.shielded&&!AUC.has(p.id));
    const tries=(rnd()<(summer?0.6:0.45)?1:0)+(listed.length&&rnd()<0.6?1:0);
    for(let t=0;t<tries;t++){const cand=(club.squad.filter(p=>!pend.has(p.id)&&!p.loan_from)).filter(p=>!p.shielded);if(club.squad.length<=X.MIN_SQ||!cand.length)break;
     const w=cand.map(p=>(p.listed?5:p.wants_out?3:1)*Math.sqrt(p.market_value||1));let x=rnd()*w.reduce((a,b)=>a+b,0),p=cand[0];for(let i=0;i<cand.length;i++){x-=w[i];if(x<=0){p=cand[i];break;}}
