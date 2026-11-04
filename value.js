@@ -1,7 +1,7 @@
 // Valor de mercado Libertadores ZC: exponencial no overall + prêmio por potencial (maior para jovens) − desconto de idade.
 const FROZEN_AGE=33; // jogadores com idade > 33 não evoluem nem regridem
 const frozen=p=>(+p.age||0)>FROZEN_AGE;
-const fix=p=>{if(p){if(p.potential==null||+p.potential<+p.overall)p.potential=p.overall;if(frozen(p))p.potential=p.overall;}return p;};
+const fix=p=>{if(p){if(p.potential==null||+p.potential<+p.overall-1)p.potential=p.overall;/* potencial+1 permitido; não altera potencial */if(frozen(p))p.potential=p.overall;}return p;};
 // overall nunca passa do potencial (e >33 anos não muda)
 const capOverall=(p,novo)=>frozen(p)?p.overall:Math.min(novo,Math.max(+p.potential||p.overall,p.overall));
 module.exports=p=>{fix(p);const o=+p.overall||50,pot=Math.max(o,+p.potential||o),a=+p.age||25,g=pot-o;

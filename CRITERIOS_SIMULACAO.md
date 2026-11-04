@@ -57,4 +57,4 @@ A temporada **não é simulada de uma vez**. O dono da sala clica em "Simular pr
 | 7,25+ | 0,29 | ~3–4 |
 
 Idade: ≤21 1,0 · 22–23 0,9 · 24–25 0,8 · 26–27 0,667 · 28–29 0,57 · 30–31 0,5 · 32 0,45 · 33+ não evolui.
-Limite rígido: over nunca passa do potencial. Faltando 2+ para o potencial, velocidade normal; o último ponto só com média 7,25+ (Excelente) e leva 3x. Variação ±40% por jogo. Ninguém perde over; potencial nunca é alterado.
+Velocidade normal até o potencial. Só com média 7,25+ (Excelente) pode chegar a potencial+1, e esse ponto extra leva 3x. Variação ±40% por jogo. Ninguém perde over; potencial nunca é alterado.

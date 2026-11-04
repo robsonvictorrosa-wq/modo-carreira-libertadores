@@ -47,7 +47,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const ps=comp?new Map((await q('SELECT player_id,apps,rating_sum FROM player_stats WHERE comp_id=$1 AND player_id=ANY($2::int[])',[comp.id,ids])).map(x=>[x.player_id,x])):new Map();
   const tier=a=>a==null?null:a<6?'Ruim':a<6.35?'Mediano':a<6.75?'Bom':a<7.25?'Muito bom':'Excelente';
   const players=sq.map(p=>{const e=ev.get(p.id)||{},st=ps.get(p.id);const avg=st?.apps?+(st.rating_sum/st.apps).toFixed(2):null;const ovr=+p.overall||0,pot=+p.potential||ovr;
-   const why=EVO.frozen(p)?'33 anos ou mais: não evolui':ovr>=pot?'Já no potencial máximo':pot-ovr===1&&!(avg>=7.25)?'Último ponto: só na fase Excelente (7,25+)':null;
+   const why=EVO.frozen(p)?'33 anos ou mais: não evolui':ovr>=pot+1?'No limite (potencial +1)':ovr>=pot&&!(avg>=7.25)?'No potencial: só passa +1 na fase Excelente (7,25+)':null;
    return {id:p.id,name:p.name,pos:p.primary_position,age:p.age,overall:ovr,potential:pot,ovr_start:e.ovr_start!=null?+e.ovr_start:null,apps:st?.apps||0,avg,tier:tier(avg),acc:why?0:Math.max(0,Math.min(1,+e.evo_acc||0)),blocked:why};});
   const PO=['GOL','LD','ADD','ZAG','LE','ADE','VOL','MC','MD','ME','MEI','PD','PE','SA','ATA'];players.sort((a,b)=>PO.indexOf(a.pos)-PO.indexOf(b.pos)||b.overall-a.overall);
   s.json({players});}));
