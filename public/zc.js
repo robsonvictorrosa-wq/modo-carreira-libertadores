@@ -117,7 +117,8 @@ function fit1(pp,sl){if(!pp)return .8;if(pp===sl)return 1;if((pp==='GOL')!==(sl=
 function zFit(p,sl){let f=fit1(p.primary_position,sl);for(const q of (p.positions||[]))if(q!==p.primary_position)f=Math.max(f,fit1(q,sl));return f;}
 function zAssign(ids,f){const sl=XI.l.slots[f],P=ids.map(id=>XI.by.get(id)).filter(Boolean),pairs=[];sl.forEach((s,i)=>P.forEach(p=>pairs.push([zFit(p,s[0]),p.overall,i,p])));pairs.sort((a,b)=>b[0]-a[0]||b[1]-a[1]);
  const out=new Array(sl.length).fill(null),u=new Set();for(const [,,i,p] of pairs){if(out[i]||u.has(p))continue;out[i]=p;u.add(p);}return out.map(p=>p?p.id:null);}
-const surname=n=>{const w=String(n||'').trim().split(/\s+/);return w.length>1&&w[w.length-1].length>2?w[w.length-1]:w[0];};
+// Robson 04/11: nome inteiro se couber; senão inicial + sobrenome (ex.: G. Jesus)
+const surname=n=>{const t=String(n||'').trim();const w=t.split(/\s+/);if(w.length<2||t.length<=12)return t;const l=w[w.length-1].length>2?w[w.length-1]:w.slice(-2).join(' ');return w[0][0]+'. '+l;};
 const tier=o=>o>=85?'t1':o>=80?'t2':o>=75?'t3':o>=70?'t4':'t5';
 async function zEscalacao(){if(!await need('escalacao'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}
  const [l,s]=await Promise.all([get(R()+'/lineup'),get(R()+'/zc/signings')]);const signed=new Set(s.in.map(x=>x.player_id));
