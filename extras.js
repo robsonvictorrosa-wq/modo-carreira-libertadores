@@ -40,6 +40,17 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const H=await hv.p;const clubs=[];for(const cid of L.CLUBS){const lc=uni.prepare('SELECT country,squad FROM lib_clubs WHERE club_id=?').get(cid);const h=H.get(cid);clubs.push({pre:h.pre,id:cid,name:cname(cid),country:lc.country,squad:lc.squad,manager:by.get(cid)||null,budget:rc.get(cid)??null,initial:+(uni.prepare('SELECT budget FROM clubs WHERE id=?').get(cid)?.budget||0),meta:h.meta});}
   const me=mans.find(m=>m.user_id===r.user.id);let win=null;try{win=M.windowOf(room,await M.mainComp(pool,room));}catch(e){}
   s.json({room:{code:room.code,name:room.name,status:room.status,season:room.season,market_day:room.market_day},admin:room.owner_id===r.user.id||!!r.user.admin,me:{nick:r.user.nick,club_id:me?.club_id||null},comp,phase:phase(comp),window:win,cal:await calInfo(pool,room),clubs,managers:mans,prizes:CF.prizes,meta_need:CF.meta_onze||6,pre_need:M.PRE_NEED,evolution:{enabled:EVO.enabled,description:EVO.description}});}));
+ // Robson 04/11: aba Evolução – elenco do usuário com o progresso até o próximo +1 (só leitura, regras em evolution.js)
+ app.get('/api/rooms/:code/zc/evolucao',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!m?.club_id)return s.json({players:[]});
+  const comp=await comp0(pool,room);const sq=await R.squad(pool,room.id,m.club_id);const ids=sq.map(p=>p.id);
+  const ev=new Map((await q('SELECT player_id,evo_acc,ovr_start FROM room_players WHERE room_id=$1 AND player_id=ANY($2::int[])',[room.id,ids])).map(x=>[x.player_id,x]));
+  const ps=comp?new Map((await q('SELECT player_id,apps,rating_sum FROM player_stats WHERE comp_id=$1 AND player_id=ANY($2::int[])',[comp.id,ids])).map(x=>[x.player_id,x])):new Map();
+  const tier=a=>a==null?null:a<6?'Ruim':a<6.35?'Mediano':a<6.75?'Bom':a<7.25?'Muito bom':'Excelente';
+  const players=sq.map(p=>{const e=ev.get(p.id)||{},st=ps.get(p.id);const avg=st?.apps?+(st.rating_sum/st.apps).toFixed(2):null;const ovr=+p.overall||0,pot=+p.potential||ovr;
+   const why=EVO.frozen(p)?'Acima de 33 anos: não evolui':ovr>=pot?'Já no potencial máximo':null;
+   return {id:p.id,name:p.name,pos:p.primary_position,age:p.age,overall:ovr,potential:pot,ovr_start:e.ovr_start!=null?+e.ovr_start:null,apps:st?.apps||0,avg,tier:tier(avg),acc:why?0:Math.max(0,Math.min(1,+e.evo_acc||0)),blocked:why};});
+  const PO=['GOL','LD','ADD','ZAG','LE','ADE','VOL','MC','MD','ME','MEI','PD','PE','SA','ATA'];players.sort((a,b)=>PO.indexOf(a.pos)-PO.indexOf(b.pos)||b.overall-a.overall);
+  s.json({players});}));
  app.get('/api/rooms/:code/zc/signings',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!m?.club_id)return s.json({in:[],out:[]});
   const t=await q('SELECT * FROM transfers WHERE room_id=$1 AND (to_club=$2 OR from_club=$2) AND status<>\'cancelled\' ORDER BY id DESC',[room.id,m.club_id]);const sq=new Set((await R.squad(pool,room.id,m.club_id,false)).map(p=>p.id));const x=await app.locals.xiFor(pool,room.id,m.club_id);const xi=new Set(x.xi.map(p=>p.id));
   const cr=(await comp0(pool,room))?.current_round||0;const LN=new Map((await q('SELECT player_id,club_id,loan_until FROM room_players WHERE room_id=$1 AND loan_from IS NOT NULL',[room.id])).map(y=>[y.player_id,y]));
