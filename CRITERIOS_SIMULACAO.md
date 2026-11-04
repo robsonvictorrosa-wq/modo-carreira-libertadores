@@ -46,3 +46,15 @@ A temporada **não é simulada de uma vez**. O dono da sala clica em "Simular pr
 ## 8. Tabela e estatísticas
 - Vitória 3, empate 1. Desempate: pontos, vitórias, saldo de gols, gols pró.
 - Por jogador e competição: jogos, gols, assistências e nota média.
+
+## Evolução (Robson 04/11)
+| Média na temporada | Ganho/jogo (jovem ≤21, longe do potencial) | Jogos por +1 |
+|---|---|---|
+| < 6,00 | 0 | não evolui |
+| 6,00–6,35 | 0,095 | ~10–11 |
+| 6,35–6,75 | 0,135 | ~7–8 |
+| 6,75–7,25 | 0,18 | ~5–6 |
+| 7,25+ | 0,29 | ~3–4 |
+
+Idade: ≤21 1,0 · 22–23 0,9 · 24–25 0,8 · 26–27 0,667 · 28–29 0,57 · 30–31 0,5 · 32 0,45 · 33+ não evolui.
+Distância ao potencial (suave): 5+ = 1,0; 1 = 0,76. Limite rígido: over nunca passa do potencial. Variação ±40% por jogo. Ninguém perde over; potencial nunca é alterado.
