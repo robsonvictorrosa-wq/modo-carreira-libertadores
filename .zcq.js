@@ -1,0 +1,10 @@
+const {Pool}=require('pg');const p=new Pool({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false}});
+const uni=require('better-sqlite3')('data/game.db',{readonly:true});const nm=id=>uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name;
+(async()=>{const c=await p.connect();await c.query('BEGIN READ ONLY');
+const [room]=(await c.query("SELECT id,status,season FROM rooms WHERE code='LIGA'")).rows;
+const [comp]=(await c.query('SELECT id,current_round FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY id LIMIT 1',[room.id,room.season])).rows;
+console.log(room.status,comp);
+const flu=uni.prepare("SELECT id FROM clubs WHERE name LIKE 'Fluminense%'").all();console.log('flu',flu);
+const ms=(await c.query('SELECT id,round,home,away,hg,ag,played,stage FROM matches WHERE comp_id=$1 AND round<=$2+1 AND (home=ANY($3) OR away=ANY($3)) ORDER BY round',[comp.id,comp.current_round,flu.map(x=>x.id)])).rows;
+for(const m of ms)console.log(m.round,nm(m.home),m.hg,'x',m.ag,nm(m.away),m.played,m.stage,m.home,m.away);
+await c.query('ROLLBACK');c.release();p.end();})();

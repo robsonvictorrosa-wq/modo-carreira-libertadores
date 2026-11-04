@@ -1,9 +1,10 @@
 // Libertadores ZC – formato: 40 clubes, liga única (todos x todos, 39 rodadas),
-// 1º–10º direto às oitavas, 11º–22º play-in (jogo único na casa do melhor), mata-mata com pênaltis.
+// formato Champions (Robson 03/11): 1º–8º direto às oitavas, 9º–24º playoffs (9x24, 10x23… ida e volta), 25º+ eliminados; mata-mata com pênaltis.
 const CFG={
  NAME:'Libertadores ZC',
- DIRECT:10,            // 1º ao 10º: direto às oitavas
- PLAYIN_FROM:11,PLAYIN_TO:22, // 11º ao 22º: play-in (11x22, 12x21, ...)
+ DIRECT:8,             // 1º ao 8º: direto às oitavas
+ PLAYIN_FROM:9,PLAYIN_TO:24, // 9º ao 24º: playoffs (9x24, 10x23, ...)
+ PLAYIN_TWO_LEGS:true, // playoffs em ida (casa do pior) e volta (casa do melhor)
  KO_TWO_LEGS:true,     // oitavas, quartas e semi em ida e volta (false = jogo único)
  FINAL_SINGLE:true,    // final em jogo único (campo neutro)
 };
@@ -13,8 +14,8 @@ let CLUBS=[];const loadClubs=uni=>(CLUBS=uni.prepare('SELECT club_id FROM lib_cl
 // elenco vazio (provisório): completa o time com jogadores "Provisório" de OVR neutro só para o motor rodar
 const VPOS=['GOL','LD','ZAG','ZAG','LE','VOL','MC','MEI','PD','PE','ATA','GOL','ZAG','MC','ATA','LE'];
 const virtualSquad=clubId=>VPOS.map((pos,i)=>({id:-(clubId*100+i+1),name:'Provisório '+pos+(i>=11?' (res.)':''),primary_position:pos,positions:[pos],overall:CF.placeholder_ovr,age:25,stats:{},virtual:true}));
-const STAGE_NAMES={league:'Fase de liga',playin:'Play-in',r16:'Oitavas de final',qf:'Quartas de final',sf:'Semifinal',final:'Final'};
-function plan(n=40){const p=[];const lr=n%2?n:n-1;for(let i=1;i<=lr;i++)p.push({stage:'league',leg:0});p.push({stage:'playin',leg:1});
+const STAGE_NAMES={league:'Fase de liga',playin:'Playoffs',r16:'Oitavas de final',qf:'Quartas de final',sf:'Semifinal',final:'Final'};
+function plan(n=40){const p=[];const lr=n%2?n:n-1;for(let i=1;i<=lr;i++)p.push({stage:'league',leg:0});p.push({stage:'playin',leg:1});if(CFG.PLAYIN_TWO_LEGS)p.push({stage:'playin',leg:2});
  for(const st of ['r16','qf','sf']){p.push({stage:st,leg:1});if(CFG.KO_TWO_LEGS)p.push({stage:st,leg:2});}
  p.push({stage:'final',leg:1});if(!CFG.FINAL_SINGLE)p.push({stage:'final',leg:2});
  return p.map((x,i)=>({...x,round:i+1}));}
@@ -31,7 +32,7 @@ function penalties(r=Math.random){let a=0,b=0;for(let i=0;i<5;i++){if(r()<.75)a+
 // gera os jogos de uma rodada de mata-mata. ctx: {rank: Map clube->posição na liga, prev: jogos já disputados (todas as fases)}
 function koMatches(step,ctx){const {rank,prev}=ctx;const better=(x,y)=>rank.get(x)<rank.get(y);
  if(step.leg===2){return prev.filter(m=>m.stage===step.stage&&m.leg===1).map(m=>({home:m.away,away:m.home,stage:step.stage,leg:2,tie:m.tie}));}
- const single=step.stage==='playin'||(step.stage==='final'?CFG.FINAL_SINGLE:!CFG.KO_TWO_LEGS);
+ const single=step.stage==='playin'?!CFG.PLAYIN_TWO_LEGS:(step.stage==='final'?CFG.FINAL_SINGLE:!CFG.KO_TWO_LEGS);
  const pair=(x,y,tie)=>{const [b,w]=better(x,y)?[x,y]:[y,x];return single?{home:b,away:w,stage:step.stage,leg:1,tie,neutral:step.stage==='final'}:{home:w,away:b,stage:step.stage,leg:1,tie};};// ida na casa do pior, volta na casa do melhor
  if(step.stage==='playin'){const byPos=[...rank].sort((a,b)=>a[1]-b[1]).map(x=>x[0]);const out=[];for(let i=0;i<(CFG.PLAYIN_TO-CFG.PLAYIN_FROM+1)/2;i++)out.push(pair(byPos[CFG.PLAYIN_FROM-1+i],byPos[CFG.PLAYIN_TO-1-i],i));return out;}
  if(step.stage==='r16'){const byPos=[...rank].sort((a,b)=>a[1]-b[1]).map(x=>x[0]);const q=[...byPos.slice(0,CFG.DIRECT),...winners(prev,'playin').map(w=>w.club)].sort((a,b)=>rank.get(a)-rank.get(b));

@@ -21,7 +21,7 @@ for(let r=0;r<n-1;r++){for(let i=0;i<n/2;i++){let h=arr[i],a=arr[n-1-i];if(i===0
 const table=L.standings(ms,CL,name);const rank=new Map(table.map(t=>[t.club_id,t.pos]));
 const plan=L.plan().filter(s=>s.stage!=='league');const ko=[];
 for(const step of plan){const gs=L.koMatches(step,{rank,prev:ko});for(const g of gs){const m=play({...g,round:step.round});
- const decisive=m.stage==='playin'||m.leg===2||m.stage==='final';if(decisive){const legs=ko.filter(x=>x.stage===m.stage&&x.tie===m.tie);const t=L.decideTie([...legs,m],m);m.winner=t.winner;m.pens=t.pens;m.agg=legs.length?t.agg:null;}ko.push(m);}}
+ const decisive=(m.stage==='playin'&&!L.CFG.PLAYIN_TWO_LEGS)||m.leg===2||m.stage==='final';if(decisive){const legs=ko.filter(x=>x.stage===m.stage&&x.tie===m.tie);const t=L.decideTie([...legs,m],m);m.winner=t.winner;m.pens=t.pens;m.agg=legs.length?t.agg:null;}ko.push(m);}}
 const champ=ko.find(m=>m.stage==='final').winner;
 // altitude: aproveitamento em casa
 const hs=c=>{const h=ms.filter(m=>m.home===c),a=ms.filter(m=>m.away===c);const pts=(l,s)=>l.reduce((t,m)=>{const f=s?m.hg:m.ag,g=s?m.ag:m.hg;return t+(f>g?3:f===g?1:0);},0);return {home:+(100*pts(h,1)/(3*h.length)).toFixed(1),away:+(100*pts(a,0)/(3*a.length)).toFixed(1)};};

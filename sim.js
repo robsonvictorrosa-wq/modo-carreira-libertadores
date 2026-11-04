@@ -78,8 +78,10 @@ function playMatch(H,A,r=Math.random){ // H/A = {club_id,xi,bench?,form,alt?}
    const dp=st(p,'defense')/65;s.tk=pois(P.tk*f*dp/dom,r);s.it=pois(P.it*f*dp/dom,r);s.cl=pois(P.cl*f/dom*(sec(p)==='DEF'?(.8+xg*.1):1),r);s.rc=pois(P.rc*f*(.7+dp*.3),r);
    s.lost=pois((sec(p)==="ATT"?8:sec(p)==="MID"?6.5:sec(p)==="DEF"?4.5:1.5)*f*(1.15-(ovr-60)*.01),r)+(s.dr-s.drs);s.fc=pois(P.ft*f*E.foul,r);
    if(sec(p)==='GK'){s.cla=pois(1.3,r);s.lbs=pois(6*f,r);s.pa+=s.lbs+pois(4,r);s.pac=Math.round(s.pa*acc);}
-   if(r()<.12*f+s.fc*.03)s.yc=1;if(r()<.008*f)s.rd=1;if(s.sh&&r()<.012)s.pkm=1;
-   s.noise=(r()+r()+r()-1.5)*.35;if(T===A&&AD>0)s.noise-=0.08*AD*Math.max(0,s.out-Math.max(s.in,45))/45;if(E.tire)s.noise-=.06*E.tire*Math.max(0,s.out-Math.max(s.in,60))/30;}}
+   if(r()<.12*f+s.fc*.03)s.yc=1;if(r()<.008*f)s.rd=1;
+   s.noise=(r()+r()+r()-1.5)*.35;if(T===A&&AD>0)s.noise-=0.08*AD*Math.max(0,s.out-Math.max(s.in,45))/45;if(E.tire)s.noise-=.06*E.tire*Math.max(0,s.out-Math.max(s.in,60))/30;}
+  // pênalti perdido (Robson 03/11): só o cobrador oficial bate; se ele não estiver em campo, o melhor finalizador em campo
+  if(r()<.05){const fl=field(T,1+Math.floor(r()*90)).filter(p=>sec(p)!=='GK');const tk=PL.get(T).tk;const bt=fl.find(p=>p.id===tk.pk)||[...fl].sort((a,b)=>st(b,'shooting')-st(a,'shooting'))[0];if(bt)S0[bt.id].pkm=1;}}
  const ratings={};for(const [T,gf,ga] of teams)for(const p of all(T))ratings[p.id]=rate(S0[p.id],p,gf,ga);
  const pstats={};for(const id in S0){const s=S0[id];const o={};for(const k in s)if(k!=='noise'&&k!=='club'&&s[k])o[k]=s[k];o.min=s.min;pstats[id]=o;}
  const motm=+Object.entries(ratings).sort((a,b)=>b[1]-a[1])[0]?.[0]||null;
