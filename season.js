@@ -73,7 +73,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   s.json({comp,round,step:stepOf(round),plan:PLAN,stages:L.STAGE_NAMES,matches:ms.map(m=>({...m,home_name:club(m.home).name,away_name:club(m.away).name,home_mgr:hum.get(m.home)||null,away_mgr:hum.get(m.away)||null}))});}));
 
  app.get('/api/rooms/:code/comp/:id/scorers',auth,wrap(async(r,s)=>{const room=await member(r);const [comp]=await q('SELECT id FROM competitions WHERE id=$1 AND room_id=$2',[r.params.id,room.id]);if(!comp)throw fail('Competição não encontrada',404);
-  const name=id=>vname(id)||uni.prepare('SELECT name,primary_position FROM players WHERE id=?').get(id)||{};const fmt=x=>({...x,...name(x.player_id),club:club(x.club_id)?.name,rating:x.apps?+(x.rating_sum/x.apps).toFixed(2):null});
+  const name=id=>vname(id)||uni.prepare('SELECT name,primary_position FROM players WHERE id=?').get(id)||{};/* Robson 04/11: mostra o clube ATUAL (elenco da sala; senão clube base), não o do último jogo */const CUR=new Map((await q('SELECT player_id,club_id FROM room_players WHERE room_id=$1 AND club_id IS NOT NULL',[room.id])).map(y=>[+y.player_id,+y.club_id]));const curClub=id=>CUR.get(+id)??uni.prepare('SELECT club_id FROM players WHERE id=?').get(+id)?.club_id;
+  const fmt=x=>({...x,...name(x.player_id),club:club(curClub(x.player_id)??x.club_id)?.name,rating:x.apps?+(x.rating_sum/x.apps).toFixed(2):null});
   s.json({goals:(await q('SELECT * FROM player_stats WHERE comp_id=$1 AND goals>0 ORDER BY goals DESC,assists DESC LIMIT 30',[comp.id])).map(fmt),
    assists:(await q('SELECT * FROM player_stats WHERE comp_id=$1 AND assists>0 ORDER BY assists DESC,goals DESC LIMIT 30',[comp.id])).map(fmt),
    ratings:(await q('SELECT * FROM player_stats WHERE comp_id=$1 AND apps>=GREATEST(1,(SELECT max(apps) FROM player_stats WHERE comp_id=$1)/2) ORDER BY rating_sum/apps DESC LIMIT 30',[comp.id])).map(fmt)});}));
