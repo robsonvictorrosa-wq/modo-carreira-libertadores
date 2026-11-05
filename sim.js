@@ -31,12 +31,12 @@ function expected(sH,sA,formH,formA){const fm=f=>f==null?1:0.95+0.1*(f/15);
 // Notas individuais estilo Sofascore: estatísticas por jogador coerentes com placar, gols/assistências, posição, atributos e minutos
 const PR={GK:{pa:16,sh:0,dr:0,tk:.1,it:.2,cl:.8,rc:2.5,ft:.15},DEF:{pa:48,sh:.5,dr:.5,tk:2.2,it:1.6,cl:3.6,rc:5,ft:1.1},MID:{pa:52,sh:1.2,dr:1.3,tk:2,it:1.1,cl:.9,rc:5.5,ft:1.2},ATT:{pa:28,sh:2.3,dr:2.4,tk:.8,it:.4,cl:.4,rc:3,ft:1}};
 const pois=(l,r)=>l<=0?0:l<6?poisson(l,r):Math.max(0,Math.round(l+Math.sqrt(l)*(r()+r()+r()+r()-2)*1.7));const r1=x=>Math.round(x*10)/10;const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
-// Equilíbrio por posição (05/11/2026): ponta/atacante ganha mais por drible certo e perde menos por bola perdida; MEI tinha estatísticas infladas e leva um ajuste fixo. Não mexe em placar nem em estatísticas.
-const POSADJ={MEI:-.3};
+// Pontas (05/11/2026): PE/PD ganham mais por drible certo e perdem menos por bola perdida. Não mexe em placar nem em estatísticas.
+const WING=p=>p.primary_position==='PE'||p.primary_position==='PD';
 function rate(s,p,gf,ga){const S=sec(p),f=clamp(s.min/90,.15,1);let v;
  if(S==='GK'){v=6.5+s.svd*.38+s.svs*.1+s.cla*.07+s.lbs*.02+(s.ga===0&&s.min>=60?.55:0)-s.ga*.32-s.err*1.1+s.pks*1.1+(s.pa?((s.pac/s.pa)-.7)*.6:0);}
- else{v=6.27+s.g*(S==="ATT"?1.05:1.15)+(S==="ATT"?.08:0)+s.a*.7+s.kp*.16+(s.sot-s.g)*.08-(s.sh-s.sot)*.05+s.drs*(S==='ATT'?.18:.11)-(s.dr-s.drs)*.04+s.tk*.11+s.it*.11+s.cl*(S==='DEF'?.05:.03)+s.rc*.035
-  +(s.pa?((s.pac/s.pa)-.8)*2.2*Math.min(s.pa/35,1):0)+s.pac*.004-s.lost*(S==='ATT'?.025:.035)-s.fc*.07+(POSADJ[p.primary_position]||0)-s.og*1.1-s.pkm*1;
+ else{v=6.27+s.g*(S==="ATT"?1.05:1.15)+(S==="ATT"?.08:0)+s.a*.7+s.kp*.16+(s.sot-s.g)*.08-(s.sh-s.sot)*.05+s.drs*(WING(p)?.18:.11)-(s.dr-s.drs)*.04+s.tk*.11+s.it*.11+s.cl*(S==='DEF'?.05:.03)+s.rc*.035
+  +(s.pa?((s.pac/s.pa)-.8)*2.2*Math.min(s.pa/35,1):0)+s.pac*.004-s.lost*(WING(p)?.025:.035)-s.fc*.07-s.og*1.1-s.pkm*1;
   if(S==='DEF'){v-=Math.max(0,s.ga-1)*.18;if(s.ga===0&&s.min>=60)v+=.3;}}
  v+=(gf>ga?.25:gf<ga?-.2:0)*f-s.yc*.3-s.rd*1.5+s.noise;
  if(s.min<45)v=6.5+(v-6.5)*(.4+s.min/75);return r1(clamp(v,3,10));}
