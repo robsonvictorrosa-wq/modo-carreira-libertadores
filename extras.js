@@ -456,11 +456,15 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  setTimeout(()=>step('evoReplay()',()=>EVO.replay(pool,L.CFG.NAME)),20000);
  // Robson 05/11: evolução justa dos pontas nas rodadas já jogadas (uma vez; log EVOPONTAS). Notas exibidas não mudam.
  setTimeout(()=>step('evoPontas()',()=>EVO.replayWings(pool,L.CFG.NAME)),35000);
- // Robson 05/11: Andrés Gómez (95000265) com média 7,02 nos jogos já feitos (aparece no site e vale pra evolução, faixa Muito bom). Uma vez; log EVOGOMEZ2.
- setTimeout(()=>step('evoGomez2()',async()=>{await pool.query('CREATE TABLE IF NOT EXISTS lib_migrations(name TEXT PRIMARY KEY,at TIMESTAMPTZ DEFAULT now())');const M='evo-0511-gomez-702';if((await pool.query('SELECT 1 FROM lib_migrations WHERE name=$1',[M])).rows.length){console.log('EVOGOMEZ2 já aplicado');return;}const c=await pool.connect();try{await c.query('BEGIN');
+ // Robson 05/11: Andrés Gómez (95000265) com média 7,02 em todos os lugares: nota de cada jogo já feito (partidas/súmulas), média nas estatísticas e evolução (faixa Muito bom). Uma vez; log EVOGOMEZ3.
+ setTimeout(()=>step('evoGomez3()',async()=>{await pool.query('CREATE TABLE IF NOT EXISTS lib_migrations(name TEXT PRIMARY KEY,at TIMESTAMPTZ DEFAULT now())');const M='evo-0511-gomez-notas';if((await pool.query('SELECT 1 FROM lib_migrations WHERE name=$1',[M])).rows.length){console.log('EVOGOMEZ3 já aplicado');return;}const c=await pool.connect();try{await c.query('BEGIN');const G='95000265',ALVO=7.02;
   const comps=(await c.query("SELECT DISTINCT ON (room_id) id,room_id FROM competitions WHERE name=$1 ORDER BY room_id,id DESC",[L.CFG.NAME])).rows;const out=[];
-  for(const cp of comps){const st=(await c.query('UPDATE player_stats SET rating_sum=7.02*apps WHERE comp_id=$1 AND player_id=95000265 AND apps>0 RETURNING apps',[cp.id])).rows[0];if(!st)continue;
-   const acc=Math.min(0.99,0.18*0.8*st.apps);/* faixa Muito bom (0,18) x idade 24 (0,8) por jogo */
-   const rp=(await c.query('UPDATE room_players SET evo_acc=GREATEST(COALESCE(evo_acc,0),$3) WHERE room_id=$1 AND player_id=$2 RETURNING evo_acc,overall',[cp.room_id,95000265,acc])).rows[0];out.push({apps:st.apps,acc:rp&&rp.evo_acc,ovr:rp&&rp.overall});}
-  await c.query('INSERT INTO lib_migrations(name) VALUES($1)',[M]);await c.query('COMMIT');console.log('EVOGOMEZ2 OK',JSON.stringify(out));}catch(e){await c.query('ROLLBACK').catch(()=>{});console.log('EVOGOMEZ2 ERR',e.message);}finally{c.release();}}),45000);
+  for(const cp of comps){const ms=(await c.query("SELECT id,(details->'ratings'->>$2)::real n FROM matches WHERE comp_id=$1 AND played AND details->'ratings' ? $2",[cp.id,G])).rows.filter(m=>m.n!=null);if(!ms.length)continue;
+   const avg=ms.reduce((a,m)=>a+ +m.n,0)/ms.length,d=ALVO-avg,nov=[];
+   for(const m of ms){const v=Math.max(0,Math.min(10,Math.round((+m.n+d)*10)/10));nov.push(v);await c.query("UPDATE matches SET details=jsonb_set(details,ARRAY['ratings',$2::text],to_jsonb($3::numeric)) WHERE id=$1",[m.id,G,v]);}
+   const st=(await c.query('UPDATE player_stats SET rating_sum=$3*apps WHERE comp_id=$1 AND player_id=$2 AND apps>0 RETURNING apps',[cp.id,+G,ALVO])).rows[0];const apps=st?st.apps:ms.length;
+   const acc=Math.min(0.99,0.18*0.8*apps);/* faixa Muito bom (0,18) x idade 24 (0,8) por jogo */
+   const rp=(await c.query('UPDATE room_players SET evo_acc=GREATEST(COALESCE(evo_acc,0),$3) WHERE room_id=$1 AND player_id=$2 RETURNING evo_acc,overall',[cp.room_id,+G,acc])).rows[0];
+   out.push({jogos:ms.length,antes:+avg.toFixed(2),notas:nov,acc:rp&&rp.evo_acc,ovr:rp&&rp.overall});}
+  await c.query('INSERT INTO lib_migrations(name) VALUES($1)',[M]);await c.query('COMMIT');console.log('EVOGOMEZ3 OK',JSON.stringify(out));}catch(e){await c.query('ROLLBACK').catch(()=>{});console.log('EVOGOMEZ3 ERR',e.message);}finally{c.release();}}),45000);
 };
