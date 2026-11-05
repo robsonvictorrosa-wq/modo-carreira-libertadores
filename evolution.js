@@ -24,7 +24,7 @@ function step(p,ov,acc,nota,media,rnd){const q={...p,overall:ov};const g=gain(q,
 // só para a evolução, jogos antigos (sem rv>=2) de pontas recebem o bônus que a fórmula nova daria (dribles certos e bolas perdidas).
 const WINGP=new Set(['PE','PD']);
 function evoNota(nota,ps,pos,rv){nota=+nota;if(!WINGP.has(pos)||(+rv||0)>=2||!ps)return nota;let d=(+ps.drs||0)*.07+(+ps.lost||0)*.01;const mn=+ps.min||90;if(mn<45)d*=(.4+mn/75);return Math.min(10,nota+d);}
-async function wingMedia(db,compId,pid,pos){if(!WINGP.has(pos))return null;const rs=(await db.query("SELECT (details->'ratings'->>$2::text)::real n,details->'pstats'->$2::text ps,details->>'rv' rv FROM matches WHERE comp_id=$1 AND played AND details->'ratings' ? $2::text",[compId,String(pid)])).rows;
+async function wingMedia(db,compId,pid,pos){if(!WINGP.has(pos)||+pid===95000265)return null;/* Gómez: média ajustada à mão (Robson 05/11) */const rs=(await db.query("SELECT (details->'ratings'->>$2::text)::real n,details->'pstats'->$2::text ps,details->>'rv' rv FROM matches WHERE comp_id=$1 AND played AND details->'ratings' ? $2::text",[compId,String(pid)])).rows;
  if(!rs.length)return null;let t=0;for(const x of rs)t+=evoNota(x.n,x.ps,pos,x.rv);return t/rs.length;}
 const U0=()=>require('better-sqlite3')(__dirname+'/data/game.db',{readonly:true});
 async function ensureRows(db,room,ids,bq){const have=new Set((await db.query('SELECT player_id FROM room_players WHERE room_id=$1 AND player_id=ANY($2::int[])',[room.id,ids])).rows.map(x=>x.player_id));
