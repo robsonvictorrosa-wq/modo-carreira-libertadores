@@ -43,6 +43,17 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  // Robson 04/11: aba Evolução – elenco do usuário com o progresso até o próximo +1 (só leitura, regras em evolution.js)
  // Somente leitura: média de overall do XI titular dos 40 clubes (lineup salvo ou XI automático)
  app.get('/api/rooms/:code/zc/xi-medias',auth,wrap(async(r,s)=>{const room=await member(r);const out=[];for(const id of L.CLUBS){const x=await app.locals.xiFor(pool,room.id,id);const o=x.xi.filter(Boolean).map(p=>+p.overall);const avg=o.length?o.reduce((a,b)=>a+b,0)/o.length:0;out.push({club_id:id,club:uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name,avg:+avg.toFixed(2),min:Math.min(...o),max:Math.max(...o),n:o.length,formation:x.formation,xi:x.custom?'salvo':'auto'})}out.sort((a,b)=>b.avg-a.avg);s.json(out)}));
+ // Somente leitura: XI + tática + elenco completo dos 40 (filtro ?club= e ?format=txt)
+ app.get('/api/rooms/:code/zc/elencos',auth,wrap(async(r,s)=>{const room=await member(r);const TT=require('./tactics');
+  let ids=[...L.CLUBS];const f=String(r.query.club||'').trim();
+  if(f){const n=f.toLowerCase();ids=ids.filter(id=>{const nm=uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name||'';return String(id)===f||nm.toLowerCase()===n||nm.toLowerCase().includes(n);});if(!ids.length)return s.status(404).json({error:'clube não encontrado'});}
+  const out=[];for(const id of ids){const name=uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name;const x=await app.locals.xiFor(pool,room.id,id);const sq=await R.squad(pool,room.id,id);const slots=TT.FORMS[x.formation]||[];
+   const xi=x.xi.filter(Boolean).map((p,i)=>({slot:slots[i]?.[0]||'?',name:p.name,pos:p.primary_position,ovr:+p.overall,pot:p.potential==null?null:+p.potential}));
+   const elenco=sq.map(p=>({name:p.name,pos:p.primary_position,ovr:+p.overall,pot:p.potential==null?null:+p.potential,age:p.age==null?null:+p.age})).sort((a,b)=>b.ovr-a.ovr||a.name.localeCompare(b.name));
+   const tac=TT.norm(x.tactics||{});out.push({club_id:id,club:name,formation:x.formation,xi_src:x.custom?'salvo':'auto',tactics:tac,tactics_label:TT.label(tac),xi,elenco});}
+  if(String(r.query.format||'').toLowerCase()==='txt'){const lines=[];for(const c of out){lines.push(`=== ${c.club} (${c.club_id}) | ${c.formation} | XI ${c.xi_src} | ${c.tactics_label}`);lines.push('XI:');for(const p of c.xi)lines.push(`  ${(p.slot+'').padEnd(3)} ${p.name}  ${p.ovr}/${p.pot??'-'} (${p.pos})`);lines.push('Elenco:');for(const p of c.elenco)lines.push(`  ${(p.pos+'').padEnd(3)} ${p.name}  ${p.ovr}/${p.pot??'-'}  ${p.age??'-'}a`);lines.push('');}return s.type('text/plain; charset=utf-8').send(lines.join('\n'));}
+  s.json(out.length===1?out[0]:out);}));
+
  app.get('/api/rooms/:code/zc/evolucao',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!m?.club_id)return s.json({players:[]});
   const comp=await comp0(pool,room);const sq=await R.squad(pool,room.id,m.club_id);const ids=sq.map(p=>p.id);
   const ev=new Map((await q('SELECT player_id,evo_acc,ovr_start FROM room_players WHERE room_id=$1 AND player_id=ANY($2::int[])',[room.id,ids])).map(x=>[x.player_id,x]));
