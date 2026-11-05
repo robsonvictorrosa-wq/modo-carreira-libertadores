@@ -456,4 +456,6 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  setTimeout(()=>step('evoReplay()',()=>EVO.replay(pool,L.CFG.NAME)),20000);
  // Robson 05/11: evolução justa dos pontas nas rodadas já jogadas (uma vez; log EVOPONTAS). Notas exibidas não mudam.
  setTimeout(()=>step('evoPontas()',()=>EVO.replayWings(pool,L.CFG.NAME)),35000);
+ // Robson 05/11: correção maior só pro Andrés Gómez (95000265): os 4 jogos passados contam como faixa Muito bom (+35% de progresso). Uma vez; log EVOGOMEZ.
+ setTimeout(()=>step('evoGomez()',async()=>{await pool.query('CREATE TABLE IF NOT EXISTS lib_migrations(name TEXT PRIMARY KEY,at TIMESTAMPTZ DEFAULT now())');const M='evo-0511-gomez';if((await pool.query('SELECT 1 FROM lib_migrations WHERE name=$1',[M])).rows.length){console.log('EVOGOMEZ já aplicado');return;}const c=await pool.connect();try{await c.query('BEGIN');const r=await c.query('UPDATE room_players SET evo_acc=LEAST(COALESCE(evo_acc,0)+0.35,0.99) WHERE player_id=95000265 AND overall<potential RETURNING evo_acc');await c.query('INSERT INTO lib_migrations(name) VALUES($1)',[M]);await c.query('COMMIT');console.log('EVOGOMEZ OK',JSON.stringify(r.rows));}catch(e){await c.query('ROLLBACK').catch(()=>{});console.log('EVOGOMEZ ERR',e.message);}finally{c.release();}}),45000);
 };
