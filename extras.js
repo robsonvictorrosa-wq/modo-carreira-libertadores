@@ -71,9 +71,13 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   s.json({in:t.filter(x2=>x2.to_club===m.club_id).map(f),out:t.filter(x2=>x2.from_club===m.club_id).map(f),meta:await meta(pool,room,m.club_id)});}));
  app.get('/api/rooms/:code/zc/stats',auth,wrap(async(r,s)=>{const room=await member(r);const comp=await comp0(pool,room);if(!comp)return s.json({players:[],matches:0});
   const st=r.query.stage||'',club=+r.query.club||0;const ms=await q(`SELECT home,away,details FROM matches WHERE comp_id=$1 AND played ${st==='ko'?"AND stage<>'league'":st?'AND stage=$2':''}`,st&&st!=='ko'?[comp.id,st]:[comp.id]);
-  const P={};const g=(id,cid)=>P[id]??={id,name:pname(id),pos:R.P.get(id)?.primary_position||'—',club_id:cid,club:cname(cid),apps:0,goals:0,assists:0,rs:0};
+  /* Robson 06/11: estatísticas mostram o clube ATUAL (Savarino saiu do Flu e ainda aparecia) */
+  const CUR=new Map((await q('SELECT player_id,club_id FROM room_players WHERE room_id=$1 AND club_id IS NOT NULL',[room.id])).map(y=>[+y.player_id,+y.club_id]));
+  const curClub=id=>CUR.get(+id)??R.P.get(+id)?.club_id;
+  const P={};const g=(id,cid)=>{const c=curClub(id)??cid;return P[id]??={id,name:pname(id),pos:R.P.get(id)?.primary_position||'—',club_id:c,club:cname(c),apps:0,goals:0,assists:0,rs:0};};
   for(const m of ms){const d=m.details||{};for(const side of ['home','away'])for(const p of (d.lineups?.[side]||[])){const x=g(p.id,m[side]);x.apps++;x.rs+=+(d.ratings?.[p.id]||0);}
    for(const e of d.events||[]){if(e.scorer)g(e.scorer,e.club).goals++;if(e.assist)g(e.assist,e.club).assists++;}}
+  for(const p of Object.values(P)){const c=curClub(p.id);if(c){p.club_id=c;p.club=cname(c);}}
   let L2=Object.values(P).filter(p=>p.id>0&&(!club||p.club_id===club)).map(p=>({...p,rating:p.apps?+(p.rs/p.apps).toFixed(2):0}));
   const MA=Math.max(1,Math.round(Math.max(0,...L2.map(p=>p.apps))*0.3));
   const top=(k,n=15)=>[...L2].sort((a,b)=>b[k]-a[k]||b.rating-a.rating).filter(p=>p[k]>0).slice(0,n);
