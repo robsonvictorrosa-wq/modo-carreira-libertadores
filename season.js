@@ -63,9 +63,12 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   s.json({status:room.status,season:room.season,owner:room.owner_id===r.user.id||!!r.user.admin,competitions:comps,my_comp:myComp?.id||null,my_club:me?.club_id??null,managers:ms.map(m=>({...m,club:m.club_id&&club(m.club_id).name}))});}));
 
  app.get('/api/rooms/:code/comp/:id/table',auth,wrap(async(r,s)=>{const room=await member(r);const [comp]=await q('SELECT * FROM competitions WHERE id=$1 AND room_id=$2',[r.params.id,room.id]);if(!comp)throw fail('Competição não encontrada',404);
+  const view=String(r.query.view||'geral').toLowerCase();
+  const lr=L.LEAGUE_ROUNDS(),t1=L.TURNO1_END();
+  const opts=view==='home'?{side:'home',zones:false}:view==='away'?{side:'away',zones:false}:view==='turno1'?{roundFrom:1,roundTo:t1,zones:false}:view==='turno2'?{roundFrom:t1+1,roundTo:lr,zones:false}:{zones:true};
   const ms=await q('SELECT * FROM matches WHERE comp_id=$1 AND played',[comp.id]);const hum=new Map((await q('SELECT m.club_id,u.nick FROM room_managers m JOIN users u ON u.id=m.user_id WHERE room_id=$1',[room.id])).map(x=>[x.club_id,x.nick]));
-  const pen=await penMap(pool,room.id);const rows=L.standings(ms,L.CLUBS,id=>club(id).name,pen).map(t=>({...t,manager:hum.get(t.club_id)||null}));
-  s.json({comp,rows});}));
+  const pen=await penMap(pool,room.id);const rows=L.standings(ms,L.CLUBS,id=>club(id).name,pen,opts).map(t=>({...t,manager:hum.get(t.club_id)||null}));
+  s.json({comp,rows,view:['home','away','turno1','turno2'].includes(view)?view:'geral',meta:{league_rounds:lr,turno1_end:t1,turno1:`1–${t1}`,turno2:`${t1+1}–${lr}`}});}));
 
  app.get('/api/rooms/:code/comp/:id/fixtures',auth,wrap(async(r,s)=>{const room=await member(r);const [comp]=await q('SELECT * FROM competitions WHERE id=$1 AND room_id=$2',[r.params.id,room.id]);if(!comp)throw fail('Competição não encontrada',404);
   const round=+r.query.round||Math.max(1,comp.current_round);const ms=await q('SELECT id,round,home,away,hg,ag,played,stage,leg,tie,winner,pens,neutral FROM matches WHERE comp_id=$1 AND round=$2 ORDER BY tie NULLS LAST,id',[comp.id,round]);

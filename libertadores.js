@@ -20,10 +20,15 @@ function plan(n=40){const p=[];const lr=n%2?n:n-1;for(let i=1;i<=lr;i++)p.push({
  p.push({stage:'final',leg:1});if(!CFG.FINAL_SINGLE)p.push({stage:'final',leg:2});
  return p.map((x,i)=>({...x,round:i+1}));}
 const LEAGUE_ROUNDS=()=>plan().filter(x=>x.stage==='league').length;
-// Tabela: pontos, vitórias, saldo, gols pró (depois nome)
-function standings(matches,clubIds,nameOf=id=>String(id),pen){const T={};clubIds.forEach(id=>T[id]={club_id:id,name:nameOf(id),j:0,v:0,e:0,d:0,gp:0,gc:0,pts:-(pen?.get(id)||0),penalty:pen?.get(id)||0,form:[]});
- for(const m of [...matches].filter(m=>m.played&&(m.stage||'league')==='league').sort((a,b)=>a.round-b.round))for(const [id,f,g] of [[m.home,m.hg,m.ag],[m.away,m.ag,m.hg]]){const t=T[id];if(!t)continue;t.j++;t.gp+=f;t.gc+=g;if(f>g){t.v++;t.pts+=3;t.form.push('V')}else if(f===g){t.e++;t.pts++;t.form.push('E')}else{t.d++;t.form.push('D')}}
- return Object.values(T).map(t=>({...t,sg:t.gp-t.gc,form:t.form.slice(-5)})).sort((a,b)=>b.pts-a.pts||b.v-a.v||b.sg-a.sg||b.gp-a.gp||a.name.localeCompare(b.name)).map((t,i)=>({...t,pos:i+1,zone:i+1<=CFG.DIRECT?'oitavas':i+1>=CFG.PLAYIN_FROM&&i+1<=CFG.PLAYIN_TO?'playin':'fora'}));}
+// Metade da fase de liga: 1º turno = rodadas 1..TURNO1_END; 2º turno = TURNO1_END+1..LEAGUE_ROUNDS
+const TURNO1_END=()=>Math.floor(LEAGUE_ROUNDS()/2); // 39 → 19
+// Tabela: pontos, vitórias, saldo, gols pró (depois nome). opts: {side:'home'|'away', roundFrom, roundTo, zones:false}
+function standings(matches,clubIds,nameOf=id=>String(id),pen,opts){const side=opts?.side||null,r0=opts?.roundFrom||0,r1=opts?.roundTo||1e9,useZones=opts?.zones!==false;
+ const T={};clubIds.forEach(id=>T[id]={club_id:id,name:nameOf(id),j:0,v:0,e:0,d:0,gp:0,gc:0,pts:-(pen?.get(id)||0),penalty:pen?.get(id)||0,form:[]});
+ for(const m of [...matches].filter(m=>m.played&&(m.stage||'league')==='league'&&(+m.round||0)>=r0&&(+m.round||0)<=r1).sort((a,b)=>a.round-b.round)){
+  const sides=side==='home'?[[m.home,m.hg,m.ag]]:side==='away'?[[m.away,m.ag,m.hg]]:[[m.home,m.hg,m.ag],[m.away,m.ag,m.hg]];
+  for(const [id,f,g] of sides){const t=T[id];if(!t)continue;t.j++;t.gp+=f;t.gc+=g;if(f>g){t.v++;t.pts+=3;t.form.push('V')}else if(f===g){t.e++;t.pts++;t.form.push('E')}else{t.d++;t.form.push('D')}}}
+ return Object.values(T).map(t=>({...t,sg:t.gp-t.gc,form:t.form.slice(-5)})).sort((a,b)=>b.pts-a.pts||b.v-a.v||b.sg-a.sg||b.gp-a.gp||a.name.localeCompare(b.name)).map((t,i)=>({...t,pos:i+1,zone:useZones?(i+1<=CFG.DIRECT?'oitavas':i+1>=CFG.PLAYIN_FROM&&i+1<=CFG.PLAYIN_TO?'playin':'fora'):null}));}
 // chaveamento das oitavas por campanha (1x16, 8x9, ...): metades separadas, 1 e 2 só se cruzam na final
 const BRACKET=[1,16,8,9,4,13,5,12,2,15,7,10,3,14,6,11];
 // pênaltis: 5 cobranças + alternadas, conversão ~75%
@@ -42,4 +47,4 @@ function winners(prev,stage){return prev.filter(m=>m.stage===stage&&m.winner).ma
 // define vencedor de um confronto após o jogo decisivo. ms = jogos do confronto (1 ou 2), last = jogo recém-disputado
 function decideTie(ms,last,r=Math.random){const a=last.home,b=last.away;let ga=0,gb=0;for(const m of ms){if(m.home===a){ga+=m.hg;gb+=m.ag}else{ga+=m.ag;gb+=m.hg}}
  if(ga!==gb)return {winner:ga>gb?a:b,agg:[ga,gb],pens:null};const p=penalties(r);return {winner:p[0]>p[1]?a:b,agg:[ga,gb],pens:p.join('-')};}
-module.exports={CFG,CF,get CLUBS(){return CLUBS},loadClubs,virtualSquad,STAGE_NAMES,plan,LEAGUE_ROUNDS,standings,penalties,koMatches,winners,decideTie,BRACKET};
+module.exports={CFG,CF,get CLUBS(){return CLUBS},loadClubs,virtualSquad,STAGE_NAMES,plan,LEAGUE_ROUNDS,TURNO1_END,standings,penalties,koMatches,winners,decideTie,BRACKET};
