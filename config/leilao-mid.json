@@ -1,0 +1,29 @@
+{
+ "_doc": "Leilão do meio da fase de liga (lista do Robson, 10/11/2026). id = jogador FC27 reaproveitado (atributos do motor; over/pot exatamente estes); id 96200000+ = criado (dob = data de nascimento real, stats_from = atributos base). Lance mínimo = 50% do valor de mercado (mesma regra dos outros leilões). Abre 12/11 19:01 e fecha 13/11 19:01 (Brasília), no meio da janela de mercado. Jogadores do leilão ficam bloqueados no mercado. Cada clube leva no máximo 1. Se o jogador já estiver em clube com técnico humano na LIGA, a migração NÃO o move e NÃO o coloca no leilão.",
+ "room": "LIGA",
+ "label": "Leilão do meio da fase de liga",
+ "players": [
+  {"pos":"GOL","name":"Lucas Arcanjo","ovr":76,"pot":78,"id":96200000,"nat":"Brasil","dob":"1998-08-08","stats_from":230670,"height_cm":189,"weight_kg":87,"foot":"Direito"},
+  {"pos":"GOL","name":"Bento","ovr":78,"pot":81,"id":73562},
+  {"pos":"ZAG","name":"Davinson Sánchez","ovr":79,"pot":81,"id":220793},
+  {"pos":"ZAG","name":"Leonardo Balerdi","ovr":78,"pot":82,"id":242835},
+  {"pos":"ZAG","name":"Juan Foyth","ovr":78,"pot":81,"id":237221},
+  {"pos":"ZAG","name":"Andrei Girotto","ovr":77,"pot":77,"id":226515},
+  {"pos":"LD","name":"Nélson Semedo","ovr":77,"pot":78,"id":227928},
+  {"pos":"LD","name":"Kyle Walker","ovr":76,"pot":76,"id":188377},
+  {"pos":"LE","name":"Jesús Gallardo","ovr":77,"pot":78,"id":226045},
+  {"pos":"LE","name":"Bernardo","ovr":76,"pot":77,"id":232805},
+  {"pos":"VOL","name":"Guido Rodríguez","ovr":78,"pot":79,"id":225659},
+  {"pos":"VOL","name":"Vítor Carvalho","ovr":76,"pot":78,"id":255471},
+  {"pos":"MC","name":"Joelinton","ovr":79,"pot":82,"id":223334},
+  {"pos":"MC","name":"Mario Götze","ovr":78,"pot":78,"id":192318},
+  {"pos":"MEI","name":"Thomas Müller","ovr":80,"pot":80,"id":189596},
+  {"pos":"MEI","name":"Giovani Lo Celso","ovr":79,"pot":81,"id":226226},
+  {"pos":"PE","name":"Ivan Perišić","ovr":81,"pot":81,"id":181458},
+  {"pos":"PE","name":"Akram Afif","ovr":78,"pot":80,"id":234051},
+  {"pos":"PD","name":"Claudinho","ovr":77,"pot":79,"id":96200001,"nat":"Brasil","dob":"1997-01-28","stats_from":77033,"height_cm":172,"weight_kg":65,"foot":"Esquerdo"},
+  {"pos":"PD","name":"Erick","ovr":75,"pot":77,"id":96200002,"nat":"Brasil","dob":"1997-12-10","stats_from":258494,"height_cm":173,"weight_kg":63,"foot":"Esquerdo"},
+  {"pos":"ATA","name":"Edin Džeko","ovr":78,"pot":78,"id":180930},
+  {"pos":"ATA","name":"Youssef En-Nesyri","ovr":80,"pot":82,"id":235410}
+ ]
+}
