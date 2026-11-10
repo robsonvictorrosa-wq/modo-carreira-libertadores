@@ -461,7 +461,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  // Robson 05/11: evolução justa dos pontas nas rodadas já jogadas (uma vez; log EVOPONTAS). Notas exibidas não mudam.
  setTimeout(()=>step('evoPontas()',()=>EVO.replayWings(pool,L.CFG.NAME)),35000);
  // Robson 05/11: Andrés Gómez — força média 7,02 nas notas de cada partida já jogada, nas estatísticas e na evolução (log EVOGOMEZ4).
- setTimeout(()=>step('evoGomez4()',async()=>{await pool.query('CREATE TABLE IF NOT EXISTS lib_migrations(name TEXT PRIMARY KEY,at TIMESTAMPTZ DEFAULT now())');const M='evo-0511-gomez-notas4';if((await pool.query('SELECT 1 FROM lib_migrations WHERE name=$1',[M])).rows.length){console.log('EVOGOMEZ4 já aplicado');return;}const c=await pool.connect();try{await c.query('BEGIN');const GID=95000265,GS=String(GID),ALVO=7.02;
+ setTimeout(()=>step('evoGomez4()',async()=>{await pool.query('CREATE TABLE IF NOT EXISTS lib_migrations(name TEXT PRIMARY KEY,at TIMESTAMPTZ DEFAULT now())');const M='evo-1011-gomez-notas5';if((await pool.query('SELECT 1 FROM lib_migrations WHERE name=$1',[M])).rows.length){console.log('EVOGOMEZ4 já aplicado');return;}const c=await pool.connect();try{await c.query('BEGIN');const GID=95000265,GS=String(GID),ALVO=7.02;
   const comps=(await c.query("SELECT DISTINCT ON (room_id) id,room_id FROM competitions WHERE name=$1 ORDER BY room_id,id DESC",[L.CFG.NAME])).rows;const out=[];
   for(const cp of comps){
    const ms=(await c.query("SELECT m.id, e.key, e.value::text::real n FROM matches m, LATERAL jsonb_each_text(m.details->'ratings') e WHERE m.comp_id=$1 AND m.played AND e.key::bigint=$2 ORDER BY m.round,m.id",[cp.id,GID])).rows;
@@ -469,7 +469,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    const avg=ms.reduce((a,m)=>a+ +m.n,0)/ms.length,d=ALVO-avg,nov=[];
    for(const m of ms){const v=Math.max(0,Math.min(10,Math.round((+m.n+d)*10)/10));nov.push({id:m.id,antes:+m.n,depois:v});
     await c.query("UPDATE matches SET details=jsonb_set(details,ARRAY['ratings',$2::text],to_jsonb($3::float8),true) WHERE id=$1",[m.id,m.key||GS,v]);}
-   const st=(await c.query('UPDATE player_stats SET rating_sum=$3*GREATEST(apps,1) WHERE comp_id=$1 AND player_id=$2 RETURNING apps,rating_sum',[cp.id,GID,ALVO])).rows[0];
+   const st=(await c.query('UPDATE player_stats SET rating_sum=$3::float8*GREATEST(apps,1) WHERE comp_id=$1 AND player_id=$2 RETURNING apps,rating_sum',[cp.id,GID,ALVO])).rows[0];
    const apps=st?+st.apps:(ms.length);const acc=Math.min(0.99,0.18*0.8*apps);
    const rp=(await c.query('UPDATE room_players SET evo_acc=GREATEST(COALESCE(evo_acc,0),$3) WHERE room_id=$1 AND player_id=$2 RETURNING evo_acc,overall',[cp.room_id,GID,acc])).rows[0];
    out.push({comp:cp.id,jogos:ms.length,media_antes:+avg.toFixed(2),notas:nov,apps,rating_sum:st&&st.rating_sum,acc:rp&&rp.evo_acc});}
