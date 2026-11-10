@@ -10,7 +10,7 @@ module.exports=(app,uni)=>{
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
- const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(migLeilaoSurpresa2910).then(migLeilaoMid1111).then(syncIdades).then(()=>purgeRooms());
+ const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(migLeilaoSurpresa2910).then(migLeilaoMid1111b).then(syncIdades).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
  // Migração única: primeiro leilão (config/leilao-pre.json) -> jogadores vão para o clube "Leilão ZC" com over/pot/idade do Robson e viram lotes do leilão de pré-temporada (bloqueado até um admin desbloquear)
  async function migLeilaoPre2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='leilao-pre-2610'")).rows.length)return;
@@ -52,7 +52,7 @@ module.exports=(app,uni)=>{
     console.log('leilao-surpresa-2910 sala',room.code,'lotes novos',lots,'saíram de clubes:',moved.join(', ')||'nenhum');}
    await c.query("INSERT INTO lib_migrations(name) VALUES('leilao-surpresa-2910')");await c.query('COMMIT');console.log('Migração leilao-surpresa-2910 OK');}catch(e){await c.query('ROLLBACK');console.error('leilao-surpresa-2910',e)}finally{c.release()}}
  // Migração única: leilão do meio (config/leilao-mid.json, Robson 10/11) -> só na sala LIGA: jogadores vão para o "Leilão ZC" e viram lotes stage='mid'. Não move jogador que já está em clube com técnico humano.
-async function migLeilaoMid1111(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='leilao-mid-1111'")).rows.length)return;
+async function migLeilaoMid1111b(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='leilao-mid-1111b'")).rows.length)return;
  const CS=JSON.parse(fs.readFileSync(__dirname+'/config/leilao-mid.json','utf8'));const auc=uni.prepare("SELECT id FROM clubs WHERE name='Leilão ZC'").get()?.id;if(!auc)return console.error('leilao-mid-1111: clube Leilão ZC ausente');
  const ps=uni.prepare("SELECT p.id,p.name,p.overall,p.potential,p.age,p.market_value FROM lib_auction a JOIN players p ON p.id=a.player_id WHERE a.stage='mid' ORDER BY a.ord").all();if(!ps.length)return console.error('leilao-mid-1111: sem jogadores');
  const lib=new Set(uni.prepare('SELECT club_id FROM lib_clubs').all().map(x=>x.club_id));const cn=id=>uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name||id;
@@ -60,7 +60,7 @@ async function migLeilaoMid1111(){if((await pool.query("SELECT 1 FROM lib_migrat
  const c=await pool.connect();try{await c.query('BEGIN');const [room]=(await c.query('SELECT * FROM rooms WHERE code=$1 FOR UPDATE',[CS.room||'LIGA'])).rows;
   if(room){const hum=new Set((await c.query('SELECT club_id FROM room_managers WHERE room_id=$1 AND club_id IS NOT NULL',[room.id])).rows.map(x=>x.club_id));
    const moved=[],skipped=[],created=[];let lots=0;
-   const [comp]=(await c.query("SELECT current_round FROM competitions WHERE room_id=$1 AND kind='league' AND season=$2 ORDER BY id DESC LIMIT 1",[room.id,room.season])).rows;
+   const [comp]=(await c.query("SELECT current_round FROM competitions WHERE room_id=$1 AND season=$2 ORDER BY id LIMIT 1",[room.id,room.season])).rows;
    const rnd=comp?.current_round||0;
    for(const p of ps){const [o]=(await c.query('SELECT club_id,overall,potential FROM room_players WHERE room_id=$1 AND player_id=$2',[room.id,p.id])).rows;
     const cur=o?o.club_id:(uni.prepare('SELECT club_id FROM players WHERE id=?').get(p.id)?.club_id);
@@ -81,8 +81,8 @@ async function migLeilaoMid1111(){if((await pool.query("SELECT 1 FROM lib_migrat
    if(moved.length)ev+=` Saíram dos clubes para o leilão: ${moved.join(', ')}.`;
    if(skipped.length)ev+=` Não entraram (já estão em clube com técnico): ${skipped.join(', ')}.`;
    await c.query('INSERT INTO room_events(room_id,text) VALUES($1,$2)',[room.id,ev]);
-   console.log('leilao-mid-1111 sala',room.code,'lotes novos',lots,'movidos',moved.join(', ')||'nenhum','pulados (humano)',skipped.join(', ')||'nenhum','novos na sala',created.join(', ')||'nenhum');}
-  await c.query("INSERT INTO lib_migrations(name) VALUES('leilao-mid-1111')");await c.query('COMMIT');console.log('Migração leilao-mid-1111 OK');}catch(e){await c.query('ROLLBACK');console.error('leilao-mid-1111',e)}finally{c.release()}}
+   console.log('leilao-mid-1111b sala',room.code,'lotes novos',lots,'movidos',moved.join(', ')||'nenhum','pulados (humano)',skipped.join(', ')||'nenhum','novos na sala',created.join(', ')||'nenhum');}
+  await c.query("INSERT INTO lib_migrations(name) VALUES('leilao-mid-1111b')");await c.query('COMMIT');console.log('Migração leilao-mid-1111b OK');}catch(e){await c.query('ROLLBACK');console.error('leilao-mid-1111b',e)}finally{c.release()}}
 // Migração única: idade real (Transfermarkt) dos elencos brasileiros -> atualiza idade, potencial (34+ = over) e valor de mercado nas salas
  // Idade = data de nascimento (roda a cada start e a cada 6h; só a coluna age, não mexe em over/potencial)
  async function syncIdades(){try{const BD=require('./birth');BD.load(uni);const ids=(await pool.query('SELECT DISTINCT player_id FROM room_players')).rows.map(r=>r.player_id);
