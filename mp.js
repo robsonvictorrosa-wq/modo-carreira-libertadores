@@ -77,7 +77,7 @@ async function migLeilaoMid1111b(){if((await pool.query("SELECT 1 FROM lib_migra
     else if(d.status==='open')await c.query('UPDATE auction_lots SET from_club=$2,min_bid=$3 WHERE id=$1',[d.id,auc,Math.max(1e5,Math.round(p.market_value*pct/1e5)*1e5)]);
    }
    await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);
-   let ev=`🔨 Leilão do meio da fase de liga: ${ps.length-skipped.length} jogador(es) definidos (abre 12/11 19:01 e fecha 13/11 19:01, horário de Brasília).`;
+   let ev=`🔨 Leilão do meio da fase de liga: ${ps.length-skipped.length} jogador(es) definidos (abre 13/11 12:00 e fecha 13/11 20:00, horário de Brasília).`;
    if(moved.length)ev+=` Saíram dos clubes para o leilão: ${moved.join(', ')}.`;
    if(skipped.length)ev+=` Não entraram (já estão em clube com técnico): ${skipped.join(', ')}.`;
    await c.query('INSERT INTO room_events(room_id,text) VALUES($1,$2)',[room.id,ev]);

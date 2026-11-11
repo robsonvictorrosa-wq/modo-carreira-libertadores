@@ -1,5 +1,5 @@
 {
- "_doc": "Agenda da Libertadores ZC (horário de Brasília). Aplicada sozinha pelo servidor. start_slot=1: a 1ª rodada usa o 2º horário do dia (19:00). pre_market_during_rounds: exceção aprovada pelo Robson (03/11) para jogar com o mercado da pré-temporada aberto até market_close. penalty_at_market_close: punição da meta de contratações aplicada uma vez logo após market_close (não no início da temporada). windows.mid.market_open (Robson 04/11): mercado do meio abre antes da R19 e a R19 roda com ele aberto; leilão do meio roda no meio do mercado (mercado segue aberto; jogadores do leilão bloqueados no mercado). windows.*.resume_slot: índice do horário do 1º jogo após a janela (1 = 19:00).",
+ "_doc": "Agenda da Libertadores ZC (horário de Brasília). Aplicada sozinha pelo servidor. start_slot=1: a 1ª rodada usa o 2º horário do dia (19:00). pre_market_during_rounds: exceção aprovada pelo Robson (03/11) para jogar com o mercado da pré-temporada aberto até market_close. penalty_at_market_close: punição da meta de contratações aplicada uma vez logo após market_close (não no início da temporada). windows.mid (Robson 11/11): R18 e R19 jogam em 12/11 (12:00 e 19:00), mercado do meio abre 12/11 20:00 e fecha 15/11 20:00, sem jogos na janela; R20 volta em 16/11 12:00; leilão do meio roda no meio do mercado (mercado segue aberto; jogadores do leilão bloqueados no mercado). windows.*.resume_slot: índice do horário do 1º jogo após a janela (1 = 19:00).",
  "room": "LIGA",
  "auction_start": "2026-10-26T12:00:00-03:00",
  "auction_close": "2026-10-26T20:00:00-03:00",
@@ -16,12 +16,12 @@
  "windows": {
   "mid": {
    "after_round": 19,
-   "auction_start": "2026-11-12T19:01:00-03:00",
-   "auction_close": "2026-11-13T19:01:00-03:00",
-   "market_close": "2026-11-15T12:01:00-03:00",
-   "resume": "2026-11-15",
-   "market_open": "2026-11-12T12:01:00-03:00",
-   "resume_slot": 1
+   "auction_start": "2026-11-13T12:00:00-03:00",
+   "auction_close": "2026-11-13T20:00:00-03:00",
+   "market_close": "2026-11-15T20:00:00-03:00",
+   "resume": "2026-11-16",
+   "market_open": "2026-11-12T20:00:00-03:00",
+   "resume_slot": 0
   },
   "end": {
    "after_round": 39,

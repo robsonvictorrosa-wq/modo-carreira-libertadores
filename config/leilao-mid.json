@@ -1,5 +1,5 @@
 {
- "_doc": "Leilão do meio da fase de liga (lista do Robson, 10/11/2026). id = jogador FC27 reaproveitado (atributos do motor; over/pot exatamente estes); id 96200000+ = criado (dob = data de nascimento real, stats_from = atributos base). Lance mínimo = 50% do valor de mercado (mesma regra dos outros leilões). Abre 12/11 19:01 e fecha 13/11 19:01 (Brasília), no meio da janela de mercado. Jogadores do leilão ficam bloqueados no mercado. Cada clube leva no máximo 1. Se o jogador já estiver em clube com técnico humano na LIGA, a migração NÃO o move e NÃO o coloca no leilão.",
+ "_doc": "Leilão do meio da fase de liga (lista do Robson, 10/11/2026). id = jogador FC27 reaproveitado (atributos do motor; over/pot exatamente estes); id 96200000+ = criado (dob = data de nascimento real, stats_from = atributos base). Lance mínimo = 50% do valor de mercado (mesma regra dos outros leilões). Abre 13/11 12:00 e fecha 13/11 20:00 (Brasília; Robson 11/11), no meio da janela de mercado. Jogadores do leilão ficam bloqueados no mercado. Cada clube leva no máximo 1. Se o jogador já estiver em clube com técnico humano na LIGA, a migração NÃO o move e NÃO o coloca no leilão.",
  "room": "LIGA",
  "label": "Leilão do meio da fase de liga",
  "players": [
