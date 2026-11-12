@@ -4,7 +4,7 @@ body{background:#000;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,s
 .btn{background:#FACC15;color:#000;font-weight:800;border-radius:10px;text-transform:none}.btn.sec,.btn.out{background:transparent;color:#FACC15;border:1.5px solid #FACC15}.btn.green{background:#22C55E;color:#000}.btn.red{background:#EF4444;color:#fff}.btn.ghost{background:#2a2a2a;color:#eee}
 input,select{background:#111;border:1px solid #333;color:#eee;border-radius:10px;padding:10px}
 .zh{display:flex;align-items:center;gap:12px;padding:14px 16px 6px;position:sticky;top:0;background:#000;z-index:5}
-.zlogo{width:40px;height:40px;background:#FACC15;color:#000;font-weight:900;font-size:24px;display:flex;align-items:center;justify-content:center;border-radius:8px}
+.zlogo{width:40px;height:40px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:8px;overflow:hidden;background:#000}.zlogo img{width:40px;height:40px;object-fit:contain;display:block;border-radius:8px}.zlogin-logo{margin:0 0 14px}.zlogin-logo img{width:min(300px,80%);height:auto;display:block}
 .zt b{display:block;font-weight:900;letter-spacing:.5px;font-size:18px}.zt span{color:var(--mut);font-size:13px}
 .ztabs{display:flex;overflow-x:auto;gap:4px;border-bottom:1px solid #222;padding:0 10px;position:sticky;top:60px;background:#000;z-index:5;scrollbar-width:none}.ztabs::-webkit-scrollbar{display:none}
 .ztabs a{flex:0 0 auto;padding:12px 10px;color:#aaa;font-weight:700;font-size:14px;border-bottom:3px solid transparent;white-space:nowrap}.ztabs a.on{color:#FACC15;border-bottom-color:#FACC15}

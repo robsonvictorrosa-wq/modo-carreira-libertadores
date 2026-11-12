@@ -9,7 +9,7 @@ async function zJson(r){let j=null;try{j=await r.json()}catch(e){if(r.ok)throw O
 const post=(u,b)=>zFetch('/api'+u,{method:'POST',headers:H(),body:JSON.stringify(b||{})},/\/auth\//.test(u)?2:3).then(zJson);
 const get=u=>zFetch('/api'+u,{headers:H()}).then(zJson);
 async function whoami(){try{const j=await get('/me');ME=j.user;$('#who').textContent='👤 '+ME.nick;return j;}catch(e){if(e.zNet)throw e;ME=null;$('#who').textContent='';return null;}}
-function loginView(next){app.innerHTML=`<h1>Entrar</h1><div class="sub">Crie um apelido e um PIN (mín. 4 dígitos/caracteres). Use o mesmo para entrar depois em qualquer aparelho.</div>
+function loginView(next){app.innerHTML=`<div class="zlogin-logo"><img src="/logo-login.webp" alt="ZC Libertadores" width="300" height="300"></div><h1>Entrar</h1><div class="sub">Crie um apelido e um PIN (mín. 4 dígitos/caracteres). Use o mesmo para entrar depois em qualquer aparelho.</div>
  <div class="form"><input id="nk" placeholder="Apelido" autocomplete="username"><input id="pn" type="password" placeholder="PIN / senha" autocomplete="current-password">
  <button class="btn" id="bl">Entrar</button><button class="btn sec" id="br">Criar conta</button><div class="err" id="er"></div></div>`;
  const go=async ep=>{try{const j=await post('/auth/'+ep,{nick:$('#nk').value,pin:$('#pn').value});localStorage.token=j.token;await whoami();next();}catch(e){$('#er').textContent=e.message}};
