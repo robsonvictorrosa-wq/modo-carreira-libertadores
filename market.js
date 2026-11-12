@@ -254,7 +254,11 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   const [o]=await q("UPDATE offers SET status='withdrawn',reason='Retirada pelo comprador',updated_at=now() WHERE id=$1 AND room_id=$2 AND buyer_club=$3 AND status IN ('pending','countered','club_accepted') RETURNING *",[+r.params.id,room.id,cid]);if(!o)throw fail('Nada para retirar');s.json({ok:1});}));
  app.get('/api/rooms/:code/market/offers',auth,wrap(async(r,s)=>{const room=await member(r);const cid=await myClub(pool,room,r.user.id);
   const rows=await q('SELECT * FROM offers WHERE room_id=$1 AND (buyer_club=$2 OR seller_club=$2) ORDER BY updated_at DESC LIMIT 80',[room.id,cid]);
-  const f=o=>({...o,fee:+o.fee,counter_fee:o.counter_fee&&+o.counter_fee,wage:o.wage&&+o.wage,counter_wage:o.counter_wage&&+o.counter_wage,bot_max:undefined,player:pname(o.player_id),player_ovr:R.P.get(o.player_id)?.overall,buyer:clubName(o.buyer_club),seller:isFree(o.seller_club)?'Livre':clubName(o.seller_club),swap:o.swap_player_id&&pname(o.swap_player_id),days_left:o.deadline_day-room.market_day,max_fee:6*(+R.P.get(o.player_id)?.market_value||0),history:o.history||[]});
+  const pids=[...new Set(rows.map(o=>+o.player_id).filter(Boolean))];
+  const ov=pids.length?await q('SELECT * FROM room_players WHERE room_id=$1 AND player_id=ANY($2::int[])',[room.id,pids]):[];
+  const om=new Map(ov.map(o=>[+o.player_id,o]));
+  const cur=id=>R.merge(R.P.get(+id),om.get(+id));
+  const f=o=>{const p=cur(o.player_id);return {...o,fee:+o.fee,counter_fee:o.counter_fee&&+o.counter_fee,wage:o.wage&&+o.wage,counter_wage:o.counter_wage&&+o.counter_wage,bot_max:undefined,player:pname(o.player_id),player_ovr:p?.overall,buyer:clubName(o.buyer_club),seller:isFree(o.seller_club)?'Livre':clubName(o.seller_club),swap:o.swap_player_id&&pname(o.swap_player_id),days_left:o.deadline_day-room.market_day,max_fee:6*(+p?.market_value||0),history:o.history||[]};};
   s.json({day:room.market_day,sent:rows.filter(o=>o.buyer_club===cid).map(f),received:rows.filter(o=>o.seller_club===cid).map(f)});}));
  // observados
  app.get('/api/rooms/:code/market/watch',auth,wrap(async(r,s)=>{const room=await member(r);const hum=await humans(pool,room.id);const ids=(await q('SELECT player_id FROM watchlist WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id])).map(x=>x.player_id);
