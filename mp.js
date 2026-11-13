@@ -10,7 +10,7 @@ module.exports=(app,uni)=>{
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
- const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(migLeilaoSurpresa2910).then(migLeilaoMid1111b).then(migRestoreUnbid1311).then(migReopenMid2015).then(syncIdades).then(()=>purgeRooms());
+ const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(migLeilaoSurpresa2910).then(migLeilaoMid1111b).then(migRestoreUnbid1311).then(migReopenMid2015).then(migReopenMid2030).then(syncIdades).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
  // Migração única: primeiro leilão (config/leilao-pre.json) -> jogadores vão para o clube "Leilão ZC" com over/pot/idade do Robson e viram lotes do leilão de pré-temporada (bloqueado até um admin desbloquear)
  async function migLeilaoPre2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='leilao-pre-2610'")).rows.length)return;
@@ -92,6 +92,7 @@ async function migLeilaoMid1111b(){if((await pool.query("SELECT 1 FROM lib_migra
  setInterval(()=>syncIdades(),6*3600e3).unref();
  async function migRestoreUnbid1311(){const RU=require('./restore-unbid');const pname=id=>uni.prepare('SELECT name FROM players WHERE id=?').get(id)?.name||String(id);const cname=id=>uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name||String(id);await RU.run(pool,{pname,cname});}
  async function migReopenMid2015(){const RM=require('./reopen-mid');await RM.run(pool);}
+ async function migReopenMid2030(){const RV=require('./reopen-mid-2030');const R=require('./roster')(uni);const pname=id=>uni.prepare('SELECT name FROM players WHERE id=?').get(id)?.name||String(id);const cname=id=>uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name||String(id);await RV.run(pool,{isFree:R.isFree,pname,cname});}
  async function migIdadesBR2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='idades-br-2610'")).rows.length)return;
   const ps=uni.prepare('SELECT id,age,potential,market_value FROM players WHERE id>=95000000 AND id<96000000').all();
   const c=await pool.connect();try{await c.query('BEGIN');

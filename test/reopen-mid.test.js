@@ -24,7 +24,6 @@ assert.strictEqual(shouldExtend(null,t),false);
 const extras=fs.readFileSync(path.join(__dirname,'../extras.js'),'utf8');
 assert.match(extras,/closeMidOvertime/);
 assert.match(extras,/now\(\)\+interval '60 seconds'/);
-assert.match(extras,/stage='mid' AND status='sold' AND winner_club=/);
 assert.match(extras,/closes_at IS NOT NULL AND closes_at>now\(\)/);
 
 const mkt=fs.readFileSync(path.join(__dirname,'../market.js'),'utf8');
@@ -37,7 +36,7 @@ assert.match(ui,/Mercado fechado até o fim do leilão/);
 assert.match(ui,/cal\.auction_open/);
 
 const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v50'/);
+assert.match(sw,/const V='zc-v51'/);
 
 const mp=fs.readFileSync(path.join(__dirname,'../mp.js'),'utf8');
 assert.match(mp,/migReopenMid2015/);

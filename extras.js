@@ -128,8 +128,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    if(!l)throw fail('Lote fechado');if(l.from_club===m.club_id)throw fail('Não dá pra dar lance no seu próprio jogador');
    if(SUR){if(!l.started)throw fail(`O leilão surpresa ainda não abriu: abre ${M.brt(l.opens_at)} (horário de Brasília)`);if(!l.running)throw fail('Lote encerrado');
     const [w]=(await c.query("SELECT player_id FROM auction_lots WHERE room_id=$1 AND season=$2 AND stage='surpresa' AND status='sold' AND winner_club=$3",[room.id,room.season,m.club_id])).rows;if(w)throw fail(`Seu clube já arrematou ${pname(w.player_id)} no leilão surpresa: cada clube leva no máximo 1 jogador.`);}
-   if(!SUR&&l.stage==='mid'){if(l.closes_at&&!l.running)throw fail('Lote encerrado');
-    const [w]=(await c.query("SELECT player_id FROM auction_lots WHERE room_id=$1 AND season=$2 AND stage='mid' AND status='sold' AND winner_club=$3",[room.id,room.season,m.club_id])).rows;if(w)throw fail(`Seu clube já arrematou ${pname(w.player_id)}. Só quem não levou ninguém pode dar lance nos lotes que ficaram sem oferta.`);}
+   if(!SUR&&l.closes_at&&!l.running)throw fail('Lote encerrado');
+
    const a=Math.round(+r.body?.amount||0);if(a<+l.min_bid)throw fail(`Lance abaixo do mínimo (€ ${(l.min_bid/1e6).toFixed(1)} mi)`);
    const top=await leaderOf(c,l.id);
    const lead=(await c.query("SELECT l.id,l.player_id FROM auction_lots l WHERE l.room_id=$1 AND l.season=$2 AND l.status='open' AND l.id<>$3 AND (COALESCE(l.stage,'')='surpresa')=$5 AND (SELECT b.club_id FROM auction_bids b WHERE b.lot_id=l.id ORDER BY b.amount DESC,b.created_at LIMIT 1)=$4",[room.id,room.season,l.id,m.club_id,SUR])).rows[0];
