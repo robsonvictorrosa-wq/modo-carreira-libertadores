@@ -36,7 +36,7 @@ assert.match(ui,/Mercado fechado até o fim do leilão/);
 assert.match(ui,/cal\.auction_open/);
 
 const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v51'/);
+assert.match(sw,/const V='zc-v52'/);
 
 const mp=fs.readFileSync(path.join(__dirname,'../mp.js'),'utf8');
 assert.match(mp,/migReopenMid2015/);
