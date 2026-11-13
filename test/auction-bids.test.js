@@ -40,7 +40,7 @@ assert.match(ui,/Liderando outro/);
 assert.match(ui,/leading&&leading\.id!==l\.id/);
 
 const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v49'/);
+assert.match(sw,/const V='zc-v50'/);
 assert.doesNotMatch(sw,/const V='zc-v48'/);
 
 console.log('ok: unbid bloqueado; quem lidera não lança em outro lote; libera depois de ser coberto; UI e cache zc-v49');

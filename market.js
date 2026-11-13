@@ -14,8 +14,8 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  const CAL_LBL={pre:'pré-temporada',mid:'meio da fase de liga',end:'fim da fase de liga'};
  const brt=d=>new Date(d).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).replace(',','');
  function windowOf(room,comp){const st=room.mkt_stage||(room.status==='lobby'?'pre':null),lb=CAL_LBL[st]||'';
-  // Robson 04/11: mercado e leilão podem ficar abertos juntos (jogadores do leilão ficam bloqueados no mercado)
-  if(room.auction_open&&!(room.mkt_state==='market'&&room.mkt_until&&new Date(room.mkt_until)>Date.now()))return {open:false,auction:true,stage:st,name:('Leilão '+(lb?'de '+lb:'')).trim()+' em andamento',day:0,days:3};
+  // Robson 13/11: com leilão reaberto, o mercado fica fechado até o leilão (e as prorrogações de 60s) terminar; propostas pendentes não expiram.
+  if(room.auction_open)return {open:false,auction:true,paused_for_auction:true,stage:st,name:'Mercado fechado até o fim do leilão',until:room.mkt_until?new Date(room.mkt_until).toISOString():null,closes:room.mkt_until?brt(room.mkt_until):null,day:0,days:3};
   const u=room.mkt_until?new Date(room.mkt_until):null;
   if(room.mkt_state==='market'&&u&&u>Date.now())return {open:true,stage:st,name:`Mercado aberto até ${brt(u)}`,until:u.toISOString(),closes:brt(u),day:0,days:3};
   return {open:false,stage:st,name:'Mercado fechado',day:0,days:3};}
@@ -63,7 +63,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   await note(db,room.id,out?`😠 ${p.name} ficou insatisfeito por não ir para o ${buyer.name} e pediu para sair do ${seller.name}.`:`😕 A moral de ${p.name} caiu após a recusa da proposta do ${buyer.name}.`,hum?.get(o.seller_club)?.user_id);}
  // ---------- tick dos bots (um "dia" de janela) ----------
  const SEC_TARGET={GK:3,DEF:8,MID:8,ATT:5};
- async function tick(db,room,win){const day=room.market_day;const hum=await humans(db,room.id);const rnd=Math.random;const W=await R.world(db,room.id);const AUC=new Set((await db.query("SELECT l.player_id FROM auction_lots l JOIN rooms r ON r.id=l.room_id WHERE l.room_id=$1 AND l.season=$2 AND l.status='open' AND (r.auction_open OR (l.stage='surpresa' AND now()>=COALESCE(l.opens_at,now()) AND now()<COALESCE(l.closes_at,now()+interval '1 day')))",[room.id,room.season])).rows.map(x=>+x.player_id));// Robson 04/11: IA pula jogadores em leilão aberto
+ async function tick(db,room,win){if(room.auction_open)return {paused:1};const day=room.market_day;const hum=await humans(db,room.id);const rnd=Math.random;const W=await R.world(db,room.id);const AUC=new Set((await db.query("SELECT l.player_id FROM auction_lots l JOIN rooms r ON r.id=l.room_id WHERE l.room_id=$1 AND l.season=$2 AND l.status='open' AND (r.auction_open OR (l.stage='surpresa' AND now()>=COALESCE(l.opens_at,now()) AND now()<COALESCE(l.closes_at,now()+interval '1 day')))",[room.id,room.season])).rows.map(x=>+x.player_id));// Robson 04/11: IA pula jogadores em leilão aberto
 
   // ofertas vencidas
   // Robson 27/10: proposta a clube sem técnico fica pendente; quando um técnico assume, ganha prazo novo a partir de hoje
@@ -127,6 +127,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  async function before(db,room){const comp=await mainComp(db,room);const win=windowOf(room,comp);if(!win.open)return;
   await db.query('UPDATE rooms SET market_day=market_day+1 WHERE id=$1',[room.id]);room.market_day++;await tick(db,room,win);}
  async function after(db,room){const [r]=(await db.query('SELECT * FROM rooms WHERE id=$1',[room.id])).rows;const win=windowOf(r,await mainComp(db,r));
+  if(win.paused_for_auction||win.auction)return;
   if(r.window_was_open&&!win.open){const n=(await db.query("UPDATE offers SET status='expired',reason='Janela fechada',updated_at=now() WHERE room_id=$1 AND status IN ('pending','countered','club_accepted') AND NOT (status='pending' AND buyer_user IS NOT NULL AND NOT EXISTS(SELECT 1 FROM room_managers m WHERE m.room_id=offers.room_id AND m.club_id=offers.seller_club)) RETURNING id",[r.id])).rowCount;
    await note(db,r.id,`🔒 Janela de transferências fechada.${n?` ${n} negociação(ões) em aberto expiraram.`:''}`);}
   if(!r.window_was_open&&win.open)await note(db,r.id,`🔓 ${win.name} aberta (fecha ${win.closes||'quando o dono decidir'}).`);
@@ -137,7 +138,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
  // ---------- rotas ----------
  const tx=async f=>{const c=await pool.connect();try{await c.query('BEGIN');const r=await f(c);await c.query('COMMIT');return r;}catch(e){await c.query('ROLLBACK');throw e}finally{c.release()}};
  const lockRoom=async(c,r)=>{const [room]=(await c.query('SELECT r.* FROM rooms r JOIN room_managers m ON m.room_id=r.id AND m.user_id=$2 WHERE r.code=$1 FOR UPDATE OF r',[String(r.params.code).toUpperCase(),r.user.id])).rows;if(!room)throw fail('Você não está nessa sala',403);return room;};
- const needOpen=async(c,room)=>{const w=windowOf(room,await mainComp(c,room));if(!w.open)throw fail('A janela de transferências está fechada');return w;};
+ const needOpen=async(c,room)=>{const w=windowOf(room,await mainComp(c,room));if(!w.open)throw fail(w.paused_for_auction||w.auction?'Mercado fechado até o fim do leilão':'A janela de transferências está fechada');return w;};
  const view=(p,hum)=>({id:p.id,name:p.name,primary_position:p.primary_position,overall:p.overall,potential:p.potential,age:p.age,nationality:p.nationality,market_value:+p.market_value,wage:+p.wage,contract_end:p.contract_end,release_clause:p.release_clause,club_id:p.club_id,club:isFree(p.club_id)?'Livre':clubName(p.club_id),league:L.get(C.get(p.club_id)?.league_id)?.name,manager:hum?.get(p.club_id)?.nick||null,listed:p.listed,shielded:!!p.shielded,wants_out:p.wants_out,morale:p.morale,loan_from:p.loan_from?clubName(p.loan_from):null});
 
  app.get('/api/rooms/:code/market',auth,wrap(async(r,s)=>{const room=await member(r);const comp=await mainComp(pool,room);const win=windowOf(room,comp);let me=null;
@@ -250,7 +251,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R})=>{
   await c.query('UPDATE offers SET status=$2,counter_wage=$3,reason=$4,updated_at=now() WHERE id=$1',[o.id,end?'player_rejected':'club_accepted',d.ask||null,msg]);
   if(end&&o.seller_user)await note(c,room.id,`🚫 ${p.name} recusou a transferência para o ${clubName(cid)}: ${d.msg}`,o.seller_user);
   return {decision:end?'reject':d.d,ask:d.ask,message:msg,ended:end,attempts_left:end?0:3-fails};}))));
- app.post('/api/rooms/:code/market/offer/:id/withdraw',auth,wrap(async(r,s)=>{const room=await member(r);const cid=await myClub(pool,room,r.user.id);
+ app.post('/api/rooms/:code/market/offer/:id/withdraw',auth,wrap(async(r,s)=>{const room=await member(r);const w=windowOf(room);if(!w.open)throw fail(w.paused_for_auction||w.auction?'Mercado fechado até o fim do leilão':'A janela de transferências está fechada');const cid=await myClub(pool,room,r.user.id);
   const [o]=await q("UPDATE offers SET status='withdrawn',reason='Retirada pelo comprador',updated_at=now() WHERE id=$1 AND room_id=$2 AND buyer_club=$3 AND status IN ('pending','countered','club_accepted') RETURNING *",[+r.params.id,room.id,cid]);if(!o)throw fail('Nada para retirar');s.json({ok:1});}));
  app.get('/api/rooms/:code/market/offers',auth,wrap(async(r,s)=>{const room=await member(r);const cid=await myClub(pool,room,r.user.id);
   const rows=await q('SELECT * FROM offers WHERE room_id=$1 AND (buyer_club=$2 OR seller_club=$2) ORDER BY updated_at DESC LIMIT 80',[room.id,cid]);
