@@ -1,6 +1,7 @@
 const TRX=require('./dt').trx;
 // Zero Clubistas: visão geral dos clubes (meta do onze), contratações, estatísticas, empréstimos, leilão, premiações e Central da liga
 const L=require('./libertadores'),EVO=require('./evolution'),CF=require('./config/libertadores.json');
+const AR=require('./auction-rules');
 module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
  const PLAN=L.plan();const LEAGUE_END=PLAN.filter(s=>s.stage==='league').length;
  const cname=id=>R.C.get(id)?.name||uni.prepare('SELECT name FROM clubs WHERE id=?').get(id)?.name||'Livre';
@@ -115,7 +116,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
   const AUCX=[...R.C.values()].find(x=>x.name==='Leilão ZC')?.id;const TR=new Map();for(const l of lots)if(l.status==='unsold'){const p=await R.player(pool,room.id,l.player_id);if(p)TR.set(l.player_id,p.club_id);}const [sw]=m?.club_id?await q("SELECT player_id FROM auction_lots WHERE room_id=$1 AND season=$2 AND stage='surpresa' AND status='sold' AND winner_club=$3",[room.id,room.season,m.club_id]):[];
   s.json({now:new Date().toISOString(),sur_won:sw?pname(sw.player_id):null,open:!!room.auction_open,locked:!room.auction_open&&stateOf(room)==='waiting'&&lots.some(l=>l.status==='open'),admin:room.owner_id===r.user.id||!!r.user.admin,league_end:LEAGUE_END,cal,my_club:m?.club_id||null,excluded:!!(m?.club_id&&room.auction_open&&(room.auction_excl||[]).includes(m.club_id)),lots:lots.map(l=>{const p=R.P.get(l.player_id)||{};const hs=H.get(l.id)||[];return {...l,top:hs[0]||null,leader_mine:!!(hs[0]&&hs[0].club_id===m?.club_id),history:hs.slice(0,15),bids:hs.length,min_bid:+l.min_bid,price:l.price&&+l.price,mine:l.mine&&+l.mine,name:p.name,pos:p.primary_position,overall:p.overall,potential:p.potential,age:p.age,from:cname(l.from_club),winner:l.winner_club?cname(l.winner_club):null,locked:l.status==='unsold'&&AUCX!=null&&(TR.get(l.player_id)===AUCX),stage_label:l.stage==='surpresa'?'Leilão surpresa':CAL[l.stage]?.label||'Leilão',surpresa:l.stage==='surpresa',started:!l.opens_at||new Date(l.opens_at)<=Date.now(),running:!l.closes_at||new Date(l.closes_at)>Date.now()};})});}));
  const avail=async(db,room,cid)=>{const [rc]=(await db.query('SELECT budget FROM room_clubs WHERE room_id=$1 AND club_id=$2',[room.id,cid])).rows;const res=(await M.reservedMap(db,room.id)).get(cid)||0;return (+rc?.budget||0)-res;};
- // leilão aberto: lances visíveis, novo lance precisa superar o maior; cada clube lidera no máx 1 lote (leva no máx 1); o lance líder fica reservado e volta quando superado
+ // leilão aberto: lances visíveis, novo lance precisa superar o maior; cada clube lidera no máx 1 lote (leva no máx 1); o lance líder fica reservado e volta quando superado; lance não pode ser retirado
  const leaderOf=async(db,lotId)=>(await db.query('SELECT club_id,amount FROM auction_bids WHERE lot_id=$1 ORDER BY amount DESC,created_at LIMIT 1',[lotId])).rows[0];
  app.post('/api/rooms/:code/zc/auction/bid',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!m?.club_id)throw fail('Escolha um clube');
   const c=await pool.connect();try{await c.query('BEGIN');const [rm]=(await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[room.id])).rows;
@@ -126,9 +127,10 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    if(SUR){if(!l.started)throw fail(`O leilão surpresa ainda não abriu: abre ${M.brt(l.opens_at)} (horário de Brasília)`);if(!l.running)throw fail('Lote encerrado');
     const [w]=(await c.query("SELECT player_id FROM auction_lots WHERE room_id=$1 AND season=$2 AND stage='surpresa' AND status='sold' AND winner_club=$3",[room.id,room.season,m.club_id])).rows;if(w)throw fail(`Seu clube já arrematou ${pname(w.player_id)} no leilão surpresa: cada clube leva no máximo 1 jogador.`);}
    const a=Math.round(+r.body?.amount||0);if(a<+l.min_bid)throw fail(`Lance abaixo do mínimo (€ ${(l.min_bid/1e6).toFixed(1)} mi)`);
-   const top=await leaderOf(c,l.id);if(top&&top.club_id===m.club_id)throw fail('Você já tem o maior lance deste jogador');if(top&&a<=+top.amount)throw fail(`O lance precisa superar o atual: € ${(top.amount/1e6).toFixed(1)} mi (${cname(top.club_id)})`);
+   const top=await leaderOf(c,l.id);
    const lead=(await c.query("SELECT l.id,l.player_id FROM auction_lots l WHERE l.room_id=$1 AND l.season=$2 AND l.status='open' AND l.id<>$3 AND (COALESCE(l.stage,'')='surpresa')=$5 AND (SELECT b.club_id FROM auction_bids b WHERE b.lot_id=l.id ORDER BY b.amount DESC,b.created_at LIMIT 1)=$4",[room.id,room.season,l.id,m.club_id,SUR])).rows[0];
-   if(lead)throw fail(`Você já tem o maior lance pelo ${pname(lead.player_id)}. Cada clube leva no máximo 1 jogador: só dá pra dar lance em outro se for superado.`);
+   const chk=AR.canBid({sameLotLeader:!!(top&&top.club_id===m.club_id),otherLotLeader:!!lead,otherPlayerName:lead?pname(lead.player_id):''});if(!chk.ok)throw fail(chk.error);
+   if(top&&a<=+top.amount)throw fail(`O lance precisa superar o atual: € ${(top.amount/1e6).toFixed(1)} mi (${cname(top.club_id)})`);
    const av=await avail(c,rm,m.club_id);if(a>av)throw fail(`Saldo insuficiente: você tem ${(av/1e6).toFixed(1)} mi disponíveis (orçamento menos o reservado)`);
    await c.query('INSERT INTO auction_bids(lot_id,club_id,user_id,amount) VALUES($1,$2,$3,$4) ON CONFLICT(lot_id,club_id) DO UPDATE SET amount=$4,user_id=$3,created_at=now()',[l.id,m.club_id,r.user.id,a]);
    await c.query('INSERT INTO auction_bid_log(lot_id,club_id,user_id,amount) VALUES($1,$2,$3,$4)',[l.id,m.club_id,r.user.id,a]);
@@ -136,16 +138,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{
    await c.query('INSERT INTO room_events(room_id,text) VALUES($1,$2)',[room.id,`🔨 ${cname(m.club_id)} deu € ${(a/1e6).toFixed(1)} mi por ${pname(l.player_id)}`+(top?` (superou ${cname(top.club_id)})`:'')+'.']);
    await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}
   s.json({ok:1});}));
- app.post('/api/rooms/:code/zc/auction/unbid',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);const adm=room.owner_id===r.user.id||!!r.user.admin;
-  const cid=r.body?.club_id!=null&&+r.body.club_id!==m?.club_id?(adm?+r.body.club_id:(()=>{throw fail('Só administradores podem remover lances de outros clubes',403)})()):m?.club_id;if(!cid)throw fail('Escolha um clube');
-  const c=await pool.connect();let out;try{await c.query('BEGIN');const [rm]=(await c.query('SELECT * FROM rooms WHERE id=$1 FOR UPDATE',[room.id])).rows;if((await c.query("SELECT 1 FROM auction_lots WHERE id=$1 AND stage='surpresa'",[+r.body?.lot_id])).rows.length)throw fail('No leilão surpresa o lance não pode ser retirado: ele vale até alguém superar.');if(!rm.auction_open)throw fail('O leilão está fechado: não dá mais pra remover lances');
-   const [l]=(await c.query("SELECT * FROM auction_lots WHERE id=$1 AND room_id=$2 AND status='open'",[+r.body?.lot_id,room.id])).rows;if(!l)throw fail('Lote fechado');if(l.stage==='surpresa')throw fail('No leilão surpresa o lance não pode ser retirado: ele vale até alguém superar.');
-   const [b]=(await c.query('DELETE FROM auction_bids WHERE lot_id=$1 AND club_id=$2 RETURNING amount',[l.id,cid])).rows;if(!b)throw fail('Não há lance desse clube neste jogador');
-   await c.query('UPDATE auction_bid_log SET removed_at=now() WHERE lot_id=$1 AND club_id=$2 AND removed_at IS NULL',[l.id,cid]);
-   const top=await leaderOf(c,l.id);const who=cid===m?.club_id?cname(cid):`${r.user.nick} (admin)`;
-   await c.query('INSERT INTO room_events(room_id,text) VALUES($1,$2)',[room.id,`↩️ ${who} removeu o lance de € ${(b.amount/1e6).toFixed(1)} mi ${cid===m?.club_id?'':'do '+cname(cid)+' '}em ${pname(l.player_id)}.`+(top?` Agora lidera: ${cname(top.club_id)} (€ ${(top.amount/1e6).toFixed(1)} mi).`:' Sem lances agora.')]);
-   await c.query('UPDATE rooms SET version=version+1 WHERE id=$1',[room.id]);await c.query('COMMIT');out={ok:1,leader:top?{club:cname(top.club_id),amount:+top.amount}:null};}catch(e){await c.query('ROLLBACK');throw e;}finally{c.release();}
-  s.json(out);}));
+ app.post('/api/rooms/:code/zc/auction/unbid',auth,wrap(async()=>{throw fail(AR.UNBID_ERR);}));
  // resolve: maiores lances primeiro; cada clube leva no máximo 1 jogador; lance só vale se couber no disponível (orçamento - reservado)
  async function resolveAuction(c,room){const lots=new Map((await c.query("SELECT * FROM auction_lots WHERE room_id=$1 AND season=$2 AND status='open' AND COALESCE(stage,'')<>'surpresa'",[room.id,room.season])).rows.map(l=>[l.id,l]));let n=0;const won=new Set(),done=new Set();const excl=new Set(room.auction_excl||[]);
   const bids=lots.size?(await c.query('SELECT DISTINCT ON (lot_id) * FROM auction_bids WHERE lot_id=ANY($1) ORDER BY lot_id,amount DESC,created_at',[[...lots.keys()]])).rows.sort((a,b)=>b.amount-a.amount):[];
