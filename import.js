@@ -117,3 +117,4 @@ console.log(db.prepare("select name,(select count(*) from clubs where league_id=
   console.log('Leilão do meio:',AM.length,'jogadores no clube Leilão ZC');}
  db.exec('CREATE TABLE lib_clubs(ord INT,club_id INT,name TEXT,country TEXT,squad TEXT)');const ins=db.prepare('INSERT INTO lib_clubs VALUES(?,?,?,?,?)');CF.clubs.forEach((c,i)=>ins.run(i,c.id,c.name,c.country,c.squad)); require('./gen-attrs')(db);
  console.log('Libertadores ZC: 40 clubes; fora do FC27 (criados vazios):',miss.join(', '));}
+require('./recalc-values').runSqlite(db);
