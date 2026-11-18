@@ -89,11 +89,17 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   const st={};for(const m of ms){const k=m.stage;(st[k]??={name:L.STAGE_NAMES[k],ties:{}});const t=st[k].ties[m.tie]??={tie:m.tie,legs:[]};t.legs.push({...m,home_name:club(m.home).name,away_name:club(m.away).name});if(m.winner){t.winner=m.winner;t.winner_name=club(m.winner).name;t.pens=m.pens;}}
   s.json({comp,cfg:L.CFG,champion:comp.champion?club(comp.champion).name:null,stages:Object.entries(st).map(([k,v])=>({key:k,name:v.name,ties:Object.values(v.ties)})),clubs:L.CLUBS.length});}));
 
+ const KIT=require('./kit');
  app.get('/api/rooms/:code/lineup',auth,wrap(async(r,s)=>{const room=await member(r);const [me]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!me.club_id)throw fail('Escolha um clube');
   const sq=await squad(pool,room.id,me.club_id);const x=await xiFor(pool,room.id,me.club_id);
   const TT=require('./tactics');const lu=TT.lineup(x.xi,x.formation,x.slotted);
+  const clubName=(typeof club==='function'&&club(me.club_id)?.name)||null;
+  const kitd=await KIT.enrich(q,room.id,me.club_id,clubName,sq);
+  let evo={};try{const ev=await q('SELECT player_id,ovr_start,overall FROM room_players WHERE room_id=$1 AND player_id=ANY($2::int[])',[room.id,sq.map(p=>p.id)]);
+   for(const r of ev){if(r.ovr_start!=null&&+r.overall>+r.ovr_start)evo[r.player_id]={dir:1,from:+r.ovr_start,overall:+r.overall};}}catch(e){}
   s.json({formations:Object.keys(S.FORMATIONS),slots:TT.FORMS,tac_catalog:TT.TAC,formation:x.formation,custom:x.custom,tactics:x.tactics||TT.DEF_TAC,takers:TT.takers(x.xi,x.takers||{}),starters:lu.map(z=>z.p.id),placed:lu.map(z=>({id:z.p.id,slot:z.slot,x:z.x,y:z.y,fit:+z.fit.toFixed(2)})),sector_fit:TT.sectorFit(lu),strength:S.strength(lu.map(z=>TT.effective(z.p,z.slot))),
-   squad:sq.map(p=>({id:p.id,name:p.name,primary_position:p.primary_position,positions:p.positions||[],overall:p.overall,potential:p.potential,age:p.age,market_value:p.market_value,sector:S.sec(p),shielded:!!p.shielded,listed:!!p.listed,virtual:!!p.virtual})).sort((a,b)=>b.overall-a.overall)});}));
+   kit:kitd.kit,
+   squad:sq.map(p=>({id:p.id,name:p.name,primary_position:p.primary_position,positions:p.positions||[],overall:p.overall,potential:p.potential,age:p.age,market_value:p.market_value,sector:S.sec(p),shielded:!!p.shielded,listed:!!p.listed,virtual:!!p.virtual,number:kitd.numbers[p.id]||null,evo:evo[p.id]||null})).sort((a,b)=>b.overall-a.overall)});}));
  app.post('/api/rooms/:code/lineup',auth,wrap(async(r,s)=>{const room=await member(r);app.locals.zcOvCacheClear?.(room.id);const [me]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!me.club_id)throw fail('Escolha um clube');
   const f=r.body?.formation;if(!S.FORMATIONS[f])throw fail('Formação inválida');let st=null;
   if(!r.body.auto){st=[...new Set((r.body.starters||[]).map(Number))];if(st.length!==11)throw fail('Escolha exatamente 11 titulares');const ids=new Set((await squad(pool,room.id,me.club_id)).map(p=>p.id));if(st.some(i=>!ids.has(i)))throw fail('Jogador fora do elenco');}

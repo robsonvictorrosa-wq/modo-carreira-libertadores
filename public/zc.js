@@ -150,6 +150,31 @@ function zAssign(ids,f){const sl=XI.l.slots[f],P=ids.map(id=>XI.by.get(id)).filt
 // Robson 04/11: nome inteiro se couber; senão inicial + sobrenome (ex.: G. Jesus)
 const surname=n=>{const t=String(n||'').trim();const w=t.split(/\s+/);if(w.length<2||t.length<=12)return t;const l=w[w.length-1].length>2?w[w.length-1]:w.slice(-2).join(' ');return w[0][0]+'. '+l;};
 const tier=o=>o>=85?'t1':o>=80?'t2':o>=75?'t3':o>=70?'t4':'t5';
+
+const KITFB={primary:'#FFFFFF',secondary:'#111111',number:'#111111',gk_primary:'#1B5E20',gk_secondary:'#0D3B12',gk_number:'#FFFFFF'};
+function kitOf(l){return l&&l.kit?l.kit:KITFB;}
+function shirtCols(kit,gk){kit=kit||KITFB;return gk?{p:kit.gk_primary,s:kit.gk_secondary,n:kit.gk_number}:{p:kit.primary,s:kit.secondary,n:kit.number};}
+function shirtSVG(num,kit,gk){const c=shirtCols(kit,gk);const n=num==null||num==='—'?'':String(num);
+ const fs=n.length>2?26:n.length>1?30:34;
+ return `<svg class="shirt" viewBox="0 0 100 110" aria-hidden="true"><path fill="${c.s}" d="M20 28 L5 38 L12 60 L27 48 Z"/><path fill="${c.s}" d="M80 28 L95 38 L88 60 L73 48 Z"/><path fill="${c.p}" d="M27 26 C29 13 38 7 50 7 C62 7 71 13 73 26 L85 31 L77 50 L77 96 C77 103 50 108 50 108 C50 108 23 103 23 96 L23 50 L15 31 Z"/><path fill="${c.s}" d="M38 15 Q50 26 62 15 Q58 11 50 10 Q42 11 38 15 Z"/><path fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.2" d="M40 16 Q50 23 60 16"/><text x="50" y="68" text-anchor="middle" font-family="Oswald,'Barlow Condensed',sans-serif" font-size="${fs}" font-weight="700" fill="${c.n}">${esc(n)}</text></svg>`;}
+function kpos(pos){const bg=pc(pos),fg=bg==='#FFFFFF'?'#000':'#fff';return `<span class="kpos psq" style="background:${bg};color:${fg}">${esc(pos||'—')}</span>`;}
+function kitPos(x,y){const t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.32),bottom:5+t*72,scale:1-t*.2};}
+function pitchLines(){const map=(px,py)=>{const u=1-py/100,y=4+u*96,hw=36+u*14,x=50+(px-50)/50*hw;return `${x.toFixed(2)},${y.toFixed(2)}`;};
+ const P=(a,b)=>`M ${map(a[0],a[1])} L ${map(b[0],b[1])}`;
+ const R=(x,y,w,h)=>`${P([x,y],[x+w,y])} ${P([x+w,y],[x+w,y+h])} ${P([x+w,y+h],[x,y+h])} ${P([x,y+h],[x,y])}`;
+ const circ=(cx,cy,r,n=28)=>{const pts=[];for(let i=0;i<=n;i++){const a=Math.PI*2*i/n;pts.push(map(cx+r*Math.cos(a),cy+r*Math.sin(a)*1.15));}return 'M '+pts.join(' L ');};
+ const arc=(cx,cy,r,a0,a1,n=12)=>{const pts=[];for(let i=0;i<=n;i++){const a=a0+(a1-a0)*i/n;pts.push(map(cx+r*Math.cos(a),cy+r*Math.sin(a)*1.15));}return 'M '+pts.join(' L ');};
+ return `<svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none"><g fill="none" stroke="rgba(255,255,255,.55)" stroke-width=".45">${R(2,2,96,96)}${P([2,50],[98,50])}<path d="${circ(50,50,12)}"/>${R(21,2,58,16)}${R(34,2,32,6)}${R(21,82,58,16)}${R(34,92,32,6)}<path d="${arc(50,18,12,0.15*Math.PI,.85*Math.PI)}"/><path d="${arc(50,82,12,1.15*Math.PI,1.85*Math.PI)}"/></g><g fill="rgba(255,255,255,.7)"><circle cx="${map(50,50).split(',')[0]}" cy="${map(50,50).split(',')[1]}" r=".7"/><circle cx="${map(50,12).split(',')[0]}" cy="${map(50,12).split(',')[1]}" r=".55"/><circle cx="${map(50,88).split(',')[0]}" cy="${map(50,88).split(',')[1]}" r=".55"/></g></svg>`;}
+function xiPitchHTML(sl,st,kit){kit=kit||KITFB;
+ return `<div class="pitchwrap fifa-pitch"><div class="xi-title"><h1>Escalação titular</h1><div class="xi-form">${esc(XI.f)}</div></div>
+ <div class="pitch"><div class="pitch-bed">${pitchLines()}</div>
+ ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2]),num=p&&p.number!=null?p.number:'—';
+  const arr=p&&p.evo&&p.evo.dir>0?'<span class="earr" title="Evoluiu">▲</span>':'';
+  const cap=+XI.tk.cap===p?.id?' <i class="cap">C</i>':'';
+  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;width:${(15.5*xy.scale).toFixed(2)}%" onclick="zSlot(${i})">${shirtSVG(num,kit,gk)}<div class="kit-tag">${kpos(pos)}<span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span>${arr}</div></div>`;}).join('')}
+ </div>
+ <div class="sub" style="text-align:center;margin:8px 4px">${XI.sel!=null?'<b style="color:#D4AF37">Escolha no banco (ou outro titular) quem entra na vaga de '+sl[XI.sel][0]+'.</b>':'Toque num titular para trocar. A vaga de volante aceita VOL e MC.'}</div></div>`;}
+
 async function zEscalacao(){if(!await need('escalacao'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}
  const [l,s]=await Promise.all([get(R()+'/lineup'),get(R()+'/zc/signings')]);const signed=new Set(s.in.map(x=>x.player_id));
  XI={l,f:l.formation,ids:l.placed.map(x=>x.id),signed,need:s.meta.need,tac:{...l.tactics},tk:{...l.takers},sel:null,q:'',pos:'',by:new Map(l.squad.map(p=>[p.id,p]))};drawXI();}
@@ -165,13 +190,11 @@ function drawXI(){const {l,signed,need}=XI;zTk();const sl=l.slots[XI.f];const st
  const opt=k=>`<select onchange="zTkSet('${k}',this.value)">${st.filter(Boolean).map(p=>`<option value="${p.id}" ${+XI.tk[k]===p.id?'selected':''}>${esc(p.name)} (${p.primary_position})</option>`).join('')}</select>`;
  const prow=(p,btn)=>`<div class="pl">${psq(p)}<div class="i"><b>${esc(p.name)}</b><span>${[p.primary_position,...(p.positions||[]).filter(x=>x!==p.primary_position)].join(' · ')} · ${p.age} anos</span></div><span class="ovr o${p.overall>=85?1:p.overall>=78?2:p.overall>=70?3:4}">${p.overall}${pt(p)}</span>${btn}</div>`;
  const cr=myClub();
- app.innerHTML=`<div class="hero xhero"><div class="xtop">${badge(cr.name)}<div style="flex:1;min-width:0"><div class="kick">Escalação</div><h1 style="margin:0">${esc(cr.name)}</h1><div class="sub" style="margin:2px 0 0">Formação ${esc(XI.f)} · ${l.custom?'escalação personalizada':'auto-escalação'}</div></div><div class="xovr"><small>OVR</small>${ovr}</div></div>
+ app.innerHTML=`<div class="hero xhero"><div class="xtop">${badge(cr.name)}<div style="flex:1;min-width:0"><div class="kick">Escalação</div><h1 style="margin:0">${esc(cr.name)}</h1><div class="sub" style="margin:2px 0 0">${l.custom?'Escalação personalizada':'Auto-escalação'} · OVR ${ovr}</div></div><div class="xovr"><small>OVR</small>${ovr}</div></div>
   <div class="xinds">${ind('DEF')}${ind('MID')}${ind('ATT')}</div>
   <p style="margin:8px 0">Meta do onze: <b class="${n>=need?'ok':'no'}">${n}/${need} contratados no XI</b></p>
-  <label class="sub" style="display:block;margin:0 0 4px">Formação</label><div style="display:flex;gap:6px;flex-wrap:wrap"><select id="xf" onchange="zForm(this.value)">${l.formations.map(f=>`<option ${f===XI.f?'selected':''}>${f}</option>`).join('')}</select><button class="btn" onclick="zXI(0)">💾 Salvar escalação e táticas</button><button class="btn sec" onclick="zXI(1)">Escalação automática</button></div></div>
- <div class="pitchwrap"><div class="pitch"><svg class="lines" viewBox="0 0 68 105" preserveAspectRatio="none"><g fill="none" stroke="rgba(255,255,255,.75)" stroke-width=".45"><rect x="1.5" y="1.5" width="65" height="102"/><line x1="1.5" y1="52.5" x2="66.5" y2="52.5"/><circle cx="34" cy="52.5" r="9.15"/><rect x="13.85" y="1.5" width="40.3" height="16.5"/><rect x="24.85" y="1.5" width="18.3" height="5.5"/><rect x="13.85" y="87" width="40.3" height="16.5"/><rect x="24.85" y="98" width="18.3" height="5.5"/><path d="M26.7 18 A9.15 9.15 0 0 0 41.3 18"/><path d="M26.7 87 A9.15 9.15 0 0 1 41.3 87"/><rect x="30.3" y=".2" width="7.4" height="1.3"/><rect x="30.3" y="103.5" width="7.4" height="1.3"/></g><g fill="rgba(255,255,255,.8)"><circle cx="34" cy="52.5" r=".6"/><circle cx="34" cy="12.5" r=".5"/><circle cx="34" cy="92.5" r=".5"/></g></svg>
-  ${sl.map((s,i)=>{const p=st[i];const f=p?zFit(p,s[0]):1;return `<div class="pcard ${p?tier(p.overall):''} ${XI.sel===i?'sel':''} ${f<.97?'off':''}" style="left:${s[1]}%;bottom:${4+s[2]*.86}%" onclick="zSlot(${i})"><span class="ppos">${s[0]}</span><span class="pnm">${p?esc(surname(p.name)):'—'}${+XI.tk.cap===p?.id?' <i class="cap">C</i>':''}</span><span class="pnum"><b>${p?.overall??''}</b><em>${p?.potential??''}</em></span>${f<.97?`<span class="pwarn">${p.primary_position}</span>`:''}</div>`;}).join('')}</div>
-  <div class="sub" style="text-align:center;margin:8px 4px">${XI.sel!=null?'<b style="color:#D4AF37">Escolha no banco (ou outro titular) quem entra na vaga de '+sl[XI.sel][0]+'.</b>':'Toque num titular para trocar. O número dourado é o overall e o outro é o potencial. A vaga de volante aceita VOL e MC.'}</div></div>
+  <label class="sub" style="display:block;margin:0 0 4px">Formação</label><div class="xactions"><select id="xf" onchange="zForm(this.value)">${l.formations.map(f=>`<option ${f===XI.f?'selected':''}>${f}</option>`).join('')}</select><button class="btn" onclick="zXI(0)">Salvar escalação e táticas</button><button class="btn sec" onclick="zXI(1)">Escalação automática</button><a class="btn sec" href="#/escalacao/camisa">Mudar a camisa</a></div></div>
+ ${xiPitchHTML(sl,st,kitOf(l))}
  <div class="card"><h2 style="margin-top:0">Banco de reservas <span class="sub">(${l.squad.length-11})</span></h2><div style="display:flex;gap:6px;margin-bottom:8px"><input id="bq" placeholder="Buscar no banco" value="${esc(XI.q)}" oninput="zQ(this.value)" style="flex:1;min-width:0"><select onchange="zPos(this.value)"><option value="">Todas as posições</option>${Object.keys(SECP).map(k=>`<option ${XI.pos===k?'selected':''}>${k}</option>`).join('')}</select></div>
   <div id="bench" style="margin:0 -12px">${bench.map(p=>`<div onclick="zBenchPick(${p.id})" class="${XI.sel!=null?'pickable':''}">${prow(p,`<span class="sub" style="margin:0 0 0 6px">${signed.has(p.id)?'🆕':''}${p.shielded?'🛡️':''}${p.listed?'🤝':''}</span>`)}</div>`).join('')||'<div class="sub" style="padding:8px 12px">Ninguém no banco com esse filtro.</div>'}</div></div>
  <div class="card"><h2 style="margin-top:0">Táticas de jogo</h2><div class="sub">Mentalidade e três setores. Vale na simulação de cada partida.</div>
@@ -288,9 +311,28 @@ window.zCon=async id=>{if(!confirm('Desfazer esta venda e devolver o valor?'))re
 
 // ---------- roteador ----------
 window.mercado=sub=>sub==='propostas'?(location.hash==='#/negociacoes'?negociacoes():location.hash='#/negociacoes'):zMercado(sub);
+
+async function zCamisa(){if(!await need('escalacao'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}
+ const l=await get(R()+'/lineup');const kit=kitOf(l),cr=myClub(),sq=l.squad||[];
+ const col=(id,lab,v)=>`<label>${esc(lab)} <input type="color" id="${id}" value="${v}" oninput="zKitLive()"></label>`;
+ const row=p=>`<div class="pl">${kpos(p.primary_position)}<div class="i"><b>${esc(p.name)}</b><span>${esc(p.primary_position)} · ${p.age} anos · OVR ${p.overall}</span></div><input type="number" min="1" max="99" id="sn-${p.id}" value="${p.number??''}" ></div>`;
+ app.innerHTML=`<div class="hero"><div class="kick">Escalação</div><h1>Mudar a camisa</h1><p>Só o técnico do ${esc(cr.name)} edita o uniforme e os números do próprio elenco. Números de 1 a 99, sem repetir no clube.</p>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"><a class="btn sec" href="#/escalacao">Voltar à escalação</a><button class="btn" onclick="zSaveKit()">Salvar cores</button><button class="btn" onclick="zSaveShirts()">Salvar números</button></div></div>
+ <div class="card kit-edit"><h2 style="margin-top:0">Cores do uniforme</h2>
+  <div class="kprev"><figure id="kp-field">${shirtSVG(10,kit,0)}<figcaption>Linha</figcaption></figure><figure id="kp-gk">${shirtSVG(1,kit,1)}<figcaption>Goleiro</figcaption></figure></div>
+  <h3>Linha</h3><div class="kit-colors">${col('k-primary','Cor principal',kit.primary)}${col('k-secondary','Cor do detalhe',kit.secondary)}${col('k-number','Cor do número',kit.number)}</div>
+  <h3>Goleiro</h3><div class="kit-colors">${col('k-gk_primary','Cor principal',kit.gk_primary)}${col('k-gk_secondary','Cor do detalhe',kit.gk_secondary)}${col('k-gk_number','Cor do número',kit.gk_number)}</div></div>
+ <div class="card shirt-list"><h2 style="margin-top:0">Números do elenco</h2><div class="sub">De 1 a 99, cada um só pode aparecer uma vez no clube.</div>${sq.map(row).join('')||'<p class="sub">Nenhum jogador no elenco.</p>'}</div>`;
+ window._kitL=l;}
+window.zKitRead=()=>({primary:$('#k-primary').value,secondary:$('#k-secondary').value,number:$('#k-number').value,gk_primary:$('#k-gk_primary').value,gk_secondary:$('#k-gk_secondary').value,gk_number:$('#k-gk_number').value});
+window.zKitLive=()=>{const kit=zKitRead();const f=document.getElementById('kp-field'),g=document.getElementById('kp-gk');if(f)f.innerHTML=shirtSVG(10,kit,0)+'<figcaption>Linha</figcaption>';if(g)g.innerHTML=shirtSVG(1,kit,1)+'<figcaption>Goleiro</figcaption>';};
+window.zSaveKit=async()=>{try{const r=await post(R()+'/zc/kit',zKitRead());window.toast?toast('Cores da camisa salvas'):alert('Cores da camisa salvas');if(r.kit){const f=document.getElementById('kp-field'),g=document.getElementById('kp-gk');if(f)f.innerHTML=shirtSVG(10,r.kit,0)+'<figcaption>Linha</figcaption>';if(g)g.innerHTML=shirtSVG(1,r.kit,1)+'<figcaption>Goleiro</figcaption>';}}catch(e){alert(e.message)}};
+window.zSaveShirts=async()=>{const numbers=[];document.querySelectorAll('input[id^="sn-"]').forEach(el=>{if(el.value!=='')numbers.push({player_id:+el.id.slice(3),number:+el.value});});
+ try{await post(R()+'/zc/shirts',{numbers});window.toast?toast('Números salvos'):alert('Números salvos');zCamisa();}catch(e){alert(e.message)}};
+
 const old=window.route;
 window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
- const map={'':inicio,inicio,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:zEscalacao,emprestimos:()=>location.hash='#/mercado',estatisticas,jogos:()=>jogos(m[2]),tabela:()=>tabela(m[2]),leilao,premiacoes,clubes,evolucao,central};
+ const map={'':inicio,inicio,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:()=>m[2]==='camisa'?zCamisa():zEscalacao(),emprestimos:()=>location.hash='#/mercado',estatisticas,jogos:()=>jogos(m[2]),tabela:()=>tabela(m[2]),leilao,premiacoes,clubes,evolucao,central};
  if(t==='ligas'){chrome('');return salas();}
  const OKOLD=['jogo','matamata','bolao','historico','artilharia','como-funciona','clube'];
  if(!map[t]&&!OKOLD.includes(t))return location.hash='#/';

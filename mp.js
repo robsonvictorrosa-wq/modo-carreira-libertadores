@@ -10,7 +10,7 @@ module.exports=(app,uni)=>{
  const SCH=process.env.PGSCHEMA&&/^[a-z_][a-z0-9_]*$/.test(process.env.PGSCHEMA)?process.env.PGSCHEMA:null;
  
  if(SCH)pool.on('connect',c=>c.query(`SET search_path TO ${SCH}`).catch(()=>{}));
- const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(migLeilaoSurpresa2910).then(migLeilaoMid1111b).then(migRestoreUnbid1311).then(migReopenMid2015).then(migReopenMid2030).then(migMidClose2025).then(syncIdades).then(migValuesNoAgeDisc1511).then(()=>purgeRooms());
+ const ready=(SCH?pool.query(`CREATE SCHEMA IF NOT EXISTS ${SCH}`):Promise.resolve()).then(()=>pool.query(fs.readFileSync(__dirname+'/pg.sql','utf8'))).then(()=>console.log('Postgres OK')).then(purgeTest).then(migClubs2610).then(migVerbas2610).then(migIdadesBR2610).then(migLeilaoPre2610).then(migLeilaoSurpresa2910).then(migLeilaoMid1111b).then(migRestoreUnbid1311).then(migReopenMid2015).then(migReopenMid2030).then(migMidClose2025).then(syncIdades).then(migValuesNoAgeDisc1511).then(()=>require('./kit').runPostgres(pool)).then(()=>purgeRooms());
  // Limpeza de usuários de teste: defina PURGE_TEST_USERS (regex de apelidos) nas variáveis do Render, faça deploy e depois remova.
  // Migração única: primeiro leilão (config/leilao-pre.json) -> jogadores vão para o clube "Leilão ZC" com over/pot/idade do Robson e viram lotes do leilão de pré-temporada (bloqueado até um admin desbloquear)
  async function migLeilaoPre2610(){if((await pool.query("SELECT 1 FROM lib_migrations WHERE name='leilao-pre-2610'")).rows.length)return;
@@ -198,6 +198,7 @@ async function migLeilaoMid1111b(){if((await pool.query("SELECT 1 FROM lib_migra
  const M=require('./market')({app,uni,q,pool,auth,wrap,fail,member,bump,R});
  require('./season')({app,uni,q,pool,auth,wrap,fail,member,bump,R,M});
  require('./extras')({app,uni,q,pool,auth,wrap,fail,member,bump,R,M});
+ require('./kit').attach({app,uni,q,pool,auth,wrap,fail,member,bump,R,M});
  require('./bolao')({app,uni,q,pool,auth,wrap,fail,member});
  // apagar a própria conta (usado também para limpar usuários de teste): exige PIN
  app.delete('/api/me',auth,wrap(async(r,s)=>{const [u]=await q('SELECT * FROM users WHERE id=$1',[r.user.id]);if(!(await check(String(r.body?.pin||''),u.pass_hash)))throw fail('PIN incorreto',401);

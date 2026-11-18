@@ -138,3 +138,24 @@ END IF; END $$;
 
 ALTER TABLE auction_lots ADD COLUMN IF NOT EXISTS opens_at TIMESTAMPTZ;
 ALTER TABLE auction_lots ADD COLUMN IF NOT EXISTS closes_at TIMESTAMPTZ;
+
+-- 18/11 (Robson): números de camisa e cores do uniforme, por sala e clube
+CREATE TABLE IF NOT EXISTS room_kits(
+  room_id INT REFERENCES rooms(id) ON DELETE CASCADE,
+  club_id INT NOT NULL,
+  primary_color TEXT NOT NULL,
+  secondary_color TEXT NOT NULL,
+  number_color TEXT NOT NULL,
+  gk_primary TEXT NOT NULL,
+  gk_secondary TEXT NOT NULL,
+  gk_number TEXT NOT NULL,
+  PRIMARY KEY(room_id, club_id)
+);
+CREATE TABLE IF NOT EXISTS room_shirts(
+  room_id INT REFERENCES rooms(id) ON DELETE CASCADE,
+  club_id INT NOT NULL,
+  player_id INT NOT NULL,
+  number INT NOT NULL CHECK (number BETWEEN 1 AND 99),
+  PRIMARY KEY(room_id, club_id, player_id),
+  UNIQUE(room_id, club_id, number)
+);
