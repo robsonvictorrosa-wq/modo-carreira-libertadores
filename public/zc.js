@@ -161,6 +161,7 @@ function shirtSVG(num,kit,gk){const c=shirtCols(kit,gk);const n=num==null||num==
  const fs=n.length>2?30:n.length>1?36:42;
  return `<svg class="shirt" viewBox="0 0 100 110" aria-hidden="true"><path fill="${c.s}" d="M20 28 L5 38 L12 60 L27 48 Z"/><path fill="${c.s}" d="M80 28 L95 38 L88 60 L73 48 Z"/><path fill="${c.p}" d="M27 26 C29 13 38 7 50 7 C62 7 71 13 73 26 L85 31 L77 50 L77 96 C77 103 50 108 50 108 C50 108 23 103 23 96 L23 50 L15 31 Z"/><path fill="${c.s}" d="M38 15 Q50 26 62 15 Q58 11 50 10 Q42 11 38 15 Z"/><path fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.2" d="M40 16 Q50 23 60 16"/><text x="50" y="68" text-anchor="middle" font-family="Oswald,'Barlow Condensed',sans-serif" font-size="${fs}" font-weight="700" fill="${c.n}">${esc(n)}</text></svg>`;}
 function kpos(pos){const bg=pc(pos),fg=bg==='#FFFFFF'?'#000':'#fff';return `<span class="kpos psq" style="background:${bg};color:${fg}">${esc(pos||'—')}</span>`;}
+function kitOvr(p){if(!p||p.overall==null||p.overall==='')return '';const n=+p.overall;if(!Number.isFinite(n)||n<=0)return '';return `<span class="kovr">${esc(String(n))}</span>`;}
 function kitPos(x,y,sl){const raw=[...new Set((sl||[]).map(s=>+s[2]))].sort((a,b)=>a-b);const ys=[];for(const v of raw){if(!ys.length||v-ys[ys.length-1]>3)ys.push(v);}let band=ys[0]||0,bd=1e9;for(const v of ys){const d=Math.abs(v-(+y||0));if(d<bd){bd=d;band=v;}}let t;if(ys.length>1){t=ys.indexOf(band)/(ys.length-1);}else t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.14),bottom:6+t*64,scale:1-t*.08,t};}
 function pitchAspect(){const w=typeof innerWidth==='number'?innerWidth:1200;return w<=380?1/2:w<=700?4/7:4/3;}
 function pitchSVG(w,h){w=Math.max(160,+w||800);h=Math.max(160,+h||600);
@@ -219,7 +220,8 @@ function xiPitchHTML(sl,st,kit){kit=kit||KITFB;
  ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2],sl),num=p&&p.number!=null?p.number:'—';
   const arr=p&&p.evo&&p.evo.dir>0?'<span class="earr" title="Evoluiu">▲</span>':'';
   const cap=+XI.tk.cap===p?.id?' <i class="cap">C</i>':'';
-  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" data-fx="${s[1]}" data-t="${xy.t}" onclick="zSlot(${i})"><div class="kit-tag"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-top">${kpos(pos)}${arr}</div><span class="knm">${p?`<span class="knm-t" data-full="${esc(surname(p.name))}" data-short="${esc(shortSurname(p.name))}">${esc(surname(p.name))}</span>`:'—'}${cap}</span></div></div>`;}).join('')}
+  const ovr=kitOvr(p);
+  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" data-fx="${s[1]}" data-t="${xy.t}" onclick="zSlot(${i})"><div class="kit-tag"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-top"><span class="kit-top-l">${kpos(pos)}${arr}</span>${ovr}</div><span class="knm">${p?`<span class="knm-t" data-full="${esc(surname(p.name))}" data-short="${esc(shortSurname(p.name))}">${esc(surname(p.name))}</span>`:'—'}${cap}</span></div></div>`;}).join('')}
  </div>
  <div class="sub" style="text-align:center;margin:8px 4px">${XI.sel!=null?'<b style="color:#D4AF37">Escolha no banco (ou outro titular) quem entra na vaga de '+sl[XI.sel][0]+'.</b>':'Toque num titular para trocar. A vaga de volante aceita VOL e MC.'}</div></div>`;}
 

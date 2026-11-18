@@ -50,7 +50,7 @@ assert.match(src,/FROZEN_AGE=33/);
 assert.match(src,/Sem desconto de idade/);
 
 const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v70'/);
+assert.match(sw,/const V='zc-v71'/);
 const mp=fs.readFileSync(path.join(__dirname,'../mp.js'),'utf8');
 assert.match(mp,/migValuesNoAgeDisc1511/);
 assert.match(mp,/recalc-values/);

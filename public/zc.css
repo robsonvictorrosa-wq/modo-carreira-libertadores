@@ -165,9 +165,11 @@ th{background:rgba(0,0,0,.35)}
 .kit.sel .shirt{filter:drop-shadow(0 0 8px #D4AF37) drop-shadow(0 6px 6px #0008)}
 .kit.off .shirt{opacity:.88}
 .kit-tag{position:relative;margin-top:0;width:140px;max-width:140px;box-sizing:border-box;background:transparent;border:0;padding:0;display:flex;flex-direction:column;align-items:stretch;text-align:center;white-space:nowrap;box-shadow:none;overflow:visible}
-.kit-top{position:relative;z-index:1;display:flex;align-items:center;gap:4px;min-height:20px;padding:3px 8px 2px 4px;background:rgba(8,8,8,.92);border:1px solid rgba(255,255,255,.16);border-bottom:0;border-radius:3px 3px 0 0}
+.kit-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:4px;min-height:20px;padding:3px 4px 2px;background:rgba(8,8,8,.92);border:1px solid rgba(255,255,255,.16);border-bottom:0;border-radius:3px 3px 0 0}
+.kit-top-l{position:relative;z-index:4;display:flex;align-items:center;gap:4px;min-width:0;flex:0 0 auto}
 .kit-tag .psq,.kit-tag .kpos{position:static;width:auto;min-width:22px;height:14px;padding:0 4px;font-size:8px;border-radius:2px;letter-spacing:.04em;flex:0 0 auto}
 .kit-tag .earr{position:static;color:#2E9E4F;font-size:11px;font-weight:900;line-height:1}
+.kit-tag .kovr{position:relative;z-index:4;flex:0 0 auto;margin-left:auto;box-sizing:border-box;min-width:22px;height:14px;padding:0 4px;font-size:8px;font-weight:800;letter-spacing:.04em;border-radius:2px;display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:#000;font-family:'Barlow Condensed',Oswald,sans-serif;line-height:1}
 .kit-tag .knm{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:3px;font-family:'Barlow Condensed',Oswald,sans-serif;font-size:15px;font-weight:700;color:#fff;overflow:hidden;letter-spacing:.015em;text-transform:uppercase;line-height:1.15;text-align:center;max-width:100%;padding:6px 8px 7px;background:rgba(8,8,8,.92);border:1px solid rgba(255,255,255,.16);border-radius:0 0 3px 3px;box-shadow:0 2px 8px #000a}
 .kit-tag .knm-t{overflow:hidden;white-space:nowrap;min-width:0;max-width:100%}
 .kit.sel .kit-top,.kit.sel .knm{box-shadow:0 0 0 1px var(--gold),0 2px 8px #000a}
@@ -188,9 +190,10 @@ th{background:rgba(0,0,0,.35)}
   .kit{padding-top:26px}
   .kit .shirt-wrap{width:calc(36px * var(--kit-s,1));left:50%;top:-26px}
   .kit-tag{width:80px;max-width:80px;padding:0;margin-top:0}
-  .kit-top{min-height:16px;padding:2px 6px 1px 3px;gap:2px}
+  .kit-top{min-height:16px;padding:2px 3px 1px;gap:2px}
+  .kit-top-l{gap:2px}
   .kit-tag .knm{font-size:10.5px;letter-spacing:0;padding:5px 3px 5px}
-  .kit-tag .psq,.kit-tag .kpos{min-width:16px;height:12px;font-size:7px;padding:0 3px}
+  .kit-tag .psq,.kit-tag .kpos,.kit-tag .kovr{min-width:16px;height:12px;font-size:7px;padding:0 3px}
   .xactions .btn{font-size:13px}
   .xhero .xovr{display:none}
   .xinds{gap:4px}
