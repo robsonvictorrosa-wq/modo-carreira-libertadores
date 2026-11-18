@@ -2,7 +2,7 @@
 (function(){
 const TABS=[['campeonato','🏆','Campeonato'],['mercado','🛒','Mercado'],['escalacao','📋','Escalação'],['jogos','⚽','Jogos'],['tabela','📑','Tabela'],['estatisticas','📊','Estatísticas'],['leilao','🔨','Leilão'],['premiacoes','🥇','Premiações'],['clubes','💰','Clubes e verbas'],['evolucao','📈','Evolução'],['central','⚙️','Central da liga',1]];
 let OV=null;const R=()=>`/rooms/${ROOM}`;
-const POSC={GOL:'#C62828',GK:'#C62828',ZAG:'#E65100',CB:'#E65100',LD:'#E65100',LE:'#E65100',RB:'#E65100',LB:'#E65100',ADE:'#E65100',ADD:'#E65100',VOL:'#2E9E4F',CDM:'#2E9E4F',MC:'#2E9E4F',CM:'#2E9E4F',MEI:'#2E9E4F',CAM:'#2E9E4F',ME:'#2E9E4F',MD:'#2E9E4F',LM:'#2E9E4F',RM:'#2E9E4F',PE:'#C62828',PD:'#C62828',LW:'#C62828',RW:'#C62828',ATA:'#C62828',ST:'#C62828',SA:'#C62828',CF:'#C62828',CA:'#C62828'};
+const POSC={GOL:'#C62828',GK:'#C62828',ZAG:'#E65100',CB:'#E65100',LD:'#E65100',LE:'#E65100',RB:'#E65100',LB:'#E65100',ADE:'#E65100',ADD:'#E65100',VOL:'#2E9E4F',CDM:'#2E9E4F',MC:'#2E9E4F',CM:'#2E9E4F',MEI:'#2E9E4F',CAM:'#2E9E4F',ME:'#2E9E4F',MD:'#2E9E4F',LM:'#2E9E4F',RM:'#2E9E4F',PE:'#FFFFFF',PD:'#FFFFFF',LW:'#FFFFFF',RW:'#FFFFFF',ATA:'#FFFFFF',ST:'#FFFFFF',SA:'#FFFFFF',CF:'#FFFFFF',CA:'#FFFFFF'};
 const pc=p=>POSC[p]||'#6B6B6B';
 const ABR={'Atlético Nacional':'ATN','Nacional':'NAC','Flamengo':'FLA','Palmeiras':'PAL','Fluminense':'FLU','São Paulo':'SAO','Corinthians':'COR','Atlético Mineiro':'CAM','Grêmio':'GRE','Internacional':'INT','Cruzeiro':'CRU','Santos':'SAN','Vasco':'VAS','Athletico-PR':'CAP','Botafogo':'BOT','Bahia':'BAH','River Plate':'RIV','Boca Juniors':'BOC','Racing Club':'RAC','Independiente':'IND','San Lorenzo':'SLO','Estudiantes':'EST','Vélez Sarsfield':'VEL','Argentinos Jrs.':'ARG','Rosario Central':'ROS','Belgrano':'BEL','Lanús':'LAN','Peñarol':'PEÑ','Indep. Santa Fe':'ISF','U. Católica':'UCA','Coquimbo Unido':'COQ','Olimpia':'OLI','Cerro Porteño':'CER','Libertad':'LIB','Barcelona SC':'BSC','LDU Quito':'LDU','Ind. del Valle':'IDV','Sporting Cristal':'CRI','Universitario':'UNI','Bolívar':'BOL','Always Ready':'ALW','Caracas FC':'CAR'};
 const hue=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))%360;return h};
@@ -11,7 +11,7 @@ const CREST={"Flamengo": 765, "Palmeiras": 763, "Fluminense": 768, "Botafogo": 2
 const badge0=n=>`<span class="badge" style="background:hsl(${hue(n)},55%,32%)">${esc(abbr(n))}</span>`;
 const badge=n=>CREST[n]?`<span class="badge crest"><img src="/crests/${CREST[n]}.png" alt="${esc(abbr(n))}" loading="lazy" onerror="this.parentNode.outerHTML=this.parentNode.dataset.fb"></span>`.replace('class="badge crest"',`class="badge crest" data-fb='${badge0(n).replace(/'/g,'&#39;')}'`):badge0(n);
 const mi=v=>v==null?'—':'€ '+(v/1e6).toFixed(1).replace('.',',')+' mi';
-const psq=p=>`<span class="psq" style="background:${pc(p.primary_position||p.pos)}">${esc(p.primary_position||p.pos||'—')}</span>`;
+const psq=p=>{const pos=p.primary_position||p.pos,bg=pc(pos);return `<span class="psq" style="background:${bg};color:${bg==='#FFFFFF'?'#000':'#fff'}">${esc(pos||'—')}</span>`};
 const empty=(t,s)=>`<div class="card empty"><b>${t}</b>${s||''}</div>`;
 async function ov(){OV=await get(R()+'/zc/overview');window.zOV=OV;return OV}
 function chrome(tab){const isAdm=OV?.admin;
