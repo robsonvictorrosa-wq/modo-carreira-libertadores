@@ -1,0 +1,12 @@
+const assert=require('assert');
+const fs=require('fs');
+const path=require('path');
+const root=path.join(__dirname,'..');
+const zc=fs.readFileSync(path.join(root,'public/zc.js'),'utf8');
+const man=fs.readFileSync(path.join(root,'public/manifest.webmanifest'),'utf8');
+const sw=fs.readFileSync(path.join(root,'public/sw.js'),'utf8');
+assert.match(man,/"start_url":"\/#\/"/);
+assert.match(zc,/history\.replaceState\(null,'',location\.pathname\+location\.search\+'#\/'\)/);
+assert.match(zc,/loginView\(\(\)=>\{if\(location\.hash!=='#\/'/);
+assert.match(sw,/const V='zc-v60'/);
+console.log('ok: entrada do app abre no menu de quadros');

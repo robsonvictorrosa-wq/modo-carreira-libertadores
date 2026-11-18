@@ -1,5 +1,7 @@
 /* Super Libertadores ZC · shell de UI (abas) sobre o backend existente */
 (function(){
+// Entrada no app (abrir site, PWA, recarregar, login): sempre o menu de quadros. hashchange depois disso segue normal.
+{const h=location.hash;if(h!=='#/'&&h!=='#'&&h!==''&&h!=='#/inicio')history.replaceState(null,'',location.pathname+location.search+'#/');}
 const TABS=[['','🏠','Menu'],['campeonato','🏆','Campeonato'],['mercado','🛒','Mercado'],['escalacao','📋','Escalação'],['jogos','⚽','Jogos'],['tabela','📑','Tabela'],['estatisticas','📊','Estatísticas'],['leilao','🔨','Leilão'],['premiacoes','🥇','Premiações'],['clubes','💰','Clubes e verbas'],['evolucao','📈','Evolução'],['central','⚙️','Central da liga',1]];
 let OV=null;const R=()=>`/rooms/${ROOM}`;
 const POSC={GOL:'#C62828',GK:'#C62828',ZAG:'#E65100',CB:'#E65100',LD:'#E65100',LE:'#E65100',RB:'#E65100',LB:'#E65100',ADE:'#E65100',ADD:'#E65100',VOL:'#2E9E4F',CDM:'#2E9E4F',MC:'#2E9E4F',CM:'#2E9E4F',MEI:'#2E9E4F',CAM:'#2E9E4F',ME:'#2E9E4F',MD:'#2E9E4F',LM:'#2E9E4F',RM:'#2E9E4F',PE:'#FFFFFF',PD:'#FFFFFF',LW:'#FFFFFF',RW:'#FFFFFF',ATA:'#FFFFFF',ST:'#FFFFFF',SA:'#FFFFFF',CF:'#FFFFFF',CA:'#FFFFFF'};
@@ -24,7 +26,7 @@ function chrome(tab){const isAdm=OV?.admin;const isMenu=tab===''||tab==='inicio'
  document.getElementById('zcrumb').innerHTML='';}
 window.zSair=async()=>{try{await post('/auth/logout',{})}catch(e){}localStorage.removeItem('room');ROOM=null;ME=null;location.hash='#/';location.reload();};
 let LIGA=null;
-async function need(tab){if(window.zLastTab!==tab){window.zLastTab=tab;app.innerHTML='<div class="card empty" style="text-align:center;padding:28px">Carregando…</div>';}if(!ME&&!(await whoami())){chrome(tab);loginView(route);return false}
+async function need(tab){if(window.zLastTab!==tab){window.zLastTab=tab;app.innerHTML='<div class="card empty" style="text-align:center;padding:28px">Carregando…</div>';}if(!ME&&!(await whoami())){chrome('');loginView(()=>{if(location.hash!=='#/'&&location.hash!=='#'&&location.hash!=='#/inicio')location.hash='#/';else route();});return false}
  try{if(!LIGA)LIGA=await get('/liga');ROOM=LIGA.code;localStorage.room=ROOM;await ov()}catch(e){chrome(tab);app.innerHTML=empty('Erro ao carregar o campeonato',esc(e.message));return false}
  chrome(tab);return true}
 const myClub=()=>OV.clubs.find(c=>c.id===OV.me.club_id);
