@@ -171,7 +171,7 @@ function xiPitchHTML(sl,st,kit){kit=kit||KITFB;
  ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2],sl),num=p&&p.number!=null?p.number:'—';
   const arr=p&&p.evo&&p.evo.dir>0?'<span class="earr" title="Evoluiu">▲</span>':'';
   const cap=+XI.tk.cap===p?.id?' <i class="cap">C</i>':'';
-  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" onclick="zSlot(${i})"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-tag">${kpos(pos)}${arr}<span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span></div></div>`;}).join('')}
+  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" onclick="zSlot(${i})"><div class="kit-tag"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-top">${kpos(pos)}${arr}</div><span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span></div></div>`;}).join('')}
  </div>
  <div class="sub" style="text-align:center;margin:8px 4px">${XI.sel!=null?'<b style="color:#D4AF37">Escolha no banco (ou outro titular) quem entra na vaga de '+sl[XI.sel][0]+'.</b>':'Toque num titular para trocar. A vaga de volante aceita VOL e MC.'}</div></div>`;}
 
