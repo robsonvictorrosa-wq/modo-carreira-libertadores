@@ -21,7 +21,7 @@ assert.match(ui,/20:25/);
 assert.doesNotMatch(ui,/Só quem <b>não levou ninguém<\/b>/);
 assert.doesNotMatch(ui,/!a\.mid_won&&/);
 const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v55'/);
+assert.match(sw,/const V='zc-v56'/);
 const ag=fs.readFileSync(path.join(__dirname,'../config/agenda-zc.json'),'utf8');
 assert.match(ag,/2026-11-13T20:25:00-03:00/);
 console.log('ok: reabre todos os lotes mid até 20:30, reverte venda, todos podem lançar');
