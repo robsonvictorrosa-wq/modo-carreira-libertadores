@@ -76,17 +76,27 @@ assert.strictEqual(batch[11],99);
 assert.strictEqual(batch[8],20);
 assert.throws(()=>K.setNumbers(squad,{},[{player_id:11,number:9},{player_id:13,number:9}]),/já é de outro/);
 
-// API e migração no código
+// API: números continuam graváveis; cores da camisa não se editam
 const src=fs.readFileSync(path.join(__dirname,'../kit.js'),'utf8');
 assert.match(src,/app\.post\('\/api\/rooms\/:code\/zc\/kit'/);
+assert.match(src,/A edição das cores da camisa está desativada/);
 assert.match(src,/app\.post\('\/api\/rooms\/:code\/zc\/shirt'/);
+assert.match(src,/app\.post\('\/api\/rooms\/:code\/zc\/shirts'/);
+assert.match(src,/INSERT INTO room_shirts/);
 assert.match(src,/app\.get\('\/api\/rooms\/:code\/zc\/kit'/);
+assert.match(src,/clubDefault\(clubName,clubId\)/);
+assert.match(src,/defaultNumbers\(squad,saved\)/);
 assert.match(src,/clubOf/);
 assert.match(src,/Escolha um clube/);
 assert.match(src,/CREATE TABLE IF NOT EXISTS room_kits/);
 assert.match(src,/CREATE TABLE IF NOT EXISTS room_shirts/);
 assert.match(src,/INSERT INTO lib_migrations\(name\) VALUES\(\$1\)/);
 assert.strictEqual(K.NAME,'kits-1811');
+const ui=fs.readFileSync(path.join(__dirname,'../public/zc.js'),'utf8');
+assert.match(ui,/Mudar número/);
+assert.doesNotMatch(ui,/Mudar a camisa/);
+assert.match(ui,/zNumeros/);
+assert.match(ui,/zSaveShirts/);
 const mp=fs.readFileSync(path.join(__dirname,'../mp.js'),'utf8');
 assert.match(mp,/require\('\.\/kit'\)\.runPostgres/);
 assert.match(mp,/require\('\.\/kit'\)\.attach/);
@@ -94,5 +104,5 @@ const pg=fs.readFileSync(path.join(__dirname,'../pg.sql'),'utf8');
 assert.match(pg,/CREATE TABLE IF NOT EXISTS room_kits/);
 assert.match(pg,/CREATE TABLE IF NOT EXISTS room_shirts/);
 const sw=fs.readFileSync(path.join(__dirname,'../public\/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v61'/);
-console.log('ok: números 1-99 únicos, cores validadas, API e migração kits-1811');
+assert.match(sw,/const V='zc-v62'/);
+console.log('ok: números 1-99 únicos e graváveis, cores fixas do clube, edição de cor desativada');

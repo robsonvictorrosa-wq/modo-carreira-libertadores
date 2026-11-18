@@ -38,12 +38,12 @@ function setNumbers(squad,saved,items){let map={...(saved||{})};const out={};
  return out;}
 
 async function enrich(q,roomId,clubId,clubName,squad){
- let kitRow=null,savedRows=[];
- try{kitRow=(await q('SELECT primary_color,secondary_color,number_color,gk_primary,gk_secondary,gk_number FROM room_kits WHERE room_id=$1 AND club_id=$2',[roomId,clubId]))[0];}catch(e){}
+ // Cores: sempre o mapa fixo do clube. Números: salvos da sala, ou o padrão por posição.
+ let savedRows=[];
  try{savedRows=await q('SELECT player_id,number FROM room_shirts WHERE room_id=$1 AND club_id=$2',[roomId,clubId]);}catch(e){}
  const saved=Object.fromEntries((savedRows||[]).map(r=>[r.player_id,+r.number]));
  const numbers=defaultNumbers(squad,saved);
- const kit=normalizeKit(rowToKit(kitRow),clubDefault(clubName,clubId));
+ const kit=clubDefault(clubName,clubId);
  return {kit,numbers,saved};
 }
 
@@ -76,15 +76,7 @@ function attachKit({app,q,pool,auth,wrap,fail,member,R,uni}){
   const d=await enrich(q,room.id,clubId,clubName(clubId),sq);
   s.json({kit:d.kit,numbers:d.numbers,squad:sq.map(p=>({id:p.id,name:p.name,primary_position:p.primary_position,overall:p.overall,age:p.age,number:d.numbers[p.id]||null}))});
  }));
- app.post('/api/rooms/:code/zc/kit',auth,wrap(async(r,s)=>{
-  const room=await member(r);const clubId=await clubOf(q,room,r.user.id,fail);
-  const kit=normalizeKit(r.body||{},clubDefault(clubName(clubId),clubId));
-  await q(`INSERT INTO room_kits(room_id,club_id,primary_color,secondary_color,number_color,gk_primary,gk_secondary,gk_number)
-   VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(room_id,club_id) DO UPDATE SET
-   primary_color=$3,secondary_color=$4,number_color=$5,gk_primary=$6,gk_secondary=$7,gk_number=$8`,
-   [room.id,clubId,kit.primary,kit.secondary,kit.number,kit.gk_primary,kit.gk_secondary,kit.gk_number]);
-  s.json({ok:1,kit});
- }));
+ app.post('/api/rooms/:code/zc/kit',auth,wrap(async()=>{throw fail('A edição das cores da camisa está desativada',403);}));
  app.post('/api/rooms/:code/zc/shirt',auth,wrap(async(r,s)=>{
   const room=await member(r);const clubId=await clubOf(q,room,r.user.id,fail);
   const sq=await R.squad(pool,room.id,clubId);
@@ -114,5 +106,6 @@ function attachKit({app,q,pool,auth,wrap,fail,member,R,uni}){
   s.json({ok:1,numbers:out});
  }));
 }
+
 
 module.exports={NAME,HEX,FALLBACK,PREF,parseColor,parseNumber,normalizeKit,clubDefault,defaultNumbers,setNumber,setNumbers,rowToKit,enrich,runPostgres,attach:attachKit,loadColors};

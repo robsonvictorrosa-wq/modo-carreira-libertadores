@@ -158,7 +158,7 @@ function shirtSVG(num,kit,gk){const c=shirtCols(kit,gk);const n=num==null||num==
  const fs=n.length>2?26:n.length>1?30:34;
  return `<svg class="shirt" viewBox="0 0 100 110" aria-hidden="true"><path fill="${c.s}" d="M20 28 L5 38 L12 60 L27 48 Z"/><path fill="${c.s}" d="M80 28 L95 38 L88 60 L73 48 Z"/><path fill="${c.p}" d="M27 26 C29 13 38 7 50 7 C62 7 71 13 73 26 L85 31 L77 50 L77 96 C77 103 50 108 50 108 C50 108 23 103 23 96 L23 50 L15 31 Z"/><path fill="${c.s}" d="M38 15 Q50 26 62 15 Q58 11 50 10 Q42 11 38 15 Z"/><path fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.2" d="M40 16 Q50 23 60 16"/><text x="50" y="68" text-anchor="middle" font-family="Oswald,'Barlow Condensed',sans-serif" font-size="${fs}" font-weight="700" fill="${c.n}">${esc(n)}</text></svg>`;}
 function kpos(pos){const bg=pc(pos),fg=bg==='#FFFFFF'?'#000':'#fff';return `<span class="kpos psq" style="background:${bg};color:${fg}">${esc(pos||'—')}</span>`;}
-function kitPos(x,y){const t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.32),bottom:5+t*72,scale:1-t*.2};}
+function kitPos(x,y){const t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.28),bottom:4+t*78,scale:1-t*.12};}
 function pitchLines(){const map=(px,py)=>{const u=1-py/100,y=4+u*96,hw=36+u*14,x=50+(px-50)/50*hw;return `${x.toFixed(2)},${y.toFixed(2)}`;};
  const P=(a,b)=>`M ${map(a[0],a[1])} L ${map(b[0],b[1])}`;
  const R=(x,y,w,h)=>`${P([x,y],[x+w,y])} ${P([x+w,y],[x+w,y+h])} ${P([x+w,y+h],[x,y+h])} ${P([x,y+h],[x,y])}`;
@@ -171,7 +171,7 @@ function xiPitchHTML(sl,st,kit){kit=kit||KITFB;
  ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2]),num=p&&p.number!=null?p.number:'—';
   const arr=p&&p.evo&&p.evo.dir>0?'<span class="earr" title="Evoluiu">▲</span>':'';
   const cap=+XI.tk.cap===p?.id?' <i class="cap">C</i>':'';
-  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;width:${(15.5*xy.scale).toFixed(2)}%" onclick="zSlot(${i})">${shirtSVG(num,kit,gk)}<div class="kit-tag">${kpos(pos)}<span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span>${arr}</div></div>`;}).join('')}
+  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;width:${(9.3*xy.scale).toFixed(2)}%" onclick="zSlot(${i})">${shirtSVG(num,kit,gk)}<div class="kit-tag">${kpos(pos)}<span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span>${arr}</div></div>`;}).join('')}
  </div>
  <div class="sub" style="text-align:center;margin:8px 4px">${XI.sel!=null?'<b style="color:#D4AF37">Escolha no banco (ou outro titular) quem entra na vaga de '+sl[XI.sel][0]+'.</b>':'Toque num titular para trocar. A vaga de volante aceita VOL e MC.'}</div></div>`;}
 
@@ -193,7 +193,7 @@ function drawXI(){const {l,signed,need}=XI;zTk();const sl=l.slots[XI.f];const st
  app.innerHTML=`<div class="hero xhero"><div class="xtop">${badge(cr.name)}<div style="flex:1;min-width:0"><div class="kick">Escalação</div><h1 style="margin:0">${esc(cr.name)}</h1><div class="sub" style="margin:2px 0 0">${l.custom?'Escalação personalizada':'Auto-escalação'} · OVR ${ovr}</div></div><div class="xovr"><small>OVR</small>${ovr}</div></div>
   <div class="xinds">${ind('DEF')}${ind('MID')}${ind('ATT')}</div>
   <p style="margin:8px 0">Meta do onze: <b class="${n>=need?'ok':'no'}">${n}/${need} contratados no XI</b></p>
-  <label class="sub" style="display:block;margin:0 0 4px">Formação</label><div class="xactions"><select id="xf" onchange="zForm(this.value)">${l.formations.map(f=>`<option ${f===XI.f?'selected':''}>${f}</option>`).join('')}</select><button class="btn" onclick="zXI(0)">Salvar escalação e táticas</button><button class="btn sec" onclick="zXI(1)">Escalação automática</button><a class="btn sec" href="#/escalacao/camisa">Mudar a camisa</a></div></div>
+  <label class="sub" style="display:block;margin:0 0 4px">Formação</label><div class="xactions"><select id="xf" onchange="zForm(this.value)">${l.formations.map(f=>`<option ${f===XI.f?'selected':''}>${f}</option>`).join('')}</select><button class="btn" onclick="zXI(0)">Salvar escalação e táticas</button><button class="btn sec" onclick="zXI(1)">Escalação automática</button><a class="btn sec" href="#/escalacao/numeros">Mudar número</a></div></div>
  ${xiPitchHTML(sl,st,kitOf(l))}
  <div class="card"><h2 style="margin-top:0">Banco de reservas <span class="sub">(${l.squad.length-11})</span></h2><div style="display:flex;gap:6px;margin-bottom:8px"><input id="bq" placeholder="Buscar no banco" value="${esc(XI.q)}" oninput="zQ(this.value)" style="flex:1;min-width:0"><select onchange="zPos(this.value)"><option value="">Todas as posições</option>${Object.keys(SECP).map(k=>`<option ${XI.pos===k?'selected':''}>${k}</option>`).join('')}</select></div>
   <div id="bench" style="margin:0 -12px">${bench.map(p=>`<div onclick="zBenchPick(${p.id})" class="${XI.sel!=null?'pickable':''}">${prow(p,`<span class="sub" style="margin:0 0 0 6px">${signed.has(p.id)?'🆕':''}${p.shielded?'🛡️':''}${p.listed?'🤝':''}</span>`)}</div>`).join('')||'<div class="sub" style="padding:8px 12px">Ninguém no banco com esse filtro.</div>'}</div></div>
@@ -312,27 +312,20 @@ window.zCon=async id=>{if(!confirm('Desfazer esta venda e devolver o valor?'))re
 // ---------- roteador ----------
 window.mercado=sub=>sub==='propostas'?(location.hash==='#/negociacoes'?negociacoes():location.hash='#/negociacoes'):zMercado(sub);
 
-async function zCamisa(){if(!await need('escalacao'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}
+async function zNumeros(){if(!await need('escalacao'))return;if(!OV.me.club_id){app.innerHTML=noClub();return}
  const l=await get(R()+'/lineup');const kit=kitOf(l),cr=myClub(),sq=l.squad||[];
- const col=(id,lab,v)=>`<label>${esc(lab)} <input type="color" id="${id}" value="${v}" oninput="zKitLive()"></label>`;
- const row=p=>`<div class="pl">${kpos(p.primary_position)}<div class="i"><b>${esc(p.name)}</b><span>${esc(p.primary_position)} · ${p.age} anos · OVR ${p.overall}</span></div><input type="number" min="1" max="99" id="sn-${p.id}" value="${p.number??''}" ></div>`;
- app.innerHTML=`<div class="hero"><div class="kick">Escalação</div><h1>Mudar a camisa</h1><p>Só o técnico do ${esc(cr.name)} edita o uniforme e os números do próprio elenco. Números de 1 a 99, sem repetir no clube.</p>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"><a class="btn sec" href="#/escalacao">Voltar à escalação</a><button class="btn" onclick="zSaveKit()">Salvar cores</button><button class="btn" onclick="zSaveShirts()">Salvar números</button></div></div>
- <div class="card kit-edit"><h2 style="margin-top:0">Cores do uniforme</h2>
-  <div class="kprev"><figure id="kp-field">${shirtSVG(10,kit,0)}<figcaption>Linha</figcaption></figure><figure id="kp-gk">${shirtSVG(1,kit,1)}<figcaption>Goleiro</figcaption></figure></div>
-  <h3>Linha</h3><div class="kit-colors">${col('k-primary','Cor principal',kit.primary)}${col('k-secondary','Cor do detalhe',kit.secondary)}${col('k-number','Cor do número',kit.number)}</div>
-  <h3>Goleiro</h3><div class="kit-colors">${col('k-gk_primary','Cor principal',kit.gk_primary)}${col('k-gk_secondary','Cor do detalhe',kit.gk_secondary)}${col('k-gk_number','Cor do número',kit.gk_number)}</div></div>
- <div class="card shirt-list"><h2 style="margin-top:0">Números do elenco</h2><div class="sub">De 1 a 99, cada um só pode aparecer uma vez no clube.</div>${sq.map(row).join('')||'<p class="sub">Nenhum jogador no elenco.</p>'}</div>`;
- window._kitL=l;}
-window.zKitRead=()=>({primary:$('#k-primary').value,secondary:$('#k-secondary').value,number:$('#k-number').value,gk_primary:$('#k-gk_primary').value,gk_secondary:$('#k-gk_secondary').value,gk_number:$('#k-gk_number').value});
-window.zKitLive=()=>{const kit=zKitRead();const f=document.getElementById('kp-field'),g=document.getElementById('kp-gk');if(f)f.innerHTML=shirtSVG(10,kit,0)+'<figcaption>Linha</figcaption>';if(g)g.innerHTML=shirtSVG(1,kit,1)+'<figcaption>Goleiro</figcaption>';};
-window.zSaveKit=async()=>{try{const r=await post(R()+'/zc/kit',zKitRead());window.toast?toast('Cores da camisa salvas'):alert('Cores da camisa salvas');if(r.kit){const f=document.getElementById('kp-field'),g=document.getElementById('kp-gk');if(f)f.innerHTML=shirtSVG(10,r.kit,0)+'<figcaption>Linha</figcaption>';if(g)g.innerHTML=shirtSVG(1,r.kit,1)+'<figcaption>Goleiro</figcaption>';}}catch(e){alert(e.message)}};
+ const row=p=>`<div class="pl">${kpos(p.primary_position)}<div class="i"><b>${esc(p.name)}</b><span>${esc(p.primary_position)} · ${p.age} anos · OVR ${p.overall}</span></div><input type="number" min="1" max="99" id="sn-${p.id}" value="${p.number??''}"></div>`;
+ app.innerHTML=`<div class="hero"><div class="kick">Escalação</div><h1>Mudar número</h1><p>Só o técnico do ${esc(cr.name)} edita os números do próprio elenco. De 1 a 99, sem repetir no clube. As cores da camisa são as oficiais do time e não se alteram.</p>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"><a class="btn sec" href="#/escalacao">Voltar à escalação</a><button class="btn" onclick="zSaveShirts()">Salvar números</button></div></div>
+ <div class="card kit-edit"><h2 style="margin-top:0">Camisa do clube</h2>
+  <div class="kprev"><figure>${shirtSVG(10,kit,0)}<figcaption>Linha</figcaption></figure><figure>${shirtSVG(1,kit,1)}<figcaption>Goleiro</figcaption></figure></div></div>
+ <div class="card shirt-list"><h2 style="margin-top:0">Números do elenco</h2>${sq.map(row).join('')||'<p class="sub">Nenhum jogador no elenco.</p>'}</div>`;}
 window.zSaveShirts=async()=>{const numbers=[];document.querySelectorAll('input[id^="sn-"]').forEach(el=>{if(el.value!=='')numbers.push({player_id:+el.id.slice(3),number:+el.value});});
- try{await post(R()+'/zc/shirts',{numbers});window.toast?toast('Números salvos'):alert('Números salvos');zCamisa();}catch(e){alert(e.message)}};
+ try{await post(R()+'/zc/shirts',{numbers});window.toast?toast('Números salvos'):alert('Números salvos');zNumeros();}catch(e){alert(e.message)}};
 
 const old=window.route;
 window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
- const map={'':inicio,inicio,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:()=>m[2]==='camisa'?zCamisa():zEscalacao(),emprestimos:()=>location.hash='#/mercado',estatisticas,jogos:()=>jogos(m[2]),tabela:()=>tabela(m[2]),leilao,premiacoes,clubes,evolucao,central};
+ const map={'':inicio,inicio,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:()=>(m[2]==='numeros'||m[2]==='camisa')?zNumeros():zEscalacao(),emprestimos:()=>location.hash='#/mercado',estatisticas,jogos:()=>jogos(m[2]),tabela:()=>tabela(m[2]),leilao,premiacoes,clubes,evolucao,central};
  if(t==='ligas'){chrome('');return salas();}
  const OKOLD=['jogo','matamata','bolao','historico','artilharia','como-funciona','clube'];
  if(!map[t]&&!OKOLD.includes(t))return location.hash='#/';
