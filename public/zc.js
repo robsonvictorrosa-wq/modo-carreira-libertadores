@@ -148,17 +148,17 @@ function zFit(p,sl){let f=fit1(p.primary_position,sl);for(const q of (p.position
 function zAssign(ids,f){const sl=XI.l.slots[f],P=ids.map(id=>XI.by.get(id)).filter(Boolean),pairs=[];sl.forEach((s,i)=>P.forEach(p=>pairs.push([zFit(p,s[0]),p.overall,i,p])));pairs.sort((a,b)=>b[0]-a[0]||b[1]-a[1]);
  const out=new Array(sl.length).fill(null),u=new Set();for(const [,,i,p] of pairs){if(out[i]||u.has(p))continue;out[i]=p;u.add(p);}return out.map(p=>p?p.id:null);}
 // Robson 04/11: nome inteiro se couber; senão inicial + sobrenome (ex.: G. Jesus)
-const surname=n=>{const t=String(n||'').trim();const w=t.split(/\s+/);if(w.length<2||t.length<=12)return t;const l=w[w.length-1].length>2?w[w.length-1]:w.slice(-2).join(' ');return w[0][0]+'. '+l;};
+const surname=n=>{const t=String(n||'').trim();const w=t.split(/\s+/);if(w.length<2||t.length<=14)return t;const l=w[w.length-1].length>2?w[w.length-1]:w.slice(-2).join(' ');return w[0][0]+'. '+l;};
 const tier=o=>o>=85?'t1':o>=80?'t2':o>=75?'t3':o>=70?'t4':'t5';
 
 const KITFB={primary:'#FFFFFF',secondary:'#111111',number:'#111111',gk_primary:'#1B5E20',gk_secondary:'#0D3B12',gk_number:'#FFFFFF'};
 function kitOf(l){return l&&l.kit?l.kit:KITFB;}
 function shirtCols(kit,gk){kit=kit||KITFB;return gk?{p:kit.gk_primary,s:kit.gk_secondary,n:kit.gk_number}:{p:kit.primary,s:kit.secondary,n:kit.number};}
 function shirtSVG(num,kit,gk){const c=shirtCols(kit,gk);const n=num==null||num==='—'?'':String(num);
- const fs=n.length>2?26:n.length>1?30:34;
+ const fs=n.length>2?30:n.length>1?36:42;
  return `<svg class="shirt" viewBox="0 0 100 110" aria-hidden="true"><path fill="${c.s}" d="M20 28 L5 38 L12 60 L27 48 Z"/><path fill="${c.s}" d="M80 28 L95 38 L88 60 L73 48 Z"/><path fill="${c.p}" d="M27 26 C29 13 38 7 50 7 C62 7 71 13 73 26 L85 31 L77 50 L77 96 C77 103 50 108 50 108 C50 108 23 103 23 96 L23 50 L15 31 Z"/><path fill="${c.s}" d="M38 15 Q50 26 62 15 Q58 11 50 10 Q42 11 38 15 Z"/><path fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.2" d="M40 16 Q50 23 60 16"/><text x="50" y="68" text-anchor="middle" font-family="Oswald,'Barlow Condensed',sans-serif" font-size="${fs}" font-weight="700" fill="${c.n}">${esc(n)}</text></svg>`;}
 function kpos(pos){const bg=pc(pos),fg=bg==='#FFFFFF'?'#000':'#fff';return `<span class="kpos psq" style="background:${bg};color:${fg}">${esc(pos||'—')}</span>`;}
-function kitPos(x,y,sl){const ys=[...new Set((sl||[]).map(s=>+s[2]))].sort((a,b)=>a-b);let t;if(ys.length>1){const i=ys.indexOf(+y);t=i<0?Math.max(0,Math.min(1,(+y||0)/100)):i/(ys.length-1);}else t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.28),bottom:7+t*68,scale:1-t*.12};}
+function kitPos(x,y,sl){const raw=[...new Set((sl||[]).map(s=>+s[2]))].sort((a,b)=>a-b);const ys=[];for(const v of raw){if(!ys.length||v-ys[ys.length-1]>3)ys.push(v);}let band=ys[0]||0,bd=1e9;for(const v of ys){const d=Math.abs(v-(+y||0));if(d<bd){bd=d;band=v;}}let t;if(ys.length>1){t=ys.indexOf(band)/(ys.length-1);}else t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.14),bottom:6+t*64,scale:1-t*.08};}
 function pitchLines(){const map=(px,py)=>{const u=1-py/100,y=4+u*96,hw=36+u*14,x=50+(px-50)/50*hw;return `${x.toFixed(2)},${y.toFixed(2)}`;};
  const P=(a,b)=>`M ${map(a[0],a[1])} L ${map(b[0],b[1])}`;
  const R=(x,y,w,h)=>`${P([x,y],[x+w,y])} ${P([x+w,y],[x+w,y+h])} ${P([x+w,y+h],[x,y+h])} ${P([x,y+h],[x,y])}`;
@@ -166,12 +166,12 @@ function pitchLines(){const map=(px,py)=>{const u=1-py/100,y=4+u*96,hw=36+u*14,x
  const arc=(cx,cy,r,a0,a1,n=12)=>{const pts=[];for(let i=0;i<=n;i++){const a=a0+(a1-a0)*i/n;pts.push(map(cx+r*Math.cos(a),cy+r*Math.sin(a)*1.15));}return 'M '+pts.join(' L ');};
  return `<svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none"><g fill="none" stroke="rgba(255,255,255,.55)" stroke-width=".45">${R(2,2,96,96)}${P([2,50],[98,50])}<path d="${circ(50,50,12)}"/>${R(21,2,58,16)}${R(34,2,32,6)}${R(21,82,58,16)}${R(34,92,32,6)}<path d="${arc(50,18,12,0.15*Math.PI,.85*Math.PI)}"/><path d="${arc(50,82,12,1.15*Math.PI,1.85*Math.PI)}"/></g><g fill="rgba(255,255,255,.7)"><circle cx="${map(50,50).split(',')[0]}" cy="${map(50,50).split(',')[1]}" r=".7"/><circle cx="${map(50,12).split(',')[0]}" cy="${map(50,12).split(',')[1]}" r=".55"/><circle cx="${map(50,88).split(',')[0]}" cy="${map(50,88).split(',')[1]}" r=".55"/></g></svg>`;}
 function xiPitchHTML(sl,st,kit){kit=kit||KITFB;
- return `<div class="pitchwrap fifa-pitch"><div class="xi-title"><h1>Escalação titular</h1><div class="xi-form">${esc(XI.f)}</div></div>
- <div class="pitch"><div class="pitch-bed">${pitchLines()}</div>
+ return `<div class="pitchwrap fifa-pitch"><div class="pitch"><div class="pitch-bed">${pitchLines()}</div>
+ <div class="xi-title"><h1>Escalação titular</h1><div class="xi-form">${esc(XI.f)}</div></div>
  ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2],sl),num=p&&p.number!=null?p.number:'—';
   const arr=p&&p.evo&&p.evo.dir>0?'<span class="earr" title="Evoluiu">▲</span>':'';
   const cap=+XI.tk.cap===p?.id?' <i class="cap">C</i>':'';
-  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;width:${(9.3*xy.scale).toFixed(2)}%" onclick="zSlot(${i})">${shirtSVG(num,kit,gk)}<div class="kit-tag">${kpos(pos)}<span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span>${arr}</div></div>`;}).join('')}
+  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" onclick="zSlot(${i})"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-tag">${kpos(pos)}${arr}<span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span></div></div>`;}).join('')}
  </div>
  <div class="sub" style="text-align:center;margin:8px 4px">${XI.sel!=null?'<b style="color:#D4AF37">Escolha no banco (ou outro titular) quem entra na vaga de '+sl[XI.sel][0]+'.</b>':'Toque num titular para trocar. A vaga de volante aceita VOL e MC.'}</div></div>`;}
 
