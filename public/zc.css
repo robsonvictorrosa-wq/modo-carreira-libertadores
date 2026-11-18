@@ -86,6 +86,7 @@ header.zh .zt b{display:block;font-family:Oswald,'Barlow Condensed',sans-serif;f
 .zprofile .nm{font-weight:600;letter-spacing:.05em;font-size:16px;text-transform:uppercase}
 .zprofile .meta{font-size:12px;font-weight:400;color:var(--mut);letter-spacing:.04em}
 .zprofile .links{font-size:11px;margin-top:2px}
+.zprofile .saldo{color:var(--gold);font-weight:600}
 .zprofile .links a{color:var(--gold);font-weight:600}
 .ztabs{display:flex;overflow-x:auto;gap:22px;border-bottom:0;padding:6px 24px 10px;position:sticky;top:56px;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.12));backdrop-filter:blur(8px);z-index:5;scrollbar-width:none}
 .ztabs a{flex:0 0 auto;padding:6px 0 6px;color:rgba(255,255,255,.42);font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid transparent;white-space:nowrap}
