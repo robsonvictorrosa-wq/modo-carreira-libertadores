@@ -147,8 +147,11 @@ function fit1(pp,sl){if(!pp)return .8;if(pp===sl)return 1;if((pp==='GOL')!==(sl=
 function zFit(p,sl){let f=fit1(p.primary_position,sl);for(const q of (p.positions||[]))if(q!==p.primary_position)f=Math.max(f,fit1(q,sl));return f;}
 function zAssign(ids,f){const sl=XI.l.slots[f],P=ids.map(id=>XI.by.get(id)).filter(Boolean),pairs=[];sl.forEach((s,i)=>P.forEach(p=>pairs.push([zFit(p,s[0]),p.overall,i,p])));pairs.sort((a,b)=>b[0]-a[0]||b[1]-a[1]);
  const out=new Array(sl.length).fill(null),u=new Set();for(const [,,i,p] of pairs){if(out[i]||u.has(p))continue;out[i]=p;u.add(p);}return out.map(p=>p?p.id:null);}
-// Robson 04/11: nome inteiro se couber; senão inicial + sobrenome (ex.: G. Jesus)
-const surname=n=>{const t=String(n||'').trim();const w=t.split(/\s+/);if(w.length<2||t.length<=14)return t;const l=w[w.length-1].length>2?w[w.length-1]:w.slice(-2).join(' ');return w[0][0]+'. '+l;};
+// Nome completo se couber na plaquinha; só encurta (J. Jesus, Di María) quando transborda.
+const NAMEPART=/^(da|das|de|do|dos|del|di|la|le|van|von|el)$/i;
+function shortSurname(n){const t=String(n||'').trim();if(!t)return '—';const w=t.split(/\s+/);if(w.length<2)return t;if(NAMEPART.test(w[w.length-2])){const two=w.slice(-2).join(' ');if(two.length<=16)return two;}const last=w[w.length-1].length>2?w[w.length-1]:w.slice(-2).join(' ');const short=w[0][0]+'. '+last;return short.length<=16?short:last;}
+const surname=n=>{const t=String(n||'').trim();if(!t)return '—';const w=t.split(/\s+/);if(w.length<2||t.length<=18)return t;return shortSurname(t);};
+function fitKitNames(root){(root||document).querySelectorAll('.knm-t').forEach(el=>{const full=el.getAttribute('data-full')||el.textContent,short=el.getAttribute('data-short')||full;el.textContent=full;if(short!==full&&el.scrollWidth>el.clientWidth+0.5)el.textContent=short;});}
 const tier=o=>o>=85?'t1':o>=80?'t2':o>=75?'t3':o>=70?'t4':'t5';
 
 const KITFB={primary:'#FFFFFF',secondary:'#111111',number:'#111111',gk_primary:'#1B5E20',gk_secondary:'#0D3B12',gk_number:'#FFFFFF'};
@@ -159,19 +162,39 @@ function shirtSVG(num,kit,gk){const c=shirtCols(kit,gk);const n=num==null||num==
  return `<svg class="shirt" viewBox="0 0 100 110" aria-hidden="true"><path fill="${c.s}" d="M20 28 L5 38 L12 60 L27 48 Z"/><path fill="${c.s}" d="M80 28 L95 38 L88 60 L73 48 Z"/><path fill="${c.p}" d="M27 26 C29 13 38 7 50 7 C62 7 71 13 73 26 L85 31 L77 50 L77 96 C77 103 50 108 50 108 C50 108 23 103 23 96 L23 50 L15 31 Z"/><path fill="${c.s}" d="M38 15 Q50 26 62 15 Q58 11 50 10 Q42 11 38 15 Z"/><path fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.2" d="M40 16 Q50 23 60 16"/><text x="50" y="68" text-anchor="middle" font-family="Oswald,'Barlow Condensed',sans-serif" font-size="${fs}" font-weight="700" fill="${c.n}">${esc(n)}</text></svg>`;}
 function kpos(pos){const bg=pc(pos),fg=bg==='#FFFFFF'?'#000':'#fff';return `<span class="kpos psq" style="background:${bg};color:${fg}">${esc(pos||'—')}</span>`;}
 function kitPos(x,y,sl){const raw=[...new Set((sl||[]).map(s=>+s[2]))].sort((a,b)=>a-b);const ys=[];for(const v of raw){if(!ys.length||v-ys[ys.length-1]>3)ys.push(v);}let band=ys[0]||0,bd=1e9;for(const v of ys){const d=Math.abs(v-(+y||0));if(d<bd){bd=d;band=v;}}let t;if(ys.length>1){t=ys.indexOf(band)/(ys.length-1);}else t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.14),bottom:6+t*64,scale:1-t*.08};}
-function pitchLines(){const map=(px,py)=>{const u=1-py/100,y=4+u*96,hw=36+u*14,x=50+(px-50)/50*hw;return `${x.toFixed(2)},${y.toFixed(2)}`;};
- const P=(a,b)=>`M ${map(a[0],a[1])} L ${map(b[0],b[1])}`;
- const R=(x,y,w,h)=>`${P([x,y],[x+w,y])} ${P([x+w,y],[x+w,y+h])} ${P([x+w,y+h],[x,y+h])} ${P([x,y+h],[x,y])}`;
- const circ=(cx,cy,r,n=28)=>{const pts=[];for(let i=0;i<=n;i++){const a=Math.PI*2*i/n;pts.push(map(cx+r*Math.cos(a),cy+r*Math.sin(a)*1.15));}return 'M '+pts.join(' L ');};
- const arc=(cx,cy,r,a0,a1,n=12)=>{const pts=[];for(let i=0;i<=n;i++){const a=a0+(a1-a0)*i/n;pts.push(map(cx+r*Math.cos(a),cy+r*Math.sin(a)*1.15));}return 'M '+pts.join(' L ');};
- return `<svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none"><g fill="none" stroke="rgba(255,255,255,.55)" stroke-width=".45">${R(2,2,96,96)}${P([2,50],[98,50])}<path d="${circ(50,50,12)}"/>${R(21,2,58,16)}${R(34,2,32,6)}${R(21,82,58,16)}${R(34,92,32,6)}<path d="${arc(50,18,12,0.15*Math.PI,.85*Math.PI)}"/><path d="${arc(50,82,12,1.15*Math.PI,1.85*Math.PI)}"/></g><g fill="rgba(255,255,255,.7)"><circle cx="${map(50,50).split(',')[0]}" cy="${map(50,50).split(',')[1]}" r=".7"/><circle cx="${map(50,12).split(',')[0]}" cy="${map(50,12).split(',')[1]}" r=".55"/><circle cx="${map(50,88).split(',')[0]}" cy="${map(50,88).split(',')[1]}" r=".55"/></g></svg>`;}
+function pitchAspect(){const w=typeof innerWidth==='number'?innerWidth:1200;return w<=380?1/2:w<=700?4/7:4/3;}
+function pitchGeom(aspect){aspect=aspect||pitchAspect();
+ const Y0=3.2,Y1=97.2,TOP=11,BOT=1.2;
+ const clamp=v=>Math.max(0,Math.min(1,v));
+ const half=py=>50-(BOT+clamp(py/100)*(TOP-BOT));
+ const map=(px,py)=>{const t=clamp(py/100),y=Y1-t*(Y1-Y0),hw=half(py),x=50+(px-50)/50*hw;return [+x.toFixed(3),+y.toFixed(3)];};
+ const xy=(px,py)=>map(px,py).join(',');
+ const L=(a,b)=>`M ${xy(a[0],a[1])} L ${xy(b[0],b[1])}`;
+ const poly=pts=>{const m=pts.map(p=>xy(p[0],p[1]));return `M ${m[0]} `+m.slice(1).map(s=>'L '+s).join(' ')+' Z';};
+ const rect=(x,y,w,h)=>poly([[x,y],[x+w,y],[x+w,y+h],[x,y+h]]);
+ const fieldRadii=(py,svgRx)=>{const dX=half(py)/50,dY=(Y1-Y0)/100;return {rX:svgRx/dX,rY:(svgRx*aspect)/dY};};
+ const oval=(cx,cy,svgRx,a0,a1,n)=>{const {rX,rY}=fieldRadii(cy,svgRx);const pts=[];const i0=a0??0,i1=a1??Math.PI*2,N=n||48;
+  for(let i=0;i<=N;i++){const a=i0+(i1-i0)*i/N;pts.push(xy(cx+rX*Math.cos(a),cy+rY*Math.sin(a)));}
+  return 'M '+pts.join(' L ');};
+ const paW=40.32/68*100,paD=16.5/105*100,gaW=18.32/68*100,gaD=5.5/105*100,spot=11/105*100;
+ const paX=(100-paW)/2,gaX=(100-gaW)/2,svgR=9.6;
+ const dY=(Y1-Y0)/100,{rY}=fieldRadii(spot,svgR);
+ const kBot=(paD-spot)/rY,phiB=Math.asin(Math.max(0,Math.min(1,kBot)));
+ const {rY:rYt}=fieldRadii(100-spot,svgR);
+ const kTop=(paD-spot)/rYt,phiT=Math.asin(Math.max(0,Math.min(1,kTop)));
+ const clip=[map(0,100),map(100,100),map(100,0),map(0,0)].map(([x,y])=>`${x}% ${y}%`).join(',');
+ const svg=`<svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><g class="plines" fill="none">${rect(0,0,100,100)}${L([0,50],[100,50])}<path d="${oval(50,50,svgR)}"/>${rect(paX,0,paW,paD)}${rect(gaX,0,gaW,gaD)}${rect(paX,100-paD,paW,paD)}${rect(gaX,100-gaD,gaW,gaD)}<path d="${oval(50,spot,svgR,phiB,Math.PI-phiB,24)}"/><path d="${oval(50,100-spot,svgR,Math.PI+phiT,2*Math.PI-phiT,24)}"/></g><g class="pspots">${(()=>{const c=map(50,50),b=map(50,spot),u=map(50,100-spot);return `<circle cx="${c[0]}" cy="${c[1]}" r="0.7"/><circle cx="${b[0]}" cy="${b[1]}" r="0.5"/><circle cx="${u[0]}" cy="${u[1]}" r="0.5"/>`;})()}</g></svg>`;
+ return {svg,clip};}
+function pitchLines(aspect){return pitchGeom(aspect).svg;}
+function paintPitch(){const bed=document.querySelector('.pitch-bed'),el=bed&&bed.parentElement;if(!bed||!el)return;const r=el.getBoundingClientRect();if(r.height<2)return;const g=pitchGeom(r.width/r.height);bed.style.clipPath='polygon('+g.clip+')';bed.innerHTML=g.svg;}
+
 function xiPitchHTML(sl,st,kit){kit=kit||KITFB;
- return `<div class="pitchwrap fifa-pitch"><div class="pitch"><div class="pitch-bed">${pitchLines()}</div>
+ return `<div class="pitchwrap fifa-pitch"><div class="pitch"><div class="pitch-bed" style="clip-path:polygon(${pitchGeom().clip})">${pitchLines()}</div>
  <div class="xi-title"><h1>Escalação titular</h1><div class="xi-form">${esc(XI.f)}</div></div>
  ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2],sl),num=p&&p.number!=null?p.number:'—';
   const arr=p&&p.evo&&p.evo.dir>0?'<span class="earr" title="Evoluiu">▲</span>':'';
   const cap=+XI.tk.cap===p?.id?' <i class="cap">C</i>':'';
-  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" onclick="zSlot(${i})"><div class="kit-tag"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-top">${kpos(pos)}${arr}</div><span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span></div></div>`;}).join('')}
+  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" onclick="zSlot(${i})"><div class="kit-tag"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-top">${kpos(pos)}${arr}</div><span class="knm">${p?`<span class="knm-t" data-full="${esc(surname(p.name))}" data-short="${esc(shortSurname(p.name))}">${esc(surname(p.name))}</span>`:'—'}${cap}</span></div></div>`;}).join('')}
  </div>
  <div class="sub" style="text-align:center;margin:8px 4px">${XI.sel!=null?'<b style="color:#D4AF37">Escolha no banco (ou outro titular) quem entra na vaga de '+sl[XI.sel][0]+'.</b>':'Toque num titular para trocar. A vaga de volante aceita VOL e MC.'}</div></div>`;}
 
@@ -203,7 +226,8 @@ function drawXI(){const {l,signed,need}=XI;zTk();const sl=l.slots[XI.f];const st
  <div class="card"><h2 style="margin-top:0">Cobradores e capitão</h2><div class="sub">Só titulares. Se o escolhido sair do onze, passa para outro automaticamente.</div><div class="tkg"><label>🎯 Batedor de falta${opt('fk')}</label><label>🚩 Escanteio${opt('ck')}</label><label>⚽ Pênalti${opt('pk')}</label><label>©️ Capitão${opt('cap')}</label></div></div>
  <details class="card" open><summary><h2 style="display:inline">🛡️ Blindagem <span class="sub">${nS}/3</span></h2></summary><div class="sub">Quem estiver blindado não recebe proposta. As ofertas abertas são canceladas e o dinheiro volta.</div><div style="margin:0 -12px">${l.squad.filter(p=>!p.virtual&&p.id>0).map(p=>prow(p,`<button class="btn ${p.shielded?'':'sec'} xb" onclick="zShield(${p.id},${!p.shielded})">${p.shielded?'Desblindar':'Blindar'}</button>`)).join('')}</div></details>
  <details class="card"><summary><h2 style="display:inline">🤝 Negociáveis <span class="sub">${l.squad.filter(p=>p.listed).length}</span></h2></summary><div class="sub">Negociável aparece com selo no Mercado e no filtro "Negociáveis", para os outros clubes acharem. Não pode estar blindado ao mesmo tempo.</div><div style="margin:0 -12px">${l.squad.filter(p=>!p.virtual&&p.id>0).map(p=>prow(p,`<button class="btn ${p.listed?'':'sec'} xb" onclick="zNeg(${p.id},${!p.listed})">${p.listed?'✓ Negociável':'Negociável'}</button>`)).join('')}</div></details>
- <details class="card"><summary><h2 style="display:inline">Dispensar jogadores</h2></summary><div style="margin:0 -12px">${l.squad.filter(p=>!p.virtual&&p.id>0).map(p=>prow(p,`<button class="btn ghost xb" onclick="dispensar(${p.id},'${esc(p.name).replace(/'/g,'&#39;')}',${+p.market_value||0})">Dispensar</button>`)).join('')}</div></details>`;}
+ <details class="card"><summary><h2 style="display:inline">Dispensar jogadores</h2></summary><div style="margin:0 -12px">${l.squad.filter(p=>!p.virtual&&p.id>0).map(p=>prow(p,`<button class="btn ghost xb" onclick="dispensar(${p.id},'${esc(p.name).replace(/'/g,'&#39;')}',${+p.market_value||0})">Dispensar</button>`)).join('')}</div></details>`;fitKitNames();paintPitch();}
+if(!window._xiResize){window._xiResize=1;let _rt;addEventListener('resize',()=>{if(!document.querySelector('.fifa-pitch')||typeof drawXI!=='function'||!window.XI||!XI.l)return;clearTimeout(_rt);_rt=setTimeout(drawXI,120);});}
 window.zPos=v=>{XI.pos=v;drawXI();};window.zQ=v=>{XI.q=v;zBench();};window.zTkSet=(k,v)=>{XI.tk[k]=+v;};
 window.zBench=()=>{const el=document.getElementById('bq');const pos=el.selectionStart;drawXI();const e2=document.getElementById('bq');e2.focus();try{e2.setSelectionRange(pos,pos)}catch(e){}};
 window.zForm=f=>{XI.ids=zAssign(XI.ids,f);XI.f=f;XI.sel=null;drawXI();};

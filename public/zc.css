@@ -152,19 +152,22 @@ th{background:rgba(0,0,0,.35)}
 .xhero{padding:12px 16px 8px;margin-bottom:8px}.xhero h1{font-size:24px;margin:2px 0 4px}
 .fifa-pitch{position:relative;max-width:none;width:100%;margin:4px auto 12px;padding:0 0 40px}
 .fifa-pitch .pitch{position:relative;width:100%;aspect-ratio:4/3;max-height:min(78vh,820px);height:auto;margin:0 auto;overflow:visible;background:transparent;border:0;border-radius:0;box-shadow:none}
-.pitch-bed{position:absolute;inset:0;clip-path:polygon(7% 3%,93% 3%,100% 100%,0 100%);background:repeating-linear-gradient(to top,#1c6a32 0 9%,#16582a 9% 18%);box-shadow:inset 0 -30px 60px #0006,inset 0 40px 50px #0005,0 18px 36px #0009}
-.pitch-bed .lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pitch-bed{position:absolute;inset:0;clip-path:polygon(11% 3.2%,89% 3.2%,98.8% 97.2%,1.2% 97.2%);background:repeating-linear-gradient(to top,#1c6a32 0 9%,#16582a 9% 18%);box-shadow:inset 0 -30px 60px #0006,inset 0 40px 50px #0005,0 18px 36px #0009}
+.pitch-bed .lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.pitch-bed .plines{fill:none;stroke:rgba(255,255,255,.55);stroke-width:1.2px;stroke-linejoin:miter;vector-effect:non-scaling-stroke}
+.pitch-bed .pspots{fill:rgba(255,255,255,.75)}
 .kit{position:absolute;transform:translate(-50%,0);display:flex;flex-direction:column;align-items:center;cursor:pointer;width:auto;min-width:0;max-width:none;z-index:2;padding-top:34px;-webkit-tap-highlight-color:transparent}
 .kit .shirt-wrap{position:absolute;top:-34px;left:62%;width:calc(48px * var(--kit-s,1));transform:translateX(-50%);z-index:3;line-height:0;pointer-events:none}
 .kit .shirt{width:100%;height:auto;display:block;filter:drop-shadow(0 7px 5px #0009);pointer-events:none}
 .kit.sel{z-index:5}
 .kit.sel .shirt{filter:drop-shadow(0 0 8px #D4AF37) drop-shadow(0 6px 6px #0008)}
 .kit.off .shirt{opacity:.88}
-.kit-tag{position:relative;margin-top:0;width:120px;max-width:120px;box-sizing:border-box;background:transparent;border:0;padding:0;display:flex;flex-direction:column;align-items:stretch;text-align:center;white-space:nowrap;box-shadow:none;overflow:visible}
+.kit-tag{position:relative;margin-top:0;width:140px;max-width:140px;box-sizing:border-box;background:transparent;border:0;padding:0;display:flex;flex-direction:column;align-items:stretch;text-align:center;white-space:nowrap;box-shadow:none;overflow:visible}
 .kit-top{position:relative;z-index:1;display:flex;align-items:center;gap:4px;min-height:20px;padding:3px 40px 2px 4px;background:rgba(8,8,8,.92);border:1px solid rgba(255,255,255,.16);border-bottom:0;border-radius:3px 3px 0 0}
 .kit-tag .psq,.kit-tag .kpos{position:static;width:auto;min-width:22px;height:14px;padding:0 4px;font-size:8px;border-radius:2px;letter-spacing:.04em;flex:0 0 auto}
 .kit-tag .earr{position:static;color:#2E9E4F;font-size:11px;font-weight:900;line-height:1}
-.kit-tag .knm{position:relative;z-index:2;display:block;font-size:15px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;letter-spacing:.04em;text-transform:uppercase;line-height:1.15;text-align:center;max-width:100%;padding:6px 8px 7px;background:rgba(8,8,8,.92);border:1px solid rgba(255,255,255,.16);border-radius:0 0 3px 3px;box-shadow:0 2px 8px #000a}
+.kit-tag .knm{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:3px;font-family:'Barlow Condensed',Oswald,sans-serif;font-size:15px;font-weight:700;color:#fff;overflow:hidden;letter-spacing:.015em;text-transform:uppercase;line-height:1.15;text-align:center;max-width:100%;padding:6px 8px 7px;background:rgba(8,8,8,.92);border:1px solid rgba(255,255,255,.16);border-radius:0 0 3px 3px;box-shadow:0 2px 8px #000a}
+.kit-tag .knm-t{overflow:hidden;white-space:nowrap;min-width:0;max-width:100%}
 .kit.sel .kit-top,.kit.sel .knm{box-shadow:0 0 0 1px var(--gold),0 2px 8px #000a}
 .kit-edit .kprev{display:flex;gap:28px;justify-content:center;align-items:end;margin:12px 0 18px}
 .kit-edit .kprev figure{margin:0;text-align:center}
@@ -178,16 +181,23 @@ th{background:rgba(0,0,0,.35)}
   .xi-title{top:6px;left:8px;max-width:52%}
   .xi-title h1{font-size:16px;letter-spacing:.08em;white-space:nowrap}
   .xi-title .xi-form{font-size:11px;margin-top:2px}
-  .fifa-pitch{padding:0 0 32px}
-  .fifa-pitch .pitch{aspect-ratio:auto;width:100%;height:min(78vh,640px);max-height:none}
+  .fifa-pitch{padding:0 0 36px}
+  .fifa-pitch .pitch{aspect-ratio:4/7;width:100%;height:auto;max-height:min(82vh,680px)}
   .kit{padding-top:26px}
   .kit .shirt-wrap{width:calc(36px * var(--kit-s,1));left:64%;top:-26px}
-  .kit-tag{width:78px;max-width:78px;padding:0;margin-top:0}
+  .kit-tag{width:80px;max-width:80px;padding:0;margin-top:0}
   .kit-top{min-height:16px;padding:2px 28px 1px 3px;gap:2px}
-  .kit-tag .knm{font-size:11px;letter-spacing:.03em;padding:5px 4px 5px}
+  .kit-tag .knm{font-size:10.5px;letter-spacing:0;padding:5px 3px 5px}
   .kit-tag .psq,.kit-tag .kpos{min-width:16px;height:12px;font-size:7px;padding:0 3px}
   .xactions .btn{font-size:13px}
   .xhero .xovr{display:none}
   .xinds{gap:4px}
   .xind{padding:4px 6px;font-size:11px}
 }
+@media(max-width:380px){
+  .fifa-pitch .pitch{aspect-ratio:1/2;max-height:min(84vh,700px)}
+  .kit-tag{width:72px;max-width:72px}
+  .kit-tag .knm{font-size:10.5px;letter-spacing:0;padding:5px 2px 5px}
+  .xi-title h1{font-size:14px;letter-spacing:.06em}
+}
+
