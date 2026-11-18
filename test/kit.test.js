@@ -84,6 +84,80 @@ assert.strictEqual(batch[11],99);
 assert.strictEqual(batch[8],20);
 assert.throws(()=>K.setNumbers(squad,{},[{player_id:11,number:9},{player_id:13,number:9}]),/já é de outro/);
 
+// permuta 10↔8 (MEI tinha 10, MC tinha 8) — nas duas ordens
+assert.strictEqual(nums[8],10);
+assert.strictEqual(nums[7],8);
+for(const order of [
+  [{player_id:8,number:8},{player_id:7,number:10}],
+  [{player_id:7,number:10},{player_id:8,number:8}]
+]){
+  const swap=K.setNumbers(squad,{},order);
+  assert.strictEqual(swap[8],8);
+  assert.strictEqual(swap[7],10);
+  assert.strictEqual(swap[11],9);
+  assert.strictEqual(new Set(Object.values(swap)).size,squad.length);
+}
+
+// troca em lote de vários números, todos distintos no resultado
+const lote=K.setNumbers(squad,{11:9,8:10},[
+  {player_id:11,number:99},{player_id:9,number:21},{player_id:10,number:17},{player_id:8,number:20},{player_id:7,number:14}
+]);
+assert.strictEqual(lote[11],99);
+assert.strictEqual(lote[9],21);
+assert.strictEqual(lote[10],17);
+assert.strictEqual(lote[8],20);
+assert.strictEqual(lote[7],14);
+assert.strictEqual(new Set(Object.values(lote)).size,squad.length);
+
+// ex-jogador (id 99) com número 16 não bloqueia o ATA de assumir o 16 (16 não é default de ninguém do elenco)
+const exSaved={99:16,8:10,11:9};
+const freed=K.setNumbers(squad,exSaved,[{player_id:11,number:16}]);
+assert.strictEqual(freed[11],16);
+assert.ok(!Object.keys(freed).includes('99')&&freed[99]==null);
+assert.strictEqual(new Set(Object.values(freed)).size,squad.length);
+
+// persistência: transação apaga ex-jogador e aceita permuta sem UNIQUE no meio
+async function withStore(seed){
+  const rows=seed.map(r=>({...r}));
+  const exec=async(sql,p)=>{
+    const s=String(sql).replace(/\s+/g,' ').trim();
+    if(s==='DELETE FROM room_shirts WHERE room_id=$1 AND club_id=$2'){
+      for(let i=rows.length-1;i>=0;i--)if(rows[i].room_id===p[0]&&rows[i].club_id===p[1])rows.splice(i,1);
+      return {rowCount:1};
+    }
+    if(s.startsWith('INSERT INTO room_shirts')){
+      if(rows.some(r=>r.room_id===p[0]&&r.club_id===p[1]&&(r.player_id===p[2]||r.number===p[3]))){
+        const e=new Error('duplicate');e.code='23505';throw e;
+      }
+      rows.push({room_id:p[0],club_id:p[1],player_id:p[2],number:p[3]});
+      return {rowCount:1};
+    }
+    throw new Error('sql inesperado: '+s);
+  };
+  return {rows,exec};
+}
+async function testPersist(){
+  const roomId=1,clubId=7;
+  const store=await withStore([
+    {room_id:roomId,club_id:clubId,player_id:99,number:16}, // ex-jogador
+    {room_id:roomId,club_id:clubId,player_id:8,number:10},
+    {room_id:roomId,club_id:clubId,player_id:7,number:8},
+    {room_id:roomId,club_id:clubId,player_id:11,number:9}
+  ]);
+  const next=K.setNumbers(squad,{99:16,8:10,7:8,11:9},[
+    {player_id:8,number:8},{player_id:7,number:10},{player_id:11,number:16}
+  ]);
+  await K.writeShirts(store.exec,roomId,clubId,next);
+  const mine=store.rows.filter(r=>r.room_id===roomId&&r.club_id===clubId);
+  assert.ok(!mine.some(r=>r.player_id===99),'ex-jogador deve sair');
+  const by=Object.fromEntries(mine.map(r=>[r.player_id,r.number]));
+  assert.strictEqual(by[8],8);
+  assert.strictEqual(by[7],10);
+  assert.strictEqual(by[11],16);
+  assert.strictEqual(new Set(mine.map(r=>r.number)).size,mine.length);
+  assert.strictEqual(mine.length,squad.length);
+}
+
 // API: números continuam graváveis; cores da camisa não se editam
 const src=fs.readFileSync(path.join(__dirname,'../kit.js'),'utf8');
 assert.match(src,/app\.post\('\/api\/rooms\/:code\/zc\/kit'/);
@@ -91,6 +165,8 @@ assert.match(src,/A edição das cores da camisa está desativada/);
 assert.match(src,/app\.post\('\/api\/rooms\/:code\/zc\/shirt'/);
 assert.match(src,/app\.post\('\/api\/rooms\/:code\/zc\/shirts'/);
 assert.match(src,/INSERT INTO room_shirts/);
+assert.match(src,/function writeShirts/);
+assert.match(src,/DELETE FROM room_shirts WHERE room_id=\$1 AND club_id=\$2'\s*,\s*\[roomId,clubId\]/);
 assert.match(src,/app\.get\('\/api\/rooms\/:code\/zc\/kit'/);
 assert.match(src,/clubDefault\(clubName,clubId\)/);
 assert.match(src,/defaultNumbers\(squad,saved\)/);
@@ -112,7 +188,7 @@ const pg=fs.readFileSync(path.join(__dirname,'../pg.sql'),'utf8');
 assert.match(pg,/CREATE TABLE IF NOT EXISTS room_kits/);
 assert.match(pg,/CREATE TABLE IF NOT EXISTS room_shirts/);
 const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v65'/);
+assert.match(sw,/const V='zc-v66'/);
 assert.match(ui,/function kitPos\(x,y,sl\)/);
 assert.match(ui,/shirt-wrap/);
 assert.match(ui,/Escalação titular/);
@@ -123,4 +199,4 @@ assert.match(css,/\.kit-tag\{[^}]*width:120px/);
 assert.match(css,/\.kit-tag \.knm\{[^}]*font-size:15px/);
 assert.doesNotMatch(css,/aspect-ratio:4\/5/);
 
-console.log('ok: números 1-99 únicos e graváveis, cores fixas do clube, edição de cor desativada');
+testPersist().then(()=>console.log('ok: números 1-99 únicos e graváveis, cores fixas do clube, edição de cor desativada')).catch(e=>{console.error(e);process.exit(1);});

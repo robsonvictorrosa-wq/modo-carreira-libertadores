@@ -28,14 +28,38 @@ function defaultNumbers(squad,saved){const out={},used=new Set();const list=[...
   let n=prefs.find(x=>!used.has(x));if(!n){for(let i=1;i<=99;i++)if(!used.has(i)){n=i;break;}}
   if(n){out[id]=n;used.add(n);}}
  return out;}
-function setNumber(squad,saved,playerId,number){const n=parseNumber(number);const pid=+playerId;if(!Number.isInteger(pid)||pid<=0)throw Object.assign(new Error('Jogador inválido'),{status:400,expose:true});
- if(!(squad||[]).some(p=>(p.id??p.player_id)===pid))throw Object.assign(new Error('Jogador fora do elenco'),{status:400,expose:true});
- const assigned=defaultNumbers(squad,saved||{});
- for(const [id,v] of Object.entries(assigned))if(+id!==pid&&+v===n)throw Object.assign(new Error('Esse número já é de outro jogador do clube'),{status:400,expose:true});
- return n;}
-function setNumbers(squad,saved,items){let map={...(saved||{})};const out={};
- for(const it of items||[]){const pid=+(it.player_id??it.id);const n=setNumber(squad,map,pid,it.number);map[pid]=n;out[pid]=n;}
- return out;}
+function shirtError(msg,status){const e=new Error(msg);e.status=status||400;e.expose=true;throw e;}
+function squadIds(squad){return new Set((squad||[]).map(p=>+(p.id??p.player_id)));}
+// Valida o conjunto FINAL (elenco atual da sala). Permutas e trocas em lote entram de uma vez;
+// números de ex-jogadores em `saved` são ignorados.
+function setNumbers(squad,saved,items){
+ const ids=squadIds(squad);
+ const pending=[];
+ for(const it of items||[]){
+  const pid=+(it.player_id??it.id);
+  if(!Number.isInteger(pid)||pid<=0)shirtError('Jogador inválido');
+  if(!ids.has(pid))shirtError('Jogador fora do elenco');
+  pending.push([pid,parseNumber(it.number)]);
+ }
+ const final=defaultNumbers(squad,saved||{});
+ for(const [pid,n] of pending)final[pid]=n;
+ const byNum=new Map();
+ for(const p of squad||[]){
+  const id=p.id??p.player_id;const n=final[id];
+  if(n==null)continue;
+  if(byNum.has(n))shirtError('Esse número já é de outro jogador do clube');
+  byNum.set(n,id);
+ }
+ return final;
+}
+function setNumber(squad,saved,playerId,number){const all=setNumbers(squad,saved,[{player_id:playerId,number}]);return all[+playerId];}
+// Substitui os números do clube na sala: apaga ex-jogadores e regrava o elenco atual numa tacada só (permite permuta).
+async function writeShirts(exec,roomId,clubId,numbers){
+ await exec('DELETE FROM room_shirts WHERE room_id=$1 AND club_id=$2',[roomId,clubId]);
+ for(const [pid,n] of Object.entries(numbers||{})){
+  await exec('INSERT INTO room_shirts(room_id,club_id,player_id,number) VALUES($1,$2,$3,$4)',[roomId,clubId,+pid,+n]);
+ }
+}
 
 async function enrich(q,roomId,clubId,clubName,squad){
  // Cores: sempre o mapa fixo do clube. Números: salvos da sala, ou o padrão por posição.
@@ -81,12 +105,13 @@ function attachKit({app,q,pool,auth,wrap,fail,member,R,uni}){
   const room=await member(r);const clubId=await clubOf(q,room,r.user.id,fail);
   const sq=await R.squad(pool,room.id,clubId);
   const saved=Object.fromEntries((await q('SELECT player_id,number FROM room_shirts WHERE room_id=$1 AND club_id=$2',[room.id,clubId])).map(x=>[x.player_id,+x.number]));
-  const n=setNumber(sq,saved,r.body?.player_id,r.body?.number);
+  const out=setNumbers(sq,saved,[{player_id:r.body?.player_id,number:r.body?.number}]);
   const pid=+r.body.player_id;
-  await q('DELETE FROM room_shirts WHERE room_id=$1 AND club_id=$2 AND player_id=$3',[room.id,clubId,pid]);
-  try{await q('INSERT INTO room_shirts(room_id,club_id,player_id,number) VALUES($1,$2,$3,$4)',[room.id,clubId,pid,n]);}
-  catch(e){if(e.code==='23505')throw fail('Esse número já é de outro jogador do clube');throw e;}
-  s.json({ok:1,player_id:pid,number:n});
+  const c=await pool.connect();
+  try{await c.query('BEGIN');await writeShirts((sql,p)=>c.query(sql,p),room.id,clubId,out);await c.query('COMMIT');}
+  catch(e){try{await c.query('ROLLBACK');}catch(x){}if(e.code==='23505')throw fail('Esse número já é de outro jogador do clube');throw e;}
+  finally{c.release();}
+  s.json({ok:1,player_id:pid,number:out[pid]});
  }));
  app.post('/api/rooms/:code/zc/shirts',auth,wrap(async(r,s)=>{
   const room=await member(r);const clubId=await clubOf(q,room,r.user.id,fail);
@@ -96,16 +121,12 @@ function attachKit({app,q,pool,auth,wrap,fail,member,R,uni}){
   if(!items.length)throw fail('Informe os números da camisa');
   const out=setNumbers(sq,saved,items);
   const c=await pool.connect();
-  try{await c.query('BEGIN');
-   for(const [pid,n] of Object.entries(out)){
-    await c.query('DELETE FROM room_shirts WHERE room_id=$1 AND club_id=$2 AND player_id=$3',[room.id,clubId,+pid]);
-    await c.query('INSERT INTO room_shirts(room_id,club_id,player_id,number) VALUES($1,$2,$3,$4)',[room.id,clubId,+pid,+n]);
-   }
-   await c.query('COMMIT');}catch(e){await c.query('ROLLBACK');if(e.code==='23505')throw fail('Esse número já é de outro jogador do clube');throw e;}
+  try{await c.query('BEGIN');await writeShirts((sql,p)=>c.query(sql,p),room.id,clubId,out);await c.query('COMMIT');}
+  catch(e){try{await c.query('ROLLBACK');}catch(x){}if(e.code==='23505')throw fail('Esse número já é de outro jogador do clube');throw e;}
   finally{c.release();}
   s.json({ok:1,numbers:out});
  }));
 }
 
 
-module.exports={NAME,HEX,FALLBACK,PREF,parseColor,parseNumber,normalizeKit,clubDefault,defaultNumbers,setNumber,setNumbers,rowToKit,enrich,runPostgres,attach:attachKit,loadColors};
+module.exports={NAME,HEX,FALLBACK,PREF,parseColor,parseNumber,normalizeKit,clubDefault,defaultNumbers,setNumber,setNumbers,writeShirts,rowToKit,enrich,runPostgres,attach:attachKit,loadColors};
