@@ -161,40 +161,65 @@ function shirtSVG(num,kit,gk){const c=shirtCols(kit,gk);const n=num==null||num==
  const fs=n.length>2?30:n.length>1?36:42;
  return `<svg class="shirt" viewBox="0 0 100 110" aria-hidden="true"><path fill="${c.s}" d="M20 28 L5 38 L12 60 L27 48 Z"/><path fill="${c.s}" d="M80 28 L95 38 L88 60 L73 48 Z"/><path fill="${c.p}" d="M27 26 C29 13 38 7 50 7 C62 7 71 13 73 26 L85 31 L77 50 L77 96 C77 103 50 108 50 108 C50 108 23 103 23 96 L23 50 L15 31 Z"/><path fill="${c.s}" d="M38 15 Q50 26 62 15 Q58 11 50 10 Q42 11 38 15 Z"/><path fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.2" d="M40 16 Q50 23 60 16"/><text x="50" y="68" text-anchor="middle" font-family="Oswald,'Barlow Condensed',sans-serif" font-size="${fs}" font-weight="700" fill="${c.n}">${esc(n)}</text></svg>`;}
 function kpos(pos){const bg=pc(pos),fg=bg==='#FFFFFF'?'#000':'#fff';return `<span class="kpos psq" style="background:${bg};color:${fg}">${esc(pos||'—')}</span>`;}
-function kitPos(x,y,sl){const raw=[...new Set((sl||[]).map(s=>+s[2]))].sort((a,b)=>a-b);const ys=[];for(const v of raw){if(!ys.length||v-ys[ys.length-1]>3)ys.push(v);}let band=ys[0]||0,bd=1e9;for(const v of ys){const d=Math.abs(v-(+y||0));if(d<bd){bd=d;band=v;}}let t;if(ys.length>1){t=ys.indexOf(band)/(ys.length-1);}else t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.14),bottom:6+t*64,scale:1-t*.08};}
+function kitPos(x,y,sl){const raw=[...new Set((sl||[]).map(s=>+s[2]))].sort((a,b)=>a-b);const ys=[];for(const v of raw){if(!ys.length||v-ys[ys.length-1]>3)ys.push(v);}let band=ys[0]||0,bd=1e9;for(const v of ys){const d=Math.abs(v-(+y||0));if(d<bd){bd=d;band=v;}}let t;if(ys.length>1){t=ys.indexOf(band)/(ys.length-1);}else t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.14),bottom:6+t*64,scale:1-t*.08,t};}
 function pitchAspect(){const w=typeof innerWidth==='number'?innerWidth:1200;return w<=380?1/2:w<=700?4/7:4/3;}
-function pitchGeom(aspect){aspect=aspect||pitchAspect();
- const Y0=3.2,Y1=97.2,TOP=11,BOT=1.2;
- const clamp=v=>Math.max(0,Math.min(1,v));
- const half=py=>50-(BOT+clamp(py/100)*(TOP-BOT));
- const map=(px,py)=>{const t=clamp(py/100),y=Y1-t*(Y1-Y0),hw=half(py),x=50+(px-50)/50*hw;return [+x.toFixed(3),+y.toFixed(3)];};
- const xy=(px,py)=>map(px,py).join(',');
- const L=(a,b)=>`M ${xy(a[0],a[1])} L ${xy(b[0],b[1])}`;
- const poly=pts=>{const m=pts.map(p=>xy(p[0],p[1]));return `M ${m[0]} `+m.slice(1).map(s=>'L '+s).join(' ')+' Z';};
- const rect=(x,y,w,h)=>poly([[x,y],[x+w,y],[x+w,y+h],[x,y+h]]);
- const fieldRadii=(py,svgRx)=>{const dX=half(py)/50,dY=(Y1-Y0)/100;return {rX:svgRx/dX,rY:(svgRx*aspect)/dY};};
- const oval=(cx,cy,svgRx,a0,a1,n)=>{const {rX,rY}=fieldRadii(cy,svgRx);const pts=[];const i0=a0??0,i1=a1??Math.PI*2,N=n||48;
-  for(let i=0;i<=N;i++){const a=i0+(i1-i0)*i/N;pts.push(xy(cx+rX*Math.cos(a),cy+rY*Math.sin(a)));}
-  return 'M '+pts.join(' L ');};
- const paW=40.32/68*100,paD=16.5/105*100,gaW=18.32/68*100,gaD=5.5/105*100,spot=11/105*100;
- const paX=(100-paW)/2,gaX=(100-gaW)/2,svgR=9.6;
- const dY=(Y1-Y0)/100,{rY}=fieldRadii(spot,svgR);
- const kBot=(paD-spot)/rY,phiB=Math.asin(Math.max(0,Math.min(1,kBot)));
- const {rY:rYt}=fieldRadii(100-spot,svgR);
- const kTop=(paD-spot)/rYt,phiT=Math.asin(Math.max(0,Math.min(1,kTop)));
- const clip=[map(0,100),map(100,100),map(100,0),map(0,0)].map(([x,y])=>`${x}% ${y}%`).join(',');
- const svg=`<svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><g class="plines" fill="none">${rect(0,0,100,100)}${L([0,50],[100,50])}<path d="${oval(50,50,svgR)}"/>${rect(paX,0,paW,paD)}${rect(gaX,0,gaW,gaD)}${rect(paX,100-paD,paW,paD)}${rect(gaX,100-gaD,gaW,gaD)}<path d="${oval(50,spot,svgR,phiB,Math.PI-phiB,24)}"/><path d="${oval(50,100-spot,svgR,Math.PI+phiT,2*Math.PI-phiT,24)}"/></g><g class="pspots">${(()=>{const c=map(50,50),b=map(50,spot),u=map(50,100-spot);return `<circle cx="${c[0]}" cy="${c[1]}" r="0.7"/><circle cx="${b[0]}" cy="${b[1]}" r="0.5"/><circle cx="${u[0]}" cy="${u[1]}" r="0.5"/>`;})()}</g></svg>`;
- return {svg,clip};}
-function pitchLines(aspect){return pitchGeom(aspect).svg;}
-function paintPitch(){const bed=document.querySelector('.pitch-bed'),el=bed&&bed.parentElement;if(!bed||!el)return;const r=el.getBoundingClientRect();if(r.height<2)return;const g=pitchGeom(r.width/r.height);bed.style.clipPath='polygon('+g.clip+')';bed.innerHTML=g.svg;}
+function pitchSVG(w,h){w=Math.max(160,+w||800);h=Math.max(160,+h||600);
+ const m=Math.max(12,Math.min(w,h)*0.028),x0=m,y0=m,x1=w-m,y1=h-m,fw=x1-x0,fh=y1-y0,cx=x0+fw/2,mid=y0+fh/2;
+ const paW=40.32/68*fw,paD=16.5/105*fh,gaW=18.32/68*fw,gaD=5.5/105*fh,spotD=11/105*fh,R=9.15/105*fh;
+ const goW=7.32/68*fw,goD=Math.max(7,0.014*fh),cr=Math.max(6,1/105*fh);
+ const paX=cx-paW/2,gaX=cx-gaW/2,goX=cx-goW/2,spotT=y0+spotD,spotB=y1-spotD,sr=Math.max(2.4,R*0.08),pr=Math.max(2,R*0.07);
+ const n=v=>(+v).toFixed(2);
+ return `<svg class="lines" viewBox="0 0 ${n(w)} ${n(h)}" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+   <clipPath id="zc-d-top"><rect x="0" y="${n(y0+paD)}" width="${n(w)}" height="${n(h)}"/></clipPath>
+   <clipPath id="zc-d-bot"><rect x="0" y="0" width="${n(w)}" height="${n(y1-paD)}"/></clipPath>
+  </defs>
+  <g class="plines" fill="none">
+   <rect x="${n(x0)}" y="${n(y0)}" width="${n(fw)}" height="${n(fh)}"/>
+   <line x1="${n(x0)}" y1="${n(mid)}" x2="${n(x1)}" y2="${n(mid)}"/>
+   <circle cx="${n(cx)}" cy="${n(mid)}" r="${n(R)}"/>
+   <rect x="${n(paX)}" y="${n(y0)}" width="${n(paW)}" height="${n(paD)}"/>
+   <rect x="${n(gaX)}" y="${n(y0)}" width="${n(gaW)}" height="${n(gaD)}"/>
+   <rect x="${n(paX)}" y="${n(y1-paD)}" width="${n(paW)}" height="${n(paD)}"/>
+   <rect x="${n(gaX)}" y="${n(y1-gaD)}" width="${n(gaW)}" height="${n(gaD)}"/>
+   <circle cx="${n(cx)}" cy="${n(spotT)}" r="${n(R)}" clip-path="url(#zc-d-top)"/>
+   <circle cx="${n(cx)}" cy="${n(spotB)}" r="${n(R)}" clip-path="url(#zc-d-bot)"/>
+   <rect x="${n(goX)}" y="${n(y0-goD)}" width="${n(goW)}" height="${n(goD)}"/>
+   <rect x="${n(goX)}" y="${n(y1)}" width="${n(goW)}" height="${n(goD)}"/>
+   <path d="M ${n(x0)} ${n(y0+cr)} A ${n(cr)} ${n(cr)} 0 0 0 ${n(x0+cr)} ${n(y0)}"/>
+   <path d="M ${n(x1-cr)} ${n(y0)} A ${n(cr)} ${n(cr)} 0 0 0 ${n(x1)} ${n(y0+cr)}"/>
+   <path d="M ${n(x0+cr)} ${n(y1)} A ${n(cr)} ${n(cr)} 0 0 0 ${n(x0)} ${n(y1-cr)}"/>
+   <path d="M ${n(x1)} ${n(y1-cr)} A ${n(cr)} ${n(cr)} 0 0 0 ${n(x1-cr)} ${n(y1)}"/>
+  </g>
+  <g class="pspots">
+   <circle cx="${n(cx)}" cy="${n(mid)}" r="${n(sr)}"/>
+   <circle cx="${n(cx)}" cy="${n(spotT)}" r="${n(pr)}"/>
+   <circle cx="${n(cx)}" cy="${n(spotB)}" r="${n(pr)}"/>
+  </g>
+ </svg>`;}
+function pitchLines(){const el=document.querySelector('.pitch-bed');const w=el&&el.offsetWidth||800,h=el&&el.offsetHeight||600;return pitchSVG(w,h);}
+function layoutKits(){const pitch=document.querySelector('.fifa-pitch .pitch'),bed=document.querySelector('.pitch-bed');if(!pitch||!bed)return;
+ const pr=pitch.getBoundingClientRect();
+ const pt=sel=>{const el=bed.querySelector(sel);if(!el)return null;const b=el.getBoundingClientRect();return {x:b.left+b.width/2,y:b.top+b.height/2};};
+ const tl=pt('.pref.tl'),tr=pt('.pref.tr'),bl=pt('.pref.bl'),br=pt('.pref.br');if(!tl||!tr||!bl||!br)return;
+ pitch.querySelectorAll('.kit[data-fx]').forEach(kit=>{
+  const fx=Math.max(0,Math.min(100,+kit.dataset.fx)),t=+kit.dataset.t||0,u=0.06+t*0.80;
+  const lx=bl.x+(tl.x-bl.x)*u,ly=bl.y+(tl.y-bl.y)*u,rx=br.x+(tr.x-br.x)*u,ry=br.y+(tr.y-br.y)*u;
+  const px=lx+(rx-lx)*(fx/100),py=ly+(ry-ly)*(fx/100);
+  kit.style.left=((px-pr.left)/pr.width*100).toFixed(3)+'%';
+  kit.style.bottom=((pr.bottom-py)/pr.height*100).toFixed(3)+'%';
+ });}
+function paintPitch(){const bed=document.querySelector('.pitch-bed');if(!bed)return;const w=bed.offsetWidth,h=bed.offsetHeight;if(h<2)return;
+ const svg=pitchSVG(w,h),old=bed.querySelector('svg.lines');if(old)old.outerHTML=svg;else bed.insertAdjacentHTML('beforeend',svg);
+ layoutKits();}
 
 function xiPitchHTML(sl,st,kit){kit=kit||KITFB;
- return `<div class="pitchwrap fifa-pitch"><div class="pitch"><div class="pitch-bed" style="clip-path:polygon(${pitchGeom().clip})">${pitchLines()}</div>
+ return `<div class="pitchwrap fifa-pitch"><div class="pitch"><div class="pitch-bed"><i class="pref tl"></i><i class="pref tr"></i><i class="pref bl"></i><i class="pref br"></i>${pitchLines()}</div>
  <div class="xi-title"><h1>Escalação titular</h1><div class="xi-form">${esc(XI.f)}</div></div>
  ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2],sl),num=p&&p.number!=null?p.number:'—';
   const arr=p&&p.evo&&p.evo.dir>0?'<span class="earr" title="Evoluiu">▲</span>':'';
   const cap=+XI.tk.cap===p?.id?' <i class="cap">C</i>':'';
-  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" onclick="zSlot(${i})"><div class="kit-tag"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-top">${kpos(pos)}${arr}</div><span class="knm">${p?`<span class="knm-t" data-full="${esc(surname(p.name))}" data-short="${esc(shortSurname(p.name))}">${esc(surname(p.name))}</span>`:'—'}${cap}</span></div></div>`;}).join('')}
+  return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;--kit-s:${xy.scale.toFixed(3)}" data-fx="${s[1]}" data-t="${xy.t}" onclick="zSlot(${i})"><div class="kit-tag"><div class="shirt-wrap">${shirtSVG(num,kit,gk)}</div><div class="kit-top">${kpos(pos)}${arr}</div><span class="knm">${p?`<span class="knm-t" data-full="${esc(surname(p.name))}" data-short="${esc(shortSurname(p.name))}">${esc(surname(p.name))}</span>`:'—'}${cap}</span></div></div>`;}).join('')}
  </div>
  <div class="sub" style="text-align:center;margin:8px 4px">${XI.sel!=null?'<b style="color:#D4AF37">Escolha no banco (ou outro titular) quem entra na vaga de '+sl[XI.sel][0]+'.</b>':'Toque num titular para trocar. A vaga de volante aceita VOL e MC.'}</div></div>`;}
 
