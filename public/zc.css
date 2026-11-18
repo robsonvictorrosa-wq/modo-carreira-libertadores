@@ -79,6 +79,7 @@ header.zh .zhead-right{display:flex;align-items:center;gap:8px;flex:0 0 auto;pos
 header.zh nav{position:static;transform:none;margin-left:0;max-width:none}
 header.zh .zt b{display:block;font-family:Oswald,'Barlow Condensed',sans-serif;font-weight:600;font-size:clamp(15px,2.2vw,24px);letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-shadow:0 0 18px #D4AF3744;line-height:1.1;white-space:nowrap}
 .zlogo{background:transparent}
+.zprofile[hidden],.zprofile:empty{display:none!important}
 .zprofile{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.55);border:1px solid rgba(212,175,55,.4);padding:5px 14px 5px 7px;backdrop-filter:blur(10px);box-shadow:0 0 18px #0006}
 .zprofile .badge,.zprofile .badge.crest{width:36px;height:36px}
 .zprofile .who{display:flex;flex-direction:column;line-height:1.15}
