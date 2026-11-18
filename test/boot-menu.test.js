@@ -8,5 +8,5 @@ const sw=fs.readFileSync(path.join(root,'public/sw.js'),'utf8');
 assert.match(man,/"start_url":"\/#\/"/);
 assert.match(zc,/history\.replaceState\(null,'',location\.pathname\+location\.search\+'#\/'\)/);
 assert.match(zc,/loginView\(\(\)=>\{if\(location\.hash!=='#\/'/);
-assert.match(sw,/const V='zc-v62'/);
+assert.match(sw,/const V='zc-v63'/);
 console.log('ok: entrada do app abre no menu de quadros');

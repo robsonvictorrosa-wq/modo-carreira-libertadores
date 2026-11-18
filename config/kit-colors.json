@@ -1,45 +1,325 @@
 {
   "_doc": "Cores padrão dos uniformes (principal, detalhe, número e camisa de goleiro). Usadas quando o técnico ainda não escolheu as cores da sala.",
   "clubs": {
-    "Flamengo": {"primary":"#C4122E","secondary":"#111111","number":"#FFFFFF","gk_primary":"#C9A227","gk_secondary":"#3A2E08","gk_number":"#111111"},
-    "Palmeiras": {"primary":"#006437","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#C62828","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Fluminense": {"primary":"#7A0019","secondary":"#006437","number":"#FFFFFF","gk_primary":"#C9A227","gk_secondary":"#3A2E08","gk_number":"#111111"},
-    "Botafogo": {"primary":"#111111","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#F5A623","gk_secondary":"#111111","gk_number":"#111111"},
-    "São Paulo": {"primary":"#FFFFFF","secondary":"#C4122E","number":"#111111","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Corinthians": {"primary":"#FFFFFF","secondary":"#111111","number":"#111111","gk_primary":"#1B5E20","gk_secondary":"#0D3B12","gk_number":"#FFFFFF"},
-    "Atlético Mineiro": {"primary":"#111111","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#C4122E","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Grêmio": {"primary":"#0A3A7A","secondary":"#111111","number":"#FFFFFF","gk_primary":"#C9A227","gk_secondary":"#111111","gk_number":"#111111"},
-    "Internacional": {"primary":"#C4122E","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"},
-    "Cruzeiro": {"primary":"#0038A8","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#C9A227","gk_secondary":"#111111","gk_number":"#111111"},
-    "Bahia": {"primary":"#0062A8","secondary":"#C4122E","number":"#FFFFFF","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Santos": {"primary":"#FFFFFF","secondary":"#111111","number":"#111111","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Vasco": {"primary":"#111111","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#C4122E","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Athletico-PR": {"primary":"#C4122E","secondary":"#111111","number":"#FFFFFF","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "River Plate": {"primary":"#FFFFFF","secondary":"#C4122E","number":"#111111","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Boca Juniors": {"primary":"#003B73","secondary":"#C9A227","number":"#FFFFFF","gk_primary":"#C4122E","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Racing": {"primary":"#86C5E8","secondary":"#FFFFFF","number":"#003B73","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"},
-    "Independiente": {"primary":"#C4122E","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"},
-    "San Lorenzo": {"primary":"#003B73","secondary":"#C4122E","number":"#FFFFFF","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Estudiantes": {"primary":"#C4122E","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"},
-    "Vélez Sarsfield": {"primary":"#FFFFFF","secondary":"#003B73","number":"#003B73","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Argentinos Juniors": {"primary":"#C4122E","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"},
-    "Rosario Central": {"primary":"#003B73","secondary":"#C9A227","number":"#FFFFFF","gk_primary":"#C4122E","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Atlético Nacional": {"primary":"#006437","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#C4122E","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Lanús": {"primary":"#6B2D1A","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Peñarol": {"primary":"#111111","secondary":"#C9A227","number":"#C9A227","gk_primary":"#C4122E","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Indep. Santa Fe": {"primary":"#C4122E","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"},
-    "Universidad Católica": {"primary":"#FFFFFF","secondary":"#003B73","number":"#003B73","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Coquimbo Unido": {"primary":"#C9A227","secondary":"#111111","number":"#111111","gk_primary":"#003B73","gk_secondary":"#FFFFFF","gk_number":"#FFFFFF"},
-    "Olimpia": {"primary":"#FFFFFF","secondary":"#111111","number":"#111111","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Cerro Porteño": {"primary":"#C4122E","secondary":"#003B73","number":"#FFFFFF","gk_primary":"#C9A227","gk_secondary":"#111111","gk_number":"#111111"},
-    "Libertad": {"primary":"#FFFFFF","secondary":"#111111","number":"#111111","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Barcelona de Guayaquil": {"primary":"#C9A227","secondary":"#C4122E","number":"#111111","gk_primary":"#003B73","gk_secondary":"#FFFFFF","gk_number":"#FFFFFF"},
-    "LDU Quito": {"primary":"#FFFFFF","secondary":"#C4122E","number":"#C4122E","gk_primary":"#1B5E20","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Independiente del Valle": {"primary":"#111111","secondary":"#F5A623","number":"#F5A623","gk_primary":"#006437","gk_secondary":"#FFFFFF","gk_number":"#FFFFFF"},
-    "Sporting Cristal": {"primary":"#6EC6E8","secondary":"#FFFFFF","number":"#003B73","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"},
-    "Universitario": {"primary":"#7A0019","secondary":"#C9A227","number":"#FFFFFF","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"},
-    "Bolívar": {"primary":"#86C5E8","secondary":"#FFFFFF","number":"#003B73","gk_primary":"#C4122E","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Nacional": {"primary":"#003B73","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#C4122E","gk_secondary":"#111111","gk_number":"#FFFFFF"},
-    "Caracas FC": {"primary":"#C4122E","secondary":"#FFFFFF","number":"#FFFFFF","gk_primary":"#111111","gk_secondary":"#C9A227","gk_number":"#FFFFFF"}
+    "Flamengo": {
+      "primary": "#C4122E",
+      "secondary": "#111111",
+      "number": "#FFFFFF",
+      "gk_primary": "#C9A227",
+      "gk_secondary": "#3A2E08",
+      "gk_number": "#111111"
+    },
+    "Palmeiras": {
+      "primary": "#006437",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#C62828",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Fluminense": {
+      "primary": "#7A0019",
+      "secondary": "#006437",
+      "number": "#FFFFFF",
+      "gk_primary": "#C9A227",
+      "gk_secondary": "#3A2E08",
+      "gk_number": "#111111"
+    },
+    "Botafogo": {
+      "primary": "#111111",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#F5A623",
+      "gk_secondary": "#111111",
+      "gk_number": "#111111"
+    },
+    "São Paulo": {
+      "primary": "#FFFFFF",
+      "secondary": "#C4122E",
+      "number": "#111111",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Corinthians": {
+      "primary": "#FFFFFF",
+      "secondary": "#111111",
+      "number": "#111111",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#0D3B12",
+      "gk_number": "#FFFFFF"
+    },
+    "Atlético Mineiro": {
+      "primary": "#111111",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#C4122E",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Grêmio": {
+      "primary": "#0A3A7A",
+      "secondary": "#111111",
+      "number": "#FFFFFF",
+      "gk_primary": "#C9A227",
+      "gk_secondary": "#111111",
+      "gk_number": "#111111"
+    },
+    "Internacional": {
+      "primary": "#C4122E",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    },
+    "Cruzeiro": {
+      "primary": "#0038A8",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#C9A227",
+      "gk_secondary": "#111111",
+      "gk_number": "#111111"
+    },
+    "Bahia": {
+      "primary": "#0062A8",
+      "secondary": "#C4122E",
+      "number": "#FFFFFF",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Santos": {
+      "primary": "#FFFFFF",
+      "secondary": "#111111",
+      "number": "#111111",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Vasco": {
+      "primary": "#111111",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#C4122E",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Athletico-PR": {
+      "primary": "#C4122E",
+      "secondary": "#111111",
+      "number": "#FFFFFF",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "River Plate": {
+      "primary": "#FFFFFF",
+      "secondary": "#C4122E",
+      "number": "#111111",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Boca Juniors": {
+      "primary": "#003B73",
+      "secondary": "#C9A227",
+      "number": "#FFFFFF",
+      "gk_primary": "#C4122E",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Racing": {
+      "primary": "#86C5E8",
+      "secondary": "#FFFFFF",
+      "number": "#003B73",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    },
+    "Independiente": {
+      "primary": "#C4122E",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    },
+    "San Lorenzo": {
+      "primary": "#003B73",
+      "secondary": "#C4122E",
+      "number": "#FFFFFF",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Estudiantes": {
+      "primary": "#C4122E",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    },
+    "Vélez Sarsfield": {
+      "primary": "#FFFFFF",
+      "secondary": "#003B73",
+      "number": "#003B73",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Argentinos Juniors": {
+      "primary": "#C4122E",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    },
+    "Rosario Central": {
+      "primary": "#003B73",
+      "secondary": "#C9A227",
+      "number": "#FFFFFF",
+      "gk_primary": "#C4122E",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Atlético Nacional": {
+      "primary": "#006437",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#C4122E",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Lanús": {
+      "primary": "#6B2D1A",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Peñarol": {
+      "primary": "#111111",
+      "secondary": "#C9A227",
+      "number": "#C9A227",
+      "gk_primary": "#C4122E",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Indep. Santa Fe": {
+      "primary": "#C4122E",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    },
+    "Universidad Católica": {
+      "primary": "#FFFFFF",
+      "secondary": "#003B73",
+      "number": "#003B73",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Coquimbo Unido": {
+      "primary": "#C9A227",
+      "secondary": "#111111",
+      "number": "#111111",
+      "gk_primary": "#003B73",
+      "gk_secondary": "#FFFFFF",
+      "gk_number": "#FFFFFF"
+    },
+    "Olimpia": {
+      "primary": "#FFFFFF",
+      "secondary": "#111111",
+      "number": "#111111",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Cerro Porteño": {
+      "primary": "#C4122E",
+      "secondary": "#003B73",
+      "number": "#FFFFFF",
+      "gk_primary": "#C9A227",
+      "gk_secondary": "#111111",
+      "gk_number": "#111111"
+    },
+    "Libertad": {
+      "primary": "#FFFFFF",
+      "secondary": "#111111",
+      "number": "#111111",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Barcelona de Guayaquil": {
+      "primary": "#C9A227",
+      "secondary": "#C4122E",
+      "number": "#111111",
+      "gk_primary": "#003B73",
+      "gk_secondary": "#FFFFFF",
+      "gk_number": "#FFFFFF"
+    },
+    "LDU Quito": {
+      "primary": "#FFFFFF",
+      "secondary": "#C4122E",
+      "number": "#C4122E",
+      "gk_primary": "#1B5E20",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Independiente del Valle": {
+      "primary": "#111111",
+      "secondary": "#F5A623",
+      "number": "#F5A623",
+      "gk_primary": "#006437",
+      "gk_secondary": "#FFFFFF",
+      "gk_number": "#FFFFFF"
+    },
+    "Sporting Cristal": {
+      "primary": "#6EC6E8",
+      "secondary": "#FFFFFF",
+      "number": "#003B73",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    },
+    "Universitario": {
+      "primary": "#F2E8D5",
+      "secondary": "#7A0019",
+      "number": "#7A0019",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    },
+    "Bolívar": {
+      "primary": "#86C5E8",
+      "secondary": "#FFFFFF",
+      "number": "#003B73",
+      "gk_primary": "#C4122E",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Nacional": {
+      "primary": "#FFFFFF",
+      "secondary": "#003B73",
+      "number": "#003B73",
+      "gk_primary": "#C4122E",
+      "gk_secondary": "#111111",
+      "gk_number": "#FFFFFF"
+    },
+    "Caracas FC": {
+      "primary": "#C4122E",
+      "secondary": "#FFFFFF",
+      "number": "#FFFFFF",
+      "gk_primary": "#111111",
+      "gk_secondary": "#C9A227",
+      "gk_number": "#FFFFFF"
+    }
   }
 }
