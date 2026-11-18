@@ -19,7 +19,7 @@ const ui=fs.readFileSync(path.join(__dirname,'../public/zc.js'),'utf8');
 assert.match(ui,/20:25/);
 assert.doesNotMatch(ui,/<b>20:30<\/b>/);
 const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v53'/);
+assert.match(sw,/const V='zc-v54'/);
 const ag=fs.readFileSync(path.join(__dirname,'../config/agenda-zc.json'),'utf8');
 assert.match(ag,/2026-11-13T20:25:00-03:00/);
 assert.doesNotMatch(ag,/"auction_close": "2026-11-13T20:30:00-03:00"/);
