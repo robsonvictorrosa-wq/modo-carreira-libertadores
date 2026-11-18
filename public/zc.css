@@ -69,3 +69,75 @@ details.card summary{cursor:pointer;list-style:none}details.card summary::-webki
 
 .pl.tec{flex-wrap:wrap}.pl.tec .i b{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word}.pl.tec select{max-width:100%}
 .ovr:not(.o1):not(.o2):not(.o3):not(.o4):not(.o5){color:#fff}.ovr:not(.o1):not(.o2):not(.o3):not(.o4):not(.o5) .pot{color:#e5e7eb!important;opacity:1!important}
+
+/* ---- visual tipo menu FIFA 14 (dourado/preto/branco, sem marcas) ---- */
+html,body{min-height:100%}
+body{background:#000 url('/stadium.jpg') center top / cover no-repeat fixed;font-family:'Barlow Condensed',Oswald,system-ui,sans-serif}
+header.zh{display:flex;align-items:center;justify-content:space-between;padding:12px 22px 6px;position:sticky;top:0;background:linear-gradient(180deg,rgba(0,0,0,.78),rgba(0,0,0,.35));backdrop-filter:blur(12px);z-index:5;border-bottom:0;margin:0;border-left:0;font-size:inherit;color:inherit;line-height:normal;word-break:normal;min-height:56px}
+header.zh .zbrand{display:flex;align-items:center;gap:12px;justify-content:flex-start;min-width:0;text-decoration:none;color:inherit}
+header.zh .zhead-right{display:flex;align-items:center;gap:8px;flex:0 0 auto;position:static;transform:none;max-width:none}
+header.zh nav{position:static;transform:none;margin-left:0;max-width:none}
+header.zh .zt b{display:block;font-family:Oswald,'Barlow Condensed',sans-serif;font-weight:600;font-size:clamp(15px,2.2vw,24px);letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-shadow:0 0 18px #D4AF3744;line-height:1.1;white-space:nowrap}
+.zlogo{background:transparent}
+.zprofile{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.55);border:1px solid rgba(212,175,55,.4);padding:5px 14px 5px 7px;backdrop-filter:blur(10px);box-shadow:0 0 18px #0006}
+.zprofile .badge,.zprofile .badge.crest{width:36px;height:36px}
+.zprofile .who{display:flex;flex-direction:column;line-height:1.15}
+.zprofile .nm{font-weight:600;letter-spacing:.05em;font-size:16px;text-transform:uppercase}
+.zprofile .meta{font-size:12px;font-weight:400;color:var(--mut);letter-spacing:.04em}
+.zprofile .links{font-size:11px;margin-top:2px}
+.zprofile .links a{color:var(--gold);font-weight:600}
+.ztabs{display:flex;overflow-x:auto;gap:22px;border-bottom:0;padding:6px 24px 10px;position:sticky;top:56px;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.12));backdrop-filter:blur(8px);z-index:5;scrollbar-width:none}
+.ztabs a{flex:0 0 auto;padding:6px 0 6px;color:rgba(255,255,255,.42);font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid transparent;white-space:nowrap}
+.ztabs a:hover{color:rgba(255,255,255,.85)}
+.ztabs a.on{color:#fff;border-bottom-color:var(--gold);text-shadow:0 0 14px #D4AF3766}
+.zcrumb{display:none}
+main{padding:8px 20px 36px}
+footer{background:transparent;color:rgba(255,255,255,.4)}
+.card,.hero,.stat,.mc,.tw,.seg,.panel{background:rgba(6,10,16,.84);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);box-shadow:0 8px 24px #0005}
+.card:hover{border-color:rgba(212,175,55,.35)}
+.hero{background:linear-gradient(135deg,rgba(6,10,16,.88),rgba(6,10,16,.7))}
+th{background:rgba(0,0,0,.35)}
+.kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.85;padding:0 4px 10px;font-weight:500}
+.mosaic{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(3,minmax(120px,1fr));gap:8px;min-height:calc(100vh - 150px)}
+.tile{position:relative;overflow:hidden;background:rgba(6,10,16,.84);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);padding:16px 18px;display:flex;flex-direction:column;justify-content:flex-start;text-decoration:none;color:inherit;box-shadow:0 8px 24px #0005}
+.tile h2{margin:0;font-size:clamp(18px,2.2vw,32px);font-weight:600;letter-spacing:.07em;text-transform:uppercase;line-height:1.05}
+.tile p{margin:7px 0 0;font-size:14px;font-weight:400;color:var(--mut);max-width:92%;line-height:1.25}
+.tile.photo{padding:0;border-color:rgba(255,255,255,.1)}
+.tile.photo .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8}
+.tile.photo .mark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.45))}
+.tile.photo .mark img{width:min(58%,180px);height:auto;filter:drop-shadow(0 8px 18px #000a)}
+.tile.sel{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold),0 0 32px #D4AF3770,inset 5px 0 0 var(--gold);background:linear-gradient(90deg,rgba(212,175,55,.22),rgba(6,10,16,.7) 42%)}
+.tile.sel h2{color:#fff;text-shadow:0 0 16px #D4AF3755}
+.t-camp{grid-column:1/6;grid-row:1}
+.t-vis{grid-column:6/9;grid-row:1/3}
+.t-merc{grid-column:9/13;grid-row:1}
+.t-esc{grid-column:1/6;grid-row:2}
+.t-jog{grid-column:9/11;grid-row:2}
+.t-tab{grid-column:11/13;grid-row:2}
+.t-est{grid-column:1/4;grid-row:3}
+.t-lei{grid-column:4/6;grid-row:3}
+.t-pre{grid-column:6/8;grid-row:3}
+.t-clu{grid-column:8/11;grid-row:3}
+.t-evo{grid-column:11/13;grid-row:3}
+#installBtn{background:var(--gold);color:#000;border:0;border-radius:6px;font-weight:700}
+#iosTip{background:#000;border:1px solid var(--gold)}
+.zlogin{max-width:420px}
+.zlogin-logo{filter:drop-shadow(0 8px 18px #000a)}
+@media(max-width:700px){
+  header.zh{padding:10px 12px 4px}
+  header.zh .zt b{font-size:15px;letter-spacing:.05em}
+  .zprofile{padding:4px 8px 4px 4px}
+  .zprofile .nm{font-size:13px}
+  .zprofile .meta{font-size:10px}
+  .zprofile .links{font-size:10px}
+  .zprofile .badge,.zprofile .badge.crest{width:28px;height:28px}
+  .ztabs{padding:6px 12px 10px;gap:16px;font-size:13px;letter-spacing:.1em;top:52px}
+  main{padding:6px 10px 28px}
+  .mosaic{grid-template-columns:1fr 1fr;grid-template-rows:auto;min-height:0;gap:6px}
+  .t-camp{grid-column:1/3;grid-row:auto}
+  .t-vis{display:none}
+  .t-merc,.t-esc,.t-jog,.t-tab,.t-est,.t-lei,.t-pre,.t-clu,.t-evo{grid-column:auto;grid-row:auto}
+  .tile{min-height:86px;padding:12px}
+  .tile h2{font-size:18px}
+  .tile p{font-size:12px;max-width:100%}
+}

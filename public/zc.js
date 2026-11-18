@@ -15,9 +15,12 @@ const psq=p=>{const pos=p.primary_position||p.pos,bg=pc(pos);return `<span class
 const empty=(t,s)=>`<div class="card empty"><b>${t}</b>${s||''}</div>`;
 async function ov(){OV=await get(R()+'/zc/overview');window.zOV=OV;return OV}
 function chrome(tab){const isAdm=OV?.admin;
- document.getElementById('ztabs').innerHTML=TABS.filter(t=>!t[3]||isAdm).map(t=>`<a href="#/${t[0]}" class="${t[0]===tab?'on':''}">${t[1]} ${t[2]}</a>`).join('');
+ document.getElementById('ztabs').innerHTML=TABS.filter(t=>!t[3]||isAdm).map(t=>`<a href="#/${t[0]}" class="${t[0]===tab?'on':''}">${t[2]}</a>`).join('');
  const on=document.querySelector('#ztabs a.on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});
- document.getElementById('zcrumb').innerHTML=ME?`<span>Super Libertadores ZC${OV?.room?' · '+esc(OV.room.name):''}</span><span>${OV?(OV.admin?'Administrador':'Técnico'):'Técnico'} • ${esc(ME.nick)} · <a href="#/ligas" style="opacity:.7">Trocar liga</a> · <a href="#" onclick="zSair();return false">Sair</a></span>`:'';}
+ const prof=document.getElementById('zprofile');
+ if(prof){if(!ME){prof.innerHTML='';prof.hidden=true}else{const mc=OV&&OV.me?OV.clubs.find(c=>c.id===OV.me.club_id):null;const role=OV?(OV.admin?'Administrador':'Técnico'):'Técnico';const room=OV?.room?.name||'';
+  prof.hidden=false;prof.innerHTML=`${mc?badge(mc.name):''}<div class="who"><span class="nm">${esc(ME.nick)}</span><span class="meta">${mc?esc(mc.name)+' · ':''}${role}${room?' · '+esc(room):''}</span><span class="links"><a href="#/ligas">Trocar liga</a> · <a href="#" onclick="zSair();return false">Sair</a></span></div>`}}
+ document.getElementById('zcrumb').innerHTML='';}
 window.zSair=async()=>{try{await post('/auth/logout',{})}catch(e){}localStorage.removeItem('room');ROOM=null;ME=null;location.hash='#/';location.reload();};
 let LIGA=null;
 async function need(tab){if(window.zLastTab!==tab){window.zLastTab=tab;app.innerHTML='<div class="card empty" style="text-align:center;padding:28px">Carregando…</div>';}if(!ME&&!(await whoami())){chrome(tab);loginView(route);return false}
@@ -25,6 +28,24 @@ async function need(tab){if(window.zLastTab!==tab){window.zLastTab=tab;app.inner
  chrome(tab);return true}
 const myClub=()=>OV.clubs.find(c=>c.id===OV.me.club_id);
 const noClub=()=>empty('Sem clube',OV?.admin?'Atribua clubes aos técnicos na <a href="#/central">Central da liga</a>.':'Você ainda não comanda um clube. Aguarde um administrador definir seu clube na Central da liga.');
+
+// ---------- INÍCIO (menu em tiles) ----------
+async function inicio(){if(!await need(''))return;
+ const phase=esc(OV.phase||'Temporada'),season=OV.room?.season||1;
+ app.innerHTML=`<div class="kicker">Libertadores · Temporada ${season} · ${phase}</div>
+ <div class="mosaic">
+  <a class="tile sel t-camp" href="#/campeonato"><h2>Campeonato</h2><p>Liga, fase atual e simulação da temporada.</p></a>
+  <div class="tile photo t-vis"><img class="bg" src="/tile-lights.jpg" alt=""><div class="mark"><img src="/logo-mark.png" alt="Super Libertadores ZC"></div></div>
+  <a class="tile t-merc" href="#/mercado"><h2>Mercado</h2><p>Propostas, observações e contratações.</p></a>
+  <a class="tile t-esc" href="#/escalacao"><h2>Escalação</h2><p>Titulares, banco e tática.</p></a>
+  <a class="tile t-jog" href="#/jogos"><h2>Jogos</h2><p>Rodadas e confrontos.</p></a>
+  <a class="tile t-tab" href="#/tabela"><h2>Tabela</h2><p>Classificação e forma recente.</p></a>
+  <a class="tile t-est" href="#/estatisticas"><h2>Estatísticas</h2><p>Gols, notas e artilharia.</p></a>
+  <a class="tile t-lei" href="#/leilao"><h2>Leilão</h2><p>Lotes e lances.</p></a>
+  <a class="tile t-pre" href="#/premiacoes"><h2>Premiações</h2><p>Premiação da liga.</p></a>
+  <a class="tile t-clu" href="#/clubes"><h2>Clubes e verbas</h2><p>Os 40 clubes e as caixas.</p></a>
+  <a class="tile t-evo" href="#/evolucao"><h2>Evolução</h2><p>Progresso do elenco.</p></a>
+ </div>`;}
 
 // ---------- CAMPEONATO ----------
 async function campeonato(step){if(!await need('campeonato'))return;const c=OV.comp,mc=myClub();
@@ -266,10 +287,10 @@ window.zCon=async id=>{if(!confirm('Desfazer esta venda e devolver o valor?'))re
 window.mercado=sub=>sub==='propostas'?(location.hash==='#/negociacoes'?negociacoes():location.hash='#/negociacoes'):zMercado(sub);
 const old=window.route;
 window.route=function(){try{closeM()}catch(e){}scrollTo(0,0);const m=(location.hash.slice(1)||'/').split('/');const t=m[1]||'';
- const map={'':campeonato,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:zEscalacao,emprestimos:()=>location.hash='#/mercado',estatisticas,jogos:()=>jogos(m[2]),tabela:()=>tabela(m[2]),leilao,premiacoes,clubes,evolucao,central};
+ const map={'':inicio,inicio,campeonato:()=>campeonato(m[2]),mercado:()=>zMercado(m[2]),negociacoes,contratacoes:()=>location.hash='#/mercado/contratacoes',escalacao:zEscalacao,emprestimos:()=>location.hash='#/mercado',estatisticas,jogos:()=>jogos(m[2]),tabela:()=>tabela(m[2]),leilao,premiacoes,clubes,evolucao,central};
  if(t==='ligas'){chrome('');return salas();}
  const OKOLD=['jogo','matamata','bolao','historico','artilharia','como-funciona','clube'];
- if(!map[t]&&!OKOLD.includes(t))return location.hash='#/campeonato';
+ if(!map[t]&&!OKOLD.includes(t))return location.hash='#/';
  if(map[t]){const pr=map[t]();if(pr&&pr.catch)pr.catch(e=>{console.error(e);window.zFail&&zFail(e&&e.zNet?null:'Algo deu errado ao abrir esta tela: '+esc(e&&e.message||e))});return pr}
  chrome('');return old();};
 route=window.route;window.zBooted=true;
