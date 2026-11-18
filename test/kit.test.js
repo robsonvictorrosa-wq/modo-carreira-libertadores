@@ -111,6 +111,12 @@ assert.match(mp,/require\('\.\/kit'\)\.attach/);
 const pg=fs.readFileSync(path.join(__dirname,'../pg.sql'),'utf8');
 assert.match(pg,/CREATE TABLE IF NOT EXISTS room_kits/);
 assert.match(pg,/CREATE TABLE IF NOT EXISTS room_shirts/);
-const sw=fs.readFileSync(path.join(__dirname,'../public\/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v63'/);
+const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
+assert.match(sw,/const V='zc-v64'/);
+assert.match(ui,/function kitPos\(x,y,sl\)/);
+const css=fs.readFileSync(path.join(__dirname,'../public/zc.css'),'utf8');
+assert.match(css,/\.xi-title\{position:static/);
+assert.doesNotMatch(css,/\.xi-title\{[^}]*position:absolute/);
+assert.match(css,/aspect-ratio:4\/5/);
+
 console.log('ok: números 1-99 únicos e graváveis, cores fixas do clube, edição de cor desativada');

@@ -158,7 +158,7 @@ function shirtSVG(num,kit,gk){const c=shirtCols(kit,gk);const n=num==null||num==
  const fs=n.length>2?26:n.length>1?30:34;
  return `<svg class="shirt" viewBox="0 0 100 110" aria-hidden="true"><path fill="${c.s}" d="M20 28 L5 38 L12 60 L27 48 Z"/><path fill="${c.s}" d="M80 28 L95 38 L88 60 L73 48 Z"/><path fill="${c.p}" d="M27 26 C29 13 38 7 50 7 C62 7 71 13 73 26 L85 31 L77 50 L77 96 C77 103 50 108 50 108 C50 108 23 103 23 96 L23 50 L15 31 Z"/><path fill="${c.s}" d="M38 15 Q50 26 62 15 Q58 11 50 10 Q42 11 38 15 Z"/><path fill="none" stroke="rgba(0,0,0,.25)" stroke-width="1.2" d="M40 16 Q50 23 60 16"/><text x="50" y="68" text-anchor="middle" font-family="Oswald,'Barlow Condensed',sans-serif" font-size="${fs}" font-weight="700" fill="${c.n}">${esc(n)}</text></svg>`;}
 function kpos(pos){const bg=pc(pos),fg=bg==='#FFFFFF'?'#000':'#fff';return `<span class="kpos psq" style="background:${bg};color:${fg}">${esc(pos||'—')}</span>`;}
-function kitPos(x,y){const t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.28),bottom:4+t*78,scale:1-t*.12};}
+function kitPos(x,y,sl){const ys=[...new Set((sl||[]).map(s=>+s[2]))].sort((a,b)=>a-b);let t;if(ys.length>1){const i=ys.indexOf(+y);t=i<0?Math.max(0,Math.min(1,(+y||0)/100)):i/(ys.length-1);}else t=Math.max(0,Math.min(1,(+y||0)/100));return {left:50+(x-50)*(1-t*.28),bottom:7+t*68,scale:1-t*.12};}
 function pitchLines(){const map=(px,py)=>{const u=1-py/100,y=4+u*96,hw=36+u*14,x=50+(px-50)/50*hw;return `${x.toFixed(2)},${y.toFixed(2)}`;};
  const P=(a,b)=>`M ${map(a[0],a[1])} L ${map(b[0],b[1])}`;
  const R=(x,y,w,h)=>`${P([x,y],[x+w,y])} ${P([x+w,y],[x+w,y+h])} ${P([x+w,y+h],[x,y+h])} ${P([x,y+h],[x,y])}`;
@@ -168,7 +168,7 @@ function pitchLines(){const map=(px,py)=>{const u=1-py/100,y=4+u*96,hw=36+u*14,x
 function xiPitchHTML(sl,st,kit){kit=kit||KITFB;
  return `<div class="pitchwrap fifa-pitch"><div class="xi-title"><h1>Escalação titular</h1><div class="xi-form">${esc(XI.f)}</div></div>
  <div class="pitch"><div class="pitch-bed">${pitchLines()}</div>
- ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2]),num=p&&p.number!=null?p.number:'—';
+ ${sl.map((s,i)=>{const p=st[i],pos=s[0],gk=pos==='GOL',f=p?zFit(p,pos):1,xy=kitPos(s[1],s[2],sl),num=p&&p.number!=null?p.number:'—';
   const arr=p&&p.evo&&p.evo.dir>0?'<span class="earr" title="Evoluiu">▲</span>':'';
   const cap=+XI.tk.cap===p?.id?' <i class="cap">C</i>':'';
   return `<div class="kit ${XI.sel===i?'sel':''} ${p&&f<.97?'off':''}" style="left:${xy.left}%;bottom:${xy.bottom}%;width:${(9.3*xy.scale).toFixed(2)}%" onclick="zSlot(${i})">${shirtSVG(num,kit,gk)}<div class="kit-tag">${kpos(pos)}<span class="knm">${p?esc(surname(p.name)):'—'}${cap}</span>${arr}</div></div>`;}).join('')}
