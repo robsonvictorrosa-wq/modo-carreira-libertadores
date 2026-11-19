@@ -50,9 +50,12 @@ async function jogo(id){const m=await get(`/rooms/${ROOM}/match/${id}`);const d=
  <h2>Escalações e notas</h2><div class="grid">${side(d.lineups.home,'home')}${side(d.lineups.away,'away')}</div>`;}
 async function comoFunciona(){const t=await fetch('/criterios.html').then(r=>r.text());app.innerHTML=`<a class="back" href="javascript:history.back()">← Voltar</a><div class="card" style="cursor:default;line-height:1.6">${t}</div>`;}
 
-// Notas estilo Sofascore
-function notaC(v){return v==null?'#8A8A8A':v<6?'#6B6B6B':v<7?'#A89050':v<8?'#D4AF37':'#F5E6A3';}
-function notaB(v){return v==null||v===''?'<b></b>':`<b style="background:${notaC(v)};color:${(+v)>=7?'#000':'#fff'};border-radius:6px;padding:2px 7px;min-width:34px;text-align:center;display:inline-block;font-size:15px">${(+v).toFixed(1)}</b>`;}
+// Notas: a cor segue o valor exibido com 1 casa (5.95 → 6.0).
+// ≤5.9 vermelho, 6.0–6.9 amarelo, 7.0–7.9 verde, 8.0–8.9 verde escuro, 9.0–10 azul.
+function notaShown(v){if(v==null||v==='')return null;const n=+v;if(!Number.isFinite(n))return null;return Math.round(n*10)/10;}
+function notaC(v){const x=notaShown(v);if(x==null)return '#8A8A8A';return x<=5.9?'#C62828':x<=6.9?'#F5C400':x<=7.9?'#8BC34A':x<=8.9?'#1B7A3A':'#1565C0';}
+function notaInk(v){const x=notaShown(v);if(x==null)return '#fff';return (x<=5.9||x>=8)?'#fff':'#000';}
+function notaB(v){const x=notaShown(v);return x==null?'<b></b>':`<b style="background:${notaC(v)};color:${notaInk(v)};border-radius:6px;padding:2px 7px;min-width:34px;text-align:center;display:inline-block;font-size:15px">${x.toFixed(1)}</b>`;}
 window.notaJ=id=>{const d=window.JG_||{};const p=[...(d.lineups?.home||[]),...(d.lineups?.away||[])].find(x=>x.id===id);const s=d.pstats?.[id];if(!p)return;
  const gk=p.pos==='GOL',L=[];const a=(k,v)=>{if(v!=null)L.push([k,v]);};
  a('Minutos jogados',s?.min??90);
