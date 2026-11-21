@@ -10,13 +10,21 @@ function autoXI(squad,formation='4-3-3'){if(TT.FORMS[formation])return TT.autoXI
 // Meio por função do slot: VOL pesa mais defesa que MC; MEI/demais sem defesa
 const MIDW={VOL:[.30,.15,.30],MC:[.38,.22,.15]},midW=p=>{const w=MIDW[p.primary_position]||[.45,.30,0];return w[0]*st(p,'passing')+w[1]*st(p,'dribbling')+w[2]*st(p,'defense')+0.25*(p.overall||50);};
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:50;
-// Força por setor dos 11 titulares
+// Força por setor dos 11 titulares (usa atributos; o motor chama esta função em playMatch)
 function strength(xi){const by=s=>xi.filter(p=>sec(p)===s);const fb=(arr,alt)=>arr.length?arr:alt;
  const gk=by('GK')[0];
  return {GK:gk?avg(['gk_diving','gk_handling','gk_reflexes','gk_positioning'].map(k=>st(gk,k))):35,
   DEF:avg(fb(by('DEF'),xi).map(p=>0.55*st(p,'defense')+0.3*st(p,'physical')+0.15*st(p,'pace'))),
   MID:avg(fb(by('MID'),xi).map(midW)),
   ATT:avg(fb(by('ATT'),xi).map(p=>0.5*st(p,'shooting')+0.25*st(p,'pace')+0.25*st(p,'dribbling')))};}
+// Exibição: escala os atributos na proporção overall atual / overall de importação (evolução).
+// playMatch NÃO usa isto — o motor continua com os atributos originais até decisão explícita.
+function alignStats(p){const base=+p.base_overall||0,cur=+p.overall||0;if(!p||!p.stats||!base||!cur||cur===base)return p;
+ const m=cur/base,st={};for(const k in p.stats)st[k]=Math.max(1,Math.min(99,Math.round((+p.stats[k]||0)*m)));
+ return {...p,stats:st};}
+function strengthLive(xi){return strength((xi||[]).map(alignStats));}
+function applyShape(s,formation){const c=FORMATIONS[formation]||FORMATIONS['4-3-3'];const o={GK:s.GK,DEF:s.DEF,MID:s.MID,ATT:s.ATT};
+ o.DEF*=1+.012*(c.DEF-4);o.MID*=1+.01*(c.MID-4);o.ATT*=1+.015*(c.ATT-2);return o;}
 const poisson=(l,r)=>{let L=Math.exp(-l),k=0,p=1;do{k++;p*=r();}while(p>L);return Math.min(k-1,9);};
 const pick=(arr,w,r)=>{const t=w.reduce((a,b)=>a+b,0);let x=r()*t;for(let i=0;i<arr.length;i++){x-=w[i];if(x<=0)return arr[i];}return arr[arr.length-1];};
 const GW={ATA:1,SA:.85,PD:.75,PE:.75,MEI:.45,MD:.35,ME:.35,MC:.25,VOL:.12,ZAG:.1,LD:.07,LE:.07,ADD:.07,ADE:.07,GOL:0};
@@ -99,4 +107,4 @@ function playMatch(H,A,r=Math.random){ // H/A = {club_id,xi,bench?,form,alt?}
 function schedule(ids,r=Math.random){const t=[...ids];for(let i=t.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[t[i],t[j]]=[t[j],t[i]];}if(t.length%2)t.push(null);
  const n=t.length,rounds=[];let arr=[...t];for(let k=0;k<n-1;k++){const m=[];for(let i=0;i<n/2;i++){const a=arr[i],b=arr[n-1-i];if(a!=null&&b!=null)m.push(k%2&&i===0?[b,a]:[a,b]);}rounds.push(m);arr=[arr[0],arr[n-1],...arr.slice(1,n-1)];}
  return rounds.concat(rounds.map(m=>m.map(([a,b])=>[b,a])));}
-module.exports={FORMATIONS,autoXI,strength,expected,playMatch,schedule,sec};
+module.exports={FORMATIONS,autoXI,strength,alignStats,strengthLive,applyShape,expected,playMatch,schedule,sec};

@@ -83,7 +83,12 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
    ratings:(await q('SELECT * FROM player_stats WHERE comp_id=$1 AND apps>=GREATEST(1,(SELECT max(apps) FROM player_stats WHERE comp_id=$1)/2) ORDER BY rating_sum/apps DESC LIMIT 30',[comp.id])).map(fmt)});}));
 
  app.get('/api/rooms/:code/match/:id',auth,wrap(async(r,s)=>{const room=await member(r);const [m]=await q('SELECT m.* FROM matches m JOIN competitions c ON c.id=m.comp_id WHERE m.id=$1 AND c.room_id=$2',[r.params.id,room.id]);if(!m)throw fail('Jogo não encontrado',404);
-  s.json({...m,home_name:club(m.home).name,away_name:club(m.away).name,stage_name:L.STAGE_NAMES[m.stage]});}));
+  const out={...m,home_name:club(m.home).name,away_name:club(m.away).name,stage_name:L.STAGE_NAMES[m.stage]};
+  // Jogo já jogado: details.strength é o que o motor usou. Jogo futuro: calcula com overall atual (atributos alinhados).
+  if(!m.played){const TT=require('./tactics');const side=async cid=>{const x=await xiFor(pool,room.id,cid);const lu=TT.lineup(x.xi,x.formation,x.slotted);
+    return S.applyShape(S.strengthLive(lu.map(z=>TT.effective(z.p,z.slot))),x.formation);};
+   out.strength={home:await side(m.home),away:await side(m.away)};out.strength_live=true;}
+  s.json(out);}));
  app.get('/api/rooms/:code/comp/:id/bracket',auth,wrap(async(r,s)=>{const room=await member(r);const [comp]=await q('SELECT * FROM competitions WHERE id=$1 AND room_id=$2',[r.params.id,room.id]);if(!comp)throw fail('Competição não encontrada',404);
   const ms=await q("SELECT id,round,home,away,hg,ag,played,stage,leg,tie,winner,pens,neutral FROM matches WHERE comp_id=$1 AND stage<>'league' ORDER BY round,tie",[comp.id]);
   const st={};for(const m of ms){const k=m.stage;(st[k]??={name:L.STAGE_NAMES[k],ties:{}});const t=st[k].ties[m.tie]??={tie:m.tie,legs:[]};t.legs.push({...m,home_name:club(m.home).name,away_name:club(m.away).name});if(m.winner){t.winner=m.winner;t.winner_name=club(m.winner).name;t.pens=m.pens;}}
@@ -97,7 +102,7 @@ module.exports=({app,uni,q,pool,auth,wrap,fail,member,bump,R,M})=>{L.loadClubs(u
   const kitd=await KIT.enrich(q,room.id,me.club_id,clubName,sq);
   let evo={};try{const ev=await q('SELECT player_id,ovr_start,overall FROM room_players WHERE room_id=$1 AND player_id=ANY($2::int[])',[room.id,sq.map(p=>p.id)]);
    for(const r of ev){if(r.ovr_start!=null&&+r.overall>+r.ovr_start)evo[r.player_id]={dir:1,from:+r.ovr_start,overall:+r.overall};}}catch(e){}
-  s.json({formations:Object.keys(S.FORMATIONS),slots:TT.FORMS,tac_catalog:TT.TAC,formation:x.formation,custom:x.custom,tactics:x.tactics||TT.DEF_TAC,takers:TT.takers(x.xi,x.takers||{}),starters:lu.map(z=>z.p.id),placed:lu.map(z=>({id:z.p.id,slot:z.slot,x:z.x,y:z.y,fit:+z.fit.toFixed(2)})),sector_fit:TT.sectorFit(lu),strength:S.strength(lu.map(z=>TT.effective(z.p,z.slot))),
+  s.json({formations:Object.keys(S.FORMATIONS),slots:TT.FORMS,tac_catalog:TT.TAC,formation:x.formation,custom:x.custom,tactics:x.tactics||TT.DEF_TAC,takers:TT.takers(x.xi,x.takers||{}),starters:lu.map(z=>z.p.id),placed:lu.map(z=>({id:z.p.id,slot:z.slot,x:z.x,y:z.y,fit:+z.fit.toFixed(2)})),sector_fit:TT.sectorFit(lu),strength:S.strengthLive(lu.map(z=>TT.effective(z.p,z.slot))),
    kit:kitd.kit,
    squad:sq.map(p=>({id:p.id,name:p.name,primary_position:p.primary_position,positions:p.positions||[],overall:p.overall,potential:p.potential,age:p.age,market_value:p.market_value,sector:S.sec(p),shielded:!!p.shielded,listed:!!p.listed,virtual:!!p.virtual,number:kitd.numbers[p.id]||null,evo:evo[p.id]||null})).sort((a,b)=>b.overall-a.overall)});}));
  app.post('/api/rooms/:code/lineup',auth,wrap(async(r,s)=>{const room=await member(r);app.locals.zcOvCacheClear?.(room.id);const [me]=await q('SELECT club_id FROM room_managers WHERE room_id=$1 AND user_id=$2',[room.id,r.user.id]);if(!me.club_id)throw fail('Escolha um clube');

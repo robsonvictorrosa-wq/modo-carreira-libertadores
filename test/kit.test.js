@@ -188,7 +188,7 @@ const pg=fs.readFileSync(path.join(__dirname,'../pg.sql'),'utf8');
 assert.match(pg,/CREATE TABLE IF NOT EXISTS room_kits/);
 assert.match(pg,/CREATE TABLE IF NOT EXISTS room_shirts/);
 const sw=fs.readFileSync(path.join(__dirname,'../public/sw.js'),'utf8');
-assert.match(sw,/const V='zc-v72'/);
+assert.match(sw,/const V='zc-v73'/);
 assert.match(ui,/function kitPos\(x,y,sl\)/);
 assert.match(ui,/shirt-wrap/);
 assert.match(ui,/kit-top/);
